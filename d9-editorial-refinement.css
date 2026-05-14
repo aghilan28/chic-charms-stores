@@ -1,0 +1,150 @@
+/* ============================================================
+   CHIC CHARMS — d9-editorial-refinement.css
+   Phase D9 · Typography Readability & Brand Voice Refinement
+   Additive final layer — load LAST after all other CSS
+   ============================================================ */
+
+/* ── Cormorant Garamond italic safety import ── */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300;1,400&display=swap');
+
+/* ============================================================
+   PART 1 — GLOBAL TYPOGRAPHY READABILITY
+   Consolidates any remaining faded-text overrides globally.
+   The root token upgrades are in styles.css itself.
+   These selectors catch any components that hardcode opacity.
+   ============================================================ */
+
+/* Any component still using muted-soft gets a readable floor */
+.section-eyebrow,
+.d6-testimonials-eyebrow,
+.d6-styled-by-eyebrow,
+.d6-campaign-collection-tag {
+  opacity: 1; /* ensure no inherited opacity fade */
+}
+
+/* Force readable contrast on all soft paragraph variants */
+.bestsellers-tagline,
+.d6-newsletter-note,
+.collection-footer-note p {
+  font-weight: 400;
+}
+
+/* ============================================================
+   PART 2 — HERO EM SAFETY NET
+   The main override is in styles.css. This acts as a cascade
+   fallback in case any other sheet re-declares .hero-headline em.
+   ============================================================ */
+.hero-headline em {
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  font-style: italic !important;
+  font-weight: 300 !important;
+  color: var(--rose-dark) !important;
+}
+
+/* ============================================================
+   PART 6 — UNIFIED ITALIC ACCENT SYSTEM
+   All heading <em> tags across every section use
+   Cormorant Garamond italic for editorial consistency.
+   ============================================================ */
+.section-title em,
+.d6-campaign-headline em,
+.d6-styled-by-headline em,
+.d6-testimonials-headline em,
+.d6-newsletter-headline em,
+.d6-final-cta-headline em,
+.d6-story-headline em,
+.bestsellers .section-title em,
+.d6-mood-card-title em {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--rose-dark);
+}
+
+/* Mood card title em on dark bg stays lighter */
+.d6-mood-card-title em {
+  color: var(--rose-light);
+}
+
+/* Campaign banner em on dark bg */
+.campaign-banner-title em {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--rose-light);
+}
+
+/* ============================================================
+   PART 6 — WHY CARDS READABILITY
+   ============================================================ */
+.why-card p {
+  font-size: 0.9rem;
+  line-height: 1.82;
+  font-weight: 400;
+}
+
+.why-card h3 {
+  font-size: 0.96rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  margin-bottom: 10px;
+}
+
+/* ============================================================
+   PART 6 — CATEGORY CARD INFO READABILITY
+   ============================================================ */
+.cat-info p {
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* ============================================================
+   PART 6 — PRODUCT CARD DESC READABILITY
+   ============================================================ */
+.product-desc {
+  font-size: 0.8rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* ============================================================
+   PART 6 — TRUST ITEMS
+   ============================================================ */
+.trust-item {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* ============================================================
+   PART 3 — BRAND VOICE: marquee text on dark bg
+   Make marquee text slightly more legible
+   ============================================================ */
+.d6-marquee-item {
+  color: rgba(255,255,255,0.68); /* was 0.55 — more readable */
+}
+
+/* ============================================================
+   PART 7 — STORY PORTRAIT IMAGE FIDELITY
+   Fix 1: The global img[loading="lazy"] rule in styles.css applies
+   background: var(--blush) (#FAF1F4) directly on the <img> element.
+   This pink-white haze composites through the portrait during decode
+   and GPU rendering, washing out deep blacks and cinematic tones.
+   Override to transparent for the story image containers only.
+   ============================================================ */
+.d6-story-img-main img,
+.d6-story-img-main img[loading="lazy"],
+.d6-story-img-accent img,
+.d6-story-img-accent img[loading="lazy"] {
+  background: transparent;
+}
+
+/* ============================================================
+   PART 8 — FOOTER SOCIAL LINKS LIFT
+   ============================================================ */
+.d6-footer-social-link {
+  color: rgba(255,255,255,0.62); /* was 0.5 */
+}
+

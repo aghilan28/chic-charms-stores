@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orders — Chic Charms Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="admin-session.css" />
+
+  <style>
+    /* ══════════════════════════════════════════
+       DESIGN TOKENS
+    ══════════════════════════════════════════ */
+    :root {
+      --rose:      #f4a7b9;
+      --rose-dark: #e8809a;
+      --rose-deep: #d4607a;
+      --cream:     #fdf8f5;
+      --blush:     #fef0f4;
+      --sand:      #faf6f0;
+      --white:     #ffffff;
+      --text:      #2d2d2d;
+      --muted:     #888;
+      --border:    #ece8e3;
+      --green:     #2e7d32;
+      --green-bg:  #e8f5e9;
+      --green-bd:  #a5d6a7;
+      --amber:     #b45309;
+      --amber-bg:  #fffbeb;
+      --red:       #c0392b;
+      --red-bg:    #fff5f5;
+      --red-bd:    #f5c6cb;
+      --blue:      #1565c0;
+      --blue-bg:   #e3f2fd;
+      --blue-bd:   #90caf9;
+      --purple:    #7b1fa2;
+      --purple-bg: #f3e5f5;
+      --purple-bd: #ce93d8;
+      --radius:    10px;
+      --radius-lg: 16px;
+      --shadow-sm: 0 2px 12px rgba(0,0,0,0.06);
+      --shadow-md: 0 6px 28px rgba(0,0,0,0.09);
+      --font-head: 'Cormorant Garamond', Georgia, serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+      --transition: 0.2s ease;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--cream);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    body.admin-auth-loading > *:not(#adminAuthOverlay),
+    body.admin-denied > *:not(#adminAuthOverlay) { visibility: hidden; }
+    #adminAuthOverlay {
+      position: fixed; inset: 0; z-index: 9999; background: var(--cream);
+      display: flex; align-items: center; justify-content: center; padding: 24px;
+    }
+    #adminAuthOverlay.hide { opacity: 0; pointer-events: none; transition: opacity 0.24s ease; }
+    .auth-card {
+      width: min(420px,100%); background: var(--white); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); box-shadow: var(--shadow-md); padding: 34px 28px; text-align: center;
+    }
+    .auth-spinner {
+      width: 38px; height: 38px; border-radius: 50%; border: 3px solid var(--border);
+      border-top-color: var(--rose-dark); animation: spin 0.8s linear infinite; margin: 0 auto 18px;
+    }
+    .auth-title { font-family: var(--font-head); font-size: 1.45rem; font-weight: 600; margin-bottom: 6px; }
+    .auth-copy { font-size: 0.84rem; color: var(--muted); line-height: 1.6; }
+    .admin-sidebar {
+      position: fixed; inset: 0 auto 0 0; width: 248px; background: rgba(255,255,255,0.94);
+      border-right: 1px solid var(--border); box-shadow: 2px 0 24px rgba(244,167,185,0.12);
+      padding: 24px 16px; z-index: 160; display: flex; flex-direction: column; transition: transform 0.24s ease;
+    }
+    .admin-sidebar-brand { padding: 6px 10px 22px; border-bottom: 1px solid var(--border); margin-bottom: 18px; }
+    .admin-sidebar-brand .logo { font-family: var(--font-head); font-size: 1.55rem; font-weight: 600; }
+    .admin-sidebar-brand .logo span { color: var(--rose-dark); font-style: italic; }
+    .admin-sidebar-kicker { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 4px; }
+    .admin-side-nav { display: grid; gap: 6px; }
+    .admin-side-link {
+      display: flex; align-items: center; gap: 11px; min-height: 42px; padding: 10px 12px;
+      border-radius: 10px; color: var(--muted); font-size: 0.88rem; font-weight: 600;
+      transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+    }
+    .admin-side-link:hover, .admin-side-link.active { background: var(--blush); color: var(--rose-deep); transform: translateX(2px); }
+    .admin-side-icon { width: 22px; text-align: center; }
+    .admin-side-footer { margin-top: auto; padding: 16px 10px 0; border-top: 1px solid var(--border); }
+    .admin-user-email { font-size: 0.76rem; color: var(--muted); word-break: break-all; line-height: 1.45; margin-bottom: 10px; }
+    .admin-side-btn {
+      width: 100%; border: 1.5px solid var(--border); background: var(--white); color: var(--text);
+      border-radius: 999px; padding: 9px 12px; font-family: var(--font-body); font-size: 0.78rem;
+      font-weight: 700; cursor: pointer; transition: var(--transition);
+    }
+    .admin-side-btn:hover { border-color: var(--rose-dark); color: var(--rose-dark); background: var(--blush); }
+    .topbar, .page { margin-left: 248px; }
+    .topbar { gap: 16px; }
+    .admin-mobile-toggle {
+      display: none; width: 40px; height: 40px; border-radius: 999px; border: 1px solid var(--border);
+      background: var(--white); color: var(--text); font-size: 1.1rem; cursor: pointer;
+    }
+    .export-btn {
+      background: var(--white); color: var(--text); border: 1.5px solid var(--border); border-radius: 999px;
+      padding: 10px 16px; font-family: var(--font-body); font-size: 0.8rem; font-weight: 700; cursor: pointer;
+      transition: var(--transition);
+    }
+    .export-btn:hover { border-color: var(--rose); color: var(--rose-dark); background: var(--blush); }
+    .admin-backdrop { position: fixed; inset: 0; background: rgba(45,32,32,0.2); z-index: 150; display: none; }
+    .admin-backdrop.open { display: block; }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ══════════════════════════════════════════
+       TOP BAR
+    ══════════════════════════════════════════ */
+    .topbar {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .topbar-left { display: flex; align-items: center; gap: 14px; }
+
+    .topbar-logo {
+      font-family: var(--font-head);
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .topbar-logo span { color: var(--rose-dark); font-style: italic; }
+
+    .topbar-badge {
+      background: var(--blush);
+      color: var(--rose-dark);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--rose);
+    }
+
+    .topbar-nav { display: flex; gap: 6px; }
+    .topbar-nav a {
+      font-size: 0.83rem;
+      font-weight: 500;
+      color: var(--muted);
+      padding: 8px 16px;
+      border-radius: 999px;
+      transition: var(--transition);
+    }
+    .topbar-nav a:hover { background: var(--blush); color: var(--rose-dark); }
+    .topbar-nav a.active { background: var(--rose); color: var(--white); }
+
+    /* ══════════════════════════════════════════
+       PAGE WRAPPER
+    ══════════════════════════════════════════ */
+    .page {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 36px 24px 80px;
+    }
+
+    /* ══════════════════════════════════════════
+       PAGE HEADER
+    ══════════════════════════════════════════ */
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .page-header-left h1 {
+      font-family: var(--font-head);
+      font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+      font-weight: 600;
+      line-height: 1.2;
+    }
+    .page-header-left p { font-size: 0.85rem; color: var(--muted); margin-top: 4px; }
+
+    /* ── Refresh button ── */
+    .btn-refresh {
+      background: var(--white);
+      color: var(--text);
+      border: 1.5px solid var(--border);
+      border-radius: 999px;
+      padding: 10px 20px;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition);
+    }
+    .btn-refresh:hover { border-color: var(--rose); color: var(--rose-dark); background: var(--blush); }
+    .btn-refresh.spinning .refresh-icon { animation: spin 0.7s linear infinite; display: inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ══════════════════════════════════════════
+       STATS STRIP  (5 cards)
+    ══════════════════════════════════════════ */
+    .stats-strip {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .stat-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+    .stat-card:hover { border-color: var(--rose); box-shadow: var(--shadow-md); }
+    .stat-label {
+      font-size: 0.68rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+    .stat-value {
+      font-family: var(--font-head);
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--rose-dark);
+      line-height: 1;
+    }
+    .stat-card.stat-pending   .stat-value { color: var(--amber); }
+    .stat-card.stat-delivered .stat-value { color: var(--purple); }
+    .stat-card.stat-cancelled .stat-value { color: var(--red); }
+    .stat-card.stat-revenue   .stat-value { color: var(--green); }
+
+    /* ══════════════════════════════════════════
+       FILTER BAR
+    ══════════════════════════════════════════ */
+    .filter-bar {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .filter-search-row {
+      display: flex;
+      gap: 10px;
+      flex: 1;
+      min-width: 280px;
+      flex-wrap: wrap;
+    }
+
+    .filter-bar input {
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      color: var(--text);
+      background: var(--cream);
+      border: 1.5px solid var(--border);
+      border-radius: 999px;
+      padding: 9px 16px;
+      outline: none;
+      transition: var(--transition);
+      flex: 1;
+      min-width: 150px;
+    }
+    .filter-bar input:focus { border-color: var(--rose); box-shadow: 0 0 0 3px rgba(244,167,185,0.18); }
+    .filter-bar input::placeholder { color: #c4a8b0; }
+
+    /* Sort select */
+    .sort-select {
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text);
+      background: var(--cream);
+      border: 1.5px solid var(--border);
+      border-radius: 999px;
+      padding: 9px 16px;
+      outline: none;
+      cursor: pointer;
+      transition: var(--transition);
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+    }
+    .sort-select:focus { border-color: var(--rose); }
+
+    .filter-divider {
+      width: 1px;
+      height: 28px;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+
+    .status-filter-btns {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .sf-btn {
+      font-family: var(--font-body);
+      font-size: 0.73rem;
+      font-weight: 600;
+      padding: 7px 13px;
+      border-radius: 999px;
+      border: 1.5px solid var(--border);
+      background: var(--white);
+      color: var(--muted);
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+    .sf-btn:hover { border-color: var(--rose); color: var(--rose-dark); background: var(--blush); }
+    .sf-btn.active { background: var(--rose-dark); border-color: var(--rose-dark); color: var(--white); }
+
+    /* ══════════════════════════════════════════
+       LOADING SKELETON
+    ══════════════════════════════════════════ */
+    @keyframes shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    .loading-wrap { display: flex; flex-direction: column; gap: 16px; }
+
+    .skeleton-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .skeleton-row { display: flex; justify-content: space-between; gap: 16px; }
+    .sk {
+      background: linear-gradient(90deg, #fef0f4 25%, #fce8ef 50%, #fef0f4 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s ease-in-out infinite;
+      border-radius: 6px;
+      height: 14px;
+    }
+    .sk.h20 { height: 20px; }
+    .sk.h12 { height: 12px; }
+    .sk.w20 { width: 20%; }
+    .sk.w30 { width: 30%; }
+    .sk.w40 { width: 40%; }
+    .sk.w50 { width: 50%; }
+    .sk.w60 { width: 60%; }
+    .sk.w70 { width: 70%; }
+    .sk.w80 { width: 80%; }
+    .sk.w100 { width: 100%; }
+
+    /* ══════════════════════════════════════════
+       ERROR STATE
+    ══════════════════════════════════════════ */
+    .error-wrap {
+      background: var(--red-bg);
+      border: 1px solid var(--red-bd);
+      color: var(--red);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      text-align: center;
+      display: none;
+    }
+    .error-wrap p { font-size: 0.9rem; margin-top: 8px; }
+    .error-wrap strong { font-size: 1.1rem; }
+
+    /* ══════════════════════════════════════════
+       EMPTY STATE
+    ══════════════════════════════════════════ */
+    .empty-wrap {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      padding: 80px 32px;
+      text-align: center;
+      display: none;
+    }
+    .empty-icon { font-size: 3.5rem; margin-bottom: 12px; }
+    .empty-wrap h2 { font-family: var(--font-head); font-size: 1.6rem; font-weight: 600; margin-bottom: 8px; }
+    .empty-wrap p { color: var(--muted); font-size: 0.9rem; }
+
+    /* ══════════════════════════════════════════
+       ORDERS LIST
+    ══════════════════════════════════════════ */
+    .orders-list { display: flex; flex-direction: column; gap: 18px; }
+
+    /* ══════════════════════════════════════════
+       ORDER CARD
+    ══════════════════════════════════════════ */
+    .order-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      animation: fadeUp 0.35s ease both;
+      transition: box-shadow var(--transition), border-color var(--transition);
+    }
+    .order-card:hover { box-shadow: var(--shadow-md); border-color: var(--rose); }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Card Header ── */
+    .order-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding: 18px 24px;
+      background: var(--blush);
+      border-bottom: 1px solid rgba(244,167,185,0.25);
+      cursor: pointer;
+      user-select: none;
+    }
+    .order-header:hover { background: #fce8ef; }
+
+    .order-header-left { display: flex; align-items: center; gap: 14px; min-width: 0; }
+    .order-num {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      background: var(--white);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .order-customer-info { min-width: 0; }
+    .order-customer { font-weight: 600; font-size: 0.97rem; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .order-email    { font-size: 0.77rem; color: var(--muted); margin-top: 1px; }
+    .order-phone    { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+
+    .order-header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .order-header-meta { text-align: right; }
+    .order-total {
+      font-family: var(--font-head);
+      font-size: 1.55rem;
+      font-weight: 600;
+      color: var(--rose-dark);
+      line-height: 1;
+    }
+    .order-date { font-size: 0.73rem; color: var(--muted); margin-top: 3px; }
+
+    /* ── Expand toggle ── */
+    .expand-toggle {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.75rem;
+      color: var(--muted);
+      transition: var(--transition);
+    }
+    .order-card.expanded .expand-toggle {
+      background: var(--rose-dark);
+      border-color: var(--rose-dark);
+      color: var(--white);
+      transform: rotate(180deg);
+    }
+
+    /* ── Status badge ── */
+    .order-status {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .status-pending   { background: var(--amber-bg);   color: var(--amber);  border: 1px solid #fcd34d; }
+    .status-confirmed { background: var(--green-bg);   color: var(--green);  border: 1px solid var(--green-bd); }
+    .status-shipped   { background: var(--blue-bg);    color: var(--blue);   border: 1px solid var(--blue-bd); }
+    .status-delivered { background: var(--purple-bg);  color: var(--purple); border: 1px solid var(--purple-bd); }
+    .status-cancelled { background: var(--red-bg);     color: var(--red);    border: 1px solid var(--red-bd); }
+
+    /* ── Payment badge ── */
+    .payment-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .payment-cod    { background: #fff8e1; color: #f59f00; border: 1px solid #ffe082; }
+    .payment-online { background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-bd); }
+
+    /* ── Expandable Details ── */
+    .order-details {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .order-card.expanded .order-details {
+      max-height: 1000px;
+    }
+
+    .order-body { padding: 20px 24px; border-bottom: 1px solid var(--border); }
+
+    /* Address */
+    .order-address {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: 18px;
+      font-size: 0.84rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .order-address-icon { font-size: 1rem; flex-shrink: 0; margin-top: 2px; }
+    .order-address span { color: var(--text); }
+
+    /* Meta row */
+    .order-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .order-meta-item {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 14px;
+    }
+    .order-meta-label {
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+    .order-meta-value {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text);
+      word-break: break-all;
+    }
+
+    /* Items table */
+    .items-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .items-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    .items-table thead tr { border-bottom: 1px solid var(--border); }
+    .items-table th {
+      text-align: left;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0 8px 8px 0;
+    }
+    .items-table th:last-child { text-align: right; padding-right: 0; }
+    .items-table td {
+      padding: 9px 8px 9px 0;
+      border-bottom: 1px dashed var(--border);
+      vertical-align: middle;
+    }
+    .items-table tr:last-child td { border-bottom: none; }
+    .items-table td:last-child { text-align: right; padding-right: 0; }
+    .item-name  { color: var(--text); font-weight: 500; }
+    .item-qty   { color: var(--muted); }
+    .item-price { color: var(--rose-dark); font-weight: 600; font-family: var(--font-head); font-size: 1rem; }
+
+    /* ── Card Footer ── */
+    .order-footer {
+      padding: 14px 24px;
+      background: var(--sand);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .order-footer-totals { display: flex; gap: 20px; font-size: 0.82rem; flex-wrap: wrap; }
+    .order-footer-row { display: flex; gap: 6px; color: var(--muted); }
+    .order-footer-row span:last-child { color: var(--text); font-weight: 600; }
+
+    .order-footer-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Status dropdown */
+    .order-status-select {
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text);
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 999px;
+      padding: 7px 14px;
+      outline: none;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .order-status-select:focus { border-color: var(--rose); }
+
+    /* Quick action buttons */
+    .quick-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+    .quick-btn {
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1.5px solid;
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+    .quick-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+    .qb-confirm  { background: var(--green-bg);  color: var(--green);  border-color: var(--green-bd); }
+    .qb-ship     { background: var(--blue-bg);   color: var(--blue);   border-color: var(--blue-bd); }
+    .qb-deliver  { background: var(--purple-bg); color: var(--purple); border-color: var(--purple-bd); }
+
+    /* Update status button */
+    .btn-update-status {
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 7px 16px;
+      border-radius: 999px;
+      border: none;
+      background: var(--rose-dark);
+      color: var(--white);
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+    .btn-update-status:hover { background: var(--rose-deep); transform: translateY(-1px); }
+    .btn-update-status:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .btn-update-status.saving { opacity: 0.7; }
+
+    /* ══════════════════════════════════════════
+       REALTIME BADGE
+    ══════════════════════════════════════════ */
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--green);
+      background: var(--green-bg);
+      border: 1px solid var(--green-bd);
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+    .live-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 1.5s ease infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.3; }
+    }
+
+    /* ══════════════════════════════════════════
+       TOAST NOTIFICATION
+    ══════════════════════════════════════════ */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 9000;
+      background: var(--text);
+      color: var(--white);
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      box-shadow: var(--shadow-md);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      pointer-events: none;
+      max-width: 320px;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.success { background: var(--green); }
+    .toast.error   { background: var(--red); }
+
+    /* ══════════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════════ */
+    @media (max-width: 900px) {
+      .admin-sidebar { transform: translateX(-105%); }
+      body.sidebar-open .admin-sidebar { transform: translateX(0); }
+      .topbar, .page { margin-left: 0; }
+      .admin-mobile-toggle { display: inline-flex; align-items: center; justify-content: center; }
+      .stats-strip { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 640px) {
+      .topbar { padding: 0 16px; }
+      .topbar-nav { display: none; }
+      .page { padding: 24px 16px 60px; }
+      .stats-strip { grid-template-columns: 1fr 1fr; }
+      .stats-strip .stat-card:last-child { grid-column: 1 / -1; }
+      .order-header { flex-direction: column; align-items: flex-start; }
+      .order-header-right { text-align: left; justify-content: flex-start; }
+      .order-footer { flex-direction: column; gap: 12px; }
+      .order-footer-actions { width: 100%; }
+      .order-status-select { width: 100%; }
+      .filter-bar { flex-direction: column; align-items: stretch; }
+      .filter-bar input { min-width: unset; }
+      .filter-divider { display: none; }
+      .order-meta-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 400px) {
+      .stats-strip { grid-template-columns: 1fr; }
+      .stats-strip .stat-card:last-child { grid-column: auto; }
+    }
+  </style>
+</head>
+<body class="admin-auth-loading">
+  <div id="adminAuthOverlay" aria-live="polite" data-phase="verifying">
+    <div class="auth-card">
+      <div class="auth-spinner"></div>
+      <div class="auth-title" id="adminAuthTitle">Verifying admin access</div>
+      <p class="auth-copy" id="adminAuthCopy">Restoring your Chic Charms operations session.</p>
+    </div>
+  </div>
+  <div class="admin-backdrop" id="adminBackdrop"></div>
+  <aside class="admin-sidebar" id="adminSidebar" aria-label="Admin navigation">
+    <div class="admin-sidebar-brand">
+      <a href="index.html" class="logo">Chic<span>Charms</span></a>
+      <div class="admin-sidebar-kicker">Operations CMS</div>
+    </div>
+    <nav class="admin-side-nav">
+      <a class="admin-side-link" href="admin.html#dashboardSection"><span class="admin-side-icon">D</span><span>Dashboard</span></a>
+      <a class="admin-side-link" href="admin.html#productForm"><span class="admin-side-icon">P</span><span>Products</span></a>
+      <a class="admin-side-link active" href="admin-orders.html"><span class="admin-side-icon">O</span><span>Orders</span></a>
+      <a class="admin-side-link" href="admin.html#customersSection"><span class="admin-side-icon">C</span><span>Customers</span></a>
+      <a class="admin-side-link" href="admin.html#inventoryTimelinePanel"><span class="admin-side-icon">I</span><span>Inventory</span></a>
+      <a class="admin-side-link" href="admin.html#metricsGrid"><span class="admin-side-icon">A</span><span>Analytics</span></a>
+    </nav>
+    <div class="admin-side-footer">
+      <div class="admin-user-email" id="adminUserEmail">Signed in as admin</div>
+      <button class="admin-side-btn" id="adminLogoutBtn" type="button">Sign out</button>
+    </div>
+  </aside>
+
+  <!-- ░░ TOP BAR ░░ -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="admin-mobile-toggle" id="adminMobileToggle" type="button" aria-label="Open navigation">☰</button>
+      <span class="topbar-logo">Chic<span>Charms</span></span>
+      <span class="topbar-badge">Admin V2</span>
+      <div class="admin-session-status" data-state="live" role="status" aria-live="polite" aria-label="Session status: Live">
+        <span class="session-status-dot" aria-hidden="true"></span>
+        <span class="session-status-label">Live</span>
+      </div>
+    </div>
+    <nav class="topbar-nav">
+      <a href="admin.html">Products</a>
+      <a href="admin-orders.html" class="active">Orders</a>
+      <a href="index.html">← Store</a>
+    </nav>
+  </header>
+
+  <!-- ░░ PAGE ░░ -->
+  <div class="page">
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="page-header-left">
+        <h1>Orders 📦</h1>
+        <p>Live orders from Firestore — updates in real-time</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span class="live-badge" id="liveBadge" style="display:none;">
+          <span class="live-dot"></span> Live
+        </span>
+        <button class="btn-refresh" id="refreshBtn">
+          <span class="refresh-icon" style="display:inline-block;">↻</span>
+          Refresh
+        </button>
+        <button class="export-btn" id="exportOrdersBtn" type="button">Export Orders CSV</button>
+      </div>
+    </div>
+
+    <!-- Stats Strip (5 cards) -->
+    <div class="stats-strip" id="statsStrip" style="display:none;">
+      <div class="stat-card">
+        <div class="stat-label">Total Orders</div>
+        <div class="stat-value" id="statCount">0</div>
+      </div>
+      <div class="stat-card stat-pending">
+        <div class="stat-label">Pending</div>
+        <div class="stat-value" id="statPending">0</div>
+      </div>
+      <div class="stat-card stat-delivered">
+        <div class="stat-label">Delivered</div>
+        <div class="stat-value" id="statDelivered">0</div>
+      </div>
+      <div class="stat-card stat-cancelled">
+        <div class="stat-label">Cancelled</div>
+        <div class="stat-value" id="statCancelled">0</div>
+      </div>
+      <div class="stat-card stat-revenue">
+        <div class="stat-label">Total Revenue</div>
+        <div class="stat-value" id="statRevenue">₹0</div>
+      </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar" id="filterBar" style="display:none;">
+      <div class="filter-search-row">
+        <input type="text" id="orderSearch" placeholder="🔍 Search by name or phone…" />
+        <select class="sort-select" id="sortSelect">
+          <option value="newest">↓ Newest First</option>
+          <option value="oldest">↑ Oldest First</option>
+          <option value="highest">↓ Highest Amount</option>
+          <option value="lowest">↑ Lowest Amount</option>
+        </select>
+      </div>
+      <div class="filter-divider"></div>
+      <div class="status-filter-btns">
+        <button class="sf-btn active" data-sf="all">All</button>
+        <button class="sf-btn" data-sf="pending">⏳ Pending</button>
+        <button class="sf-btn" data-sf="confirmed">✅ Confirmed</button>
+        <button class="sf-btn" data-sf="shipped">🚚 Shipped</button>
+        <button class="sf-btn" data-sf="delivered">🎁 Delivered</button>
+        <button class="sf-btn" data-sf="cancelled">❌ Cancelled</button>
+      </div>
+    </div>
+
+    <!-- Loading Skeleton -->
+    <div class="loading-wrap" id="loadingWrap">
+      <div class="skeleton-card">
+        <div class="skeleton-row"><div class="sk h20 w30"></div><div class="sk h20 w20"></div></div>
+        <div class="sk w60"></div><div class="sk w80"></div>
+        <div class="sk h12 w40" style="margin-top:4px;"></div>
+      </div>
+      <div class="skeleton-card">
+        <div class="skeleton-row"><div class="sk h20 w40"></div><div class="sk h20 w20"></div></div>
+        <div class="sk w50"></div><div class="sk w70"></div>
+        <div class="sk h12 w30" style="margin-top:4px;"></div>
+      </div>
+      <div class="skeleton-card">
+        <div class="skeleton-row"><div class="sk h20 w35"></div><div class="sk h20 w25"></div></div>
+        <div class="sk w65"></div><div class="sk w75"></div>
+        <div class="sk h12 w45" style="margin-top:4px;"></div>
+      </div>
+    </div>
+
+    <!-- Error -->
+    <div class="error-wrap" id="errorWrap">
+      <strong>⚠️ Failed to load orders</strong>
+      <p id="errorMsg">Please check your internet connection and try refreshing.</p>
+    </div>
+
+    <!-- Empty -->
+    <div class="empty-wrap" id="emptyWrap">
+      <div class="empty-icon">🛍️</div>
+      <h2>No orders yet</h2>
+      <p>When customers place orders, they'll appear here.</p>
+    </div>
+
+    <!-- Orders List -->
+    <div class="orders-list" id="ordersList"></div>
+
+  </div><!-- /page -->
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+       FIREBASE MODULE
+  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
+  <script type="module">
+    import { initializeApp, getApps }
+      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, signOut }
+      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { createAdminGuard } from "./admin-guard.js";
+    import { AdminToast, AdminSessionStatus, AdminSessionTimer, adminReveal } from "./admin-session-ux.js";
+    import { getFirestore, collection, addDoc, doc, onSnapshot, updateDoc, query, orderBy, Timestamp }
+      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    /* ══════════════════════════════════════════
+       FIREBASE INIT — safe singleton
+    ══════════════════════════════════════════ */
+    const FIREBASE_CONFIG = {
+      apiKey:            "AIzaSyA5Bh77_4HE3yQF0hi5ddvbFLZC7rEerxg",
+      authDomain:        "chic-charms-store.firebaseapp.com",
+      projectId:         "chic-charms-store",
+      storageBucket:     "chic-charms-store.firebasestorage.app",
+      messagingSenderId: "342514318589",
+      appId:             "1:342514318589:web:31c3490c10731e46d75294",
+    };
+
+    const app = getApps().length ? getApps()[0] : initializeApp(FIREBASE_CONFIG);
+    const db  = getFirestore(app);
+
+    /* ============================================================
+       STATE MANAGEMENT
+       Flat aliases are kept for compatibility with existing handlers;
+       AdminOrdersState is the future extraction boundary.
+    ============================================================ */
+    const AdminOrdersState = {
+      orders: [],
+      filters: {
+        text: "",
+        status: "all",
+        sort: "newest",
+      },
+      listener: {
+        unsubscribe: null,
+        cleanup: new Set(),
+      },
+      auth: {
+        verified: false,
+      },
+      renderQueued: false,
+    };
+
+    let allOrders    = [];
+    let filterText   = "";
+    let filterStatus = "all";
+    let sortMode     = "newest";
+    let unsubscribe  = null; // single listener ref
+    const realtimeUnsubscribers = new Set();
+
+    /* ══════════════════════════════════════════
+       DOM REFS
+    ══════════════════════════════════════════ */
+    const $id = (id) => document.getElementById(id);
+    const $all = (selector) => document.querySelectorAll(selector);
+
+    const loadingWrap  = $id("loadingWrap");
+    const errorWrap    = $id("errorWrap");
+    const emptyWrap    = $id("emptyWrap");
+    const ordersList   = $id("ordersList");
+    const statsStrip   = $id("statsStrip");
+    const filterBar    = $id("filterBar");
+    const orderSearch  = $id("orderSearch");
+    const sortSelect   = $id("sortSelect");
+    const refreshBtn   = $id("refreshBtn");
+    const liveBadge    = $id("liveBadge");
+    const statCount    = $id("statCount");
+    const statPending  = $id("statPending");
+    const statDelivered= $id("statDelivered");
+    const statCancelled= $id("statCancelled");
+    const statRevenue  = $id("statRevenue");
+    const sfBtns       = $all(".sf-btn");
+    const toastEl      = $id("toast");
+    const adminMobileToggle = $id("adminMobileToggle");
+    const adminBackdrop = $id("adminBackdrop");
+    const adminLogoutBtn = $id("adminLogoutBtn");
+    const adminUserEmail = $id("adminUserEmail");
+    const exportOrdersBtn = $id("exportOrdersBtn");
+    let adminVerified = false;
+
+    /* ============================================================
+       SHARED HELPERS
+       DOM, formatting, Firestore mapping, CSV, badges, and toasts.
+    ============================================================ */
+
+    /** XSS-safe escaping */
+    function esc(s) {
+      return String(s ?? "")
+        .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+    }
+
+    /** Format Firestore timestamp */
+    function formatDate(ts) {
+      if (!ts) return "—";
+      const d = ts.toDate ? ts.toDate() : new Date(ts);
+      return d.toLocaleDateString("en-IN", {
+        day:"numeric", month:"short", year:"numeric",
+        hour:"2-digit", minute:"2-digit"
+      });
+    }
+
+    /** INR currency formatter */
+    function formatINR(n) { return "₹" + Number(n || 0).toLocaleString("en-IN"); }
+
+    /** Show / hide helpers */
+    function showEl(el) { el.style.display = "block"; }
+    function hideEl(el) { el.style.display = "none";  }
+
+    function mapSnapshotDocs(snap) {
+      return snap.docs.map((d) => ({ _id: d.id, id: d.id, ...d.data() }));
+    }
+
+    function syncStateAliases() {
+      AdminOrdersState.orders = allOrders;
+      AdminOrdersState.filters.text = filterText;
+      AdminOrdersState.filters.status = filterStatus;
+      AdminOrdersState.filters.sort = sortMode;
+      AdminOrdersState.listener.unsubscribe = unsubscribe;
+      AdminOrdersState.listener.cleanup = realtimeUnsubscribers;
+      AdminOrdersState.auth.verified = adminVerified;
+    }
+
+    function setRealtimeVisible(hasOrders) {
+      statsStrip.style.display = hasOrders ? "grid" : "none";
+      filterBar.style.display  = hasOrders ? "flex" : "none";
+      liveBadge.style.display  = hasOrders ? "inline-flex" : "none";
+      if (hasOrders) hideEl(emptyWrap);
+      else showEl(emptyWrap);
+    }
+
+    /** Status badge HTML */
+    function statusBadge(s) {
+      const map = {
+        pending:   ["status-pending",   "⏳ Pending"],
+        confirmed: ["status-confirmed", "✅ Confirmed"],
+        shipped:   ["status-shipped",   "🚚 Shipped"],
+        delivered: ["status-delivered", "🎁 Delivered"],
+        cancelled: ["status-cancelled", "❌ Cancelled"],
+      };
+      const [cls, label] = map[s] || ["status-pending", "⏳ Pending"];
+      return `<span class="order-status ${cls}">${label}</span>`;
+    }
+
+    /** Payment method badge HTML */
+    function paymentBadge(method) {
+      const m = (method || "").toLowerCase();
+      if (m === "cod" || m === "cash on delivery") {
+        return `<span class="payment-badge payment-cod">💵 COD</span>`;
+      }
+      return `<span class="payment-badge payment-online">💳 Online</span>`;
+    }
+
+    /** Premium toast -- delegates to AdminToast (admin-session-ux.js) */
+    function showToast(msg, type = "success") {
+      AdminToast.show(msg, type === "error" ? "error" : type === "warning" ? "warning" : "success");
+    }
+
+    /* ============================================================
+       AUTH — delegated to admin-guard.js
+       Whitelist, overlay management, flash prevention and
+       redirect logic all live in the shared guard module.
+    ============================================================ */
+
+    /* Expose cleanup hook so guard can tear down listeners on deny */
+    window.__adminCleanup = () => cleanupRealtimeListener();
+
+    const _guard = createAdminGuard({
+      app,
+      nextPage: "admin-orders.html",
+      onGranted(user) {
+        adminVerified = true;
+        AdminOrdersState.auth.verified = true;
+        /* Premium reveal choreography */
+        adminReveal([".admin-sidebar", ".topbar"]);
+        /* Session timer in sidebar footer */
+        AdminSessionTimer.start(".admin-side-footer");
+        startRealtimeListener();
+      },
+    });
+
+    /* auth ref used by sign-out handler */
+    const auth = _guard.auth;
+
+    function verifyAdminAndStart() { _guard.start(); }
+
+    async function logAdminActivity(actionType, entityType, entityId, details = {}) {
+      if (!adminVerified) return;
+      try {
+        await addDoc(collection(db, "adminActivityLogs"), {
+          adminEmail: auth.currentUser?.email || "",
+          actionType,
+          timestamp: Timestamp.now(),
+          entityType,
+          entityId: entityId || null,
+          affectedEntity: { type: entityType, id: entityId || null, name: details.name || null },
+          details,
+        });
+      } catch (err) {
+        console.warn("Admin activity log failed:", err);
+      }
+    }
+
+    function downloadOrdersCSV() {
+      if (!allOrders.length) {
+        showToast("No orders available to export.", "error");
+        return;
+      }
+      const rows = allOrders.map((o) => ({
+        id: o._id,
+        customerName: o.customerName || "",
+        email: o.email || o.userEmail || "",
+        phone: o.phone || "",
+        status: o.status || "pending",
+        paymentMethod: o.paymentMethod || "",
+        total: o.totalAmount || o.total || 0,
+        createdAt: formatDate(o.createdAt),
+      }));
+      const headers = Object.keys(rows[0]);
+      const csv = [
+        headers.join(","),
+        ...rows.map((row) => headers.map((key) => `"${String(row[key] ?? "").replace(/"/g, '""')}"`).join(",")),
+      ].join("\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "chic-charms-orders.csv";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      showToast("Orders CSV exported.", "success");
+    }
+
+    /* ============================================================
+       ANALYTICS
+    ============================================================ */
+    function calculateOrderStats(orders) {
+      let totalRevenue = 0, pending = 0, delivered = 0, cancelled = 0;
+      orders.forEach(o => {
+        totalRevenue += Number(o.totalAmount || o.total || 0);
+        const s = (o.status || "pending").toLowerCase();
+        if (s === "pending")   pending++;
+        if (s === "delivered") delivered++;
+        if (s === "cancelled") cancelled++;
+      });
+      return { totalRevenue, pending, delivered, cancelled, count: orders.length };
+    }
+
+    function updateStats(orders) {
+      const stats = calculateOrderStats(orders);
+      statCount.textContent    = stats.count;
+      statPending.textContent  = stats.pending;
+      statDelivered.textContent= stats.delivered;
+      statCancelled.textContent= stats.cancelled;
+      statRevenue.textContent  = formatINR(stats.totalRevenue);
+    }
+
+    /* ============================================================
+       ORDERS: FILTER, SORT, RENDER
+    ============================================================ */
+    function getFilteredSorted() {
+      let list = allOrders.filter(o => {
+        // Text search: name or phone
+        if (filterText) {
+          const q = filterText.toLowerCase();
+          const hay = [o.customerName, o.phone, o.email].join(" ").toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        // Status filter
+        if (filterStatus !== "all") {
+          const s = (o.status || "pending").toLowerCase();
+          if (s !== filterStatus) return false;
+        }
+        return true;
+      });
+
+      // Sort
+      switch (sortMode) {
+        case "oldest":
+          list.sort((a, b) => getTimestamp(a) - getTimestamp(b));
+          break;
+        case "highest":
+          list.sort((a, b) => Number(b.totalAmount||0) - Number(a.totalAmount||0));
+          break;
+        case "lowest":
+          list.sort((a, b) => Number(a.totalAmount||0) - Number(b.totalAmount||0));
+          break;
+        default: // newest
+          list.sort((a, b) => getTimestamp(b) - getTimestamp(a));
+      }
+
+      return list;
+    }
+
+    function getTimestamp(o) {
+      if (!o.createdAt) return 0;
+      return o.createdAt.toDate ? o.createdAt.toDate().getTime() : new Date(o.createdAt).getTime();
+    }
+
+    function renderOrders() {
+      const list = getFilteredSorted();
+
+      ordersList.innerHTML = "";
+      hideEl(emptyWrap);
+      hideEl(errorWrap);
+
+      if (list.length === 0) {
+        showEl(emptyWrap);
+        emptyWrap.querySelector("h2").textContent = (filterText || filterStatus !== "all")
+          ? "No matching orders" : "No orders yet";
+        emptyWrap.querySelector("p").textContent = (filterText || filterStatus !== "all")
+          ? "Try adjusting your filters." : "When customers place orders, they'll appear here.";
+        return;
+      }
+
+      const fragment = document.createDocumentFragment();
+      list.forEach((o, idx) => {
+        const card = buildCard(o, idx);
+        fragment.appendChild(card);
+      });
+      ordersList.appendChild(fragment);
+    }
+
+    function scheduleRenderOrders() {
+      if (AdminOrdersState.renderQueued) return;
+      AdminOrdersState.renderQueued = true;
+      requestAnimationFrame(() => {
+        AdminOrdersState.renderQueued = false;
+        renderOrders();
+      });
+    }
+
+    /* ══════════════════════════════════════════
+       BUILD ORDER CARD (modular)
+    ══════════════════════════════════════════ */
+    function buildCard(o, index) {
+      const docId      = o._id;
+      const curStatus  = (o.status || "pending").toLowerCase();
+      const num        = String(index + 1).padStart(3, "0");
+
+      const card = document.createElement("div");
+      card.className = "order-card";
+      card.dataset.id = docId;
+      card.style.animationDelay = Math.min(index * 0.04, 0.4) + "s";
+
+      card.innerHTML = buildCardHTML(o, curStatus, num);
+
+      return card;
+    }
+
+    function buildCardHTML(o, curStatus, num) {
+      const docId = o._id;
+      return `
+        <!-- Clickable header -->
+        <div class="order-header" role="button" tabindex="0" aria-expanded="false"
+             onclick="toggleCard(this)" onkeydown="if(event.key==='Enter'||event.key===' ')toggleCard(this)">
+          <div class="order-header-left">
+            <span class="order-num">#${esc(num)}</span>
+            <div class="order-customer-info">
+              <div class="order-customer">${esc(o.customerName || "—")}</div>
+              ${o.email ? `<div class="order-email">✉️ ${esc(o.email)}</div>` : ""}
+              <div class="order-phone">📞 ${esc(o.phone || "—")}</div>
+            </div>
+          </div>
+          <div class="order-header-right">
+            <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+              ${statusBadge(curStatus)}
+              ${paymentBadge(o.paymentMethod)}
+            </div>
+            <div class="order-header-meta">
+              <div class="order-total">${formatINR(o.totalAmount)}</div>
+              <div class="order-date">🕐 ${formatDate(o.createdAt)}</div>
+            </div>
+            <div class="expand-toggle">▼</div>
+          </div>
+        </div>
+
+        <!-- Expandable details -->
+        <div class="order-details">
+          ${buildDetailsHTML(o)}
+          ${buildFooterHTML(o, curStatus)}
+        </div>
+      `;
+    }
+
+    function buildDetailsHTML(o) {
+      const itemRows = (o.items || []).map(item => {
+        const lineTotal = Number(item.price || 0) * Number(item.quantity || 1);
+        return `<tr>
+          <td class="item-name">${esc(item.name)}</td>
+          <td class="item-qty">×${item.quantity || 1}</td>
+          <td class="item-price">${formatINR(lineTotal)}</td>
+        </tr>`;
+      }).join("");
+
+      return `
+        <div class="order-body">
+          <!-- Shipping address -->
+          <div class="order-address">
+            <span class="order-address-icon">📍</span>
+            <div>
+              <span>${esc(o.address || "—")}</span>
+              ${o.pincode ? `<span style="margin-left:6px;font-size:0.78rem;color:var(--muted);">PIN: ${esc(o.pincode)}</span>` : ""}
+            </div>
+          </div>
+
+          <!-- Meta grid -->
+          <div class="order-meta-grid">
+            <div class="order-meta-item">
+              <div class="order-meta-label">Customer Email</div>
+              <div class="order-meta-value">${esc(o.email || "—")}</div>
+            </div>
+            <div class="order-meta-item">
+              <div class="order-meta-label">Customer UID</div>
+              <div class="order-meta-value">${esc(o.uid || o.userId || "—")}</div>
+            </div>
+            <div class="order-meta-item">
+              <div class="order-meta-label">Payment Method</div>
+              <div class="order-meta-value">${esc(o.paymentMethod || "—")}</div>
+            </div>
+            <div class="order-meta-item">
+              <div class="order-meta-label">Order Date</div>
+              <div class="order-meta-value">${formatDate(o.createdAt)}</div>
+            </div>
+            ${o.pincode ? `<div class="order-meta-item">
+              <div class="order-meta-label">Pincode</div>
+              <div class="order-meta-value">${esc(o.pincode)}</div>
+            </div>` : ""}
+            ${o.razorpayOrderId ? `<div class="order-meta-item">
+              <div class="order-meta-label">Razorpay Order ID</div>
+              <div class="order-meta-value">${esc(o.razorpayOrderId)}</div>
+            </div>` : ""}
+          </div>
+
+          <!-- Items table -->
+          <div class="items-label">Items Ordered</div>
+          <table class="items-table">
+            <thead>
+              <tr><th>Product</th><th>Qty</th><th>Price</th></tr>
+            </thead>
+            <tbody>${itemRows || '<tr><td colspan="3" style="color:var(--muted);padding:12px 0;">No items recorded</td></tr>'}</tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function buildFooterHTML(o, curStatus) {
+      const docId = o._id;
+      return `
+        <div class="order-footer">
+          <div class="order-footer-totals">
+            <div class="order-footer-row">
+              <span>Subtotal</span><span>${formatINR(o.subtotal)}</span>
+            </div>
+            <div class="order-footer-row">
+              <span>Shipping</span>
+              <span>${Number(o.shipping) === 0 ? "Free" : formatINR(o.shipping ?? 49)}</span>
+            </div>
+            <div class="order-footer-row total-row">
+              <span>Total</span><span>${formatINR(o.totalAmount)}</span>
+            </div>
+          </div>
+
+          <div class="order-footer-actions">
+            <!-- Quick action buttons -->
+            <div class="quick-btns">
+              ${curStatus !== "confirmed" && curStatus !== "cancelled"
+                ? `<button class="quick-btn qb-confirm" data-id="${esc(docId)}" data-status="confirmed">✅ Confirm</button>` : ""}
+              ${curStatus !== "shipped" && curStatus !== "delivered" && curStatus !== "cancelled"
+                ? `<button class="quick-btn qb-ship" data-id="${esc(docId)}" data-status="shipped">🚚 Ship</button>` : ""}
+              ${curStatus !== "delivered" && curStatus !== "cancelled"
+                ? `<button class="quick-btn qb-deliver" data-id="${esc(docId)}" data-status="delivered">🎁 Deliver</button>` : ""}
+            </div>
+
+            <!-- Status dropdown + update -->
+            <select class="order-status-select" data-id="${esc(docId)}">
+              <option value="pending"   ${curStatus==="pending"   ? "selected":""}>⏳ Pending</option>
+              <option value="confirmed" ${curStatus==="confirmed" ? "selected":""}>✅ Confirmed</option>
+              <option value="shipped"   ${curStatus==="shipped"   ? "selected":""}>🚚 Shipped</option>
+              <option value="delivered" ${curStatus==="delivered" ? "selected":""}>🎁 Delivered</option>
+              <option value="cancelled" ${curStatus==="cancelled" ? "selected":""}>❌ Cancelled</option>
+            </select>
+            <button class="btn-update-status" data-id="${esc(docId)}">Update</button>
+          </div>
+        </div>
+      `;
+    }
+
+    /* ══════════════════════════════════════════
+       CARD ACCORDION TOGGLE (global fn)
+    ══════════════════════════════════════════ */
+    window.toggleCard = function(headerEl) {
+      const card = headerEl.closest(".order-card");
+      const isExpanded = card.classList.contains("expanded");
+      card.classList.toggle("expanded", !isExpanded);
+      headerEl.setAttribute("aria-expanded", String(!isExpanded));
+    };
+
+    /* ══════════════════════════════════════════
+       ORDERS - status updates and activity logs
+    ══════════════════════════════════════════ */
+    async function updateOrderStatus(docId, newStatus) {
+      if (!docId || !newStatus) return;
+      try {
+        const order = allOrders.find((o) => o._id === docId);
+        await updateDoc(doc(db, "orders", docId), {
+          status: newStatus,
+          updatedAt: new Date().toISOString(),
+          updatedBy: auth.currentUser?.email || "",
+        });
+        await logAdminActivity("ORDER_STATUS_CHANGE", "order", docId, {
+          name: order?.customerName || order?.email || "Order",
+          previousStatus: order?.status || "pending",
+          newStatus,
+          totalAmount: order?.totalAmount || order?.total || 0,
+        });
+        showToast(`Order marked as ${newStatus}`, "success");
+      } catch (err) {
+        console.error("Status update error:", err);
+        showToast("Could not update order status.", "error");
+      }
+    }
+
+    // Delegated: Update button click
+    ordersList.addEventListener("click", async function (e) {
+      // Update status button
+      if (e.target.classList.contains("btn-update-status")) {
+        const id  = e.target.dataset.id;
+        const sel = e.target.closest(".order-footer-actions")?.querySelector(".order-status-select");
+        if (!sel) return;
+        const newStatus = sel.value;
+        e.target.disabled = true;
+        e.target.textContent = "Saving…";
+        await updateOrderStatus(id, newStatus);
+        e.target.disabled = false;
+        e.target.textContent = "Update";
+        return;
+      }
+
+      // Quick action buttons
+      if (e.target.classList.contains("quick-btn")) {
+        const id     = e.target.dataset.id;
+        const status = e.target.dataset.status;
+        e.target.disabled = true;
+        await updateOrderStatus(id, status);
+        e.target.disabled = false;
+        return;
+      }
+    });
+
+    /* ══════════════════════════════════════════
+       REALTIME LISTENERS
+       Centralized listener registration. Single orders onSnapshot.
+    ══════════════════════════════════════════ */
+
+    function registerRealtimeListener(unsubscribeFn) {
+      if (typeof unsubscribeFn !== "function") return unsubscribeFn;
+      let active = true;
+      const wrappedUnsubscribe = () => {
+        if (!active) return;
+        active = false;
+        realtimeUnsubscribers.delete(wrappedUnsubscribe);
+        unsubscribeFn();
+      };
+      realtimeUnsubscribers.add(wrappedUnsubscribe);
+      syncStateAliases();
+      return wrappedUnsubscribe;
+    }
+
+    function cleanupRealtimeListener() {
+      Array.from(realtimeUnsubscribers).forEach((unsubscribeFn) => unsubscribeFn());
+      realtimeUnsubscribers.clear();
+      unsubscribe = null;
+      syncStateAliases();
+    }
+
+    function startRealtimeListener() {
+      // Guard: never attach duplicate listener
+      if (!adminVerified) return;
+      if (unsubscribe) return;
+
+      const q = query(collection(db, "orders"), orderBy("createdAt", "desc"));
+
+      unsubscribe = registerRealtimeListener(onSnapshot(q, function (snap) {
+        hideEl(loadingWrap);
+        hideEl(errorWrap);
+
+        allOrders = mapSnapshotDocs(snap);
+        syncStateAliases();
+
+        if (allOrders.length === 0) {
+          setRealtimeVisible(false);
+          return;
+        }
+
+        updateStats(allOrders);
+        setRealtimeVisible(true);
+
+        scheduleRenderOrders();
+        refreshBtn.classList.remove("spinning");
+      }, function (err) {
+        console.error("onSnapshot error:", err);
+        hideEl(loadingWrap);
+        $id("errorMsg").textContent =
+          "Error: " + (err.message || "Could not connect to database.");
+        showEl(errorWrap);
+        refreshBtn.classList.remove("spinning");
+      }));
+    }
+
+    /* ══════════════════════════════════════════
+       FILTER + SORT EVENTS
+    ══════════════════════════════════════════ */
+    orderSearch.addEventListener("input", function () {
+      filterText = this.value.trim();
+      syncStateAliases();
+      scheduleRenderOrders();
+    });
+
+    sortSelect.addEventListener("change", function () {
+      sortMode = this.value;
+      syncStateAliases();
+      scheduleRenderOrders();
+    });
+
+    sfBtns.forEach(btn => {
+      btn.addEventListener("click", function () {
+        sfBtns.forEach(b => b.classList.remove("active"));
+        this.classList.add("active");
+        filterStatus = this.dataset.sf;
+        syncStateAliases();
+        scheduleRenderOrders();
+      });
+    });
+
+    refreshBtn.addEventListener("click", function () {
+      refreshBtn.classList.add("spinning");
+      setTimeout(() => refreshBtn.classList.remove("spinning"), 800);
+    });
+    exportOrdersBtn?.addEventListener("click", downloadOrdersCSV);
+    adminMobileToggle?.addEventListener("click", function () {
+      document.body.classList.add("sidebar-open");
+      adminBackdrop?.classList.add("open");
+    });
+    adminBackdrop?.addEventListener("click", function () {
+      document.body.classList.remove("sidebar-open");
+      adminBackdrop?.classList.remove("open");
+    });
+    adminLogoutBtn?.addEventListener("click", async function () {
+      try {
+        await signOut(auth);
+        window.location.href = "auth.html?next=admin-orders.html";
+      } catch (err) {
+        showToast("Could not sign out. Try again.", "error");
+      }
+    });
+
+    /* ══════════════════════════════════════════
+       INIT
+    ══════════════════════════════════════════ */
+    window.addEventListener("beforeunload", () => { cleanupRealtimeListener(); _guard.cleanup(); });
+    verifyAdminAndStart();
+
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,1296 @@
+/* ============================================================
+   CHIC CHARMS — d7-luxury-motion.css
+   Phase D7 · Luxury Motion + Interaction Refinement System
+   Additive layer — preserves all existing styles & systems
+   ============================================================ */
+
+/* ── D7 Motion Tokens ── */
+:root {
+  /* ── Cinematic Easing Curves ── */
+  --ease-d7-silk:      cubic-bezier(0.19, 1, 0.22, 1);       /* long, breathing decel */
+  --ease-d7-cinema:    cubic-bezier(0.16, 1, 0.3, 1);        /* editorial snap-to-rest */
+  --ease-d7-hover:     cubic-bezier(0.34, 1.26, 0.64, 1);    /* soft spring on hover */
+  --ease-d7-reveal:    cubic-bezier(0.12, 0.8, 0.32, 1);     /* content entrance */
+  --ease-d7-exit:      cubic-bezier(0.4, 0, 0.8, 0.2);       /* graceful exit */
+  --ease-d7-press:     cubic-bezier(0.68, -0.55, 0.27, 1.55); /* tactile press rebound */
+  --ease-d7-float:     cubic-bezier(0.23, 1, 0.32, 1);        /* overlay float-in */
+
+  /* ── Duration Scale ── */
+  --dur-instant:   80ms;
+  --dur-fast:      160ms;
+  --dur-normal:    320ms;
+  --dur-medium:    480ms;
+  --dur-slow:      680ms;
+  --dur-cinema:    900ms;
+  --dur-epic:      1200ms;
+
+  /* ── Stagger Scale ── */
+  --stagger-xs:    60ms;
+  --stagger-sm:    90ms;
+  --stagger-md:    130ms;
+  --stagger-lg:    180ms;
+
+  /* ── Motion Shadows (depth on hover) ── */
+  --shadow-hover:  0 20px 60px rgba(60,40,30,0.13), 0 6px 20px rgba(60,40,30,0.07);
+  --shadow-lift:   0 32px 80px rgba(60,40,30,0.14), 0 8px 28px rgba(60,40,30,0.08);
+  --shadow-press:  0 4px 12px rgba(60,40,30,0.10);
+}
+
+/* ============================================================
+   D7 · REDUCED MOTION — Accessibility Gate
+   All animations respect prefers-reduced-motion
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .d7-reveal,
+  .d7-reveal-up,
+  .d7-reveal-left,
+  .d7-reveal-right,
+  .d7-reveal-scale,
+  .d7-stagger-child {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   D7 · SCROLL REVEAL SYSTEM — Cinematic Entrance Choreography
+   ============================================================ */
+
+/* Base reveal state */
+.d7-reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity var(--dur-slow) var(--ease-d7-silk),
+    transform var(--dur-slow) var(--ease-d7-silk);
+  will-change: opacity, transform;
+}
+.d7-reveal.d7-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Directional variants */
+.d7-reveal-up {
+  opacity: 0;
+  transform: translateY(32px);
+  transition:
+    opacity var(--dur-cinema) var(--ease-d7-reveal),
+    transform var(--dur-cinema) var(--ease-d7-reveal);
+}
+.d7-reveal-up.d7-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.d7-reveal-left {
+  opacity: 0;
+  transform: translateX(-28px);
+  transition:
+    opacity var(--dur-cinema) var(--ease-d7-silk),
+    transform var(--dur-cinema) var(--ease-d7-silk);
+}
+.d7-reveal-left.d7-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.d7-reveal-right {
+  opacity: 0;
+  transform: translateX(28px);
+  transition:
+    opacity var(--dur-cinema) var(--ease-d7-silk),
+    transform var(--dur-cinema) var(--ease-d7-silk);
+}
+.d7-reveal-right.d7-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.d7-reveal-scale {
+  opacity: 0;
+  transform: scale(0.97);
+  transition:
+    opacity var(--dur-slow) var(--ease-d7-silk),
+    transform var(--dur-slow) var(--ease-d7-silk);
+}
+.d7-reveal-scale.d7-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Fine-grain delay tokens */
+.d7-delay-1  { transition-delay: 80ms;  }
+.d7-delay-2  { transition-delay: 160ms; }
+.d7-delay-3  { transition-delay: 240ms; }
+.d7-delay-4  { transition-delay: 340ms; }
+.d7-delay-5  { transition-delay: 460ms; }
+.d7-delay-6  { transition-delay: 580ms; }
+
+/* ============================================================
+   D7 · PAGE LOAD — Cinematic Initial Entrance
+   ============================================================ */
+@keyframes d7-page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+body {
+  animation: d7-page-enter var(--dur-cinema) var(--ease-d7-reveal) both;
+}
+
+/* Staggered hero elements */
+@keyframes d7-hero-word {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes d7-hero-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes d7-line-grow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* ============================================================
+   D7 · NAVBAR — Refined Sticky Behavior
+   ============================================================ */
+.navbar {
+  transition:
+    background var(--dur-medium) var(--ease-d7-silk),
+    box-shadow var(--dur-medium) var(--ease-d7-silk),
+    backdrop-filter var(--dur-medium) var(--ease-d7-silk);
+  will-change: transform;
+}
+
+.navbar.scrolled {
+  backdrop-filter: blur(24px) saturate(1.9);
+  -webkit-backdrop-filter: blur(24px) saturate(1.9);
+  box-shadow: 0 1px 0 rgba(237,230,221,0.8), 0 4px 32px rgba(60,40,30,0.07);
+}
+
+/* Nav link hover — refined underline sweep */
+.nav-links a,
+.nav-links.open a {
+  position: relative;
+  transition:
+    color var(--dur-normal) var(--ease-d7-silk);
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--rose-dark);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--dur-medium) var(--ease-d7-silk);
+}
+
+.nav-links a:hover::after,
+.nav-links a:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Logo hover */
+.logo {
+  transition:
+    opacity var(--dur-normal) var(--ease-d7-silk),
+    letter-spacing var(--dur-slow) var(--ease-d7-silk);
+}
+.logo:hover {
+  opacity: 0.75;
+  letter-spacing: 0.06em;
+}
+
+/* ============================================================
+   D7 · HERO — Cinematic Entrance System
+   ============================================================ */
+
+/* Hero text reveal — cascade */
+.hero-eyebrow {
+  animation: d7-hero-word var(--dur-cinema) var(--ease-d7-reveal) 200ms both;
+}
+
+.hero-title {
+  animation: d7-hero-word var(--dur-epic) var(--ease-d7-reveal) 340ms both;
+}
+
+.hero-sub,
+.hero-subtitle {
+  animation: d7-hero-word var(--dur-cinema) var(--ease-d7-reveal) 560ms both;
+}
+
+.hero-ctas,
+.hero-actions {
+  animation: d7-hero-fade var(--dur-cinema) var(--ease-d7-silk) 760ms both;
+}
+
+.trust-strip {
+  animation: d7-hero-fade var(--dur-cinema) var(--ease-d7-silk) 940ms both;
+}
+
+/* Hero image — cinematic zoom-in on load */
+.hero-image-wrap,
+.hero-media {
+  overflow: hidden;
+}
+
+.hero-image-wrap img,
+.hero-media img {
+  animation: d7-hero-zoom var(--dur-epic) var(--ease-d7-silk) 100ms both;
+  will-change: transform;
+}
+
+@keyframes d7-hero-zoom {
+  from {
+    transform: scale(1.04);
+    opacity: 0.85;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ============================================================
+   D7 · PRODUCT CARDS — Premium Editorial Hover System
+   ============================================================ */
+
+/* Base card refinement */
+.product-card,
+.lux-card {
+  transition:
+    transform var(--dur-medium) var(--ease-d7-hover),
+    box-shadow var(--dur-medium) var(--ease-d7-silk);
+  will-change: transform, box-shadow;
+  transform-origin: bottom center;
+}
+
+.product-card:hover,
+.lux-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Card image container */
+.product-card .card-image,
+.lux-card .card-img-wrap,
+.product-card .img-wrap {
+  overflow: hidden;
+  position: relative;
+}
+
+/* Image subtle zoom on hover */
+.product-card .card-image img,
+.lux-card .card-img-wrap img,
+.product-card .img-wrap img {
+  transition:
+    transform var(--dur-cinema) var(--ease-d7-cinema),
+    filter var(--dur-medium) var(--ease-d7-silk);
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.product-card:hover .card-image img,
+.lux-card:hover .card-img-wrap img,
+.product-card:hover .img-wrap img {
+  transform: scale(1.04);
+  filter: brightness(1.02) contrast(1.01);
+}
+
+/* Card info slide-up on hover */
+.product-card .card-info,
+.lux-card .card-info {
+  transition: transform var(--dur-medium) var(--ease-d7-hover);
+}
+
+.product-card:hover .card-info,
+.lux-card:hover .card-info {
+  transform: translateY(-2px);
+}
+
+/* Badge motion */
+.product-card .badge,
+.lux-card .badge,
+.badge-new,
+.badge-sale,
+.stock-badge {
+  transition:
+    transform var(--dur-normal) var(--ease-d7-hover),
+    opacity var(--dur-normal) var(--ease-d7-silk);
+}
+
+.product-card:hover .badge,
+.lux-card:hover .badge {
+  transform: translateY(-1px) scale(1.03);
+}
+
+/* Card name / price fade-in polish */
+.card-name,
+.card-title {
+  transition: color var(--dur-normal) var(--ease-d7-silk);
+}
+
+.product-card:hover .card-name,
+.product-card:hover .card-title,
+.lux-card:hover .card-name,
+.lux-card:hover .card-title {
+  color: var(--rose-dark);
+}
+
+/* Add to cart button — reveal from bottom */
+.card-cta,
+.card-add-btn,
+.card-action-btn {
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity var(--dur-normal) var(--ease-d7-silk),
+    transform var(--dur-normal) var(--ease-d7-hover),
+    background var(--dur-fast) var(--ease-d7-silk);
+}
+
+.product-card:hover .card-cta,
+.product-card:hover .card-add-btn,
+.product-card:hover .card-action-btn,
+.lux-card:hover .card-cta,
+.lux-card:hover .card-add-btn,
+.lux-card:hover .card-action-btn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Wishlist / quick-view icon buttons */
+.card-wishlist,
+.card-quick-view,
+.lux-card-icon {
+  transition:
+    opacity var(--dur-normal) var(--ease-d7-silk),
+    transform var(--dur-normal) var(--ease-d7-hover),
+    background var(--dur-fast);
+  opacity: 0;
+  transform: scale(0.88);
+}
+
+.product-card:hover .card-wishlist,
+.product-card:hover .card-quick-view,
+.product-card:hover .lux-card-icon,
+.lux-card:hover .card-wishlist,
+.lux-card:hover .card-quick-view,
+.lux-card:hover .lux-card-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ── Category cards ── */
+.cat-card {
+  transition:
+    transform var(--dur-medium) var(--ease-d7-hover),
+    box-shadow var(--dur-medium) var(--ease-d7-silk);
+  will-change: transform;
+}
+.cat-card:hover {
+  transform: translateY(-4px) scale(1.015);
+  box-shadow: var(--shadow-hover);
+}
+.cat-card img {
+  transition: transform var(--dur-cinema) var(--ease-d7-cinema);
+}
+.cat-card:hover img {
+  transform: scale(1.06);
+}
+
+/* ── Why / feature cards ── */
+.why-card,
+.feature-card {
+  transition:
+    transform var(--dur-medium) var(--ease-d7-hover),
+    box-shadow var(--dur-medium) var(--ease-d7-silk),
+    border-color var(--dur-normal) var(--ease-d7-silk);
+}
+.why-card:hover,
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--rose-light);
+}
+
+/* Testimonial cards */
+.testi-card {
+  transition:
+    transform var(--dur-medium) var(--ease-d7-hover),
+    box-shadow var(--dur-medium) var(--ease-d7-silk);
+}
+.testi-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* ============================================================
+   D7 · BUTTON SYSTEM — Tactile Luxury Interactions
+   ============================================================ */
+
+/* Primary CTA */
+.btn-primary,
+button.btn-primary,
+a.btn-primary {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform var(--dur-normal) var(--ease-d7-hover),
+    box-shadow var(--dur-normal) var(--ease-d7-silk),
+    background var(--dur-normal) var(--ease-d7-silk),
+    letter-spacing var(--dur-slow) var(--ease-d7-silk);
+  will-change: transform;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.10);
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-d7-silk);
+  pointer-events: none;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-rose), 0 2px 0 rgba(255,255,255,0.18) inset;
+  letter-spacing: 0.015em;
+}
+.btn-primary:hover::before { opacity: 1; }
+
+.btn-primary:active {
+  transform: translateY(0) scale(0.975);
+  box-shadow: var(--shadow-press);
+  transition-duration: var(--dur-instant);
+}
+
+/* Secondary / outline button */
+.btn-secondary,
+.btn-outline,
+button.btn-secondary {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform var(--dur-normal) var(--ease-d7-hover),
+    box-shadow var(--dur-normal) var(--ease-d7-silk),
+    background var(--dur-normal) var(--ease-d7-silk),
+    border-color var(--dur-normal) var(--ease-d7-silk),
+    color var(--dur-normal) var(--ease-d7-silk);
+}
+
+.btn-secondary:hover,
+.btn-outline:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(60,40,30,0.10);
+}
+.btn-secondary:active,
+.btn-outline:active {
+  transform: translateY(0) scale(0.975);
+  transition-duration: var(--dur-instant);
+}
+
+/* Nav button */
+.btn-nav {
+  transition:
+    transform var(--dur-normal) var(--ease-d7-hover),
+    box-shadow var(--dur-normal) var(--ease-d7-silk),
+    background var(--dur-normal) var(--ease-d7-silk);
+}
+.btn-nav:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(180,100,120,0.20);
+}
+.btn-nav:active {
+  transform: scale(0.96);
+  transition-duration: var(--dur-instant);
+}
+
+/* Luxury ripple: shimmer sweep on click */
+@keyframes d7-shimmer-sweep {
+  from {
+    transform: translateX(-100%) skewX(-15deg);
+    opacity: 0.6;
+  }
+  to {
+    transform: translateX(200%) skewX(-15deg);
+    opacity: 0;
+  }
+}
+
+.btn-primary::after,
+.btn-secondary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255,255,255,0.18) 50%,
+    transparent 100%
+  );
+  transform: translateX(-100%) skewX(-15deg);
+  pointer-events: none;
+}
+
+.btn-primary:hover::after,
+.btn-secondary:hover::after {
+  animation: d7-shimmer-sweep 0.7s var(--ease-d7-silk) both;
+}
+
+/* ── Focus states: luxury ring ── */
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible,
+.btn-nav:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--white), 0 0 0 4px var(--rose);
+  transition: box-shadow var(--dur-fast) var(--ease-d7-silk);
+}
+
+/* ============================================================
+   D7 · MODAL + OVERLAY — Luxury Cinematic System
+   ============================================================ */
+
+/* Backdrop */
+.modal-backdrop,
+.overlay-backdrop,
+#searchOverlay,
+#cartModal,
+#menuOverlay {
+  transition:
+    opacity var(--dur-medium) var(--ease-d7-silk),
+    visibility var(--dur-medium);
+  will-change: opacity;
+}
+
+/* Modal panel entrance */
+.modal-panel,
+.modal-content,
+.cart-panel,
+.search-panel {
+  transition:
+    transform var(--dur-slow) var(--ease-d7-float),
+    opacity var(--dur-medium) var(--ease-d7-silk);
+  will-change: transform, opacity;
+}
+
+/* Cart / side panel: slide from right */
+.cart-panel,
+[class*="cart-drawer"],
+[class*="side-panel"] {
+  transform: translateX(24px);
+  opacity: 0;
+  transition:
+    transform var(--dur-slow) var(--ease-d7-cinema),
+    opacity var(--dur-medium) var(--ease-d7-silk);
+}
+
+.cart-panel.open,
+.cart-panel.active,
+[class*="cart-drawer"].open {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* Search overlay: fade + gentle scale */
+#searchOverlay,
+.search-overlay {
+  backdrop-filter: blur(0px);
+  transition:
+    opacity var(--dur-medium) var(--ease-d7-silk),
+    backdrop-filter var(--dur-slow) var(--ease-d7-silk);
+}
+
+#searchOverlay.open,
+#searchOverlay.active,
+.search-overlay.visible {
+  backdrop-filter: blur(16px) saturate(1.5);
+}
+
+/* Modal center panels: float up */
+.modal,
+.dialog-panel {
+  transform: translateY(16px) scale(0.99);
+  opacity: 0;
+  transition:
+    transform var(--dur-slow) var(--ease-d7-float),
+    opacity var(--dur-medium) var(--ease-d7-silk);
+}
+.modal.open,
+.modal.active,
+.dialog-panel.open {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+/* Toast notification */
+#cartToast,
+.toast,
+[id*="Toast"] {
+  transform: translateY(16px) translateX(-50%);
+  opacity: 0;
+  transition:
+    transform var(--dur-medium) var(--ease-d7-cinema),
+    opacity var(--dur-normal) var(--ease-d7-silk);
+  will-change: transform, opacity;
+}
+
+#cartToast.show,
+.toast.show {
+  transform: translateY(0) translateX(-50%);
+  opacity: 1;
+}
+
+/* ── Toast pulse on show ── */
+@keyframes d7-toast-arrive {
+  0%   { transform: translateY(0) translateX(-50%) scale(1); }
+  40%  { transform: translateY(-3px) translateX(-50%) scale(1.025); }
+  100% { transform: translateY(0) translateX(-50%) scale(1); }
+}
+
+#cartToast.show,
+.toast.show {
+  animation: d7-toast-arrive 0.4s var(--ease-d7-press) both;
+}
+
+/* ============================================================
+   D7 · SECTION TRANSITIONS — Editorial Reveal Rhythm
+   ============================================================ */
+
+/* Section header eyebrow line grow */
+.section-eyebrow::after {
+  transform-origin: left;
+  animation: d7-line-grow var(--dur-slow) var(--ease-d7-silk) 300ms both;
+}
+
+/* Section dividers */
+.collection-divider-line,
+.divider-line,
+hr {
+  transform-origin: center;
+  transition: transform var(--dur-cinema) var(--ease-d7-silk);
+}
+
+/* ── Stagger grid children ── */
+.product-grid-lux .lux-card:nth-child(1),
+.product-grid-lux .product-card:nth-child(1) { --d7-stagger: 0ms; }
+.product-grid-lux .lux-card:nth-child(2),
+.product-grid-lux .product-card:nth-child(2) { --d7-stagger: 60ms; }
+.product-grid-lux .lux-card:nth-child(3),
+.product-grid-lux .product-card:nth-child(3) { --d7-stagger: 120ms; }
+.product-grid-lux .lux-card:nth-child(4),
+.product-grid-lux .product-card:nth-child(4) { --d7-stagger: 180ms; }
+.product-grid-lux .lux-card:nth-child(5),
+.product-grid-lux .product-card:nth-child(5) { --d7-stagger: 240ms; }
+.product-grid-lux .lux-card:nth-child(6),
+.product-grid-lux .product-card:nth-child(6) { --d7-stagger: 300ms; }
+.product-grid-lux .lux-card:nth-child(7),
+.product-grid-lux .product-card:nth-child(7) { --d7-stagger: 360ms; }
+.product-grid-lux .lux-card:nth-child(8),
+.product-grid-lux .product-card:nth-child(8) { --d7-stagger: 420ms; }
+.product-grid-lux .lux-card:nth-child(9),
+.product-grid-lux .product-card:nth-child(9) { --d7-stagger: 480ms; }
+
+/* Apply stagger to existing reveal system */
+.product-grid-lux .lux-card,
+.product-grid-lux .product-card {
+  transition-delay: var(--d7-stagger, 0ms);
+}
+
+/* ============================================================
+   D7 · GALLERY + IMAGE INTERACTIONS
+   ============================================================ */
+
+/* Gallery item hover */
+.gallery-item,
+.grid-item,
+[class*="gallery"] > * {
+  overflow: hidden;
+  position: relative;
+}
+
+.gallery-item img,
+.grid-item img {
+  transition:
+    transform var(--dur-cinema) var(--ease-d7-cinema),
+    filter var(--dur-medium) var(--ease-d7-silk);
+  will-change: transform;
+}
+
+.gallery-item:hover img,
+.grid-item:hover img {
+  transform: scale(1.05);
+  filter: brightness(1.03);
+}
+
+/* Product page main image */
+.product-gallery-main img,
+.product-main-img,
+.product-image-hero img {
+  transition:
+    transform var(--dur-cinema) var(--ease-d7-cinema),
+    opacity var(--dur-medium) var(--ease-d7-silk);
+  will-change: transform;
+}
+
+.product-gallery-main:hover img,
+.product-image-hero:hover img {
+  transform: scale(1.025);
+}
+
+/* Gallery thumbnail active state */
+.gallery-thumb,
+.product-thumb,
+[class*="thumb-item"] {
+  transition:
+    opacity var(--dur-normal) var(--ease-d7-silk),
+    transform var(--dur-normal) var(--ease-d7-hover),
+    box-shadow var(--dur-normal) var(--ease-d7-silk),
+    border-color var(--dur-normal) var(--ease-d7-silk);
+  opacity: 0.65;
+}
+
+.gallery-thumb:hover,
+.product-thumb:hover {
+  opacity: 1;
+  transform: scale(1.04);
+}
+
+.gallery-thumb.active,
+.product-thumb.active {
+  opacity: 1;
+  box-shadow: 0 0 0 2px var(--rose-dark);
+  border-color: var(--rose-dark);
+}
+
+/* ── Image swap transition ── */
+@keyframes d7-img-swap {
+  from { opacity: 0; transform: scale(1.015); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.product-gallery-main.changing img {
+  animation: d7-img-swap var(--dur-medium) var(--ease-d7-silk) both;
+}
+
+/* ============================================================
+   D7 · MICRO INTERACTIONS
+   ============================================================ */
+
+/* ── Loading shimmer (refined) ── */
+@keyframes d7-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton,
+.loading-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--blush) 0%,
+    rgba(243,228,233,0.9) 40%,
+    rgba(250,241,244,1) 50%,
+    rgba(243,228,233,0.9) 60%,
+    var(--blush) 100%
+  );
+  background-size: 200% 100%;
+  animation: d7-shimmer 1.8s var(--ease-d7-silk) infinite;
+}
+
+/* ── Stock badge pulse ── */
+@keyframes d7-stock-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212,135,156,0.25); }
+  50%       { box-shadow: 0 0 0 5px rgba(212,135,156,0); }
+}
+
+.badge-low-stock,
+[class*="stock-low"],
+.stock-warning {
+  animation: d7-stock-pulse 2.5s ease-in-out infinite;
+}
+
+/* ── Wishlist heart ── */
+.wishlist-btn,
+[class*="wishlist"],
+.heart-btn {
+  transition:
+    transform var(--dur-normal) var(--ease-d7-hover),
+    color var(--dur-normal) var(--ease-d7-silk);
+}
+
+.wishlist-btn:hover,
+[class*="wishlist"]:hover,
+.heart-btn:hover {
+  transform: scale(1.18);
+  color: var(--rose-dark);
+}
+
+.wishlist-btn:active,
+.heart-btn:active {
+  transform: scale(0.9);
+  transition-duration: var(--dur-instant);
+}
+
+/* ── Heart pop animation ── */
+@keyframes d7-heart-pop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.35); }
+  70%  { transform: scale(0.92); }
+  100% { transform: scale(1); }
+}
+
+.wishlist-btn.active,
+.heart-btn.liked {
+  animation: d7-heart-pop 0.45s var(--ease-d7-press) both;
+  color: var(--rose-dark);
+}
+
+/* ── Cart badge count bounce ── */
+@keyframes d7-badge-bounce {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.4); }
+  65%  { transform: scale(0.88); }
+  100% { transform: scale(1); }
+}
+
+.cart-badge,
+.nav-badge,
+[class*="cart-count"] {
+  transition: background var(--dur-fast) var(--ease-d7-silk);
+}
+
+.cart-badge.animate,
+[class*="cart-count"].updated {
+  animation: d7-badge-bounce 0.4s var(--ease-d7-press) both;
+}
+
+/* ── Form inputs: luxury focus ── */
+input[type="text"],
+input[type="email"],
+input[type="search"],
+input[type="tel"],
+textarea,
+.lux-search-input,
+.form-input {
+  transition:
+    border-color var(--dur-normal) var(--ease-d7-silk),
+    box-shadow var(--dur-normal) var(--ease-d7-silk),
+    background var(--dur-normal) var(--ease-d7-silk);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+textarea:focus,
+.lux-search-input:focus,
+.form-input:focus {
+  border-color: var(--rose);
+  box-shadow:
+    0 0 0 3px rgba(212,135,156,0.10),
+    0 1px 4px rgba(60,40,30,0.06);
+  background: var(--white);
+  outline: none;
+}
+
+/* Select dropdowns */
+select,
+.lux-select {
+  transition:
+    border-color var(--dur-normal) var(--ease-d7-silk),
+    box-shadow var(--dur-normal) var(--ease-d7-silk);
+}
+
+/* ── Filter buttons ── */
+.lux-filter-btn,
+.filter-chip,
+[class*="filter-tag"] {
+  transition:
+    background var(--dur-normal) var(--ease-d7-silk),
+    border-color var(--dur-normal) var(--ease-d7-silk),
+    color var(--dur-normal) var(--ease-d7-silk),
+    transform var(--dur-normal) var(--ease-d7-hover),
+    box-shadow var(--dur-normal) var(--ease-d7-silk);
+}
+.lux-filter-btn:hover,
+.filter-chip:hover {
+  transform: translateY(-1px);
+}
+
+/* ============================================================
+   D7 · PRODUCT PAGE — Premium Interaction Details
+   ============================================================ */
+
+/* Size / variant selectors */
+.size-btn,
+.variant-btn,
+[class*="option-btn"],
+[class*="swatch"] {
+  transition:
+    transform var(--dur-fast) var(--ease-d7-hover),
+    box-shadow var(--dur-normal) var(--ease-d7-silk),
+    border-color var(--dur-normal) var(--ease-d7-silk),
+    background var(--dur-normal) var(--ease-d7-silk);
+}
+
+.size-btn:hover,
+.variant-btn:hover,
+[class*="option-btn"]:hover {
+  transform: scale(1.06);
+  box-shadow: 0 4px 12px rgba(60,40,30,0.10);
+}
+
+.size-btn.active,
+.variant-btn.active,
+[class*="option-btn"].selected {
+  box-shadow: 0 0 0 2px var(--rose-dark), 0 4px 16px rgba(181,101,122,0.15);
+}
+
+/* Quantity control */
+.qty-btn,
+[class*="quantity"] button {
+  transition:
+    background var(--dur-fast) var(--ease-d7-silk),
+    transform var(--dur-fast) var(--ease-d7-hover),
+    color var(--dur-fast) var(--ease-d7-silk);
+}
+.qty-btn:hover { transform: scale(1.1); }
+.qty-btn:active { transform: scale(0.9); }
+
+/* ── Product accordion / details ── */
+.accordion-header,
+.details-toggle,
+[class*="accordion"] summary {
+  transition:
+    color var(--dur-normal) var(--ease-d7-silk);
+  cursor: pointer;
+}
+
+.accordion-icon,
+.details-icon {
+  transition: transform var(--dur-medium) var(--ease-d7-cinema);
+}
+
+.accordion-header.open .accordion-icon,
+[open] .details-icon {
+  transform: rotate(180deg);
+}
+
+.accordion-body,
+.details-body {
+  overflow: hidden;
+  transition:
+    height var(--dur-slow) var(--ease-d7-cinema),
+    opacity var(--dur-medium) var(--ease-d7-silk);
+}
+
+/* ============================================================
+   D7 · BRAND STORY / EDITORIAL SECTIONS
+   ============================================================ */
+
+/* Section background transitions */
+.d6-brand-story,
+.editorial-section,
+[class*="story-section"] {
+  position: relative;
+}
+
+/* Decorative ornament slow float */
+@keyframes d7-float-gentle {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+
+.section-ornament,
+.d6-ornament,
+[class*="decorative-gem"],
+.collection-divider-gem {
+  animation: d7-float-gentle 6s ease-in-out infinite;
+}
+
+/* Parallax shimmer on editorial text */
+.d6-story-headline em,
+.collection-title em,
+.hero-title em {
+  background: linear-gradient(
+    135deg,
+    var(--rose-dark) 0%,
+    var(--rose) 50%,
+    var(--rose-dark) 100%
+  );
+  background-size: 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: d7-text-shimmer 4s ease-in-out infinite;
+}
+
+@keyframes d7-text-shimmer {
+  0%   { background-position: 100% 50%; }
+  50%  { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+/* ============================================================
+   D7 · SCROLL PERFORMANCE — GPU Optimization
+   ============================================================ */
+
+/* Promote animated elements to their own layer */
+.product-card,
+.lux-card,
+.cat-card,
+.hero-image-wrap,
+.hero-media,
+.modal-panel,
+.cart-panel,
+#cartToast,
+.gallery-item {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Contain paint for gallery items */
+.product-grid-lux,
+.gallery-grid {
+  contain: layout style;
+}
+
+/* Smooth scrolling rhythm */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Content sections — contain for performance */
+.section,
+.d6-brand-story,
+.collection-header {
+  contain: layout;
+}
+
+/* ============================================================
+   D7 · MOBILE MOTION REFINEMENTS
+   ============================================================ */
+@media (max-width: 900px) {
+  /* Reduce transform distances on mobile */
+  .product-card:hover,
+  .lux-card:hover {
+    transform: none; /* no hover lift on touch */
+  }
+
+  .product-card:active,
+  .lux-card:active {
+    transform: scale(0.985);
+    transition-duration: var(--dur-instant);
+  }
+
+  .cat-card:active {
+    transform: scale(0.97);
+    transition-duration: var(--dur-instant);
+  }
+
+  /* Touch-optimized card image press */
+  .product-card:active .card-image img,
+  .lux-card:active .card-img-wrap img {
+    transform: scale(1.02);
+  }
+
+  /* Ensure card CTAs are always visible on mobile (no hover needed) */
+  .card-cta,
+  .card-add-btn,
+  .card-action-btn {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Mobile button press feedback */
+  .btn-primary:active,
+  .btn-secondary:active {
+    transform: scale(0.965);
+    transition-duration: var(--dur-instant);
+  }
+
+  /* Reduce modal animation distance */
+  .modal,
+  .dialog-panel {
+    transform: translateY(24px);
+  }
+
+  /* Mobile drawer: slide from bottom */
+  .mobile-drawer,
+  [class*="bottom-sheet"] {
+    transform: translateY(100%);
+    transition:
+      transform var(--dur-slow) var(--ease-d7-cinema),
+      opacity var(--dur-medium) var(--ease-d7-silk);
+  }
+  .mobile-drawer.open,
+  [class*="bottom-sheet"].open {
+    transform: translateY(0);
+  }
+
+  /* Smoother mobile scroll */
+  .product-grid-lux,
+  .section {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Mobile: contain paint to avoid repaint storms */
+  .section {
+    contain: layout;
+  }
+
+  /* Tighter d7-reveal on mobile */
+  .d7-reveal,
+  .d7-reveal-up {
+    transform: translateY(14px);
+  }
+  .d7-reveal-left { transform: translateX(-16px); }
+  .d7-reveal-right { transform: translateX(16px); }
+}
+
+/* ============================================================
+   D7 · SCROLL-TRIGGERED STAGGER FOR SECTION HEADERS
+   ============================================================ */
+.section-eyebrow,
+.collection-eyebrow {
+  overflow: hidden;
+}
+
+.section-title,
+.collection-title {
+  overflow: hidden;
+}
+
+/* Section reveal helpers (used by JS observer) */
+.d7-section-ready .section-eyebrow {
+  animation: d7-hero-word var(--dur-slow) var(--ease-d7-reveal) 0ms both;
+}
+.d7-section-ready .section-title {
+  animation: d7-hero-word var(--dur-cinema) var(--ease-d7-reveal) 100ms both;
+}
+.d7-section-ready .section-desc,
+.d7-section-ready .collection-desc {
+  animation: d7-hero-word var(--dur-cinema) var(--ease-d7-reveal) 220ms both;
+}
+
+/* ============================================================
+   D7 · LUXURY CURSOR (Desktop)
+   ============================================================ */
+@media (hover: hover) and (pointer: fine) {
+  /* Custom cursor area for interactive elements */
+  .product-card,
+  .lux-card,
+  .cat-card,
+  .gallery-item,
+  .product-gallery-main {
+    cursor: pointer;
+  }
+
+  /* Image areas get zoom cursor */
+  .card-image,
+  .lux-card .card-img-wrap,
+  .product-gallery-main {
+    cursor: zoom-in;
+  }
+}
+
+/* ============================================================
+   D7 · GOLD ACCENT TRANSITIONS
+   ============================================================ */
+.gold-line,
+.collection-eyebrow-line,
+.d6-story-eyebrow-line {
+  transition: width var(--dur-slow) var(--ease-d7-silk);
+}
+
+/* Hover on eyebrow expands its line */
+.collection-eyebrow:hover .collection-eyebrow-line,
+.d6-story-eyebrow:hover .d6-story-eyebrow-line {
+  width: 60px;
+}
+
+/* ============================================================
+   D7 · SMOOTH LINK TRANSITIONS
+   ============================================================ */
+a {
+  transition: color var(--dur-fast) var(--ease-d7-silk),
+              opacity var(--dur-fast) var(--ease-d7-silk);
+}
+
+/* Footer links */
+footer a,
+.footer a {
+  transition:
+    color var(--dur-normal) var(--ease-d7-silk),
+    transform var(--dur-normal) var(--ease-d7-hover);
+  display: inline-block;
+}
+footer a:hover,
+.footer a:hover {
+  color: var(--rose-dark);
+  transform: translateX(3px);
+}
+
+/* Social icon links */
+.social-link,
+[class*="social"] a {
+  transition:
+    transform var(--dur-normal) var(--ease-d7-hover),
+    color var(--dur-normal) var(--ease-d7-silk),
+    opacity var(--dur-normal) var(--ease-d7-silk);
+}
+.social-link:hover,
+[class*="social"] a:hover {
+  transform: translateY(-3px) scale(1.12);
+  color: var(--rose-dark);
+}
+
+/* ============================================================
+   D7 · PERFORMANCE: will-change management
+   Only apply on hover, remove after
+   ============================================================ */
+.product-card,
+.lux-card,
+.btn-primary,
+.btn-secondary,
+.cat-card {
+  will-change: auto;
+  transition-property: transform, box-shadow, opacity;
+}
+
+.product-card:hover,
+.lux-card:hover,
+.btn-primary:hover,
+.btn-secondary:hover {
+  will-change: transform;
+}

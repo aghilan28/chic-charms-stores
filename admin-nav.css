@@ -1,0 +1,142 @@
+/* ============================================================
+   admin-nav.css - Chic Charms
+   Admin access styles:
+     1. .btn-admin-nav   - subtle navbar badge (logged-in admins only)
+     2. .acc-admin-*     - account sidebar operational section
+   ============================================================ */
+
+/*  1. Navbar admin badge 
+   A discreet pill tucked beside the normal nav actions.
+   Visible only when auth-ui.js detects an admin user.
+ */
+.btn-admin-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 15px;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #5c3d52;
+  background: #f0e6ed;
+  border: 1.5px solid rgba(180, 100, 120, 0.22);
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+  white-space: nowrap;
+}
+
+.btn-admin-nav:hover {
+  background: #e8d8e4;
+  color: var(--rose-dark, #b5657a);
+  border-color: rgba(180, 100, 120, 0.42);
+  box-shadow: 0 2px 10px rgba(180, 100, 120, 0.14);
+}
+
+/*  2. Account page sidebar: operational section 
+   Hidden by default (aria-hidden="true" / no .admin-visible).
+   Shown by JS: adminSection.classList.add("admin-visible")
+ */
+.acc-admin-section {
+  display: none;
+  margin-top: 12px;
+}
+
+.acc-admin-section.admin-visible {
+  display: block;
+  animation: fadeUpAdmin 0.28s ease both;
+}
+
+@keyframes fadeUpAdmin {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+
+.acc-admin-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  border: 1.5px solid rgba(180, 100, 120, 0.22);
+  box-shadow: 0 2px 12px rgba(180, 100, 120, 0.08);
+  overflow: hidden;
+}
+
+/* Card header */
+.acc-admin-card-head {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 14px 8px;
+  background: #faf1f5;
+  border-bottom: 1px solid rgba(180, 100, 120, 0.15);
+}
+
+.acc-admin-card-head-icon {
+  font-size: 0.7rem;
+  color: var(--rose-dark, #b5657a);
+  line-height: 1;
+}
+
+.acc-admin-card-head-label {
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--rose-dark, #b5657a);
+}
+
+/* Links inside the card */
+.acc-admin-links {
+  display: flex;
+  flex-direction: column;
+}
+
+.acc-admin-link {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 14px;
+  font-family: var(--font-body);
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: var(--muted, #4e4440);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border, #ede6dd);
+  transition: background 0.15s, color 0.15s;
+}
+
+.acc-admin-link:last-child {
+  border-bottom: none;
+}
+
+.acc-admin-link:hover {
+  background: #fdf3f7;
+  color: var(--rose-dark, #b5657a);
+}
+
+.acc-admin-link-icon {
+  font-size: 0.65rem;
+  color: var(--rose-dark, #b5657a);
+  opacity: 0.7;
+  transition: opacity 0.15s;
+  flex-shrink: 0;
+}
+
+.acc-admin-link:hover .acc-admin-link-icon {
+  opacity: 1;
+}
+
+/*  Mobile: collapse navbar admin badge text on small screens */
+@media (max-width: 480px) {
+  .btn-admin-nav {
+    padding: 7px 11px;
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+  }
+}

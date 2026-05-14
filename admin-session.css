@@ -1,0 +1,553 @@
+/* ============================================================
+   admin-session.css - Chic Charms
+   Phase E3 - Premium Admin Session Experience
+
+   Covers:
+    loading state atmosphere
+    dashboard reveal choreography
+    operational status indicators
+    session transition polish
+    auth recovery UX
+    premium toast system
+    error state presentation
+    mobile session experience
+    D7/D8 motion + polish alignment
+
+   Load order: after styles.css, before page-specific styles.
+   Must NOT be loaded on public-facing pages.
+============================================================ */
+
+/* 
+   1. AUTH OVERLAY - Premium Entry Experience
+ */
+
+/* Stabilise body during auth check - no layout shift */
+body.admin-auth-loading {
+  overflow: hidden;
+}
+
+/* Auth overlay base - already hidden in admin-guard.js but
+   we reinforce transitions and atmosphere here */
+#adminAuthOverlay {
+  backdrop-filter: none; /* clean, no blur blur-gate artifacts */
+}
+
+/* Luxury entrance animation for the auth card */
+@keyframes cc-auth-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.auth-card {
+  animation: cc-auth-card-in 0.42s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Operational status bar - thin animated line at card top */
+.auth-card::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: var(--radius-lg, 20px) var(--radius-lg, 20px) 0 0;
+  background: linear-gradient(90deg,
+    var(--rose, #f4a7b9) 0%,
+    var(--rose-dark, #e8809a) 50%,
+    var(--rose, #f4a7b9) 100%
+  );
+  background-size: 200% 100%;
+  animation: cc-auth-progress 1.8s ease-in-out infinite;
+  opacity: 0.7;
+}
+
+@keyframes cc-auth-progress {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Phase: reconnecting - amber progress bar */
+#adminAuthOverlay[data-phase="reconnecting"] .auth-card::after {
+  background: linear-gradient(90deg,
+    var(--amber-bd, #fcd34d),
+    var(--amber, #b45309),
+    var(--amber-bd, #fcd34d)
+  );
+  background-size: 200% 100%;
+  animation: cc-auth-progress 2.4s ease-in-out infinite;
+}
+
+/* Phase: granting - green pulse, then dissolve */
+#adminAuthOverlay[data-phase="granting"] .auth-card::after {
+  background: linear-gradient(90deg,
+    var(--green-bd, #a5d6a7),
+    var(--green, #2e7d32),
+    var(--green-bd, #a5d6a7)
+  );
+  animation: cc-auth-progress 0.6s ease-in-out 1 both;
+  opacity: 1;
+}
+
+/* Phase: denied/error - red static bar */
+#adminAuthOverlay[data-phase="denied"] .auth-card::after,
+#adminAuthOverlay[data-phase="error"] .auth-card::after {
+  background: var(--red, #c0392b);
+  animation: none;
+  opacity: 0.8;
+}
+
+/* 
+   2. DASHBOARD REVEAL - Entry Choreography
+ */
+
+/* Dashboard sections stagger in after auth resolves */
+@keyframes cc-section-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Applied to top-level admin layout containers by JS after unlock */
+.admin-reveal {
+  animation: cc-section-reveal 0.48s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.admin-reveal:nth-child(1) { animation-delay: 0.02s; }
+.admin-reveal:nth-child(2) { animation-delay: 0.07s; }
+.admin-reveal:nth-child(3) { animation-delay: 0.12s; }
+.admin-reveal:nth-child(4) { animation-delay: 0.17s; }
+.admin-reveal:nth-child(5) { animation-delay: 0.22s; }
+
+/* 
+   3. OPERATIONAL STATUS INDICATOR
+   Small ambient badge in admin bar showing live state.
+ */
+
+.admin-session-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 11px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.admin-session-status[data-state="live"] {
+  background: var(--green-bg, #e8f5e9);
+  color: var(--green, #2e7d32);
+  border-color: var(--green-bd, #a5d6a7);
+}
+
+.admin-session-status[data-state="reconnecting"] {
+  background: var(--amber-bg, #fffbeb);
+  color: var(--amber, #b45309);
+  border-color: var(--amber-bd, #fcd34d);
+}
+
+.admin-session-status[data-state="error"] {
+  background: var(--red-bg, #fff5f5);
+  color: var(--red, #c0392b);
+  border-color: var(--red-bd, #f5c6cb);
+}
+
+/* Status dot */
+.session-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: currentColor;
+}
+
+.admin-session-status[data-state="live"] .session-status-dot {
+  animation: cc-live-pulse 2s ease-in-out infinite;
+}
+
+.admin-session-status[data-state="reconnecting"] .session-status-dot {
+  animation: cc-reconnect-blink 0.9s ease-in-out infinite;
+}
+
+@keyframes cc-live-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.45; transform: scale(0.72); }
+}
+@keyframes cc-reconnect-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.2; }
+}
+
+/* 
+   4. PREMIUM TOAST SYSTEM
+   Replaces any alert() or plain toast with a luxury component.
+ */
+
+/* Toast container - fixed, safe across all admin pages */
+#adminToastContainer {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 8888;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 10px;
+  pointer-events: none;
+  max-width: min(380px, calc(100vw - 40px));
+}
+
+@keyframes cc-toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(12px) translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) translateY(0);
+  }
+}
+@keyframes cc-toast-out {
+  from {
+    opacity: 1;
+    transform: translateX(0) translateY(0);
+    max-height: 80px;
+    margin-bottom: 0;
+  }
+  to {
+    opacity: 0;
+    transform: translateX(12px);
+    max-height: 0;
+    margin-bottom: -10px;
+  }
+}
+
+.admin-toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: var(--white, #fff);
+  border: 1px solid var(--border, #f0dde5);
+  border-radius: var(--radius-lg, 20px);
+  box-shadow: 0 8px 32px rgba(45, 32, 32, 0.12),
+              0 2px 8px rgba(244, 167, 185, 0.18);
+  padding: 14px 18px;
+  font-family: var(--font-body, "DM Sans", sans-serif);
+  font-size: 0.84rem;
+  color: var(--text, #2d2020);
+  line-height: 1.5;
+  pointer-events: auto;
+  animation: cc-toast-in 0.34s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  border-left: 3px solid var(--rose-dark, #e8809a);
+  overflow: hidden;
+}
+
+.admin-toast.leaving {
+  animation: cc-toast-out 0.3s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+.admin-toast[data-type="success"] {
+  border-left-color: var(--green, #2e7d32);
+}
+.admin-toast[data-type="error"] {
+  border-left-color: var(--red, #c0392b);
+}
+.admin-toast[data-type="warning"] {
+  border-left-color: var(--amber, #b45309);
+}
+.admin-toast[data-type="info"] {
+  border-left-color: var(--rose-dark, #e8809a);
+}
+
+.admin-toast-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+  line-height: 1.4;
+  margin-top: 1px;
+}
+
+.admin-toast-body {
+  flex: 1;
+  min-width: 0;
+}
+.admin-toast-title {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.admin-toast-copy {
+  font-size: 0.78rem;
+  color: var(--muted, #9b7b85);
+}
+
+/* 
+   5. SESSION EXPIRY / ERROR BANNERS
+   Inline operational messages - no browser alerts.
+ */
+
+.admin-session-banner {
+  display: none;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  border-bottom: 1px solid transparent;
+  position: sticky;
+  top: 64px; /* below admin-bar */
+  z-index: 190;
+  animation: cc-section-reveal 0.28s ease both;
+}
+
+.admin-session-banner.visible {
+  display: flex;
+}
+
+.admin-session-banner[data-level="warning"] {
+  background: var(--amber-bg, #fffbeb);
+  border-color: var(--amber-bd, #fcd34d);
+  color: var(--amber, #b45309);
+}
+
+.admin-session-banner[data-level="error"] {
+  background: var(--red-bg, #fff5f5);
+  border-color: var(--red-bd, #f5c6cb);
+  color: var(--red, #c0392b);
+}
+
+.admin-session-banner[data-level="info"] {
+  background: var(--blush, #fef0f4);
+  border-color: var(--border, #f0dde5);
+  color: var(--rose-deep, #d4607a);
+}
+
+.session-banner-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.session-banner-text {
+  flex: 1;
+}
+
+.session-banner-dismiss {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  opacity: 0.5;
+  padding: 0 4px;
+  transition: opacity 0.15s;
+  color: inherit;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.session-banner-dismiss:hover { opacity: 1; }
+
+/* 
+   6. SKELETON LOADING STATES
+   Premium placeholders while Firestore data loads.
+ */
+
+@keyframes cc-skeleton-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--sand, #f5f0e8) 25%,
+    var(--cream, #faf8f5) 50%,
+    var(--sand, #f5f0e8) 75%
+  );
+  background-size: 200% 100%;
+  animation: cc-skeleton-shimmer 1.6s ease-in-out infinite;
+  border-radius: var(--radius, 12px);
+  flex-shrink: 0;
+}
+
+.skeleton-text {
+  height: 14px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+.skeleton-text.wide   { width: 80%; }
+.skeleton-text.medium { width: 55%; }
+.skeleton-text.short  { width: 35%; }
+
+.skeleton-metric {
+  height: 48px;
+  border-radius: var(--radius, 12px);
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.skeleton-row {
+  height: 52px;
+  border-radius: var(--radius, 12px);
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+/* Skeleton card container */
+.skeleton-card {
+  background: var(--white, #fff);
+  border: 1px solid var(--border, #f0dde5);
+  border-radius: var(--radius-lg, 20px);
+  padding: 20px;
+  box-shadow: var(--shadow, 0 4px 24px rgba(244,167,185,.15));
+}
+
+/* 
+   7. OPERATIONAL ERROR STATES
+   Graceful inline error handling (no browser alerts).
+ */
+
+.admin-error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 48px 24px;
+  gap: 14px;
+  color: var(--muted, #9b7b85);
+}
+
+.admin-error-icon {
+  font-size: 2.4rem;
+  opacity: 0.7;
+}
+
+.admin-error-title {
+  font-family: var(--font-head, "Cormorant Garamond", Georgia, serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text, #2d2020);
+  margin-bottom: 4px;
+}
+
+.admin-error-copy {
+  font-size: 0.82rem;
+  line-height: 1.65;
+  max-width: 360px;
+}
+
+.admin-error-retry {
+  margin-top: 8px;
+  background: var(--white, #fff);
+  border: 1.5px solid var(--border, #f0dde5);
+  border-radius: 999px;
+  padding: 9px 22px;
+  font-family: var(--font-body, "DM Sans", sans-serif);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--rose-dark, #e8809a);
+  cursor: pointer;
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
+}
+.admin-error-retry:hover {
+  background: var(--blush, #fef0f4);
+  border-color: var(--rose, #f4a7b9);
+}
+
+/* 
+   8. SIDEBAR SESSION FOOTER - refined status area
+ */
+
+.admin-session-meta {
+  font-size: 0.68rem;
+  color: var(--muted, #9b7b85);
+  margin-top: 8px;
+  line-height: 1.5;
+  opacity: 0.8;
+}
+
+/* Session duration pill in sidebar footer */
+.admin-session-duration {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 6px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--green, #2e7d32);
+  background: var(--green-bg, #e8f5e9);
+  border: 1px solid var(--green-bd, #a5d6a7);
+  padding: 3px 9px;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+}
+
+/* 
+   9. MOBILE ADMIN SESSION EXPERIENCE
+ */
+
+@media (max-width: 768px) {
+  /* Full-screen overlay adapts for narrow viewports */
+  #adminAuthOverlay {
+    padding: 16px;
+    align-items: flex-end;
+    padding-bottom: max(32px, env(safe-area-inset-bottom, 32px));
+  }
+
+  .auth-card {
+    width: 100%;
+    padding: 32px 24px;
+    border-radius: 20px 20px 12px 12px;
+  }
+
+  /* Toast container - bottom of mobile screen */
+  #adminToastContainer {
+    bottom: max(16px, env(safe-area-inset-bottom, 16px));
+    right: 12px;
+    left: 12px;
+    max-width: 100%;
+  }
+
+  /* Session banner - tighter on mobile */
+  .admin-session-banner {
+    top: 56px;
+    font-size: 0.78rem;
+    padding: 10px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  #adminAuthOverlay {
+    align-items: center;
+    padding: 16px;
+  }
+  .auth-card {
+    border-radius: var(--radius-lg, 20px);
+  }
+}
+
+/* 
+   10. PRINT - suppress operational chrome
+ */
+
+@media print {
+  #adminAuthOverlay,
+  #adminToastContainer,
+  .admin-session-banner,
+  .admin-session-status {
+    display: none !important;
+  }
+}

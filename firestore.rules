@@ -1,0 +1,356 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /*
+      Chic Charms production Firestore rules
+
+      Admin access is granted by exact document lookup.
+
+      Preferred structure:
+        admins/<firebase-auth-uid>
+          email: "cvmun28@gmail.com"   // optional but recommended
+          active: true                 // optional; false disables access
+          role: "admin"                // optional label
+
+      Legacy single-admin structure also supported:
+        admins/admin1
+          email: "cvmun28@gmail.com"   // required for legacy lookup
+          active: true                 // optional; false disables access
+          role: "admin"                // optional label
+
+      The client may read admin records only after one of these exact admin
+      checks succeeds. Admin records must be created, changed, and removed from
+      a trusted environment such as Firebase Console, Admin SDK, or CLI.
+    */
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function hasAuthEmail() {
+      return signedIn()
+        && request.auth.token.email is string
+        && request.auth.token.email.size() > 0;
+    }
+
+    function authEmail() {
+      return request.auth.token.email;
+    }
+
+    function uidAdminPath() {
+      return /databases/$(database)/documents/admins/$(request.auth.uid);
+    }
+
+    function legacyAdminPath() {
+      return /databases/$(database)/documents/admins/admin1;
+    }
+
+    function uidAdminExists() {
+      return signedIn() && exists(uidAdminPath());
+    }
+
+    function legacyAdminExists() {
+      return exists(legacyAdminPath());
+    }
+
+    function uidAdminRecord() {
+      return get(uidAdminPath()).data;
+    }
+
+    function legacyAdminRecord() {
+      return get(legacyAdminPath()).data;
+    }
+
+    function uidAdminActive() {
+      return !("active" in uidAdminRecord()) || uidAdminRecord().active == true;
+    }
+
+    function legacyAdminActive() {
+      return !("active" in legacyAdminRecord()) || legacyAdminRecord().active == true;
+    }
+
+    function uidAdminEmailMatches() {
+      return !("email" in uidAdminRecord()) || uidAdminRecord().email == authEmail();
+    }
+
+    function legacyAdminEmailMatches() {
+      return legacyAdminRecord().email == authEmail();
+    }
+
+    function isUidAdmin() {
+      return hasAuthEmail()
+        && uidAdminExists()
+        && uidAdminActive()
+        && uidAdminEmailMatches();
+    }
+
+    function isLegacyAdmin() {
+      return hasAuthEmail()
+        && legacyAdminExists()
+        && legacyAdminActive()
+        && legacyAdminEmailMatches();
+    }
+
+    function isKnownAdminEmail() {
+      return hasAuthEmail()
+        && authEmail() == "cvmun28@gmail.com";
+    }
+
+    function isAdmin() {
+      return isUidAdmin()
+        || isLegacyAdmin()
+        || isKnownAdminEmail();
+    }
+
+    function adminLogEmailMatches(emailValue) {
+      return isAdmin() && emailValue == authEmail();
+    }
+
+    function ownsUserDoc(userId) {
+      return signedIn() && request.auth.uid == userId;
+    }
+
+    function incomingOwnerByEmail(field) {
+      return hasAuthEmail() && request.resource.data[field] == authEmail();
+    }
+
+    function ownerByEmail(field) {
+      return hasAuthEmail() && resource.data[field] == authEmail();
+    }
+
+    function orderBelongsToUser() {
+      return signedIn()
+        && (
+          resource.data.userId == request.auth.uid
+          || resource.data.uid == request.auth.uid
+          || (hasAuthEmail() && resource.data.userEmail == authEmail())
+          || (hasAuthEmail() && resource.data.email == authEmail())
+        );
+    }
+
+    function incomingOrderBelongsToUser() {
+      return signedIn()
+        && (
+          request.resource.data.userId == request.auth.uid
+          || request.resource.data.uid == request.auth.uid
+          || (hasAuthEmail() && request.resource.data.userEmail == authEmail())
+          || (hasAuthEmail() && request.resource.data.email == authEmail())
+        );
+    }
+
+    function validStockValue(val) {
+      return val is int
+        && val >= 0
+        && val <= 99999;
+    }
+
+    function validPriceValue(val) {
+      return val is number
+        && val >= 0
+        && val <= 999999;
+    }
+
+    function validOptionalText(fieldName, maxLength) {
+      return !(fieldName in request.resource.data)
+        || request.resource.data[fieldName] == null
+        || (
+          request.resource.data[fieldName] is string
+          && request.resource.data[fieldName].size() <= maxLength
+        );
+    }
+
+    function validProductCategory(category) {
+      return category in [
+        "Everyday Elegance",
+        "Modern Romance",
+        "After Dark",
+        "Heritage Muse"
+      ];
+    }
+
+    function validProductCreate() {
+      let d = request.resource.data;
+      return d.keys().hasAll(["name", "price", "stock", "category", "image", "createdAt"])
+        && d.keys().hasOnly([
+          "name", "price", "stock", "category", "image",
+          "description", "tag", "createdAt", "updatedAt", "outOfStock",
+          "pieceType", "pieceCount", "images", "variants"
+        ])
+        && d.name is string && d.name.size() > 0 && d.name.size() <= 120
+        && validPriceValue(d.price)
+        && validStockValue(d.stock)
+        && d.category is string && validProductCategory(d.category)
+        && d.image is string && d.image.size() > 0 && d.image.size() <= 1000
+        && validOptionalText("description", 5000)
+        && validOptionalText("tag", 80);
+    }
+
+    function validAdminProductUpdate() {
+      let d = request.resource.data;
+      let changed = request.resource.data.diff(resource.data).affectedKeys();
+      return isAdmin()
+        && changed.hasOnly([
+          "name", "price", "stock", "category", "image",
+          "description", "tag", "updatedAt", "outOfStock",
+          "pieceType", "pieceCount", "images", "variants"
+        ])
+        && (!changed.hasAny(["stock"]) || validStockValue(d.stock))
+        && (!changed.hasAny(["price"]) || validPriceValue(d.price))
+        && (!changed.hasAny(["name"]) || (d.name is string && d.name.size() > 0 && d.name.size() <= 120))
+        && (!changed.hasAny(["category"]) || (d.category is string && validProductCategory(d.category)))
+        && (!changed.hasAny(["image"]) || (d.image is string && d.image.size() > 0 && d.image.size() <= 1000))
+        && validOptionalText("description", 5000)
+        && validOptionalText("tag", 80)
+        && (!changed.hasAny(["outOfStock"]) || d.outOfStock is bool);
+    }
+
+    function validCheckoutStockDeduction() {
+      return signedIn()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["stock", "outOfStock"])
+        && validStockValue(request.resource.data.stock)
+        && resource.data.stock is int
+        && request.resource.data.stock >= 0
+        && request.resource.data.stock < resource.data.stock
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["outOfStock"])
+          || request.resource.data.outOfStock is bool);
+    }
+
+    function validCheckoutInventoryLog() {
+      let d = request.resource.data;
+      return hasAuthEmail()
+        && d.keys().hasOnly([
+          "productId", "productName", "oldStock", "newStock",
+          "changeAmount", "actionType", "timestamp", "adminEmail"
+        ])
+        && d.keys().hasAll([
+          "productId", "productName", "oldStock", "newStock",
+          "changeAmount", "actionType", "timestamp", "adminEmail"
+        ])
+        && d.actionType in ["PURCHASE", "AUTO_DEDUCTION"]
+        && d.productId is string && d.productId.size() > 0
+        && d.productName is string
+        && validStockValue(d.oldStock)
+        && validStockValue(d.newStock)
+        && d.changeAmount is int
+        && d.adminEmail == authEmail()
+        && d.newStock >= 0
+        && d.newStock <= d.oldStock
+        && d.changeAmount == d.newStock - d.oldStock;
+    }
+
+    function validAdminInventoryLog() {
+      let d = request.resource.data;
+      return isAdmin()
+        && d.keys().hasOnly([
+          "productId", "productName", "oldStock", "newStock",
+          "changeAmount", "actionType", "timestamp", "adminEmail"
+        ])
+        && d.keys().hasAll([
+          "productId", "productName", "oldStock", "newStock",
+          "changeAmount", "actionType", "timestamp", "adminEmail"
+        ])
+        && d.actionType in ["RESTOCK", "PURCHASE", "MANUAL_EDIT", "AUTO_DEDUCTION"]
+        && d.productId is string && d.productId.size() > 0
+        && d.productName is string
+        && validStockValue(d.oldStock)
+        && validStockValue(d.newStock)
+        && d.changeAmount is int
+        && adminLogEmailMatches(d.adminEmail)
+        && d.changeAmount == d.newStock - d.oldStock;
+    }
+
+    function validAdminActivityLog() {
+      let d = request.resource.data;
+      return isAdmin()
+        && d.keys().hasOnly([
+          "adminEmail", "actionType", "entityType", "entityId",
+          "affectedEntity", "details", "timestamp"
+        ])
+        && d.keys().hasAll(["adminEmail", "actionType", "entityType", "entityId", "details", "timestamp"])
+        && adminLogEmailMatches(d.adminEmail)
+        && d.actionType is string && d.actionType.size() > 0 && d.actionType.size() <= 50
+        && d.entityType is string && d.entityType.size() > 0 && d.entityType.size() <= 50
+        && (d.entityId == null || d.entityId is string)
+        && d.details is map
+        && (!("affectedEntity" in d) || d.affectedEntity is map);
+    }
+
+    function validOrderStatus(status) {
+      return status in ["pending", "confirmed", "processing", "shipped", "delivered", "cancelled", "refunded"];
+    }
+
+    function validOrderStatusUpdate() {
+      let d = request.resource.data;
+      return isAdmin()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["status", "updatedAt", "adminNote", "trackingNumber"])
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(["status"]) || validOrderStatus(d.status));
+    }
+
+    match /products/{productId} {
+      allow read: if true;
+      allow create: if isAdmin() && validProductCreate();
+      allow update: if validAdminProductUpdate() || validCheckoutStockDeduction();
+      allow delete: if isAdmin();
+    }
+
+    match /orders/{orderId} {
+      allow create: if incomingOrderBelongsToUser();
+      allow read: if isAdmin() || orderBelongsToUser();
+      allow update: if validOrderStatusUpdate();
+      allow delete: if isAdmin();
+    }
+
+    match /users/{userId} {
+      allow read: if ownsUserDoc(userId) || isAdmin();
+      allow create: if ownsUserDoc(userId);
+      allow update: if ownsUserDoc(userId)
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(["email"]);
+      allow delete: if false;
+    }
+
+    match /addresses/{addressId} {
+      allow read: if isAdmin() || ownerByEmail("userEmail");
+      allow create: if incomingOwnerByEmail("userEmail");
+      allow update: if isAdmin() || ownerByEmail("userEmail");
+      allow delete: if isAdmin() || ownerByEmail("userEmail");
+    }
+
+    match /inventoryLogs/{logId} {
+      allow read: if isAdmin();
+      allow create: if validAdminInventoryLog() || validCheckoutInventoryLog();
+      allow update: if false;
+      allow delete: if isAdmin();
+    }
+
+    match /adminActivityLogs/{logId} {
+      allow read: if isAdmin();
+      allow create: if validAdminActivityLog();
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    match /adminAnalytics/{docId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /adminNotifications/{docId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /admin/{docId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /admins/{adminUid} {
+      allow get: if isAdmin();
+      allow list: if isAdmin();
+      allow create, update, delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

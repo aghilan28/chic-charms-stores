@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Checkout – Chic Charms" />
+  <title>Checkout – Chic Charms</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="d5-mobile-luxury.css" />
+  <style>
+    /* ── Checkout Page ── */
+    .checkout-page {
+      min-height: 100vh;
+      background: var(--cream);
+      padding: 100px 0 80px;
+    }
+
+    .checkout-header { margin-bottom: 36px; }
+    .checkout-header h1 {
+      font-family: var(--font-head);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 600;
+    }
+
+    /* breadcrumb */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .breadcrumb a { color: var(--rose-dark); transition: opacity 0.2s; }
+    .breadcrumb a:hover { opacity: 0.7; }
+    .breadcrumb span { color: var(--border); }
+
+    /* ── Two-column layout ── */
+    .checkout-layout {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 28px;
+      align-items: start;
+    }
+
+    /* ── Form card ── */
+    .form-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+    }
+
+    .form-card h2 {
+      font-family: var(--font-head);
+      font-size: 1.35rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .form-group { margin-bottom: 20px; }
+
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 7px;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 13px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      font-family: var(--font-body);
+      font-size: 0.92rem;
+      color: var(--text);
+      background: var(--white);
+      transition: border-color var(--transition), box-shadow var(--transition);
+      outline: none;
+      resize: none;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: #ccc; }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--rose);
+      box-shadow: 0 0 0 3px rgba(244,167,185,0.18);
+    }
+
+    .form-group input.error,
+    .form-group textarea.error {
+      border-color: #e57373;
+      box-shadow: 0 0 0 3px rgba(229,115,115,0.12);
+    }
+
+    .field-error {
+      font-size: 0.75rem;
+      color: #e57373;
+      margin-top: 5px;
+      display: none;
+    }
+    .field-error.visible { display: block; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* Place order button */
+    .btn-place-order {
+      width: 100%;
+      background: var(--rose);
+      color: var(--white);
+      border: none;
+      border-radius: 999px;
+      padding: 16px 24px;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(244,167,185,0.45);
+      transition: var(--transition);
+      letter-spacing: 0.02em;
+    }
+    .btn-place-order:hover {
+      background: var(--rose-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(232,128,154,0.45);
+    }
+    .btn-place-order:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Global form error */
+    .form-global-error {
+      background: #fff5f5;
+      border: 1px solid #ffcdd2;
+      color: #c62828;
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      font-size: 0.83rem;
+      font-weight: 500;
+      margin-bottom: 18px;
+      display: none;
+    }
+    .form-global-error.visible { display: block; }
+
+    /* ── Stock error banner (distinct style) ── */
+    .stock-error-banner {
+      background: #fff3e0;
+      border: 1.5px solid #ff9800;
+      color: #e65100;
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 18px;
+      display: none;
+      line-height: 1.6;
+    }
+    .stock-error-banner.visible { display: block; }
+    .stock-error-banner ul {
+      margin: 8px 0 0 16px;
+      font-weight: 500;
+      font-size: 0.82rem;
+    }
+
+    /* ── Order summary sidebar ── */
+    .checkout-summary {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      position: sticky;
+      top: 90px;
+    }
+
+    .checkout-summary h2 {
+      font-family: var(--font-head);
+      font-size: 1.35rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .summary-items { margin-bottom: 16px; }
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px dashed var(--border);
+    }
+    .summary-item:last-child { border-bottom: none; }
+
+    .summary-item-name {
+      font-size: 0.88rem;
+      color: var(--text);
+      flex: 1;
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .summary-item-price {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--rose-dark);
+      flex-shrink: 0;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .summary-row span:last-child { color: var(--text); font-weight: 500; }
+
+    .summary-divider { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
+
+    .summary-grand {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .summary-grand-label { font-weight: 600; font-size: 0.9rem; }
+    .summary-grand-price {
+      font-family: var(--font-head);
+      font-size: 1.7rem;
+      font-weight: 600;
+      color: var(--rose-dark);
+    }
+
+    .summary-trust {
+      font-size: 0.73rem;
+      color: var(--muted);
+      margin-top: 14px;
+      text-align: center;
+      line-height: 1.7;
+    }
+
+    /* empty redirect */
+    .empty-redirect {
+      text-align: center;
+      padding: 80px 24px;
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+    }
+    .empty-redirect p { color: var(--muted); font-size: 0.95rem; margin-bottom: 20px; }
+
+    /* ── Responsive ── */
+    @media (max-width: 860px) {
+      .checkout-layout { grid-template-columns: 1fr; }
+      .checkout-summary { order: -1; position: static; }
+    }
+    @media (max-width: 560px) {
+      .checkout-page { padding-top: 88px; }
+      .container { padding: 0 16px; }
+      .form-card { padding: 24px 18px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+    /* ── Payment method selector ── */
+    .payment-methods { margin-bottom: 20px; }
+
+    .payment-methods-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    .payment-method-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .payment-method-option {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+      position: relative;
+      background: var(--white);
+      user-select: none;
+    }
+    .payment-method-option:has(input:checked) {
+      border-color: var(--rose-dark);
+      background: var(--blush);
+      box-shadow: 0 0 0 3px rgba(244,167,185,0.18);
+    }
+    .payment-method-option input[type="radio"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--rose-dark);
+      flex-shrink: 0;
+      margin: 0;
+      cursor: pointer;
+    }
+    .method-icon { font-size: 1.3rem; flex-shrink: 0; }
+    .method-text { flex: 1; min-width: 0; }
+    .method-text strong { display: block; font-size: 0.9rem; color: var(--text); font-weight: 600; }
+    .method-text small  { font-size: 0.75rem; color: var(--muted); }
+
+    .method-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      background: var(--rose-dark);
+      color: var(--white);
+      padding: 3px 8px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      flex-shrink: 0;
+    }
+
+    .btn-pay-online {
+      background: linear-gradient(135deg, #e8809a 0%, #d4607a 100%);
+      box-shadow: 0 6px 24px rgba(232,128,154,0.45);
+    }
+    .btn-pay-online:hover {
+      background: linear-gradient(135deg, #d4607a 0%, #c04060 100%);
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 10px 32px rgba(212,96,122,0.5);
+    }
+
+    .btn-cod {
+      background: var(--blush);
+      color: var(--rose-dark);
+      border: 1.5px solid var(--rose);
+      box-shadow: none;
+    }
+    .btn-cod:hover {
+      background: var(--rose);
+      color: var(--white);
+      transform: translateY(-1px);
+    }
+
+    .payment-secure-note {
+      text-align: center;
+      font-size: 0.73rem;
+      color: var(--muted);
+      margin-top: 12px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .btn-spinner {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 4px;
+    }
+    .btn-place-order:active:not(:disabled) { transform: scale(0.97); }
+
+    .trust-banner {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      margin-bottom: 16px;
+      padding: 14px 18px;
+      background: var(--blush);
+      border-radius: var(--radius);
+      border: 1px solid rgba(244,167,185,0.3);
+    }
+    .trust-banner-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--rose-dark);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ░░ NAVBAR ░░ -->
+  <header class="navbar" id="navbar">
+    <div class="nav-inner container">
+      <a href="index.html" class="logo" aria-label="Chic Charms home">Chic<span>Charms</span></a>
+      <nav class="nav-links" id="navLinks" aria-label="Main navigation">
+        <a href="index.html#categories">Shop</a>
+        <a href="index.html#bestsellers">Best Sellers</a>
+        <a href="index.html#why-us">About</a>
+        <a href="index.html#testimonials">Reviews</a>
+      </nav>
+      <div class="nav-actions" id="navActions">
+        <!-- auth-ui.js injects Login / My Account / Logout here -->
+      </div>
+    </div>
+  </header>
+
+  <!-- ░░ CHECKOUT PAGE ░░ -->
+  <main class="checkout-page">
+    <div class="container">
+
+      <div class="checkout-header">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="index.html">Home</a>
+          <span>›</span>
+          <a href="cart.html">Cart</a>
+          <span>›</span>
+          <span style="color:var(--text); font-weight:500;">Checkout</span>
+        </nav>
+        <p class="section-eyebrow">Almost there!</p>
+        <h1>Checkout</h1>
+      </div>
+
+      <!-- Redirects away if cart is empty -->
+      <div class="empty-redirect" id="emptyRedirect" style="display:none;">
+        <p>Your cart is empty. Add some earrings first! 🌸</p>
+        <a href="index.html#bestsellers" class="btn btn-primary">Browse Best Sellers →</a>
+      </div>
+
+      <div class="checkout-layout" id="checkoutLayout">
+
+        <!-- ── Delivery Form ── -->
+        <section aria-label="Delivery details">
+
+          <!-- Trust banner -->
+          <div class="trust-banner" role="note" aria-label="Security and trust badges">
+            <span class="trust-banner-item">🔒 Secure Checkout</span>
+            <span class="trust-banner-item">💳 Cash on Delivery</span>
+            <span class="trust-banner-item">↩️ 7-Day Return Policy</span>
+            <span class="trust-banner-item">🚚 Free shipping ₹399+</span>
+          </div>
+
+          <div class="form-card">
+            <h2>Delivery Details</h2>
+
+            <!-- General validation error -->
+            <div class="form-global-error" id="globalError" role="alert">
+              ⚠️ Please fill in all required fields before placing your order.
+            </div>
+
+            <!-- ── INVENTORY ERROR BANNER (Part 2) ── -->
+            <div class="stock-error-banner" id="stockError" role="alert">
+              ⚠️ Some items in your cart are out of stock or have insufficient quantity:
+              <ul id="stockErrorList"></ul>
+              <span style="display:block;margin-top:6px;">Please update your cart and try again.</span>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fullName">Full Name *</label>
+                <input
+                  type="text"
+                  id="fullName"
+                  placeholder="Priya Sharma"
+                  autocomplete="name"
+                  maxlength="80"
+                />
+                <p class="field-error" id="fullNameError">Please enter your full name.</p>
+              </div>
+              <div class="form-group">
+                <label for="phone">Phone Number *</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  placeholder="98765 43210"
+                  autocomplete="tel"
+                  maxlength="15"
+                />
+                <p class="field-error" id="phoneError">Please enter a valid 10-digit number.</p>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="address">Delivery Address *</label>
+              <textarea
+                id="address"
+                rows="3"
+                placeholder="Flat / House no., Street, Area, City, PIN code"
+                autocomplete="street-address"
+                maxlength="300"
+              ></textarea>
+              <p class="field-error" id="addressError">Please enter your delivery address.</p>
+            </div>
+
+            <div class="form-group">
+              <label for="pincode">PIN Code *</label>
+              <input
+                type="text"
+                id="pincode"
+                placeholder="400001"
+                autocomplete="postal-code"
+                maxlength="6"
+              />
+              <p class="field-error" id="pincodeError">Please enter a valid 6-digit PIN code.</p>
+            </div>
+
+            <!-- Payment method selector -->
+            <div class="payment-methods" aria-label="Choose payment method">
+              <p class="payment-methods-label">Choose Payment Method</p>
+              <div class="payment-method-options">
+                <label class="payment-method-option" id="optOnline">
+                  <input type="radio" name="paymentMethod" value="online" checked />
+                  <span class="method-icon">💳</span>
+                  <span class="method-text">
+                    <strong>Pay Online</strong>
+                    <small>UPI, Cards, Net Banking</small>
+                  </span>
+                  <span class="method-badge">Recommended</span>
+                </label>
+                <label class="payment-method-option" id="optCod">
+                  <input type="radio" name="paymentMethod" value="cod" />
+                  <span class="method-icon">💵</span>
+                  <span class="method-text">
+                    <strong>Cash on Delivery</strong>
+                    <small>Pay when order arrives</small>
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Pay Online button -->
+            <button class="btn-place-order btn-pay-online" id="payOnlineBtn">
+              💳 Pay Now →
+            </button>
+
+            <!-- COD button (hidden until COD selected) -->
+            <button class="btn-place-order btn-cod" id="placeOrderBtn" style="display:none;">
+              🔒 Place Order (COD) →
+            </button>
+
+            <p class="payment-secure-note">🔒 256-bit encrypted · Powered by Razorpay</p>
+          </div>
+        </section>
+
+        <!-- ── Order Summary ── -->
+        <aside class="checkout-summary" aria-label="Order summary">
+          <h2>Order Summary</h2>
+          <ul class="summary-items" id="summaryItems" style="list-style:none; padding:0; margin:0;"></ul>
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span id="summarySubtotal">₹0</span>
+          </div>
+          <div class="summary-row">
+            <span>Shipping</span>
+            <span id="summaryShipping">₹49</span>
+          </div>
+          <hr class="summary-divider" />
+          <div class="summary-grand">
+            <span class="summary-grand-label">Total</span>
+            <span class="summary-grand-price" id="summaryTotal">₹0</span>
+          </div>
+          <p class="summary-trust">
+            🔒 Secure & safe &nbsp;·&nbsp; COD available<br />
+            🚚 Delivered in 3–5 days across India
+          </p>
+        </aside>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- ░░ FOOTER ░░ -->
+  <footer class="footer" aria-label="Site footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <p class="logo">Chic<span>Charms</span></p>
+        <p class="footer-tagline">Your glow-up starts here.</p>
+      </div>
+      <nav class="footer-links" aria-label="Footer links">
+        <a href="#">About Us</a>
+        <a href="#">FAQs</a>
+        <a href="#">Shipping</a>
+        <a href="#">Returns</a>
+        <a href="#">Contact</a>
+      </nav>
+    </div>
+    <p class="footer-copy">© 2025 ChicCharms. Made with 🌸 in India.</p>
+  </footer>
+
+  <!-- ░░ RAZORPAY SDK ░░ -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+  <!-- ░░ EMAILJS — raw fetch (no SDK) ░░ -->
+  <script>
+    var EMAILJS_CONFIG = {
+      publicKey:        "-gy-TugJ6KCoEwnSH",
+      serviceId:        "service_g569w2p",
+      customerTemplate: "template_d2eqqzc",
+      adminTemplate:    "template_fsqyp8e"
+    };
+
+    function ejsSend(templateId, params) {
+      console.log('[EmailJS] Sending → ' + templateId, params);
+      return fetch("https://api.emailjs.com/api/v1.0/email/send", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          service_id:      EMAILJS_CONFIG.serviceId,
+          template_id:     templateId,
+          user_id:         EMAILJS_CONFIG.publicKey,
+          template_params: params
+        })
+      }).then(function (res) {
+        return res.text().then(function (text) {
+          if (!res.ok) throw new Error(text);
+          console.log('[EmailJS] ✅ Sent (' + templateId + '):', text);
+          return text;
+        });
+      });
+    }
+
+    function customerEditorialFooterHtml() {
+      var imageUrl = "https://chic-charms-store.web.app/images/editorial-light-meets-gold.png";
+
+      return [
+        '<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-top:32px;border-collapse:collapse;background:#fff8f6;border:1px solid #f1dfdc;">',
+          '<tr>',
+            '<td style="padding:0;">',
+              '<img src="' + imageUrl + '" alt="ChicCharms quiet luxury editorial" width="640" style="display:block;width:100%;max-width:640px;height:auto;border:0;" />',
+            '</td>',
+          '</tr>',
+          '<tr>',
+            '<td style="padding:30px 26px 32px;text-align:center;background:#fff8f6;">',
+              '<div style="font-family:Georgia,serif;font-size:23px;line-height:1.35;color:#3b302d;margin:0 0 14px;">Thank you for choosing <span style="color:#c98296;">ChicCharms</span>.</div>',
+              '<div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.85;color:#746763;margin:0 auto;max-width:440px;">Every piece is curated to bring softness, confidence, and quiet luxury into your everyday moments.<br />We cannot wait to see you adorned.</div>',
+              '<div style="width:42px;height:1px;background:#e7bdc8;margin:24px auto 18px;"></div>',
+              '<div style="font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.4;letter-spacing:0.22em;text-transform:uppercase;color:#3b302d;margin-bottom:12px;">ChicCharms</div>',
+              '<a href="https://www.instagram.com/chiccharms" style="display:inline-block;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.2;letter-spacing:0.16em;text-transform:uppercase;text-decoration:none;color:#b76f83;border:1px solid #e7bdc8;border-radius:999px;padding:11px 20px;background:#ffffff;">Follow @chiccharms</a>',
+            '</td>',
+          '</tr>',
+        '</table>'
+      ].join('');
+    }
+
+    window.sendOrderEmails = function (data) {
+      console.log('[EmailJS] sendOrderEmails() called with:', data);
+      var customerFooterHtml = data.customerEditorialFooterHtml || customerEditorialFooterHtml();
+      var customerFooterText = [
+        "Thank you for choosing ChicCharms.",
+        "Every piece is curated to bring softness, confidence, and quiet luxury into your everyday moments.",
+        "We cannot wait to see you adorned.",
+        "Follow @chiccharms"
+      ].join("\n");
+
+      /* Return Promise.all so callers can await both sends before redirecting */
+      return Promise.all([
+        ejsSend(EMAILJS_CONFIG.customerTemplate, {
+          name:                  data.customerName,
+          items:                 data.itemsString,
+          total:                 data.totalAmount,
+          editorial_image_url:   "https://chic-charms-store.web.app/images/editorial-light-meets-gold.png",
+          editorial_footer:      customerFooterText,
+          editorial_footer_html: customerFooterHtml,
+          social_cta:            "Follow @chiccharms",
+          instagram_url:         "https://www.instagram.com/chiccharms"
+        }).catch(function (err) {
+          console.error('[EmailJS] ❌ Customer email failed:', err.message);
+        }),
+
+        ejsSend(EMAILJS_CONFIG.adminTemplate, {
+          name:    data.customerName,
+          phone:   data.phone,
+          address: data.address,
+          items:   data.itemsString,
+          total:   data.totalAmount
+        }).catch(function (err) {
+          console.error('[EmailJS] ❌ Admin email failed:', err.message);
+        })
+      ]);
+    };
+  </script>
+
+  <script type="module">
+    /* ============================================================
+       CHECKOUT PAGE — with full Inventory Control
+       ORDER FLOW:
+         1. Validate form fields
+         2. Fetch + validate stock from Firestore (PART 1 & 2)
+         3. Batch-update stock atomically (PART 3 & 4)
+         4. Save order document
+         5. Send emails
+         6. Clear cart → redirect
+    ============================================================ */
+
+    import { initializeApp, getApps }
+      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      doc,
+      getDoc,
+      setDoc,
+      runTransaction,
+      Timestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged }
+      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    /* ============================================================
+       FIREBASE SETUP
+       Keep this page self-contained until checkout.js extraction.
+    ============================================================ */
+    const firebaseConfig = {
+      apiKey:            "AIzaSyA5Bh77_4HE3yQF0hi5ddvbFLZC7rEerxg",
+      authDomain:        "chic-charms-store.firebaseapp.com",
+      projectId:         "chic-charms-store",
+      storageBucket:     "chic-charms-store.firebasestorage.app",
+      messagingSenderId: "342514318589",
+      appId:             "1:342514318589:web:31c3490c10731e46d75294",
+    };
+    const app  = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+    const db   = getFirestore(app);
+    const auth = getAuth(app);
+
+    /* ============================================================
+       CHECKOUT STATE
+       Single mutable state object keeps async flow predictable.
+    ============================================================ */
+    const CheckoutState = {
+      currentUser: null,
+      isSubmitting: false,
+    };
+
+    let currentUser = null;
+
+    /* ============================================================
+       SHARED HELPERS
+       DOM, currency, cart totals, buttons, and reusable errors.
+    ============================================================ */
+    const $id = (id) => document.getElementById(id);
+
+    function formatINR(value) {
+      return '₹' + Number(value || 0).toLocaleString('en-IN');
+    }
+
+    function getCartTotals(cart) {
+      const subtotal = cart.reduce(function (sum, item) {
+        return sum + Number(item.price) * (item.quantity || 1);
+      }, 0);
+      const shipping = subtotal >= 399 ? 0 : 49;
+      return { subtotal, shipping, total: subtotal + shipping };
+    }
+
+    function setCheckoutButtonState(btn, isLoading, label) {
+      if (!btn) return;
+      btn.disabled = isLoading;
+      if (label) btn.innerHTML = label;
+    }
+
+    function getDefaultButtonLabel(paymentMethod) {
+      return paymentMethod === 'cod' ? '🔒 Place Order (COD) →' : '💳 Pay Now →';
+    }
+
+    function resetCheckoutButton(btn, paymentMethod) {
+      setCheckoutButtonState(btn, false, getDefaultButtonLabel(paymentMethod));
+    }
+
+    function clearCheckoutErrors() {
+      $id('globalError').classList.remove('visible');
+      $id('stockError').classList.remove('visible');
+    }
+
+    function showGlobalCheckoutError(message) {
+      const el = $id('globalError');
+      el.textContent = message;
+      el.classList.add('visible');
+    }
+
+    function showStockErrors(errors) {
+      const list = $id('stockErrorList');
+      list.innerHTML = '';
+      errors.forEach(function (errMsg) {
+        const li = document.createElement('li');
+        li.textContent = errMsg;
+        list.appendChild(li);
+      });
+      $id('stockError').classList.add('visible');
+      $id('stockError').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function buildOrderItems(cart) {
+      return cart.map(function (item) {
+        return {
+          name: item.name,
+          price: Number(item.price),
+          quantity: item.quantity || 1,
+          productId: item.productId || null,
+        };
+      });
+    }
+
+    /* ============================================================
+       AUTH
+    ============================================================ */
+    onAuthStateChanged(auth, async function (user) {
+      if (!user) {
+        sessionStorage.setItem('authRedirect', 'checkout.html');
+        window.location.href = 'auth.html';
+        return;
+      }
+      CheckoutState.currentUser = user;
+      currentUser = user;
+      localStorage.setItem('userEmail', user.email);
+      localStorage.setItem('userId',    user.uid);
+
+      /* ── MODULE 2: Auto-fill form from Firestore users collection ── */
+      try {
+        const userSnap = await getDoc(doc(db, 'users', user.uid));
+        if (userSnap.exists()) {
+          const ud = userSnap.data();
+          if (ud.name)    $id('fullName').value = ud.name;
+          if (ud.phone)   $id('phone').value    = ud.phone;
+          if (ud.address) $id('address').value  = ud.address;
+        }
+      } catch (e) {
+        console.warn('[Checkout] Could not auto-fill user data:', e.message);
+      }
+    });
+
+    /* ============================================================
+       DOM EVENTS: NAVIGATION
+    ============================================================ */
+    const navbar = $id('navbar');
+    window.addEventListener('scroll', function () {
+      navbar.classList.toggle('scrolled', window.scrollY > 20);
+    }, { passive: true });
+
+    /* ============================================================
+       CART + RENDERING
+    ============================================================ */
+    function loadCart() { return JSON.parse(localStorage.getItem('cart')) || []; }
+    function escapeHTML(str) {
+      return String(str)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function renderSummary() {
+      const cart           = loadCart();
+      const emptyRedirect  = $id('emptyRedirect');
+      const checkoutLayout = $id('checkoutLayout');
+
+      if (cart.length === 0) {
+        emptyRedirect.style.display  = 'block';
+        checkoutLayout.style.display = 'none';
+        return;
+      }
+
+      emptyRedirect.style.display  = 'none';
+      checkoutLayout.style.display = 'grid';
+
+      const summaryItems = $id('summaryItems');
+      summaryItems.innerHTML = '';
+
+      cart.forEach(function (item) {
+        const li = document.createElement('li');
+        li.className = 'summary-item';
+        li.innerHTML =
+          '<span class="summary-item-name">' + escapeHTML(item.name) +
+            (item.quantity > 1 ? ' ×' + item.quantity : '') + '</span>' +
+          '<span class="summary-item-price">₹' +
+            (Number(item.price) * (item.quantity || 1)).toLocaleString('en-IN') + '</span>';
+        summaryItems.appendChild(li);
+      });
+
+      const totals = getCartTotals(cart);
+
+      $id('summarySubtotal').textContent = formatINR(totals.subtotal);
+      $id('summaryShipping').textContent = totals.shipping === 0 ? 'Free 🎉' : '₹49';
+      $id('summaryTotal').textContent    = formatINR(totals.total);
+    }
+
+    /* ============================================================
+       VALIDATION
+    ============================================================ */
+    function showFieldError(fieldId, errorId, show) {
+      const field = $id(fieldId);
+      const error = $id(errorId);
+      if (show) { field.classList.add('error');    error.classList.add('visible'); }
+      else       { field.classList.remove('error'); error.classList.remove('visible'); }
+    }
+
+    ['fullName', 'phone', 'address', 'pincode'].forEach(function (id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('input', function () {
+          el.classList.remove('error');
+          const errEl = $id(id + 'Error');
+          if (errEl) errEl.classList.remove('visible');
+          clearCheckoutErrors();
+        });
+      }
+    });
+
+    function getValidatedForm() {
+      const fullName = $id('fullName').value.trim();
+      const phone    = $id('phone').value.trim();
+      const address  = $id('address').value.trim();
+      const pincode  = $id('pincode').value.trim();
+
+      let valid = true;
+
+      showFieldError('fullName', 'fullNameError', !fullName);
+      if (!fullName) valid = false;
+
+      const phoneValid = /^[6-9]\d{9}$/.test(phone.replace(/\s/g, ''));
+      showFieldError('phone', 'phoneError', !phoneValid);
+      if (!phoneValid) valid = false;
+
+      showFieldError('address', 'addressError', !address);
+      if (!address) valid = false;
+
+      const pinValid = /^\d{6}$/.test(pincode);
+      showFieldError('pincode', 'pincodeError', !pinValid);
+      if (!pinValid) valid = false;
+
+      if (!valid) {
+        $id('globalError').classList.add('visible');
+        const firstError = document.querySelector('.error');
+        if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return null;
+      }
+
+      return { fullName, phone, address, pincode };
+    }
+
+    /* ============================================================
+       INVENTORY: STOCK VALIDATION + TRANSACTION
+       Returns: { valid: true, batch, stockUpdates } on success
+                { valid: false, errors: [string] } on failure
+       NEVER allows negative stock. NEVER skips validation.
+    ============================================================ */
+    function getCartStockRequests(cart) {
+      const requests = new Map();
+      const errors = [];
+
+      cart.forEach(function (cartItem) {
+        const productId = cartItem.productId;
+        if (!productId) {
+          console.error('[Stock] Cart item missing productId:', cartItem.name);
+          errors.push((cartItem.name || 'Unknown item') + ' - product reference is invalid. Please remove it from your cart and try again.');
+          return;
+        }
+
+        const qtyRaw = Number(cartItem.quantity ?? 1);
+        const requested = (!Number.isFinite(qtyRaw) || qtyRaw < 1) ? 1 : Math.floor(qtyRaw);
+        if (!requests.has(productId)) {
+          requests.set(productId, {
+            productId,
+            productRef: doc(db, 'products', productId),
+            cartName: cartItem.name || productId,
+            requested: 0,
+          });
+        }
+        requests.get(productId).requested += requested;
+      });
+
+      return { requests: Array.from(requests.values()), errors };
+    }
+
+    async function validateAndPrepareStockBatch(cart) {
+      const plan = getCartStockRequests(cart);
+      const errors = plan.errors.slice();
+      const stockUpdates = [];
+      if (errors.length > 0) return { valid: false, errors };
+
+      await Promise.all(plan.requests.map(async function (item) {
+        const productSnap = await getDoc(item.productRef);
+        if (!productSnap.exists()) {
+          errors.push(item.cartName + ' - product not found');
+          return;
+        }
+
+        const productData = productSnap.data();
+        const stockRaw = Number(productData.stock ?? 0);
+        const currentStock = Number.isFinite(stockRaw) ? stockRaw : 0;
+        if (currentStock < item.requested) {
+          errors.push((productData.name || item.cartName || item.productId) + ' - Out of Stock');
+          return;
+        }
+
+        stockUpdates.push({
+          productId: item.productId,
+          productName: productData.name || item.cartName || item.productId,
+          oldStock: currentStock,
+          newStock: currentStock - item.requested,
+          requested: item.requested,
+        });
+      }));
+
+      if (errors.length > 0) return { valid: false, errors };
+      return { valid: true, stockUpdates };
+    }
+
+    async function commitStockDeductionTransaction(cart) {
+      const plan = getCartStockRequests(cart);
+      if (plan.errors.length > 0) throw new Error(plan.errors.join(' '));
+
+      await runTransaction(db, async function (transaction) {
+        const updates = [];
+
+        for (const item of plan.requests) {
+          const productSnap = await transaction.get(item.productRef);
+          if (!productSnap.exists()) {
+            throw new Error(item.cartName + ' is no longer available.');
+          }
+
+          const productData = productSnap.data();
+          const stockRaw = Number(productData.stock ?? 0);
+          const currentStock = Number.isFinite(stockRaw) ? stockRaw : 0;
+          if (currentStock < item.requested) {
+            throw new Error((productData.name || item.cartName || item.productId) + ' is out of stock.');
+          }
+
+          updates.push({
+            productRef: item.productRef,
+            productId: item.productId,
+            productName: productData.name || item.cartName || item.productId,
+            oldStock: currentStock,
+            newStock: currentStock - item.requested,
+          });
+        }
+
+        updates.forEach(function (item) {
+          const update = { stock: item.newStock, outOfStock: item.newStock === 0 };
+          transaction.update(item.productRef, update);
+          transaction.set(doc(collection(db, 'inventoryLogs')), {
+            productId: item.productId,
+            productName: item.productName,
+            oldStock: item.oldStock,
+            newStock: item.newStock,
+            changeAmount: item.newStock - item.oldStock,
+            actionType: 'AUTO_DEDUCTION',
+            timestamp: Timestamp.now(),
+            adminEmail: currentUser?.email || 'checkout@chiccharms.system'
+          });
+        });
+      });
+    }
+    /* ============================================================
+       ORDERS: FIRESTORE SAVE + CUSTOMER PROFILE + EMAILS
+       Returns the saved order summary object. Redirect stays in caller.
+    ============================================================ */
+    function buildOrderData(fields, cart, totals, paymentMethod, paymentId) {
+      return {
+        customerName:  fields.fullName,
+        phone:         fields.phone,
+        address:       fields.address + ', ' + fields.pincode,
+        items: buildOrderItems(cart),
+        subtotal:      totals.subtotal,
+        shipping:      totals.shipping,
+        totalAmount:   totals.total,
+        paymentMethod,
+        paymentId:     paymentId || null,
+        userEmail:     currentUser.email,
+        userId:        currentUser.uid,
+        status:        'Placed',
+        createdAt:     Timestamp.now(),
+      };
+    }
+
+    function buildOrderSummary(fields, cart, totals, paymentMethod, paymentId, orderId) {
+      return {
+        name: fields.fullName,
+        phone: fields.phone,
+        address: fields.address,
+        pincode: fields.pincode,
+        items: cart,
+        subtotal: totals.subtotal,
+        shipping: totals.shipping,
+        total: totals.total,
+        paymentMethod,
+        paymentId: paymentId || null,
+        orderId,
+        date: new Date().toLocaleDateString('en-IN', {
+          day: 'numeric', month: 'long', year: 'numeric'
+        })
+      };
+    }
+
+    async function sendCheckoutEmails(orderData, cart) {
+      console.log('[Checkout] Step: sending order emails');
+      try {
+        const itemsString = cart.map(function (item) {
+          return item.name + ' ×' + (item.quantity || 1);
+        }).join(', ');
+        /* Await both emails before returning so the caller can redirect after */
+        await window.sendOrderEmails({
+          customerName: orderData.customerName,
+          phone:        orderData.phone,
+          address:      orderData.address,
+          itemsString,
+          totalAmount:  formatINR(orderData.totalAmount),
+          customerEditorialFooterHtml: customerEditorialFooterHtml()
+        });
+        console.log('[Checkout] ✅ Order emails dispatched successfully.');
+      } catch (e) {
+        /* Non-fatal — email failure must NOT block the order confirmation */
+        console.error('[Checkout] ⚠️ Email dispatch failed (non-fatal):', e.message);
+      }
+    }
+
+    async function saveOrderAndRedirect(fields, paymentMethod, paymentId) {
+      if (!currentUser) {
+        console.error('[Checkout] ❌ saveOrderAndRedirect called but currentUser is null — aborting.');
+        throw new Error('You must be logged in to place an order. Please refresh and try again.');
+      }
+
+      console.log('[Checkout] Step: creating order — user:', currentUser.uid, '| method:', paymentMethod);
+
+      const cart = loadCart();
+      const totals = getCartTotals(cart);
+      const orderData = buildOrderData(fields, cart, totals, paymentMethod, paymentId);
+
+      const orderRef = await addDoc(collection(db, 'orders'), orderData);
+      console.log('[Checkout] ✅ Order document created. ID:', orderRef.id, '| userId:', currentUser.uid);
+
+      console.log('[Checkout] Step: saving user profile — uid:', currentUser.uid);
+      try {
+        await setDoc(doc(db, 'users', currentUser.uid), {
+          name:    fields.fullName,
+          phone:   fields.phone,
+          address: fields.address,
+          pincode: fields.pincode,
+          email:   currentUser.email,
+          updatedAt: Timestamp.now(),
+        }, { merge: true });
+        console.log('[Checkout] ✅ User profile saved — uid:', currentUser.uid);
+      } catch (e) {
+        /* Non-fatal — log but do NOT throw; order is already saved */
+        console.error('[Checkout] ⚠️ Profile save failed (order already created):', e.message);
+      }
+
+      console.log('[Checkout] Step: sending order emails — waiting before redirect');
+      await sendCheckoutEmails(orderData, cart);
+
+      console.log('[Checkout] Step: clearing cart and preparing redirect');
+      const orderSummary = buildOrderSummary(fields, cart, totals, paymentMethod, paymentId, orderRef.id);
+      localStorage.setItem('lastOrder', JSON.stringify(orderSummary));
+      localStorage.removeItem('cart');
+
+      return orderSummary;
+    }
+
+    function redirectToConfirmation() {
+      console.log('[Checkout] Step: redirecting to confirmation.html');
+      window.location.href = 'confirmation.html';
+    }
+
+    /* ============================================================
+       CHECKOUT PIPELINE: COD + POST-PAYMENT COMPLETION
+       1. Validate form
+       2. Validate stock from Firestore
+       3. Create order document
+       4. Save user profile
+       5. Commit stock batch
+       6. Send emails
+       7. Clear cart + redirect
+    ============================================================ */
+    async function runOrderPipeline(btn, paymentMethod, paymentId) {
+      clearCheckoutErrors();
+      if (CheckoutState.isSubmitting) return false;
+
+      if (!currentUser) {
+        console.error('[Checkout] ❌ runOrderPipeline: currentUser is null — user not authenticated.');
+        showGlobalCheckoutError('⚠️ You must be logged in to place an order. Please refresh the page.');
+        return false;
+      }
+
+      console.log('[Checkout] Step: validating form fields');
+      const fields = getValidatedForm();
+      if (!fields) return false;
+
+      const cart = loadCart();
+      if (!cart.length) {
+        showGlobalCheckoutError('⚠️ Your cart is empty.');
+        return false;
+      }
+
+      CheckoutState.isSubmitting = true;
+      setCheckoutButtonState(btn, true, '<span class="btn-spinner"></span> Checking stock…');
+
+      console.log('[Checkout] Step: validating stock');
+      let stockResult;
+      try {
+        stockResult = await validateAndPrepareStockBatch(cart);
+      } catch (err) {
+        console.error('[Checkout] ❌ Stock fetch error:', err);
+        showGlobalCheckoutError('⚠️ Unable to verify stock. Please check your connection and try again.');
+        resetCheckoutButton(btn, paymentMethod);
+        CheckoutState.isSubmitting = false;
+        return false;
+      }
+
+      if (!stockResult.valid) {
+        showStockErrors(stockResult.errors);
+        resetCheckoutButton(btn, paymentMethod);
+        CheckoutState.isSubmitting = false;
+        return false;
+      }
+
+      btn.innerHTML = '<span class="btn-spinner"></span> Saving order…';
+
+      try {
+        await saveOrderAndRedirect(fields, paymentMethod, paymentId);
+      } catch (err) {
+        console.error('[Checkout] ❌ Order save FAILED — stock NOT deducted:', err);
+        showGlobalCheckoutError('⚠️ Could not save your order. Please try again. (' + err.message + ')');
+        resetCheckoutButton(btn, paymentMethod);
+        CheckoutState.isSubmitting = false;
+        return false;
+      }
+
+      console.log('[Checkout] Step: decrementing stock');
+      try {
+        await commitStockDeductionTransaction(cart);
+        console.log('[Checkout] ✅ Stock batch committed.');
+      } catch (err) {
+        /* Order already saved — do NOT block user. Log for admin reconciliation. */
+        console.error('[Checkout] ⚠️ Stock batch commit failed after order save — manual reconciliation needed:', err);
+      }
+
+      CheckoutState.isSubmitting = false;
+      redirectToConfirmation();
+      return true;
+    }
+
+    /* ============================================================
+       PAYMENT: RAZORPAY
+    ============================================================ */
+    window.payWithRazorpay = async function () {
+      clearCheckoutErrors();
+      if (CheckoutState.isSubmitting) return;
+
+      if (!currentUser) {
+        console.error('[Checkout] ❌ payWithRazorpay: currentUser is null.');
+        showGlobalCheckoutError('⚠️ You must be logged in to place an order. Please refresh the page.');
+        return;
+      }
+
+      if (typeof Razorpay === 'undefined') {
+        console.error('[Checkout] ❌ Razorpay SDK not loaded.');
+        showGlobalCheckoutError('⚠️ Payment gateway failed to load. Please check your internet connection and try again.');
+        return;
+      }
+
+      const fields = getValidatedForm();
+      if (!fields) return;
+
+      const cart     = loadCart();
+      if (!cart.length) {
+        showGlobalCheckoutError('⚠️ Your cart is empty.');
+        return;
+      }
+
+      const totals = getCartTotals(cart);
+
+      const btn = $id('payOnlineBtn');
+
+      console.log('[Checkout] Step: validating stock before opening Razorpay');
+      CheckoutState.isSubmitting = true;
+      setCheckoutButtonState(btn, true, '<span class="btn-spinner"></span> Checking stock…');
+
+      let stockResult;
+      try {
+        stockResult = await validateAndPrepareStockBatch(cart);
+      } catch (err) {
+        console.error('[Checkout] ❌ Stock fetch error before Razorpay:', err);
+        showGlobalCheckoutError('⚠️ Unable to verify stock. Please try again.');
+        resetCheckoutButton(btn, 'razorpay');
+        CheckoutState.isSubmitting = false;
+        return;
+      }
+
+      if (!stockResult.valid) {
+        showStockErrors(stockResult.errors);
+        resetCheckoutButton(btn, 'razorpay');
+        CheckoutState.isSubmitting = false;
+        return;
+      }
+
+      console.log('[Checkout] Stock valid — opening Razorpay modal');
+      btn.innerHTML = '<span class="btn-spinner"></span> Opening payment…';
+
+      const options = {
+        key:         'rzp_test_SfHZQiuyXtogKu',
+        amount:      totals.total * 100,
+        currency:    'INR',
+        name:        'Chic Charms',
+        description: 'Order Payment',
+        image:       '',
+        prefill: {
+          name:    fields.fullName,
+          contact: fields.phone,
+        },
+        notes: {
+          address: fields.address + ', ' + fields.pincode,
+        },
+        theme: { color: '#e8809a' },
+
+        handler: async function (response) {
+          console.log('[Checkout] Razorpay payment success. Payment ID:', response.razorpay_payment_id);
+          setCheckoutButtonState(btn, true, '<span class="btn-spinner"></span> Saving order…');
+
+          try {
+            await saveOrderAndRedirect(fields, 'razorpay', response.razorpay_payment_id);
+          } catch (err) {
+            console.error('[Checkout] ❌ Order save failed after Razorpay payment — stock NOT deducted. Payment ID:', response.razorpay_payment_id, err);
+            showGlobalCheckoutError('⚠️ Payment succeeded but order save failed. Please contact support with Payment ID: ' + response.razorpay_payment_id);
+            resetCheckoutButton(btn, 'razorpay');
+            CheckoutState.isSubmitting = false;
+            return;
+          }
+
+          console.log('[Checkout] Step: decrementing stock after Razorpay order');
+          try {
+            await commitStockDeductionTransaction(cart);
+            console.log('[Checkout] ✅ Stock batch committed after Razorpay order.');
+          } catch (err) {
+            /* Order already saved — do NOT block. Log for admin reconciliation. */
+            console.error('[Checkout] ⚠️ Stock batch commit failed after Razorpay order — reconciliation needed. Payment ID:', response.razorpay_payment_id, err);
+          }
+
+          CheckoutState.isSubmitting = false;
+          redirectToConfirmation();
+        },
+
+        modal: {
+          ondismiss: function () {
+            console.log('[Checkout] Razorpay modal dismissed by user.');
+            resetCheckoutButton(btn, 'razorpay');
+            CheckoutState.isSubmitting = false;
+          }
+        }
+      };
+
+      const rzp = new Razorpay(options);
+
+      rzp.on('payment.failed', function (response) {
+        console.error('[Checkout] ❌ Razorpay payment.failed event:', response.error);
+        showGlobalCheckoutError('⚠️ Payment failed: ' + (response.error.description || 'Unknown error') + '. Please try again.');
+        resetCheckoutButton(btn, 'razorpay');
+        CheckoutState.isSubmitting = false;
+      });
+
+      rzp.open();
+    };
+
+    /* ============================================================
+       PAYMENT: COD
+    ============================================================ */
+    window.placeOrder = async function () {
+      console.log('[Checkout] COD order initiated');
+      const btn = $id('placeOrderBtn');
+      await runOrderPipeline(btn, 'cod', null);
+    };
+
+    /* ============================================================
+       CHECKOUT EVENTS + INIT
+    ============================================================ */
+    document.querySelectorAll('input[name="paymentMethod"]').forEach(function (radio) {
+      radio.addEventListener('change', function () {
+        const isOnline = this.value === 'online';
+        $id('payOnlineBtn').style.display  = isOnline ? 'block' : 'none';
+        $id('placeOrderBtn').style.display = isOnline ? 'none'  : 'block';
+        clearCheckoutErrors();
+      });
+    });
+
+    $id('payOnlineBtn').addEventListener('click',  window.payWithRazorpay);
+    $id('placeOrderBtn').addEventListener('click', window.placeOrder);
+
+    renderSummary();
+  </script>
+
+  <!-- Auth navbar -->
+  <script type="module">
+    import { setupAuthUI } from "./auth-ui.js";
+    setupAuthUI();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,654 @@
+/* ============================================================
+   admin-ops-safety.css — Chic Charms
+   Phase E5 — Production Security Hardening + Operational Safety
+
+   Covers:
+     • Safe operation feedback states
+     • Operational lock indicator
+     • Toast system enhancements
+     • Validation state styles
+     • Error recovery banners
+     • Input error hints
+     • Processing overlays (non-blocking)
+     • Mobile-safe touch targets
+     • D7 motion integration
+     • D8 premium polish
+
+   Import alongside admin-session.css on all admin pages.
+============================================================ */
+
+/* ═══════════════════════════════════════════════════════════
+   OPERATIONAL STATE INDICATORS
+   Show processing state on cards without blocking interaction
+═══════════════════════════════════════════════════════════ */
+
+/* Loading shimmer for product cards during update */
+.product-card.op-processing {
+  pointer-events: none;
+  position: relative;
+  overflow: hidden;
+}
+.product-card.op-processing::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(244, 167, 185, 0.14) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: ops-shimmer 1.2s ease-in-out infinite;
+  border-radius: inherit;
+}
+@keyframes ops-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Locked state — subtle visual indicator */
+.product-card.op-locked {
+  border-color: var(--amber-bd, #fcd34d);
+  box-shadow: 0 0 0 2px rgba(180, 83, 9, 0.1);
+}
+
+/* Operation complete flash */
+@keyframes ops-success-flash {
+  0%, 100% { border-color: var(--border, #f0dde5); box-shadow: var(--shadow, 0 4px 24px rgba(244,167,185,0.15)); }
+  40%       { border-color: var(--green-bd, #a5d6a7); box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.14); }
+}
+.product-card.op-success-flash {
+  animation: ops-success-flash 0.9s ease forwards;
+}
+
+/* Operation error flash */
+@keyframes ops-error-flash {
+  0%, 100% { border-color: var(--border, #f0dde5); }
+  40%       { border-color: var(--red-bd, #f5c6cb); box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.1); }
+}
+.product-card.op-error-flash {
+  animation: ops-error-flash 0.9s ease forwards;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   STOCK CONTROL SAFETY STATES
+   Visual feedback on stock button interactions
+═══════════════════════════════════════════════════════════ */
+
+/* Active stock btn feedback — touch-safe 44px target */
+.stock-btn {
+  min-height: 36px;
+  min-width: 44px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Pressed state D7 integration */
+.stock-btn:active,
+.stock-btn.d7-pressed {
+  transform: scale(0.95);
+  transition: transform 0.08s ease;
+}
+
+/* Stock value pill — highlight on pending change */
+.stock-value.pending-update {
+  color: var(--amber, #b45309);
+  background: var(--amber-bg, #fffbeb);
+  border-radius: 6px;
+  padding: 2px 6px;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+/* Zero stock danger indicator */
+.stock-value[data-zero="true"] {
+  color: var(--red, #c0392b);
+}
+
+/* Low stock warning indicator */
+.stock-value[data-low="true"] {
+  color: var(--amber, #b45309);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   INPUT VALIDATION STATES
+   Premium inline error UX
+═══════════════════════════════════════════════════════════ */
+
+/* Input invalid state */
+input[aria-invalid="true"],
+textarea[aria-invalid="true"],
+select[aria-invalid="true"] {
+  border-color: var(--red, #c0392b) !important;
+  box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.1) !important;
+}
+input[aria-invalid="true"]:focus,
+textarea[aria-invalid="true"]:focus {
+  box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.18) !important;
+}
+
+/* Input valid state (after correction) */
+input.input-valid,
+textarea.input-valid,
+select.input-valid {
+  border-color: var(--green-bd, #a5d6a7);
+  box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.1);
+}
+
+/* Error hint text */
+.input-error-hint {
+  display: block;
+  font-size: 0.74rem;
+  color: var(--red, #c0392b);
+  margin-top: 4px;
+  font-weight: 500;
+  line-height: 1.45;
+  animation: ops-fade-in 0.18s ease both;
+}
+
+@keyframes ops-fade-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Form validation summary (multiple errors) */
+.ops-validation-summary {
+  background: var(--red-bg, #fff5f5);
+  border: 1.5px solid var(--red-bd, #f5c6cb);
+  border-radius: var(--radius, 12px);
+  padding: 14px 18px;
+  margin-bottom: 18px;
+  animation: ops-fade-in 0.2s ease both;
+}
+.ops-validation-summary-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--red, #c0392b);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ops-validation-summary ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0;
+}
+.ops-validation-summary li {
+  font-size: 0.8rem;
+  color: var(--red, #c0392b);
+  padding-left: 12px;
+  position: relative;
+}
+.ops-validation-summary li::before {
+  content: "·";
+  position: absolute;
+  left: 0;
+  font-weight: 700;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   OPERATIONAL FEEDBACK TOASTS
+   Enhancements to admin-session-ux.js AdminToast
+═══════════════════════════════════════════════════════════ */
+
+/* Toast container */
+#adminToastContainer {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9998;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 10px;
+  max-width: min(360px, calc(100vw - 32px));
+  pointer-events: none;
+}
+
+/* Individual toast */
+.admin-toast {
+  background: var(--white, #fff);
+  border: 1px solid var(--border, #f0dde5);
+  border-radius: 14px;
+  padding: 14px 18px;
+  box-shadow: 0 8px 32px rgba(45, 32, 32, 0.14);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-family: var(--font-body, "DM Sans", sans-serif);
+  font-size: 0.86rem;
+  line-height: 1.5;
+  pointer-events: auto;
+  cursor: pointer;
+  animation: ops-toast-in 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  transform-origin: right bottom;
+  position: relative;
+  overflow: hidden;
+}
+.admin-toast::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  border-radius: 14px 0 0 14px;
+}
+
+.admin-toast.leaving {
+  animation: ops-toast-out 0.28s ease forwards;
+}
+
+@keyframes ops-toast-in {
+  from { opacity: 0; transform: translateX(20px) scale(0.94); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+@keyframes ops-toast-out {
+  from { opacity: 1; transform: translateX(0) scale(1); max-height: 100px; }
+  to   { opacity: 0; transform: translateX(16px) scale(0.94); max-height: 0; margin-bottom: -10px; }
+}
+
+/* Toast types */
+.admin-toast[data-type="success"]::before { background: var(--green, #2e7d32); }
+.admin-toast[data-type="error"]::before   { background: var(--red, #c0392b); }
+.admin-toast[data-type="warning"]::before { background: var(--amber, #b45309); }
+.admin-toast[data-type="info"]::before    { background: var(--rose-dark, #e8809a); }
+
+.admin-toast[data-type="success"] { border-color: var(--green-bd, #a5d6a7); }
+.admin-toast[data-type="error"]   { border-color: var(--red-bd, #f5c6cb); }
+.admin-toast[data-type="warning"] { border-color: var(--amber-bd, #fcd34d); }
+
+.admin-toast-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+  width: 20px;
+  text-align: center;
+  font-weight: 700;
+}
+.admin-toast[data-type="success"] .admin-toast-icon { color: var(--green, #2e7d32); }
+.admin-toast[data-type="error"]   .admin-toast-icon { color: var(--red, #c0392b); }
+.admin-toast[data-type="warning"] .admin-toast-icon { color: var(--amber, #b45309); }
+.admin-toast[data-type="info"]    .admin-toast-icon { color: var(--rose-dark, #e8809a); }
+
+.admin-toast-body { flex: 1; min-width: 0; }
+.admin-toast-title {
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--text, #2d2020);
+  margin-bottom: 2px;
+}
+.admin-toast-copy {
+  font-size: 0.83rem;
+  color: var(--muted, #9b7b85);
+  line-height: 1.5;
+}
+
+/* Mobile: full-width toasts at bottom */
+@media (max-width: 540px) {
+  #adminToastContainer {
+    bottom: 16px;
+    right: 16px;
+    left: 16px;
+    max-width: none;
+  }
+  .admin-toast {
+    border-radius: 12px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ERROR RECOVERY BANNER
+   Full-width inline operational error state
+═══════════════════════════════════════════════════════════ */
+
+.admin-session-banner {
+  display: none;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 24px;
+  font-size: 0.85rem;
+  font-family: var(--font-body, "DM Sans", sans-serif);
+  border-bottom: 1px solid var(--border, #f0dde5);
+  animation: ops-fade-in 0.22s ease both;
+  position: relative;
+  z-index: 190;
+}
+.admin-session-banner.visible { display: flex; }
+
+.admin-session-banner[data-level="info"] {
+  background: var(--blush, #fef0f4);
+  border-color: var(--border, #f0dde5);
+  color: var(--rose-dark, #e8809a);
+}
+.admin-session-banner[data-level="warning"] {
+  background: var(--amber-bg, #fffbeb);
+  border-color: var(--amber-bd, #fcd34d);
+  color: var(--amber, #b45309);
+}
+.admin-session-banner[data-level="error"] {
+  background: var(--red-bg, #fff5f5);
+  border-color: var(--red-bd, #f5c6cb);
+  color: var(--red, #c0392b);
+}
+
+.session-banner-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+  font-weight: 700;
+}
+.session-banner-text {
+  flex: 1;
+  font-weight: 500;
+}
+.session-banner-dismiss {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: currentColor;
+  opacity: 0.6;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: opacity 0.15s ease;
+  flex-shrink: 0;
+}
+.session-banner-dismiss:hover { opacity: 1; }
+
+/* ═══════════════════════════════════════════════════════════
+   SESSION STATUS INDICATOR
+   Small live/reconnecting status dot in the admin bar
+═══════════════════════════════════════════════════════════ */
+
+.admin-session-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid;
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+
+.admin-session-status[data-state="live"] {
+  background: var(--green-bg, #e8f5e9);
+  border-color: var(--green-bd, #a5d6a7);
+  color: var(--green, #2e7d32);
+}
+.admin-session-status[data-state="reconnecting"] {
+  background: var(--amber-bg, #fffbeb);
+  border-color: var(--amber-bd, #fcd34d);
+  color: var(--amber, #b45309);
+}
+.admin-session-status[data-state="error"] {
+  background: var(--red-bg, #fff5f5);
+  border-color: var(--red-bd, #f5c6cb);
+  color: var(--red, #c0392b);
+}
+
+.session-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+.admin-session-status[data-state="live"] .session-status-dot {
+  animation: ops-live-pulse 1.8s ease-in-out infinite;
+}
+@keyframes ops-live-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.7); }
+}
+
+.admin-session-status[data-state="reconnecting"] .session-status-dot {
+  animation: ops-reconnect-pulse 1.2s ease-in-out infinite;
+}
+@keyframes ops-reconnect-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.4); opacity: 0.6; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SKELETON LOADING IMPROVEMENTS
+   Enhanced shimmer for operational skeleton states
+═══════════════════════════════════════════════════════════ */
+
+.skeleton,
+.skeleton-metric,
+.skeleton-row,
+.skeleton-text {
+  background: linear-gradient(
+    90deg,
+    var(--blush, #fef0f4) 0%,
+    #fce8ef 50%,
+    var(--blush, #fef0f4) 100%
+  );
+  background-size: 200% 100%;
+  animation: ops-shimmer 1.4s ease-in-out infinite;
+  border-radius: 8px;
+}
+.skeleton-metric {
+  height: 88px;
+  border-radius: var(--radius-lg, 20px);
+}
+.skeleton-row {
+  height: 56px;
+  border-radius: var(--radius, 12px);
+}
+.skeleton-text {
+  height: 14px;
+}
+.skeleton-text.wide { width: 100%; }
+
+/* ═══════════════════════════════════════════════════════════
+   ADMIN REVEAL ANIMATION
+   D7 staggered reveal on auth grant
+═══════════════════════════════════════════════════════════ */
+
+@keyframes admin-reveal {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.admin-reveal {
+  animation: admin-reveal 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SESSION TIMER
+═══════════════════════════════════════════════════════════ */
+
+.admin-session-duration {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  color: var(--muted, #9b7b85);
+  font-weight: 500;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border, #f0dde5);
+}
+.admin-session-duration span:first-child {
+  font-size: 0.6rem;
+  color: var(--green, #2e7d32);
+  animation: ops-live-pulse 2s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MOBILE OPERATIONAL SAFETY
+   Touch-safe admin interactions on small screens
+═══════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  /* Larger touch targets for dangerous actions */
+  .btn-delete,
+  .btn-confirm-delete,
+  .ops-btn-confirm {
+    min-height: 48px;
+    touch-action: manipulation;
+  }
+
+  .btn-restock-quick {
+    min-height: 40px;
+    padding: 8px 16px;
+    touch-action: manipulation;
+  }
+
+  /* Stack action buttons on mobile */
+  .delete-actions {
+    flex-direction: column-reverse;
+  }
+  .delete-actions .btn-modal-cancel,
+  .delete-actions .btn-confirm-delete {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Confirm dialogs full-width on mobile */
+  .ops-confirm-card {
+    padding: 28px 22px 24px;
+  }
+
+  /* Prevent accidental taps on destructive buttons */
+  .btn-delete {
+    /* Slightly smaller to prevent accidental taps near edges */
+    margin: 2px;
+  }
+}
+
+/* Touch device: remove hover states on stock btns to prevent sticky hover */
+@media (hover: none) and (pointer: coarse) {
+  .stock-btn:hover {
+    border-color: var(--border, #f0dde5);
+    color: var(--text, #2d2020);
+    background: var(--white, #fff);
+  }
+  .stock-btn.restock:hover {
+    background: var(--green-bg, #e8f5e9);
+    color: var(--green, #2e7d32);
+  }
+
+  /* Visual feedback on touch instead */
+  .stock-btn:active {
+    transform: scale(0.93);
+    transition: transform 0.08s ease;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   EXPORT ROW
+   CSV export buttons operational safety
+═══════════════════════════════════════════════════════════ */
+
+.export-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.export-btn {
+  position: relative;
+  overflow: hidden;
+}
+.export-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(244, 167, 185, 0);
+  transition: background 0.18s ease;
+  border-radius: inherit;
+}
+.export-btn.exporting::after {
+  background: rgba(244, 167, 185, 0.15);
+  animation: ops-shimmer 1.2s ease-in-out infinite;
+  background-size: 200% 100%;
+}
+.export-btn.exporting {
+  pointer-events: none;
+  color: var(--muted, #9b7b85);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   OPERATIONAL CONFIDENCE: HOVER STATES
+   Enhanced hover on all dangerous action buttons
+═══════════════════════════════════════════════════════════ */
+
+/* Delete button: requires deliberate hover-then-click */
+.btn-delete {
+  position: relative;
+  isolation: isolate;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Restock button subtle confirmation animation */
+.btn-restock-quick {
+  position: relative;
+}
+.btn-restock-quick:focus-visible {
+  outline: 2px solid var(--green, #2e7d32);
+  outline-offset: 2px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   FOCUS MANAGEMENT — Keyboard navigation safety
+═══════════════════════════════════════════════════════════ */
+
+/* Modal focus trap visual indicator */
+.modal-backdrop:focus-within .modal,
+#adminOpsConfirmDialog:focus-within .ops-confirm-card,
+#adminRestockDialog:focus-within .restock-card {
+  box-shadow: 0 28px 80px rgba(45, 32, 32, 0.22),
+              0 0 0 2px rgba(244, 167, 185, 0.3);
+}
+
+/* Button focus rings — custom, premium */
+button:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid var(--rose-dark, #e8809a);
+  outline-offset: 2px;
+}
+.btn-confirm-delete:focus-visible,
+.ops-btn-confirm:focus-visible {
+  outline-color: var(--red, #c0392b);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   VISUAL CONSISTENCY WITH D8 POLISH
+   Matches luxury design tokens throughout
+═══════════════════════════════════════════════════════════ */
+
+/* Modal transitions — match D7 spring easing */
+.modal-backdrop.open .modal,
+#adminOpsConfirmDialog.open .ops-confirm-card,
+#adminRestockDialog.open .restock-card {
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Subtle card elevation on active operations */
+.product-card:has(.stock-btn:active) {
+  box-shadow: var(--shadow-lg, 0 12px 48px rgba(244, 167, 185, 0.22));
+  border-color: var(--rose, #f4a7b9);
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ADMIN SIDEBAR SESSION TIMER
+   Operational confidence footer
+═══════════════════════════════════════════════════════════ */
+
+.admin-side-footer .admin-session-duration {
+  font-size: 0.7rem;
+  opacity: 0.75;
+}

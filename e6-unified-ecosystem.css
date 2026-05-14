@@ -1,0 +1,1513 @@
+/* ============================================================
+   e6-unified-ecosystem.css — Chic Charms
+   Phase E6 — Unified Luxury Operational Ecosystem
+
+   This is the final integration layer. It does not override
+   existing system styles — it binds them into one luxury
+   motion language, shared rhythm, and visual continuity.
+
+   Load order:
+     styles.css
+     d3–d8 layers
+     admin-session.css        (admin pages only)
+     admin-ops-safety.css     (admin pages only)
+     admin-nav.css
+     e6-unified-ecosystem.css ← LAST on every page
+
+   Sections:
+     1.  E6 Design Token Extensions
+     2.  Unified Motion Language
+     3.  Cross-System Transition Continuity
+     4.  Storefront → Admin Bridge Tokens
+     5.  Operational Brand Consistency
+     6.  Unified Navigation Rhythm
+     7.  Admin Sidebar — Luxury Polish
+     8.  Admin Bar — Final Refinement
+     9.  Operational Cards & Analytics
+    10.  Inventory & Stock System Polish
+    11.  Operational Modals — Luxury Elevation
+    12.  Toast System — Final Unification
+    13.  Session Status — Premium Indicator
+    14.  Skeleton States — Unified Loading
+    15.  Cross-System Responsive Continuity
+    16.  Unified Focus & Accessibility
+    17.  Print Isolation
+    18.  E6 Reveal Choreography
+    19.  Admin Session Banner Refinement
+    20.  Final Atmosphere Pass
+============================================================ */
+
+/* ─────────────────────────────────────────────────────────────
+   1. E6 DESIGN TOKEN EXTENSIONS
+   Harmonises storefront (D1–D8) tokens with admin tokens.
+   All admin pages AND storefront pages get these.
+───────────────────────────────────────────────────────────── */
+:root {
+  /* ── Unified palette bridge ── */
+  --e6-rose:          #D4879C;          /* storefront rose  */
+  --e6-rose-op:       #e8809a;          /* admin rose       */
+  --e6-rose-blend:    #DC84A0;          /* E6 bridge rose   */
+  --e6-blush:         #FAF1F4;
+  --e6-cream:         #FAF8F5;
+  --e6-parchment:     #F5F0EA;
+  --e6-sand:          #EDE6DD;
+  --e6-charcoal:      #1C1917;
+  --e6-muted:         #8A7F79;
+
+  /* ── Operational accent palette ── */
+  --e6-gold:          #C9A96E;
+  --e6-gold-pale:     rgba(201,169,110,0.08);
+  --e6-gold-bd:       rgba(201,169,110,0.28);
+
+  /* ── Unified shadow language ── */
+  --e6-shadow-xs:     0 1px 4px rgba(60,40,30,0.05);
+  --e6-shadow-sm:     0 3px 14px rgba(60,40,30,0.07);
+  --e6-shadow-md:     0 8px 32px rgba(60,40,30,0.09);
+  --e6-shadow-lg:     0 20px 56px rgba(60,40,30,0.10);
+  --e6-shadow-rose:   0 6px 24px rgba(180,100,120,0.16);
+  --e6-shadow-op:     0 4px 20px rgba(244,167,185,0.14);  /* operational glow */
+
+  /* ── Unified motion tokens ── */
+  --e6-ease-silk:     cubic-bezier(0.18, 1, 0.28, 1);
+  --e6-ease-spring:   cubic-bezier(0.34, 1.20, 0.64, 1);
+  --e6-ease-gentle:   cubic-bezier(0.22, 0.61, 0.36, 1);
+  --e6-ease-exit:     cubic-bezier(0.45, 0, 0.75, 0.2);
+
+  --e6-dur-micro:     100ms;
+  --e6-dur-swift:     200ms;
+  --e6-dur-flow:      380ms;
+  --e6-dur-breath:    580ms;
+  --e6-dur-cinema:    820ms;
+
+  /* ── Unified stagger rhythm ── */
+  --e6-stagger-1:     0ms;
+  --e6-stagger-2:     55ms;
+  --e6-stagger-3:     110ms;
+  --e6-stagger-4:     165ms;
+  --e6-stagger-5:     220ms;
+
+  /* ── Admin sidebar width (used in layout continuity) ── */
+  --e6-sidebar-w:     248px;
+
+  /* ── Operational badge palette ── */
+  --e6-op-live-color:  #2e7d32;
+  --e6-op-live-bg:     #e8f5e9;
+  --e6-op-live-bd:     #a5d6a7;
+  --e6-op-warn-color:  #b45309;
+  --e6-op-warn-bg:     #fffbeb;
+  --e6-op-err-color:   #c0392b;
+  --e6-op-err-bg:      #fff5f5;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   2. UNIFIED MOTION LANGUAGE
+   One luxury motion vocabulary shared by storefront + admin.
+───────────────────────────────────────────────────────────── */
+
+/* Shared entrance keyframes */
+@keyframes e6-rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes e6-bloom {
+  from { opacity: 0; transform: scale(0.96) translateY(8px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+@keyframes e6-slide-right {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes e6-slide-left {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes e6-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Shared shimmer (used in skeletons AND operational processing) */
+@keyframes e6-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Shared pulse (used in status indicators) */
+@keyframes e6-pulse {
+  0%, 100% { opacity: 1;   transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.88); }
+}
+
+/* Reveal utility class — usable on both storefront + admin */
+.e6-reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity  var(--e6-dur-breath) var(--e6-ease-silk),
+    transform var(--e6-dur-breath) var(--e6-ease-silk);
+  will-change: opacity, transform;
+}
+.e6-reveal.e6-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Stagger children in a container */
+.e6-stagger > *:nth-child(1) { animation-delay: var(--e6-stagger-1); }
+.e6-stagger > *:nth-child(2) { animation-delay: var(--e6-stagger-2); }
+.e6-stagger > *:nth-child(3) { animation-delay: var(--e6-stagger-3); }
+.e6-stagger > *:nth-child(4) { animation-delay: var(--e6-stagger-4); }
+.e6-stagger > *:nth-child(5) { animation-delay: var(--e6-stagger-5); }
+
+/* Admin dashboard reveal — choreographed entry */
+.admin-reveal {
+  animation: e6-rise var(--e6-dur-breath) var(--e6-ease-silk) both;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   3. CROSS-SYSTEM TRANSITION CONTINUITY
+   Smooth transitions when moving storefront ↔ admin.
+───────────────────────────────────────────────────────────── */
+
+/* Page-level entrance — every page feels deliberate */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  animation: e6-fade var(--e6-dur-breath) var(--e6-ease-silk) both;
+}
+
+/* Preserve D8 page breath — do not conflict */
+@media (prefers-reduced-motion: no-preference) {
+  body {
+    animation: e6-fade var(--e6-dur-cinema) var(--e6-ease-silk) both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body,
+  .admin-reveal,
+  .e6-reveal {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   4. STOREFRONT → ADMIN BRIDGE TOKENS
+   Ensures admin pages inherit the luxury storefront palette.
+───────────────────────────────────────────────────────────── */
+
+/* Admin pages: override admin token gaps with storefront values */
+body[data-page="admin"],
+body[data-page="admin-orders"] {
+  --rose:      var(--e6-rose-blend);
+  --cream:     var(--e6-cream);
+  --muted:     var(--e6-muted);
+  --border:    var(--e6-sand);
+  --font-head: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Jost', 'DM Sans', -apple-system, sans-serif;
+  background: var(--e6-cream);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   5. OPERATIONAL BRAND CONSISTENCY
+   Admin environments feel like Chic Charms — not generic SaaS.
+───────────────────────────────────────────────────────────── */
+
+/* Admin bar: brand-coherent with storefront navbar */
+.admin-bar,
+.topbar {
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border-bottom: 1px solid var(--e6-sand);
+  box-shadow: 0 1px 0 rgba(212, 135, 156, 0.08),
+              var(--e6-shadow-xs);
+  transition:
+    box-shadow var(--e6-dur-flow) var(--e6-ease-gentle),
+    border-color var(--e6-dur-flow) var(--e6-ease-gentle);
+}
+
+/* Operational brand wordmark */
+.admin-bar .logo,
+.admin-sidebar-brand .logo {
+  font-family: var(--font-head);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--e6-charcoal);
+  line-height: 1;
+  transition: opacity var(--e6-dur-swift) ease;
+}
+.admin-bar .logo:hover,
+.admin-sidebar-brand .logo:hover {
+  opacity: 0.78;
+}
+
+/* Operational tag pill — refined */
+.admin-bar-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--e6-muted);
+  background: var(--e6-blush);
+  border: 1px solid var(--e6-sand);
+  padding: 4px 12px;
+  border-radius: 999px;
+  line-height: 1;
+  transition: background var(--e6-dur-swift) ease;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   6. UNIFIED NAVIGATION RHYTHM
+   Storefront nav + admin topbar nav share spacing + feel.
+───────────────────────────────────────────────────────────── */
+
+/* Admin topbar nav links — match storefront nav weight */
+.topbar-nav a,
+.topbar-nav button {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--e6-muted);
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: transparent;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background var(--e6-dur-swift) var(--e6-ease-gentle),
+    color      var(--e6-dur-swift) var(--e6-ease-gentle),
+    border-color var(--e6-dur-swift) var(--e6-ease-gentle),
+    box-shadow var(--e6-dur-swift) var(--e6-ease-gentle);
+  white-space: nowrap;
+}
+.topbar-nav a:hover,
+.topbar-nav button:hover,
+.topbar-nav a:focus-visible,
+.topbar-nav button:focus-visible {
+  background: var(--e6-blush);
+  color: var(--e6-charcoal);
+  border-color: var(--e6-sand);
+}
+.topbar-nav a.active,
+.topbar-nav a[aria-current="page"] {
+  background: var(--e6-blush);
+  color: var(--e6-rose-blend);
+  border-color: rgba(212, 135, 156, 0.28);
+  font-weight: 600;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   7. ADMIN SIDEBAR — LUXURY POLISH
+   Elevates the sidebar to feel like a premium operational panel.
+───────────────────────────────────────────────────────────── */
+
+.admin-sidebar {
+  background: rgba(255, 255, 255, 0.97);
+  border-right: 1px solid var(--e6-sand);
+  box-shadow: 2px 0 24px rgba(212, 135, 156, 0.06),
+              1px 0 0 var(--e6-sand);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* Sidebar brand section */
+.admin-sidebar-brand {
+  border-bottom: 1px solid var(--e6-sand);
+  padding-bottom: 18px;
+  margin-bottom: 20px;
+}
+.admin-sidebar-brand .logo-sub {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--e6-rose-blend);
+  display: block;
+  margin-top: 3px;
+  opacity: 0.8;
+}
+
+/* Sidebar nav links — premium operational feel */
+.admin-sidebar .nav-link,
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  border-radius: var(--radius, 12px);
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: var(--e6-muted);
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition:
+    background  var(--e6-dur-swift) var(--e6-ease-gentle),
+    color       var(--e6-dur-swift) var(--e6-ease-gentle),
+    border-color var(--e6-dur-swift) var(--e6-ease-gentle),
+    transform   var(--e6-dur-swift) var(--e6-ease-gentle),
+    box-shadow  var(--e6-dur-swift) var(--e6-ease-gentle);
+  letter-spacing: 0.008em;
+  position: relative;
+  overflow: hidden;
+}
+.admin-sidebar .nav-link:hover,
+.sidebar-link:hover {
+  background: var(--e6-blush);
+  color: var(--e6-charcoal);
+  border-color: rgba(212, 135, 156, 0.18);
+  transform: translateX(2px);
+}
+.admin-sidebar .nav-link.active,
+.sidebar-link.active {
+  background: linear-gradient(
+    135deg,
+    rgba(212, 135, 156, 0.12) 0%,
+    rgba(212, 135, 156, 0.06) 100%
+  );
+  color: var(--e6-rose-blend);
+  border-color: rgba(212, 135, 156, 0.22);
+  font-weight: 600;
+  box-shadow: var(--e6-shadow-xs);
+}
+.admin-sidebar .nav-link.active::before,
+.sidebar-link.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 25%;
+  bottom: 25%;
+  width: 3px;
+  background: var(--e6-rose-blend);
+  border-radius: 0 3px 3px 0;
+}
+
+/* Sidebar icon */
+.sidebar-link-icon {
+  font-size: 0.78rem;
+  opacity: 0.55;
+  flex-shrink: 0;
+  width: 16px;
+  text-align: center;
+  transition: opacity var(--e6-dur-swift) ease;
+}
+.admin-sidebar .nav-link:hover .sidebar-link-icon,
+.sidebar-link:hover .sidebar-link-icon {
+  opacity: 0.85;
+}
+.admin-sidebar .nav-link.active .sidebar-link-icon,
+.sidebar-link.active .sidebar-link-icon {
+  opacity: 1;
+}
+
+/* Sidebar section divider */
+.sidebar-section-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--e6-muted);
+  opacity: 0.55;
+  padding: 14px 14px 6px;
+  display: block;
+}
+
+/* Sidebar footer — elegant operational context */
+.admin-side-footer {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--e6-sand);
+}
+.admin-side-footer a {
+  display: block;
+  padding: 8px 14px;
+  font-size: 0.80rem;
+  color: var(--e6-muted);
+  text-decoration: none;
+  border-radius: var(--radius, 12px);
+  transition: background var(--e6-dur-swift) ease, color var(--e6-dur-swift) ease;
+  letter-spacing: 0.01em;
+}
+.admin-side-footer a:hover {
+  background: var(--e6-blush);
+  color: var(--e6-charcoal);
+}
+.admin-side-footer .storefront-link {
+  color: var(--e6-rose-blend);
+  font-weight: 500;
+}
+
+/* Session duration pill */
+.admin-session-duration {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  color: var(--e6-muted);
+  opacity: 0.6;
+  padding: 6px 14px 0;
+  letter-spacing: 0.02em;
+}
+.admin-session-duration span:first-child {
+  font-size: 0.55rem;
+  color: var(--e6-op-live-color);
+  animation: e6-pulse 2.4s ease-in-out infinite;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   8. ADMIN BAR — FINAL REFINEMENT
+   Sticky bar at top of admin pages — polished.
+───────────────────────────────────────────────────────────── */
+
+.admin-bar {
+  height: 62px;
+  padding: 0 28px;
+}
+.admin-bar-left {
+  gap: 14px;
+}
+
+/* Breadcrumb separator in admin bar */
+.admin-bar-sep {
+  width: 1px;
+  height: 16px;
+  background: var(--e6-sand);
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+/* Admin bar action buttons — match storefront nav btns */
+.admin-bar-btn {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--e6-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  padding: 6px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition:
+    background var(--e6-dur-swift) var(--e6-ease-gentle),
+    color      var(--e6-dur-swift) var(--e6-ease-gentle),
+    border-color var(--e6-dur-swift) var(--e6-ease-gentle);
+  text-decoration: none;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+.admin-bar-btn:hover {
+  background: var(--e6-blush);
+  color: var(--e6-charcoal);
+  border-color: var(--e6-sand);
+}
+.admin-bar-btn.primary {
+  background: var(--e6-rose-blend);
+  color: #fff;
+  border-color: transparent;
+  font-weight: 600;
+  box-shadow: 0 2px 12px rgba(212, 135, 156, 0.28);
+}
+.admin-bar-btn.primary:hover {
+  background: var(--e6-rose-op);
+  box-shadow: 0 4px 18px rgba(212, 135, 156, 0.38);
+  transform: translateY(-1px);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   9. OPERATIONAL CARDS & ANALYTICS
+   Metric cards, stat blocks — unified luxury aesthetic.
+───────────────────────────────────────────────────────────── */
+
+/* Base card — used by both storefront product cards + admin metric cards */
+.admin-card,
+.metric-card,
+.stat-card,
+.analytics-card {
+  background: var(--e6-parchment);
+  border: 1px solid var(--e6-sand);
+  border-radius: var(--radius-lg, 20px);
+  box-shadow: var(--e6-shadow-sm);
+  transition:
+    box-shadow  var(--e6-dur-flow) var(--e6-ease-gentle),
+    border-color var(--e6-dur-flow) var(--e6-ease-gentle),
+    transform   var(--e6-dur-swift) var(--e6-ease-gentle);
+  position: relative;
+  overflow: hidden;
+}
+.admin-card:hover,
+.metric-card:hover {
+  box-shadow: var(--e6-shadow-md);
+  border-color: rgba(212, 135, 156, 0.20);
+  transform: translateY(-1px);
+}
+
+/* Metric card accent line — brand coherence */
+.metric-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--e6-rose-blend) 0%,
+    rgba(212, 135, 156, 0) 100%
+  );
+  opacity: 0;
+  transition: opacity var(--e6-dur-flow) ease;
+}
+.metric-card:hover::before {
+  opacity: 1;
+}
+
+/* Metric value — luxury typography scale */
+.metric-value,
+.stat-value {
+  font-family: var(--font-head);
+  font-size: 2.1rem;
+  font-weight: 600;
+  color: var(--e6-charcoal);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+
+/* Metric label */
+.metric-label,
+.stat-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--e6-muted);
+  margin-bottom: 6px;
+}
+
+/* Metric trend indicator */
+.metric-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-top: 6px;
+}
+.metric-trend.up {
+  color: var(--e6-op-live-color);
+  background: var(--e6-op-live-bg);
+}
+.metric-trend.down {
+  color: var(--e6-op-err-color);
+  background: var(--e6-op-err-bg);
+}
+.metric-trend.neutral {
+  color: var(--e6-muted);
+  background: var(--e6-blush);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   10. INVENTORY & STOCK SYSTEM POLISH
+   Product cards — consistent luxury aesthetic.
+───────────────────────────────────────────────────────────── */
+
+/* Product card — unified with storefront card language */
+.product-card {
+  background: #fff;
+  border: 1px solid var(--e6-sand);
+  border-radius: var(--radius-lg, 20px);
+  box-shadow: var(--e6-shadow-xs);
+  transition:
+    box-shadow   var(--e6-dur-flow) var(--e6-ease-gentle),
+    border-color var(--e6-dur-flow) var(--e6-ease-gentle),
+    transform    var(--e6-dur-swift) var(--e6-ease-gentle);
+}
+.product-card:hover {
+  box-shadow: var(--e6-shadow-md);
+  border-color: rgba(212, 135, 156, 0.18);
+  transform: translateY(-2px);
+}
+
+/* Stock badge — luxury pill */
+.stock-badge,
+.stock-pill,
+[class*="stock-status"] {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  line-height: 1;
+}
+
+/* Stock value display */
+.stock-value {
+  font-family: var(--font-head);
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--e6-charcoal);
+  letter-spacing: -0.02em;
+  transition: color var(--e6-dur-swift) ease;
+}
+.stock-value[data-zero="true"] {
+  color: var(--e6-op-err-color);
+}
+.stock-value[data-low="true"] {
+  color: var(--e6-op-warn-color);
+}
+
+/* Stock control buttons */
+.stock-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--e6-sand);
+  background: #fff;
+  color: var(--e6-muted);
+  font-size: 1.1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    background var(--e6-dur-swift) ease,
+    color      var(--e6-dur-swift) ease,
+    border-color var(--e6-dur-swift) ease,
+    transform  var(--e6-dur-micro) var(--e6-ease-spring),
+    box-shadow var(--e6-dur-swift) ease;
+  -webkit-tap-highlight-color: transparent;
+  min-width: 44px;
+  min-height: 44px;
+}
+.stock-btn:hover {
+  background: var(--e6-blush);
+  color: var(--e6-charcoal);
+  border-color: rgba(212, 135, 156, 0.28);
+  box-shadow: var(--e6-shadow-xs);
+}
+.stock-btn:active {
+  transform: scale(0.91);
+}
+.stock-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   11. OPERATIONAL MODALS — LUXURY ELEVATION
+   Edit modals, confirm dialogs — premium visual system.
+───────────────────────────────────────────────────────────── */
+
+/* Backdrop */
+.modal-backdrop,
+.edit-modal-backdrop,
+#editModal,
+#adminOpsConfirmDialog {
+  backdrop-filter: blur(8px) saturate(1.3);
+  -webkit-backdrop-filter: blur(8px) saturate(1.3);
+}
+
+/* Modal card — elevated luxury panel */
+.modal-card,
+.edit-modal,
+.ops-confirm-card {
+  background: #fff;
+  border: 1px solid var(--e6-sand);
+  border-radius: var(--radius-lg, 20px);
+  box-shadow:
+    0 28px 80px rgba(30, 20, 20, 0.18),
+    0 8px 24px rgba(30, 20, 20, 0.08),
+    0 0 0 1px rgba(212, 135, 156, 0.06);
+}
+
+/* Modal header line */
+.modal-card::before,
+.edit-modal::before {
+  content: '';
+  display: block;
+  width: 48px;
+  height: 3px;
+  background: var(--e6-rose-blend);
+  border-radius: 999px;
+  margin: 0 auto 24px;
+  opacity: 0.6;
+}
+
+/* Form fields in modals — luxury input feel */
+.modal-card input,
+.modal-card select,
+.modal-card textarea,
+input[type="text"],
+input[type="number"],
+input[type="url"],
+input[type="email"],
+select,
+textarea {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  color: var(--e6-charcoal);
+  background: var(--e6-cream);
+  border: 1px solid var(--e6-sand);
+  border-radius: var(--radius, 12px);
+  padding: 11px 14px;
+  width: 100%;
+  transition:
+    border-color var(--e6-dur-swift) var(--e6-ease-gentle),
+    box-shadow   var(--e6-dur-swift) var(--e6-ease-gentle),
+    background   var(--e6-dur-swift) ease;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="url"]:focus,
+input[type="email"]:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--e6-rose-blend);
+  box-shadow: 0 0 0 3px rgba(212, 135, 156, 0.12);
+  background: #fff;
+}
+input[aria-invalid="true"],
+select[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+  border-color: var(--e6-op-err-color);
+  box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.08);
+}
+.field-error {
+  font-size: 0.76rem;
+  color: var(--e6-op-err-color);
+  margin-top: 4px;
+  display: block;
+  letter-spacing: 0.01em;
+}
+
+/* Form label */
+label,
+.form-label {
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--e6-muted);
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* Primary operational button */
+.btn-op-primary,
+.btn-save,
+.btn-add {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--e6-rose-blend);
+  border: none;
+  border-radius: 999px;
+  padding: 11px 28px;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  transition:
+    background  var(--e6-dur-swift) var(--e6-ease-gentle),
+    box-shadow  var(--e6-dur-swift) var(--e6-ease-gentle),
+    transform   var(--e6-dur-micro) var(--e6-ease-spring);
+  box-shadow: 0 3px 14px rgba(212, 135, 156, 0.30);
+  white-space: nowrap;
+}
+.btn-op-primary:hover,
+.btn-save:hover,
+.btn-add:hover {
+  background: var(--e6-rose-op);
+  box-shadow: 0 6px 22px rgba(212, 135, 156, 0.42);
+  transform: translateY(-1px);
+}
+.btn-op-primary:active,
+.btn-save:active,
+.btn-add:active {
+  transform: translateY(0) scale(0.97);
+  box-shadow: 0 2px 8px rgba(212, 135, 156, 0.22);
+}
+
+/* Secondary operational button */
+.btn-op-secondary,
+.btn-cancel,
+.btn-ghost {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--e6-muted);
+  background: transparent;
+  border: 1px solid var(--e6-sand);
+  border-radius: 999px;
+  padding: 10px 24px;
+  cursor: pointer;
+  transition:
+    background var(--e6-dur-swift) ease,
+    color      var(--e6-dur-swift) ease,
+    border-color var(--e6-dur-swift) ease;
+}
+.btn-op-secondary:hover,
+.btn-cancel:hover,
+.btn-ghost:hover {
+  background: var(--e6-blush);
+  color: var(--e6-charcoal);
+  border-color: rgba(212, 135, 156, 0.20);
+}
+
+/* Danger button */
+.btn-op-danger,
+.btn-delete {
+  font-family: var(--font-body);
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--e6-op-err-color);
+  background: var(--e6-op-err-bg);
+  border: 1px solid rgba(192, 57, 43, 0.20);
+  border-radius: 999px;
+  padding: 8px 18px;
+  cursor: pointer;
+  transition:
+    background var(--e6-dur-swift) ease,
+    box-shadow var(--e6-dur-swift) ease,
+    transform  var(--e6-dur-micro) ease;
+}
+.btn-op-danger:hover,
+.btn-delete:hover {
+  background: var(--e6-op-err-color);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 4px 16px rgba(192, 57, 43, 0.28);
+  transform: translateY(-1px);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   12. TOAST SYSTEM — FINAL UNIFICATION
+   Premium toasts — brand-consistent across storefront + admin.
+───────────────────────────────────────────────────────────── */
+
+#adminToastContainer {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 10100;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+  width: min(380px, calc(100vw - 48px));
+}
+
+.admin-toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: #fff;
+  border: 1px solid var(--e6-sand);
+  border-radius: var(--radius-lg, 20px);
+  box-shadow:
+    0 16px 48px rgba(30, 20, 20, 0.14),
+    0 4px 14px rgba(30, 20, 20, 0.07),
+    0 0 0 1px rgba(212, 135, 156, 0.05);
+  padding: 14px 18px;
+  pointer-events: auto;
+  cursor: pointer;
+  animation: e6-toast-in var(--e6-dur-flow) var(--e6-ease-spring) both;
+  transform-origin: bottom right;
+}
+.admin-toast.leaving {
+  animation: e6-toast-out var(--e6-dur-swift) var(--e6-ease-exit) forwards;
+}
+
+@keyframes e6-toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(24px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+@keyframes e6-toast-out {
+  from {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(16px) scale(0.95);
+  }
+}
+
+.admin-toast-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.admin-toast[data-type="success"] .admin-toast-icon {
+  background: var(--e6-op-live-bg);
+  color: var(--e6-op-live-color);
+  border: 1px solid var(--e6-op-live-bd);
+}
+.admin-toast[data-type="error"] .admin-toast-icon {
+  background: var(--e6-op-err-bg);
+  color: var(--e6-op-err-color);
+  border: 1px solid rgba(192, 57, 43, 0.22);
+}
+.admin-toast[data-type="warning"] .admin-toast-icon {
+  background: var(--e6-op-warn-bg);
+  color: var(--e6-op-warn-color);
+  border: 1px solid rgba(180, 83, 9, 0.22);
+}
+.admin-toast[data-type="info"] .admin-toast-icon {
+  background: var(--e6-blush);
+  color: var(--e6-rose-blend);
+  border: 1px solid rgba(212, 135, 156, 0.22);
+}
+
+.admin-toast-body {
+  flex: 1;
+  min-width: 0;
+}
+.admin-toast-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--e6-charcoal);
+  margin-bottom: 2px;
+  letter-spacing: 0.005em;
+}
+.admin-toast-copy {
+  font-size: 0.80rem;
+  color: var(--e6-muted);
+  line-height: 1.55;
+}
+
+/* Left accent border per toast type */
+.admin-toast[data-type="success"] { border-left: 3px solid var(--e6-op-live-color); }
+.admin-toast[data-type="error"]   { border-left: 3px solid var(--e6-op-err-color); }
+.admin-toast[data-type="warning"] { border-left: 3px solid var(--e6-op-warn-color); }
+.admin-toast[data-type="info"]    { border-left: 3px solid var(--e6-rose-blend); }
+
+/* ─────────────────────────────────────────────────────────────
+   13. SESSION STATUS — PREMIUM INDICATOR
+───────────────────────────────────────────────────────────── */
+
+.admin-session-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition:
+    background    var(--e6-dur-flow) var(--e6-ease-gentle),
+    color         var(--e6-dur-flow) var(--e6-ease-gentle),
+    border-color  var(--e6-dur-flow) var(--e6-ease-gentle);
+}
+.admin-session-status[data-state="live"] {
+  background: var(--e6-op-live-bg);
+  color: var(--e6-op-live-color);
+  border-color: var(--e6-op-live-bd);
+}
+.admin-session-status[data-state="reconnecting"] {
+  background: var(--e6-op-warn-bg);
+  color: var(--e6-op-warn-color);
+  border-color: rgba(180, 83, 9, 0.22);
+}
+.admin-session-status[data-state="error"] {
+  background: var(--e6-op-err-bg);
+  color: var(--e6-op-err-color);
+  border-color: rgba(192, 57, 43, 0.22);
+}
+
+.session-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+[data-state="live"]         .session-status-dot { background: var(--e6-op-live-color); animation: e6-pulse 2.2s ease-in-out infinite; }
+[data-state="reconnecting"] .session-status-dot { background: var(--e6-op-warn-color); animation: e6-pulse 1.2s ease-in-out infinite; }
+[data-state="error"]        .session-status-dot { background: var(--e6-op-err-color); }
+
+/* ─────────────────────────────────────────────────────────────
+   14. SKELETON STATES — UNIFIED LOADING
+───────────────────────────────────────────────────────────── */
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--e6-sand)     0%,
+    var(--e6-parchment) 50%,
+    var(--e6-sand)     100%
+  );
+  background-size: 200% 100%;
+  animation: e6-shimmer 1.6s ease-in-out infinite;
+  border-radius: var(--radius, 12px);
+}
+
+.skeleton-metric {
+  height: 90px;
+  border-radius: var(--radius-lg, 20px);
+}
+.skeleton-row {
+  height: 52px;
+  border-radius: var(--radius, 12px);
+}
+.skeleton-text {
+  height: 14px;
+  border-radius: 999px;
+}
+.skeleton-text.wide  { width: 100%; }
+.skeleton-text.mid   { width: 70%; }
+.skeleton-text.short { width: 40%; }
+.skeleton-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   15. CROSS-SYSTEM RESPONSIVE CONTINUITY
+   Mobile: storefront + admin share the same breakpoints.
+───────────────────────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  /* Sidebar collapses off-canvas */
+  .admin-sidebar {
+    transform: translateX(-100%);
+    position: fixed;
+    z-index: 300;
+    box-shadow: none;
+    transition: transform var(--e6-dur-flow) var(--e6-ease-silk),
+                box-shadow var(--e6-dur-flow) var(--e6-ease-silk);
+  }
+  .admin-sidebar.open {
+    transform: translateX(0);
+    box-shadow: 8px 0 40px rgba(30, 20, 20, 0.14);
+  }
+
+  /* Admin main expands to full width */
+  .admin-main,
+  .page {
+    margin-left: 0 !important;
+    padding: 20px 16px !important;
+  }
+
+  /* Toast stacks at bottom center on mobile */
+  #adminToastContainer {
+    right: 12px;
+    left: 12px;
+    bottom: 16px;
+    width: auto;
+  }
+
+  /* Metric grid — 2 columns on tablet */
+  .metrics-grid,
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 600px) {
+  /* Single column on mobile */
+  .metrics-grid,
+  .stats-grid,
+  .product-grid,
+  .admin-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Admin bar compresses */
+  .admin-bar {
+    padding: 0 16px;
+    height: 56px;
+  }
+
+  /* Stock controls — full touch targets */
+  .stock-btn {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Modals go full-screen bottom sheet */
+  .modal-card,
+  .edit-modal,
+  .ops-confirm-card {
+    border-radius: var(--radius-lg, 20px) var(--radius-lg, 20px) 0 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: none;
+    max-height: 90dvh;
+    overflow-y: auto;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   16. UNIFIED FOCUS & ACCESSIBILITY
+───────────────────────────────────────────────────────────── */
+
+:focus-visible {
+  outline: 2px solid var(--e6-rose-blend);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Skip link — for both storefront and admin */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  background: var(--e6-rose-blend);
+  color: #fff;
+  padding: 8px 18px;
+  border-radius: 0 0 var(--radius, 12px) var(--radius, 12px);
+  font-size: 0.84rem;
+  font-weight: 600;
+  z-index: 9999;
+  transition: top var(--e6-dur-swift) ease;
+  text-decoration: none;
+}
+.skip-link:focus {
+  top: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   17. PRINT ISOLATION
+   Admin operational data never leaks in print.
+───────────────────────────────────────────────────────────── */
+@media print {
+  .admin-sidebar,
+  .admin-bar,
+  .topbar,
+  #adminToastContainer,
+  #adminAuthOverlay,
+  .admin-session-status,
+  #adminSessionBanner,
+  .stock-btn,
+  .btn-op-danger,
+  .btn-delete {
+    display: none !important;
+  }
+
+  .admin-main,
+  .page {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   18. E6 REVEAL CHOREOGRAPHY
+   Dashboard entry — synchronized with adminReveal() in JS.
+───────────────────────────────────────────────────────────── */
+
+/* Elements waiting for reveal */
+.admin-sidebar,
+.admin-bar,
+.topbar {
+  transition-property: opacity, transform, box-shadow;
+  transition-duration: var(--e6-dur-breath);
+  transition-timing-function: var(--e6-ease-silk);
+}
+
+/* Reveal animation applied by adminReveal() */
+@keyframes admin-reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.admin-reveal {
+  animation: admin-reveal-in var(--e6-dur-breath) var(--e6-ease-silk) both;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   19. ADMIN SESSION BANNER REFINEMENT
+───────────────────────────────────────────────────────────── */
+
+#adminSessionBanner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  font-size: 0.83rem;
+  font-weight: 500;
+  border-bottom: 1px solid transparent;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition:
+    max-height var(--e6-dur-flow) var(--e6-ease-silk),
+    opacity    var(--e6-dur-flow) var(--e6-ease-silk),
+    padding    var(--e6-dur-swift) ease;
+  position: relative;
+}
+#adminSessionBanner.visible {
+  max-height: 72px;
+  opacity: 1;
+}
+#adminSessionBanner[data-level="warning"] {
+  background: var(--e6-op-warn-bg);
+  color: var(--e6-op-warn-color);
+  border-bottom-color: rgba(180, 83, 9, 0.16);
+}
+#adminSessionBanner[data-level="error"] {
+  background: var(--e6-op-err-bg);
+  color: var(--e6-op-err-color);
+  border-bottom-color: rgba(192, 57, 43, 0.16);
+}
+#adminSessionBanner[data-level="info"] {
+  background: var(--e6-blush);
+  color: var(--e6-charcoal);
+  border-bottom-color: rgba(212, 135, 156, 0.16);
+}
+.session-banner-icon {
+  font-size: 0.88rem;
+  flex-shrink: 0;
+}
+.session-banner-text {
+  flex: 1;
+  line-height: 1.45;
+}
+.session-banner-dismiss {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  opacity: 0.5;
+  font-size: 0.78rem;
+  padding: 4px 8px;
+  border-radius: 999px;
+  transition: opacity var(--e6-dur-swift) ease, background var(--e6-dur-swift) ease;
+  flex-shrink: 0;
+}
+.session-banner-dismiss:hover {
+  opacity: 1;
+  background: rgba(0,0,0,0.07);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   20. FINAL ATMOSPHERE PASS
+   Micro-refinements that complete the luxury feel.
+───────────────────────────────────────────────────────────── */
+
+/* Scrollbar — brand-coherent where supported */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--e6-sand) transparent;
+}
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--e6-sand);
+  border-radius: 999px;
+  transition: background var(--e6-dur-swift) ease;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(212, 135, 156, 0.30); }
+
+/* Selection — brand highlight */
+::selection {
+  background: rgba(212, 135, 156, 0.16);
+  color: var(--e6-charcoal);
+}
+
+/* Empty state — premium illustration placeholder */
+.empty-state {
+  text-align: center;
+  padding: 60px 24px;
+}
+.empty-state-icon {
+  font-size: 2.4rem;
+  opacity: 0.25;
+  display: block;
+  margin-bottom: 16px;
+}
+.empty-state-title {
+  font-family: var(--font-head);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--e6-charcoal);
+  margin-bottom: 6px;
+}
+.empty-state-copy {
+  font-size: 0.84rem;
+  color: var(--e6-muted);
+  line-height: 1.65;
+}
+
+/* Divider — luxury rule */
+.luxury-rule {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--e6-sand) 30%,
+    var(--e6-sand) 70%,
+    transparent 100%
+  );
+  border: none;
+  margin: 0;
+}
+
+/* Table — operational data table */
+.op-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+}
+.op-table th {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--e6-muted);
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--e6-sand);
+  text-align: left;
+  white-space: nowrap;
+  background: var(--e6-cream);
+}
+.op-table td {
+  padding: 13px 16px;
+  border-bottom: 1px solid rgba(237, 230, 221, 0.55);
+  color: var(--e6-charcoal);
+  vertical-align: middle;
+  transition: background var(--e6-dur-micro) ease;
+}
+.op-table tr:last-child td { border-bottom: none; }
+.op-table tr:hover td {
+  background: var(--e6-blush);
+}
+.op-table tr {
+  transition: background var(--e6-dur-micro) ease;
+}
+
+/* Order status badges */
+.order-status,
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.70rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+  line-height: 1;
+}
+.status-badge[data-status="pending"],
+.order-status.pending   { background: var(--e6-op-warn-bg); color: var(--e6-op-warn-color); border: 1px solid rgba(180,83,9,0.18); }
+.status-badge[data-status="confirmed"],
+.order-status.confirmed { background: #e8f0fe; color: #1565c0; border: 1px solid #90caf9; }
+.status-badge[data-status="shipped"],
+.order-status.shipped   { background: #f3e5f5; color: #7b1fa2; border: 1px solid #ce93d8; }
+.status-badge[data-status="delivered"],
+.order-status.delivered { background: var(--e6-op-live-bg); color: var(--e6-op-live-color); border: 1px solid var(--e6-op-live-bd); }
+.status-badge[data-status="cancelled"],
+.order-status.cancelled { background: var(--e6-op-err-bg); color: var(--e6-op-err-color); border: 1px solid rgba(192,57,43,0.18); }
+
+/* Export button — operational utility */
+.btn-export {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-body);
+  font-size: 0.80rem;
+  font-weight: 600;
+  color: var(--e6-muted);
+  background: var(--e6-cream);
+  border: 1px solid var(--e6-sand);
+  border-radius: 999px;
+  padding: 7px 16px;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  transition:
+    background var(--e6-dur-swift) ease,
+    color      var(--e6-dur-swift) ease,
+    box-shadow var(--e6-dur-swift) ease;
+}
+.btn-export:hover {
+  background: var(--e6-blush);
+  color: var(--e6-charcoal);
+  border-color: rgba(212, 135, 156, 0.24);
+  box-shadow: var(--e6-shadow-xs);
+}
+.btn-export.exporting {
+  opacity: 0.6;
+  pointer-events: none;
+}
+.btn-export::before {
+  content: '↓';
+  font-size: 0.78rem;
+  opacity: 0.7;
+}
+
+/* ── Search / filter bar ── */
+.op-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--e6-cream);
+  border: 1px solid var(--e6-sand);
+  border-radius: 999px;
+  padding: 0 14px 0 16px;
+  transition: border-color var(--e6-dur-swift) ease, box-shadow var(--e6-dur-swift) ease;
+}
+.op-search:focus-within {
+  border-color: rgba(212, 135, 156, 0.38);
+  box-shadow: 0 0 0 3px rgba(212, 135, 156, 0.10);
+}
+.op-search input {
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  padding: 10px 0;
+  font-size: 0.86rem;
+  flex: 1;
+  min-width: 0;
+}
+.op-search input:focus {
+  box-shadow: none;
+  border: none;
+}
+.op-search-icon {
+  opacity: 0.4;
+  font-size: 0.86rem;
+  flex-shrink: 0;
+}

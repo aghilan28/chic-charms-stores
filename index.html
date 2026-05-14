@@ -1,0 +1,2345 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Chic Charms – Trendy aesthetic earrings under ₹299. Everyday elegance, modern romance, after-dark glamour & heritage-inspired luxury. Fast delivery across India."
+    />
+    <meta
+      name="keywords"
+      content="earrings India, affordable earrings, Korean earrings, trendy jewellery, earrings under 299"
+    />
+    <title>Chic Charms – Your Glow-Up Starts at Your Ears</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@1,18,400;1,18,500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="d3-luxury.css" />
+    <link rel="stylesheet" href="d6-brand-story.css" />
+    <link rel="stylesheet" href="d5-mobile-luxury.css" />
+    <link rel="stylesheet" href="admin-nav.css" />
+    <link rel="stylesheet" href="d9-editorial-refinement.css" />
+    <link rel="stylesheet" href="d10-restore.css" />
+    <script>
+      (function () {
+        if (window.__chicLocalImageFallbackReady) return;
+        window.__chicLocalImageFallbackReady = true;
+
+        var localImageExts = ["jpg", "jpeg", "png", "webp"];
+        var imageFallbackSvg =
+          "data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Crect width=%22200%22 height=%22200%22 fill=%22%23fef2f5%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2240%22%3E%F0%9F%8C%B8%3C/text%3E%3C/svg%3E";
+
+        function localImageCandidates(src) {
+          var cleanSrc = String(src || "")
+            .split("#")[0]
+            .split("?")[0];
+          if (cleanSrc.indexOf("images/") === -1) return [];
+
+          var baseSrc = cleanSrc.replace(/\.(jpe?g|png|webp)$/i, "");
+          var extMatch = cleanSrc.match(/\.(jpe?g|png|webp)$/i);
+          if (!extMatch || baseSrc === cleanSrc) return [];
+
+          var currentExt = extMatch[1].toLowerCase();
+          return localImageExts
+            .filter(function (ext) {
+              return ext !== currentExt;
+            })
+            .map(function (ext) {
+              return baseSrc + "." + ext;
+            });
+        }
+
+        document.addEventListener(
+          "error",
+          function (e) {
+            var img = e.target;
+            if (!img || img.tagName !== "IMG") return;
+
+            var tried = (img.dataset.triedLocalExts || "")
+              .split("|")
+              .filter(Boolean);
+            var candidates = localImageCandidates(img.getAttribute("src"));
+            var nextSrc = candidates.find(function (candidate) {
+              return tried.indexOf(candidate) === -1;
+            });
+
+            if (nextSrc) {
+              tried.push(nextSrc);
+              img.dataset.triedLocalExts = tried.join("|");
+              img.src = nextSrc;
+              e.stopImmediatePropagation();
+              return;
+            }
+
+            if (!img.dataset.errored) {
+              img.dataset.errored = "1";
+              img.src = imageFallbackSvg;
+              e.stopImmediatePropagation();
+            }
+          },
+          true,
+        );
+      })();
+    </script>
+    <style>
+      /* ── Part 7: Stock status badges ── */
+      .stock {
+        display: inline-block;
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 2px 10px;
+        border-radius: 999px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        margin-top: 4px;
+      }
+      .stock.in {
+        background: #edfaf3;
+        color: #1a7a4a;
+        border: 1px solid rgba(26, 122, 74, 0.18);
+      }
+      .stock.out {
+        background: #fff0f0;
+        color: #c0392b;
+        border: 1px solid rgba(192, 57, 43, 0.18);
+      }
+      /* ── Dynamic product states ── */
+      #products-container .loading,
+      #products-container .empty,
+      #products-container .error {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 48px 24px;
+        font-family: var(--font-body);
+        font-size: 1rem;
+        border-radius: var(--radius-lg);
+      }
+      #products-container .loading {
+        color: var(--muted);
+        background: var(--blush);
+      }
+      #products-container .empty {
+        color: var(--muted);
+        background: var(--cream);
+        border: 1.5px dashed var(--border);
+      }
+      #products-container .error {
+        color: #c0392b;
+        background: #fff5f5;
+        border: 1.5px solid #f5c6cb;
+      }
+      /* ── Product description ── */
+      .product-desc {
+        font-size: 0.78rem;
+        color: var(--muted);
+        line-height: 1.5;
+        margin: 4px 0 8px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      /* ── Product card links ── */
+      .product-img-link {
+        display: block;
+        line-height: 0;
+      }
+      .product-name-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+      }
+      .product-name-link:hover .product-name {
+        color: var(--rose-dark);
+        transition: color 0.2s ease;
+      }
+      /* ══════════════════════════════════════════════════
+         LUX PRODUCT CARD — Image Containment Override
+         Locks every card image to a 4:5 portrait frame,
+         matching the product detail page quality.
+         object-position: center top keeps jewelry subjects
+         visible and prevents awkward top-crop on portrait shots.
+         ══════════════════════════════════════════════════ */
+      .lux-img-container {
+        position: relative;
+        overflow: hidden;
+        aspect-ratio: 4 / 5;
+        background: var(--blush);
+      }
+      .lux-img-link {
+        display: block;
+        width: 100%;
+        height: 100%;
+        line-height: 0;
+      }
+      .lux-img-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center top;
+        display: block;
+        transition: transform 0.55s
+          var(--ease-luxury, cubic-bezier(0.22, 0.61, 0.36, 1));
+      }
+      .product-card-lux:hover .lux-img-container img {
+        transform: scale(1.05);
+      }
+    </style>
+    <!-- ░░ SEARCH · FILTER · SORT STYLES ░░ -->
+    <style>
+      /* Controls bar */
+      .shop-controls {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+
+      /* Search */
+      .shop-search-wrap {
+        position: relative;
+        flex: 1 1 240px;
+        min-width: 0;
+      }
+      .shop-search-icon {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 0.9rem;
+        pointer-events: none;
+      }
+      .shop-search {
+        width: 100%;
+        padding: 11px 38px 11px 40px;
+        border: 1.5px solid var(--border, #ece8e3);
+        border-radius: 999px;
+        font-family: var(--font-body, "DM Sans", sans-serif);
+        font-size: 0.9rem;
+        color: var(--text, #2d2d2d);
+        background: var(--white, #fff);
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      .shop-search:focus {
+        border-color: var(--rose, #f4a7b9);
+        box-shadow: 0 0 0 3px rgba(244, 167, 185, 0.18);
+      }
+      .shop-search::placeholder {
+        color: #bbb;
+      }
+
+      .shop-search-clear {
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 0.75rem;
+        color: var(--muted, #888);
+        line-height: 1;
+        padding: 2px;
+        transition: color 0.15s;
+      }
+      .shop-search-clear:hover {
+        color: var(--rose-dark, #e8809a);
+      }
+
+      /* Selects */
+      .shop-selects {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .shop-select {
+        padding: 11px 36px 11px 16px;
+        border: 1.5px solid var(--border, #ece8e3);
+        border-radius: 999px;
+        font-family: var(--font-body, "DM Sans", sans-serif);
+        font-size: 0.85rem;
+        color: var(--text, #2d2d2d);
+        background: var(--white, #fff);
+        cursor: pointer;
+        outline: none;
+        appearance: none;
+        -webkit-appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 14px center;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      .shop-select:focus {
+        border-color: var(--rose, #f4a7b9);
+        box-shadow: 0 0 0 3px rgba(244, 167, 185, 0.18);
+      }
+      .shop-select.active {
+        border-color: var(--rose-dark, #e8809a);
+        color: var(--rose-dark, #e8809a);
+        background-color: var(--blush, #fef0f4);
+      }
+
+      /* Result count */
+      .result-count {
+        font-size: 0.78rem;
+        color: var(--muted, #888);
+        margin-bottom: 20px;
+        margin-top: -4px;
+        padding-left: 4px;
+      }
+      .result-count strong {
+        color: var(--rose-dark, #e8809a);
+      }
+
+      /* Empty filtered state */
+      .no-results {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 60px 24px;
+        color: var(--muted, #888);
+      }
+      .no-results p {
+        font-size: 1rem;
+        margin-top: 8px;
+      }
+      .no-results button {
+        margin-top: 16px;
+        background: var(--rose, #f4a7b9);
+        color: #fff;
+        border: none;
+        border-radius: 999px;
+        padding: 10px 24px;
+        font-family: var(--font-body, "DM Sans", sans-serif);
+        font-size: 0.88rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .no-results button:hover {
+        background: var(--rose-dark, #e8809a);
+      }
+
+      /* Mobile */
+      @media (max-width: 560px) {
+        .shop-search-wrap {
+          flex: 1 1 100%;
+        }
+        .shop-selects {
+          width: 100%;
+        }
+        .shop-select {
+          flex: 1;
+        }
+      }
+
+      /* ── Global navbar search ── */
+      .nav-search {
+        position: relative;
+        flex: 0 1 200px;
+        max-width: 200px;
+        min-width: 0;
+      }
+      .nav-search-wrap {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+      .nav-search-icon {
+        position: absolute;
+        left: 13px;
+        color: var(--muted, #888);
+        display: flex;
+        align-items: center;
+        pointer-events: none;
+        z-index: 1;
+      }
+      .nav-search-input {
+        width: 100%;
+        padding: 9px 36px 9px 36px;
+        border: 1.5px solid var(--border, #ece8e3);
+        border-radius: 999px;
+        font-family: var(--font-body, "DM Sans", sans-serif);
+        font-size: 0.85rem;
+        color: var(--text, #2d2d2d);
+        background: var(--cream, #fdf8f5);
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s,
+          background 0.2s;
+      }
+      .nav-search-input:focus {
+        border-color: var(--rose, #f4a7b9);
+        box-shadow: 0 0 0 3px rgba(244, 167, 185, 0.18);
+        background: var(--white, #fff);
+      }
+      .nav-search-input::placeholder {
+        color: #bbb;
+      }
+      .nav-search-clear {
+        position: absolute;
+        right: 12px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--muted, #888);
+        display: flex;
+        align-items: center;
+        padding: 3px;
+        border-radius: 50%;
+        transition:
+          color 0.15s,
+          background 0.15s;
+      }
+      .nav-search-clear:hover {
+        color: var(--rose-dark, #e8809a);
+        background: var(--blush, #fef0f4);
+      }
+
+      /* Dropdown */
+      .nav-search-dropdown {
+        display: none;
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 0;
+        right: 0;
+        background: var(--white, #fff);
+        border: 1px solid var(--border, #ece8e3);
+        border-radius: 14px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+        max-height: 360px;
+        overflow-y: auto;
+        z-index: 999;
+        animation: dropIn 0.18s ease both;
+        scrollbar-width: thin;
+        scrollbar-color: var(--rose, #f4a7b9) transparent;
+      }
+      .nav-search-dropdown.open {
+        display: block;
+      }
+      @keyframes dropIn {
+        from {
+          opacity: 0;
+          transform: translateY(-6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Result item */
+      .search-result-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 14px;
+        cursor: pointer;
+        border-bottom: 1px solid var(--border, #ece8e3);
+        transition: background 0.15s;
+        text-decoration: none;
+        color: inherit;
+      }
+      .search-result-item:last-child {
+        border-bottom: none;
+      }
+      .search-result-item:hover,
+      .search-result-item:focus {
+        background: var(--blush, #fef0f4);
+        outline: none;
+      }
+      .search-result-item:first-child {
+        border-radius: 14px 14px 0 0;
+      }
+      .search-result-item:last-child {
+        border-radius: 0 0 14px 14px;
+      }
+      .search-result-item:only-child {
+        border-radius: 14px;
+      }
+
+      .search-result-img {
+        width: 44px;
+        height: 44px;
+        border-radius: 8px;
+        object-fit: cover;
+        flex-shrink: 0;
+        background: var(--cream, #fdf8f5);
+        border: 1px solid var(--border, #ece8e3);
+      }
+      .search-result-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .search-result-name {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text, #2d2d2d);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .search-result-name mark {
+        background: transparent;
+        color: var(--rose-dark, #e8809a);
+        font-weight: 700;
+      }
+      .search-result-price {
+        font-size: 0.78rem;
+        color: var(--rose-dark, #e8809a);
+        font-weight: 600;
+        margin-top: 2px;
+        font-family: var(--font-head, serif);
+      }
+      .search-no-results {
+        padding: 24px 16px;
+        text-align: center;
+        color: var(--muted, #888);
+        font-size: 0.85rem;
+      }
+      .search-no-results span {
+        font-size: 1.4rem;
+        display: block;
+        margin-bottom: 6px;
+      }
+
+      @media (max-width: 768px) {
+        .nav-search {
+          display: none;
+        }
+      }
+    </style>
+    <!-- ░░ ABOUT / BRAND-STORY VISIBILITY CONTROL ░░
+         Hidden from normal homepage scroll flow.
+         Revealed only when user clicks ABOUT in nav.
+    ══════════════════════════════════════════════════ -->
+    <style>
+      .d6-brand-story,
+      .d6-marquee {
+        display: none;
+      }
+      .d6-brand-story.about-revealed,
+      .d6-marquee.about-revealed {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ░░ ADMIN RETURN BANNER — only visible when admin is logged in ░░ -->
+    <div id="adminReturnBanner" class="admin-return-banner" aria-hidden="true">
+      <span class="admin-return-copy">
+        You are browsing as <strong id="adminReturnEmail"></strong>
+      </span>
+      <a href="admin.html">Back to Admin Dashboard</a>
+    </div>
+
+    <!-- ░░ NAVBAR ░░ -->
+    <header class="navbar" id="navbar">
+      <div class="nav-inner container">
+        <a href="index.html" class="logo" aria-label="Chic Charms home">
+          Chic<span>Charms</span>
+        </a>
+        <nav class="nav-links" id="navLinks" aria-label="Main navigation">
+          <a href="#categories">Shop</a>
+          <a href="#bestsellers">Best Sellers</a>
+          <a href="#why-us" id="navAboutLink">About</a>
+          <a href="#testimonials">Reviews</a>
+          <a href="cart.html">Cart 🛍️</a>
+        </nav>
+        <div class="nav-actions" id="navActions">
+          <!-- Auth state injected by auth-nav.js -->
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- ░░ HERO — LUXURY CINEMATIC ░░ -->
+      <section class="hero" aria-label="Hero banner">
+        <div class="hero-bg-layer" aria-hidden="true"></div>
+        <div class="hero-inner container">
+          <div class="hero-text lux-reveal">
+            <p class="hero-eyebrow">
+              <span class="eyebrow-line"></span>New Collection
+            </p>
+            <h1 class="hero-headline">
+              Adorned<br />in <em><span class="q-cap">Q</span><span class="q-rest">uiet</span></em><br />Luxury
+            </h1>
+            <p class="hero-sub">
+              Curated earrings for the woman who chooses beauty with intention.
+              Every piece under ₹299.
+            </p>
+            <div class="hero-ctas">
+              <a href="#bestsellers" class="btn btn-primary"
+                >Discover the Edit</a
+              >
+              <a href="#categories" class="btn btn-ghost"
+                >Explore Collections</a
+              >
+            </div>
+            <div class="hero-trust-row">
+              <span class="hero-trust-item"
+                ><span class="trust-dot"></span>COD Available</span
+              >
+              <span class="hero-trust-sep">·</span>
+              <span class="hero-trust-item"
+                ><span class="trust-dot"></span>Free Ship ₹399+</span
+              >
+              <span class="hero-trust-sep">·</span>
+              <span class="hero-trust-item"
+                ><span class="trust-dot"></span>Skin-Friendly</span
+              >
+            </div>
+          </div>
+          <div class="hero-visual lux-reveal-delay" aria-hidden="true">
+            <div class="hero-img-wrap">
+              <div class="hero-img-frame"></div>
+              <img
+                src="images/hero-quiet-luxury-main.jpg"
+                alt="A woman wearing elegant gold earrings, warm editorial portrait"
+                class="hero-img"
+                width="560"
+                height="680"
+                loading="eager"
+              />
+              <div class="hero-float-card">
+                <p class="float-card-label">Always Under</p>
+                <p class="float-card-price">₹299</p>
+              </div>
+              <div class="hero-float-tag">✦ New This Week</div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-scroll-hint" aria-hidden="true">
+          <span class="scroll-line"></span>
+          <span class="scroll-text">Scroll</span>
+        </div>
+      </section>
+
+      <!-- ░░ MARQUEE STRIP ░░ -->
+      <div class="marquee-wrap" aria-hidden="true">
+        <div class="marquee-track">
+          <span>Free Shipping on ₹399+</span>
+          <span class="marquee-diamond">◆</span>
+          <span>Skin-Friendly Materials</span>
+          <span class="marquee-diamond">◆</span>
+          <span>New Drops Every Friday</span>
+          <span class="marquee-diamond">◆</span>
+          <span>COD Available</span>
+          <span class="marquee-diamond">◆</span>
+          <span>All Pieces Under ₹299</span>
+          <span class="marquee-diamond">◆</span>
+          <span>7-Day Returns</span>
+          <span class="marquee-diamond">◆</span>
+          <span>Free Shipping on ₹399+</span>
+          <span class="marquee-diamond">◆</span>
+          <span>Skin-Friendly Materials</span>
+          <span class="marquee-diamond">◆</span>
+          <span>New Drops Every Friday</span>
+          <span class="marquee-diamond">◆</span>
+          <span>COD Available</span>
+          <span class="marquee-diamond">◆</span>
+          <span>All Pieces Under ₹299</span>
+          <span class="marquee-diamond">◆</span>
+          <span>7-Day Returns</span>
+          <span class="marquee-diamond">◆</span>
+        </div>
+      </div>
+
+      <!-- ░░ D6 BRAND STORY — Cinematic Editorial ░░ -->
+      <section
+        class="d6-brand-story"
+        id="why-us"
+        aria-labelledby="story-heading"
+      >
+        <div class="d6-brand-story-inner">
+          <!-- Left: Narrative -->
+          <div class="d6-story-text d6-reveal d6-reveal-left">
+            <div class="d6-story-eyebrow">
+              <span class="d6-story-eyebrow-line"></span>
+              The Chic Charms Story
+            </div>
+            <h2 class="d6-story-headline" id="story-heading">
+              Born from the belief<br />that elegance<br /><em
+                >belongs to all</em
+              >
+            </h2>
+            <p class="d6-story-body">
+              Chic Charms began with a simple conviction: beauty shouldn't be a
+              luxury tax. Every piece we carry is chosen for how it looks, how
+              it feels, and how it holds up — not for the price tag attached.
+            </p>
+
+            <blockquote class="d6-story-pull">
+              "Every woman deserves to adorn herself beautifully — without the
+              price tag making her hesitate."
+            </blockquote>
+
+            <p class="d6-story-body">
+              Hypoallergenic, featherlight, and made to last. Because the best
+              jewellery should feel like an extension of you — not an occasion.
+            </p>
+
+            <a href="#bestsellers" class="d6-story-cta">
+              Discover the Edit
+              <span class="d6-story-cta-arrow">→</span>
+            </a>
+          </div>
+
+          <!-- Right: Visual Composition -->
+          <div
+            class="d6-story-visuals d6-reveal d6-reveal-right d6-delay-2"
+            aria-hidden="true"
+          >
+            <div class="d6-story-frame-accent"></div>
+            <div class="d6-story-img-main">
+              <img
+                src="images/story-soft-pearl-drop.jpg"
+                alt="A woman wearing elegant gold earrings, editorial portrait"
+                loading="lazy"
+              />
+            </div>
+            <div class="d6-story-img-accent">
+              <img
+                src="images/story-intimate-jewelry-detail.jpg"
+                alt="Close-up of delicate stud earrings on a woman's ear"
+                loading="lazy"
+              />
+            </div>
+            <div class="d6-story-stat-float">
+              <p class="d6-story-stat-num">Thoughtfully Selected</p>
+              <p class="d6-story-stat-label">Curated with intention</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ░░ D6 BRAND MARQUEE ░░ -->
+      <div class="d6-marquee" aria-hidden="true">
+        <div class="d6-marquee-track">
+          <span class="d6-marquee-item"
+            >Curated with intention<span class="d6-marquee-gem">✦</span></span
+          >
+          <span class="d6-marquee-item"
+            >Skin-Kind &amp; Hypoallergenic<span class="d6-marquee-gem"
+              >✦</span
+            ></span
+          >
+          <span class="d6-marquee-item"
+            >Free Shipping on ₹399+<span class="d6-marquee-gem">✦</span></span
+          >
+          <span class="d6-marquee-item"
+            >New Drops Every Friday<span class="d6-marquee-gem">✦</span></span
+          >
+          <span class="d6-marquee-item"
+            >All Pieces Under ₹299<span class="d6-marquee-gem">✦</span></span
+          >
+          <span class="d6-marquee-item"
+            >COD Available Pan-India<span class="d6-marquee-gem">✦</span></span
+          >
+          <span class="d6-marquee-item"
+            >Curated with intention<span class="d6-marquee-gem">✦</span></span
+          >
+          <span class="d6-marquee-item"
+            >Skin-Kind &amp; Hypoallergenic<span class="d6-marquee-gem"
+              >✦</span
+            ></span
+          >
+          <span class="d6-marquee-item"
+            >Free Shipping on ₹399+<span class="d6-marquee-gem">✦</span></span
+          >
+          <span class="d6-marquee-item"
+            >New Drops Every Friday<span class="d6-marquee-gem">✦</span></span
+          >
+          <span class="d6-marquee-item"
+            >All Pieces Under ₹299<span class="d6-marquee-gem">✦</span></span
+          >
+          <span class="d6-marquee-item"
+            >COD Available Pan-India<span class="d6-marquee-gem">✦</span></span
+          >
+        </div>
+      </div>
+
+      <!-- ░░ COLLECTIONS ░░ -->
+      <section
+        class="categories section"
+        id="categories"
+        aria-labelledby="cat-heading"
+      >
+        <div class="container">
+          <div class="section-header-row">
+            <div>
+              <p class="section-eyebrow">Browse the Edit</p>
+              <h2 class="section-title" id="cat-heading">Shop by Style</h2>
+            </div>
+            <a href="#bestsellers" class="section-view-all"
+              >View All <span>→</span></a
+            >
+          </div>
+          <div class="cat-grid">
+            <a
+              href="index.html?category=everyday-elegance#bestsellers"
+              class="cat-card"
+              aria-label="Shop Everyday Elegance"
+              data-category="everyday-elegance"
+            >
+              <div class="cat-img-wrap">
+                <img
+                  src="images/style-everyday-elegance.jpg"
+                  alt="Soft everyday luxury earrings styled with understated elegance"
+                  width="400"
+                  height="320"
+                  loading="lazy"
+                />
+              </div>
+              <div class="cat-info">
+                <h3>Everyday Elegance</h3>
+                <p>Soft luxury for daily wear</p>
+                <span class="cat-arrow">→</span>
+              </div>
+            </a>
+
+            <a
+              href="index.html?category=modern-romance#bestsellers"
+              class="cat-card"
+              aria-label="Shop Modern Romance"
+              data-category="modern-romance"
+            >
+              <div class="cat-img-wrap">
+                <img
+                  src="images/style-modern-romance.jpg"
+                  alt="Dreamy feminine earrings with romantic modern styling"
+                  width="400"
+                  height="320"
+                  loading="lazy"
+                />
+              </div>
+              <div class="cat-info">
+                <h3>Modern Romance</h3>
+                <p>Dreamy styles with feminine charm</p>
+                <span class="cat-arrow">→</span>
+              </div>
+            </a>
+
+            <a
+              href="index.html?category=after-dark#bestsellers"
+              class="cat-card"
+              aria-label="Shop After Dark"
+              data-category="after-dark"
+            >
+              <div class="cat-img-wrap">
+                <img
+                  src="images/style-after-dark.jpg"
+                  alt="Evening glamour earrings with a luminous after-dark mood"
+                  width="400"
+                  height="320"
+                  loading="lazy"
+                />
+              </div>
+              <div class="cat-info">
+                <h3>After Dark</h3>
+                <p>Glow beyond the ordinary</p>
+                <span class="cat-arrow">→</span>
+              </div>
+            </a>
+
+            <a
+              href="index.html?category=heritage-muse#bestsellers"
+              class="cat-card"
+              aria-label="Shop Heritage Muse"
+              data-category="heritage-muse"
+            >
+              <div class="cat-img-wrap">
+                <img
+                  src="images/style-heritage-muse.jpg"
+                  alt="Heritage-inspired earrings with timeless modern luxury"
+                  width="400"
+                  height="320"
+                  loading="lazy"
+                />
+              </div>
+              <div class="cat-info">
+                <h3>Heritage Muse</h3>
+                <p>Tradition with a modern soul</p>
+                <span class="cat-arrow">→</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ░░ BEST SELLERS — D3 Luxury Experience ░░ -->
+      <section
+        class="bestsellers bestsellers-d3 section"
+        id="bestsellers"
+        aria-labelledby="bs-heading"
+      >
+        <div class="container">
+          <!-- Collection Header -->
+          <div class="bestsellers-header-d3 lux-reveal">
+            <p class="section-eyebrow" style="justify-content: center">
+              The Curated Edit
+            </p>
+            <h2 class="section-title" id="bs-heading">
+              Worn with <em>intention</em>
+            </h2>
+            <p class="bestsellers-tagline">
+              Each piece chosen for its beauty, its feel, and the quiet
+              confidence it lends the woman who wears it.
+            </p>
+          </div>
+
+          <!-- Decorative Divider -->
+          <div class="collection-divider" style="margin: 28px auto 0">
+            <div class="collection-divider-line"></div>
+            <div class="collection-divider-gem"></div>
+            <div class="collection-divider-line"></div>
+          </div>
+
+          <!-- ░░ LUXURY FILTER BAR ░░ -->
+          <div
+            class="lux-filter-bar"
+            id="shopControls"
+            style="display: none"
+            role="search"
+            aria-label="Filter products"
+          >
+            <span class="lux-filter-label" aria-hidden="true">Refine</span>
+
+            <div class="lux-search-wrap">
+              <span class="lux-search-icon" aria-hidden="true">
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+              </span>
+              <input
+                type="text"
+                id="searchInput"
+                class="lux-search-input"
+                placeholder="Search the collection…"
+                autocomplete="off"
+                aria-label="Search products"
+              />
+              <button
+                class="lux-search-clear"
+                id="searchClear"
+                aria-label="Clear search"
+                style="display: none"
+              >
+                <svg
+                  width="9"
+                  height="9"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+
+            <div class="lux-selects">
+              <select
+                id="categoryFilter"
+                class="lux-select"
+                aria-label="Filter by category"
+              >
+                <option value="all">All Styles</option>
+                <option value="everyday-elegance">Everyday Elegance</option>
+                <option value="modern-romance">Modern Romance</option>
+                <option value="after-dark">After Dark</option>
+                <option value="heritage-muse">Heritage Muse</option>
+              </select>
+              <select
+                id="sortFilter"
+                class="lux-select"
+                aria-label="Sort products"
+              >
+                <option value="default">Sort</option>
+                <option value="low-high">Price ↑</option>
+                <option value="high-low">Price ↓</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Result count -->
+          <p
+            class="lux-result-count"
+            id="resultCount"
+            style="display: none"
+          ></p>
+
+          <!-- ░░ PRODUCT GRID ░░ -->
+          <div id="products-container" class="product-grid-lux">
+            <!-- Luxury skeleton loading state rendered by JS -->
+          </div>
+
+          <!-- Collection Footer Note -->
+          <div class="collection-footer-note">
+            <p>
+              All pieces under ₹299 &nbsp;·&nbsp; Ships in 24 hrs &nbsp;·&nbsp;
+              COD available across India
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ░░ D6 EDITORIAL CAMPAIGN — Fashion Mood Blocks ░░ -->
+      <section class="d6-campaign" aria-label="Editorial Campaign">
+        <!-- Campaign Block 1: Golden Hour -->
+        <div class="d6-campaign-block">
+          <div class="d6-campaign-img-panel">
+            <img
+              src="images/editorial-light-meets-gold.jpg"
+              alt="Woman wearing gold hoops, golden hour lighting"
+              loading="lazy"
+            />
+          </div>
+          <div class="d6-campaign-text-panel">
+            <span class="d6-campaign-collection-tag"
+              >The Modern Romance Edit</span
+            >
+            <h2 class="d6-campaign-headline d6-reveal">
+              For the moments<br /><em>that feel like yours</em>
+            </h2>
+            <p class="d6-campaign-desc d6-reveal d6-delay-1">
+              Soft textures, delicate sparkle, and the kind of elegance that
+              feels intimate rather than seen. Pieces designed for women who
+              carry warmth effortlessly.
+            </p>
+            <a
+              href="#bestsellers"
+              class="d6-campaign-cta d6-reveal d6-delay-2"
+              onclick="
+                event.preventDefault();
+                window.activateCollection('modern-romance');
+              "
+            >
+              Shop the Edit →
+            </a>
+            <span class="d6-campaign-mood-num" aria-hidden="true">01</span>
+          </div>
+        </div>
+
+        <!-- Campaign Block 2: Minimal Soul (reversed) -->
+        <div class="d6-campaign-block d6-campaign-block--reverse">
+          <div class="d6-campaign-img-panel">
+            <img
+              src="images/editorial-minimal-soul-closeup.jpg"
+              alt="Close-up of minimal pearl stud earrings on woman"
+              loading="lazy"
+            />
+          </div>
+          <div class="d6-campaign-text-panel">
+            <span class="d6-campaign-collection-tag"
+              >The Heritage Muse Edit</span
+            >
+            <h2 class="d6-campaign-headline d6-reveal">
+              Rooted in tradition.<br /><em>Worn like poetry.</em>
+            </h2>
+            <p class="d6-campaign-desc d6-reveal d6-delay-1">
+              Inspired by timeless craftsmanship & intimate beauty, each piece
+              is designed to feel deeply personal - elegant enough to remember,
+              effortless enough to live in.
+            </p>
+            <a
+              href="#bestsellers"
+              class="d6-campaign-cta d6-reveal d6-delay-2"
+              onclick="
+                event.preventDefault();
+                window.activateCollection('heritage-muse');
+              "
+            >
+              Discover the Collection →
+            </a>
+            <span class="d6-campaign-mood-num" aria-hidden="true">02</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ░░ D6 MOOD STRIP — Seasonal Collections ░░ -->
+      <section class="d6-mood-strip" aria-label="Seasonal Collections">
+        <div class="d6-mood-strip-inner">
+          <div class="d6-mood-card d6-reveal">
+            <img
+              src="images/editorial-korean-morning-coffee.jpg"
+              alt="Woman with delicate K-beauty inspired earrings, soft editorial"
+              loading="lazy"
+            />
+            <div class="d6-mood-card-overlay">
+              <span class="d6-mood-card-tag">K-Beauty Inspired</span>
+              <h3 class="d6-mood-card-title">
+                Morning Coffee<br /><em>Edit</em>
+              </h3>
+              <a href="#bestsellers" class="d6-mood-card-link">Explore →</a>
+            </div>
+          </div>
+          <div class="d6-mood-card d6-reveal d6-delay-2">
+            <img
+              src="images/editorial-soft-date-night.jpg"
+              alt="Woman dressed for an evening out wearing statement earrings"
+              loading="lazy"
+            />
+            <div class="d6-mood-card-overlay">
+              <span class="d6-mood-card-tag">Festive Edit</span>
+              <h3 class="d6-mood-card-title">Soft Date<br /><em>Night</em></h3>
+              <a href="#bestsellers" class="d6-mood-card-link">Explore →</a>
+            </div>
+          </div>
+          <div class="d6-mood-card d6-reveal d6-delay-4">
+            <img
+              src="images/editorial-everyday-hoops.jpg"
+              alt="Gold hoop earrings editorial lifestyle"
+              loading="lazy"
+            />
+            <div class="d6-mood-card-overlay">
+              <span class="d6-mood-card-tag">Everyday Luxury</span>
+              <h3 class="d6-mood-card-title">
+                Effortless<br /><em>Every Day</em>
+              </h3>
+              <a href="#bestsellers" class="d6-mood-card-link">Explore →</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ░░ D6 THE PROMISE — Social Proof Cards ░░ -->
+      <section
+        class="why-us section"
+        id="promise"
+        aria-labelledby="why-heading"
+      >
+        <div class="container">
+          <div class="why-header lux-reveal">
+            <p class="section-eyebrow">Our Commitment</p>
+            <h2 class="section-title" id="why-heading">
+              The Chic Charms<br /><em>Promise</em>
+            </h2>
+          </div>
+          <div class="why-grid">
+            <div class="why-card lux-reveal">
+              <div class="why-numeral">01</div>
+              <h3>Always Under ₹299</h3>
+              <p>
+                Luxury should be democratic. Every piece in our edit is priced
+                for real life, without sacrificing an ounce of beauty.
+              </p>
+            </div>
+            <div class="why-card lux-reveal">
+              <div class="why-numeral">02</div>
+              <h3>Skin-Kind Materials</h3>
+              <p>
+                Nickel-free, hypoallergenic, dermatologist-approved. Crafted for
+                sensitive ears and all-day wear.
+              </p>
+            </div>
+            <div class="why-card lux-reveal">
+              <div class="why-numeral">03</div>
+              <h3>Featherlight Feel</h3>
+              <p>
+                From morning to midnight — our pieces move with you. Zero
+                discomfort, full elegance, always.
+              </p>
+            </div>
+            <div class="why-card lux-reveal">
+              <div class="why-numeral">04</div>
+              <h3>Swift Delivery</h3>
+              <p>
+                Pan-India delivery in 3–5 days. Cash on delivery available
+                everywhere, always.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ░░ D6 TESTIMONIALS — Premium Social Proof ░░ -->
+      <section
+        class="d6-testimonials"
+        id="testimonials"
+        aria-labelledby="testi-heading"
+      >
+        <div class="d6-testimonials-inner">
+          <div class="d6-testimonials-header d6-reveal">
+            <div>
+              <p class="d6-testimonials-eyebrow">Words of Love</p>
+              <h2 class="d6-testimonials-headline" id="testi-heading">
+                They're <em>devoted</em>
+              </h2>
+            </div>
+            <div class="d6-testi-overall">
+              <div class="d6-testi-rating-num">4.9</div>
+              <div class="d6-testi-rating-stars">★ ★ ★ ★ ★</div>
+              <div class="d6-testi-rating-label">Thoughtfully Loved</div>
+            </div>
+          </div>
+
+          <div class="d6-testi-grid">
+            <article class="d6-testi-card d6-reveal">
+              <span class="d6-testi-quote-mark">"</span>
+              <p class="d6-testi-text">
+                Got the pearl drops for my college fest and literally EVERYONE
+                asked where I got them from. The quality is extraordinary for
+                the price.
+              </p>
+              <div class="d6-testi-divider"></div>
+              <div class="d6-testi-author">
+                <img
+                  src="images/avatar-priya-cafe-edit.jpg"
+                  alt="Priya M."
+                  class="d6-testi-avatar"
+                  width="44"
+                  height="44"
+                  loading="lazy"
+                />
+                <div>
+                  <p class="d6-testi-name">Priya M.</p>
+                  <p class="d6-testi-handle">@priyavibes_pune</p>
+                  <p class="d6-testi-stars">★★★★★</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="d6-testi-card d6-reveal d6-delay-2">
+              <span class="d6-testi-quote-mark">"</span>
+              <p class="d6-testi-text">
+                Ordered the butterfly dangles and the gold star studs together.
+                Both are so lightweight I forget I'm wearing them. Worth every
+                rupee.
+              </p>
+              <div class="d6-testi-divider"></div>
+              <div class="d6-testi-author">
+                <img
+                  src="images/avatar-ananya-event-edit.jpg"
+                  alt="Ananya K."
+                  class="d6-testi-avatar"
+                  width="44"
+                  height="44"
+                  loading="lazy"
+                />
+                <div>
+                  <p class="d6-testi-name">Ananya K.</p>
+                  <p class="d6-testi-handle">@aesthetic.ananya</p>
+                  <p class="d6-testi-stars">★★★★★</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="d6-testi-card d6-reveal d6-delay-4">
+              <span class="d6-testi-quote-mark">"</span>
+              <p class="d6-testi-text">
+                My ears are super sensitive and these didn't irritate at all.
+                Chic Charms is my new go-to. Already planning my next order —
+                the Korean edit is calling me.
+              </p>
+              <div class="d6-testi-divider"></div>
+              <div class="d6-testi-author">
+                <img
+                  src="images/avatar-ritu-weekend-edit.jpg"
+                  alt="Ritu S."
+                  class="d6-testi-avatar"
+                  width="44"
+                  height="44"
+                  loading="lazy"
+                />
+                <div>
+                  <p class="d6-testi-name">Ritu S.</p>
+                  <p class="d6-testi-handle">@ritufashiondiaries</p>
+                  <p class="d6-testi-stars">★★★★★</p>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ░░ D6 NEWSLETTER — Exclusive Club Invitation ░░ -->
+      <section class="d6-newsletter" aria-labelledby="nl-heading">
+        <div class="d6-newsletter-inner">
+          <div class="d6-newsletter-img-panel">
+            <img
+              src="images/newsletter-inner-circle-portrait.jpg"
+              alt="Woman in warm editorial light, pearl jewellery portrait"
+              loading="lazy"
+            />
+          </div>
+          <div class="d6-newsletter-content">
+            <span class="d6-newsletter-ornament" aria-hidden="true"></span>
+            <p class="d6-newsletter-label">Join the Inner Circle</p>
+            <h2 class="d6-newsletter-headline" id="nl-heading">
+              First to know.<br /><em>Always adorned.</em>
+            </h2>
+            <p class="d6-newsletter-desc">
+              A quiet space for women who love beautiful things — new drops,
+              styling stories, and member-only moments, delivered to your inbox.
+            </p>
+            <ul class="d6-newsletter-perks">
+              <li>
+                <span class="d6-newsletter-perk-dot"></span>Early access to new
+                collections
+              </li>
+              <li>
+                <span class="d6-newsletter-perk-dot"></span>Exclusive
+                member-only offers
+              </li>
+              <li>
+                <span class="d6-newsletter-perk-dot"></span>Styling inspiration
+                &amp; editorial stories
+              </li>
+            </ul>
+            <div class="d6-newsletter-form">
+              <input
+                type="email"
+                class="d6-newsletter-input"
+                placeholder="Your email address"
+                aria-label="Email address for newsletter"
+              />
+              <button class="d6-newsletter-btn" type="button">
+                Join the Circle
+              </button>
+            </div>
+            <p class="d6-newsletter-note">
+              No clutter. Curated with the same care as our jewellery.
+            </p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ░░ D6 FOOTER — Refined Brand Footer ░░ -->
+    <footer class="d6-footer" aria-label="Site footer">
+      <div class="d6-footer-inner">
+        <div class="d6-footer-brand-col">
+          <a href="index.html" class="d6-footer-logo"
+            >Chic<span>Charms</span></a
+          >
+          <p class="d6-footer-tagline">
+            Curated for the woman who chooses beauty with intention. Every piece
+            under ₹299.
+          </p>
+          <div class="d6-footer-social-row">
+            <a href="#" class="d6-footer-social-link" aria-label="Instagram"
+              >IG</a
+            >
+            <a href="#" class="d6-footer-social-link" aria-label="Pinterest"
+              >PT</a
+            >
+            <a href="#" class="d6-footer-social-link" aria-label="YouTube"
+              >YT</a
+            >
+          </div>
+        </div>
+        <div>
+          <p class="d6-footer-col-title">Shop</p>
+          <ul class="d6-footer-links">
+            <li><a href="#categories">All Collections</a></li>
+            <li><a href="#bestsellers">Best Sellers</a></li>
+            <li><a href="#bestsellers">New Arrivals</a></li>
+            <li><a href="#bestsellers">Under ₹199</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="d6-footer-col-title">Help</p>
+          <ul class="d6-footer-links">
+            <li><a href="#">Shipping &amp; Delivery</a></li>
+            <li><a href="#">Returns &amp; Exchanges</a></li>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Contact Us</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="d6-footer-col-title">About</p>
+          <ul class="d6-footer-links">
+            <li><a href="#why-us">Our Story</a></li>
+            <li><a href="#">Sustainability</a></li>
+            <li><a href="#">Press</a></li>
+            <li><a href="#">Careers</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="d6-footer-bottom">
+        <p class="d6-footer-copy">
+          © 2025 Chic Charms. Made with love in India.
+        </p>
+        <div class="d6-footer-legal">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ░░ CART TOAST ░░ -->
+    <div
+      class="cart-toast"
+      id="cartToast"
+      role="status"
+      aria-live="polite"
+    ></div>
+
+    <!-- ░░ D6 SCROLL REVEAL ░░ -->
+    <script>
+      (function () {
+        "use strict";
+        var d6Els = document.querySelectorAll(
+          ".d6-reveal, .d6-reveal-left, .d6-reveal-right, .d6-reveal-scale",
+        );
+        if (!("IntersectionObserver" in window) || !d6Els.length) {
+          d6Els.forEach(function (el) {
+            el.classList.add("visible");
+          });
+          return;
+        }
+        var d6Observer = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+                d6Observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.07, rootMargin: "0px 0px -48px 0px" },
+        );
+        d6Els.forEach(function (el) {
+          d6Observer.observe(el);
+        });
+      })();
+    </script>
+    <script src="script.js"></script>
+    <script type="module" src="auth-nav.js"></script>
+    <script type="module">
+      import {
+        initializeApp,
+        getApps,
+      } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        onSnapshot,
+      } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyA5Bh77_4HE3yQF0hi5ddvbFLZC7rEerxg",
+        authDomain: "chic-charms-store.firebaseapp.com",
+        projectId: "chic-charms-store",
+        storageBucket: "chic-charms-store.firebasestorage.app",
+        messagingSenderId: "342514318589",
+        appId: "1:342514318589:web:31c3490c10731e46d75294",
+      };
+
+      /* ── Reuse existing app if auth-nav.js already initialized Firebase ── */
+      const app = getApps().length
+        ? getApps()[0]
+        : initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      const PRODUCT_IMAGE_MAP = {
+        "pearl drop earrings": "images/product-pearl-drop-earrings.jpg",
+        "party dangles": "images/product-party-dangles.jpg",
+        "gold star studs": "images/product-gold-star-studs.jpg",
+        "silver hoops": "images/product-silver-hoops.jpg",
+        "purple dangling": "images/product-purple-dangling.jpg",
+      };
+
+      const CATEGORY_LABELS = {
+        "everyday-elegance": "Everyday Elegance",
+        "modern-romance": "Modern Romance",
+        "after-dark": "After Dark",
+        "heritage-muse": "Heritage Muse",
+      };
+      const CATEGORY_ORDER = [
+        "everyday-elegance",
+        "modern-romance",
+        "after-dark",
+        "heritage-muse",
+      ];
+
+      const CATEGORY_ALIASES = {
+        studs: "everyday-elegance",
+        stud: "everyday-elegance",
+        simple: "everyday-elegance",
+        daily: "everyday-elegance",
+        everyday: "everyday-elegance",
+        "everyday elegance": "everyday-elegance",
+        "gold star studs": "everyday-elegance",
+        "silver hoops": "everyday-elegance",
+        hoops: "modern-romance",
+        hoop: "modern-romance",
+        pearl: "heritage-muse",
+        "pearl drop earrings": "heritage-muse",
+        purple: "modern-romance",
+        dangling: "modern-romance",
+        "purple dangling": "modern-romance",
+        romance: "modern-romance",
+        romantic: "modern-romance",
+        "modern romance": "modern-romance",
+        korean: "after-dark",
+        "korean style": "after-dark",
+        party: "after-dark",
+        dangles: "after-dark",
+        "party dangles": "after-dark",
+        evening: "after-dark",
+        glamour: "after-dark",
+        glamorous: "after-dark",
+        "party wear": "after-dark",
+        statement: "after-dark",
+        heritage: "heritage-muse",
+        "heritage muse": "heritage-muse",
+        traditional: "heritage-muse",
+        classic: "heritage-muse",
+      };
+
+      function normalizeCategory(value) {
+        const key = String(value || "")
+          .trim()
+          .toLowerCase();
+        return CATEGORY_LABELS[key] ? key : CATEGORY_ALIASES[key] || "";
+      }
+
+      function categoryDisplayLabel(value) {
+        const normalized = normalizeCategory(value);
+        return (
+          CATEGORY_LABELS[normalized] || CATEGORY_LABELS["everyday-elegance"]
+        );
+      }
+
+      function inferProductCategory(product, docId) {
+        const current = normalizeCategory(product?.category);
+        if (current) return current;
+
+        const haystack = [
+          product?.name,
+          product?.tag,
+          product?.description,
+          product?.category,
+          docId,
+        ]
+          .join(" ")
+          .toLowerCase();
+
+        for (const alias of Object.keys(CATEGORY_ALIASES)) {
+          if (haystack.includes(alias)) return CATEGORY_ALIASES[alias];
+        }
+
+        let hash = 0;
+        const seed = String(product?.name || docId || "");
+        for (let i = 0; i < seed.length; i += 1) {
+          hash = (hash + seed.charCodeAt(i) * (i + 1)) % CATEGORY_ORDER.length;
+        }
+        return CATEGORY_ORDER[hash];
+      }
+
+      function withCategoryArchitecture(product, docId) {
+        const categorySlug = inferProductCategory(product, docId);
+        return Object.assign({}, product, {
+          category: categoryDisplayLabel(categorySlug),
+          categorySlug,
+        });
+      }
+
+      function isUsableImageUrl(value) {
+        const img = String(value || "").trim();
+        return (
+          img &&
+          (img.startsWith("http://") ||
+            img.startsWith("https://") ||
+            img.startsWith("data:image/") ||
+            /^(?:\.\/|\/)?images\/.+\.(jpe?g|png|webp)$/i.test(img))
+        );
+      }
+
+      function productPrimaryImage(product) {
+        const images = product?.images || {};
+        return (
+          product?.productImage ||
+          images.productImage ||
+          product?.image ||
+          product?.imageUrl ||
+          product?.imageURL ||
+          ""
+        );
+      }
+
+      function productLocalImage(product) {
+        const structured = productPrimaryImage(product);
+        if (isUsableImageUrl(structured)) return structured;
+
+        // Priority 1: use product.image / product.imageUrl if it is a real external URL
+        // (Firestore / Cloudinary / CDN / any http-s link). Never substitute with local files.
+        const img = String(product?.image || product?.imageUrl || "").trim();
+        if (isUsableImageUrl(img)) return img;
+
+        // Priority 2: already a local images/ path — pass through unchanged
+        if (img && /^(?:\.\/|\/)?images\/.+\.(jpe?g|png|webp)$/i.test(img)) {
+          return img;
+        }
+
+        // Priority 3: name-keyed local map — only reached when product has NO image URL at all
+        const key = String(product?.name || "")
+          .trim()
+          .toLowerCase();
+        return (
+          PRODUCT_IMAGE_MAP[key] || "images/product-placeholder-jewelry.jpg"
+        );
+      }
+
+      /* ── In-memory product store ── */
+      let allProducts = []; // [{ data: {…}, id: "docId" }]
+
+      /* ─────────────────────────────────────────────────
+         window.updateLocalStock(docId, delta)
+         OPTIMISTIC UI UPDATE — called by addToCart() in
+         script.js immediately after a cart action, before
+         Firebase confirms the write.
+         Mutates allProducts in-place then re-renders so the
+         card flips to Out of Stock instantly. onSnapshot stays
+         the long-term source of truth and will reconcile if
+         the write ever fails.
+      ───────────────────────────────────────────────── */
+      window.updateLocalStock = function (docId, delta) {
+        // delta is -1 when adding one item to cart
+        const item = allProducts.find(function (p) {
+          return p.id === docId;
+        });
+        if (!item) return; // not in memory yet — onSnapshot will handle it
+
+        // PART 3: mutate the single in-memory object directly (no stale copy)
+        item.data.stock = Math.max(0, item.data.stock + delta);
+
+        console.log(
+          "[ChicCharms] optimistic stock:",
+          docId,
+          "| delta:",
+          delta,
+          "→ stock now:",
+          item.data.stock,
+        );
+
+        // PART 1 + 4: re-render immediately through the same render pipeline
+        filterAndRenderProducts();
+      };
+
+      /* ─────────────────────────────────────────────────
+         buildProductCard(product, docId) → HTML string
+         D3 Luxury Edition
+      ───────────────────────────────────────────────── */
+      function buildProductCard(product, docId) {
+        // P1+P5: Same normalization as the storage loop — resilient to bad Firestore data.
+        const _rawStock = product.stock ?? product.Stock ?? null;
+        const _parsed = Number(_rawStock ?? 0);
+        const stock = isNaN(_parsed) ? 0 : _parsed;
+        const inStock = stock > 0;
+
+        console.log(
+          "[ChicCharms] buildProductCard:",
+          product.name,
+          "| raw stock:",
+          product.stock,
+          "(type:",
+          typeof product.stock + ")",
+          "→ stock:",
+          stock,
+          "| inStock:",
+          inStock,
+        );
+
+        const productUrl = `product.html?id=${docId}&category=${product.categorySlug}`;
+        const safeName = product.name.replace(/'/g, "\\'");
+
+        /* ── Badge system — luxury edition ── */
+        let badgesHTML = "";
+        if (product.tag) {
+          const tagLow = product.tag.toLowerCase();
+          let badgeClass = "lux-badge--trending";
+          if (tagLow.includes("best") || tagLow.includes("seller"))
+            badgeClass = "lux-badge--bestseller";
+          else if (tagLow.includes("new")) badgeClass = "lux-badge--new";
+          else if (tagLow.includes("low") || tagLow.includes("stock"))
+            badgeClass = "lux-badge--lowstock";
+          badgesHTML += `<span class="lux-badge ${badgeClass}">${product.tag}</span>`;
+        }
+        if (!inStock) {
+          badgesHTML += `<span class="lux-badge lux-badge--outofstock">Sold Out</span>`;
+        }
+
+        /* ── Category label ── */
+        const catLabel = product.categorySlug
+          ? `<p class="lux-product-category">${categoryDisplayLabel(product.categorySlug)}</p>`
+          : "";
+
+        /* ── Description ── */
+        const descHTML = product.description
+          ? `<p class="lux-product-desc">${product.description}</p>`
+          : "";
+
+        /* ── Quick add overlay ── */
+        const quickAddBtn = inStock
+          ? `<button class="lux-quick-add-btn" onclick="addToCart('${safeName}', ${product.price}, '${docId}', ${stock}); if(typeof updateLocalStock==='function') updateLocalStock('${docId}', -1);">Quick Add</button>`
+          : `<button class="lux-quick-add-btn" disabled>Sold Out</button>`;
+
+        /* ── Main cart button ── */
+        const cartBtn = inStock
+          ? `<button class="lux-cart-btn" onclick="addToCart('${safeName}', ${product.price}, '${docId}', ${stock}); if(typeof updateLocalStock==='function') updateLocalStock('${docId}', -1);">
+               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+               Add to Cart
+             </button>`
+          : `<button class="lux-cart-btn" disabled>Out of Stock</button>`;
+
+        /* ── Stock indicator ── */
+        const stockDot = inStock
+          ? `<span class="lux-stock-dot in-stock">In Stock</span>`
+          : `<span class="lux-stock-dot out-of-stock">Sold Out</span>`;
+
+        return `
+          <article class="product-card-lux" data-category="${product.categorySlug}">
+            <div class="lux-img-container">
+              ${badgesHTML ? `<div class="lux-badges">${badgesHTML}</div>` : ""}
+              <a href="${productUrl}" class="lux-img-link" aria-label="View ${product.name}">
+                <img
+                  src="${productLocalImage(product)}"
+                  alt="${product.name}"
+                  loading="lazy"
+                  onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22260%22%3E%3Crect width=%22200%22 height=%22260%22 fill=%22%23FAF1F4%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2240%22%3E%F0%9F%8C%B8%3C/text%3E%3C/svg%3E'"
+                />
+              </a>
+              <div class="lux-hover-layer"></div>
+              <div class="lux-quick-add">${quickAddBtn}</div>
+            </div>
+            <div class="lux-product-info">
+              ${catLabel}
+              <a href="${productUrl}" class="lux-product-name">${product.name}</a>
+              ${descHTML}
+              <div class="lux-product-bottom">
+                <div class="lux-price-wrap">
+                  <span class="lux-price">₹${product.price}</span>
+                </div>
+                ${stockDot}
+              </div>
+              ${cartBtn}
+            </div>
+          </article>
+        `;
+      }
+
+      /* ─────────────────────────────────────────────────
+         filterAndRenderProducts()
+         Reads controls → filters allProducts → renders
+      ───────────────────────────────────────────────── */
+      function filterAndRenderProducts() {
+        const container = document.getElementById("products-container");
+        const resultCount = document.getElementById("resultCount");
+        const searchText = document
+          .getElementById("searchInput")
+          .value.trim()
+          .toLowerCase();
+        const category = document.getElementById("categoryFilter").value;
+        const sort = document.getElementById("sortFilter").value;
+        const clearBtn = document.getElementById("searchClear");
+
+        // Toggle clear button visibility
+        clearBtn.style.display = searchText ? "block" : "none";
+
+        // Mark selects as "active" when a non-default option is chosen
+        document
+          .getElementById("categoryFilter")
+          .classList.toggle("active", category !== "all");
+        document
+          .getElementById("sortFilter")
+          .classList.toggle("active", sort !== "default");
+
+        // 1. Filter
+        let filtered = allProducts.filter(function (item) {
+          const p = item.data;
+
+          // Search match
+          const matchSearch =
+            !searchText || p.name.toLowerCase().includes(searchText);
+
+          // Category match
+          const matchCat = category === "all" || p.categorySlug === category;
+
+          return matchSearch && matchCat;
+        });
+
+        // 2. Sort
+        if (sort === "low-high") {
+          filtered.sort(function (a, b) {
+            return Number(a.data.price) - Number(b.data.price);
+          });
+        } else if (sort === "high-low") {
+          filtered.sort(function (a, b) {
+            return Number(b.data.price) - Number(a.data.price);
+          });
+        } else {
+          filtered.sort(function (a, b) {
+            const aOrder = CATEGORY_ORDER.indexOf(a.data.categorySlug);
+            const bOrder = CATEGORY_ORDER.indexOf(b.data.categorySlug);
+            if (aOrder !== bOrder) return aOrder - bOrder;
+            return String(a.data.name || "").localeCompare(
+              String(b.data.name || ""),
+            );
+          });
+        }
+
+        // 3. Render
+        if (filtered.length === 0) {
+          container.innerHTML = `
+            <div class="lux-empty-state">
+              <div class="lux-empty-icon">🌸</div>
+              <h3 class="lux-empty-title">Nothing found</h3>
+              <p class="lux-empty-sub">We couldn't find any pieces matching your selection. Try a different search or browse the full collection.</p>
+              <button class="lux-empty-btn" onclick="resetFilters()">View All Pieces</button>
+            </div>`;
+          resultCount.style.display = "none";
+        } else {
+          // Build cards array
+          const cards = filtered.map(function (item) {
+            return buildProductCard(item.data, item.id);
+          });
+
+          // Inject editorial quote after card 3 (unfiltered full view only)
+          const isFiltered =
+            searchText || category !== "all" || sort !== "default";
+          const quoteHTML = `
+            <div class="editorial-quote-strip">
+              <p class="editorial-quote-text">"Every woman deserves to feel adorned — effortlessly, every single day."</p>
+              <span class="editorial-quote-attr">Chic Charms</span>
+            </div>`;
+
+          if (!isFiltered && cards.length >= 4) {
+            cards.splice(3, 0, quoteHTML);
+          }
+
+          container.innerHTML = cards.join("");
+
+          // Show result count only when filters are active
+          if (isFiltered) {
+            resultCount.innerHTML = `Showing <strong>${filtered.length}</strong> of <strong>${allProducts.length}</strong> pieces`;
+            resultCount.style.display = "block";
+          } else {
+            resultCount.style.display = "none";
+          }
+
+          // Reveal cards with stagger animation
+          requestAnimationFrame(function () {
+            container
+              .querySelectorAll(".product-card-lux")
+              .forEach(function (card) {
+                requestAnimationFrame(function () {
+                  card.classList.add("revealed");
+                });
+              });
+          });
+        }
+      }
+
+      /* ─────────────────────────────────────────────────
+         resetFilters() — exposed globally for the button
+      ───────────────────────────────────────────────── */
+      window.resetFilters = function () {
+        document.getElementById("searchInput").value = "";
+        document.getElementById("categoryFilter").value = "all";
+        document.getElementById("sortFilter").value = "default";
+        history.replaceState(null, "", "index.html#bestsellers");
+        filterAndRenderProducts();
+      };
+
+      /* ─────────────────────────────────────────────────
+         window.activateCollection(slug)
+         Public bridge used by editorial CTA buttons.
+         Reuses the identical runtime path as .cat-card clicks:
+           1. Set categoryFilter value (same dropdown used by Shop by Style)
+           2. Push URL state (same as wireCategoryCards)
+           3. filterAndRenderProducts() — same render pipeline
+           4. scrollToProducts() — same scroll behaviour
+      ───────────────────────────────────────────────── */
+      window.activateCollection = function (slug) {
+        const filter = document.getElementById("categoryFilter");
+        if (!filter) return;
+        filter.value = slug;
+        history.pushState(
+          null,
+          "",
+          "index.html?category=" + encodeURIComponent(slug) + "#bestsellers",
+        );
+        filterAndRenderProducts();
+        scrollToProducts();
+      };
+
+      function applyCategoryFromUrl() {
+        if (window._chicCharmsUrlCategoryApplied) return;
+        const params = new URLSearchParams(window.location.search);
+        const requested = normalizeCategory(
+          params.get("category") || params.get("style"),
+        );
+        if (!requested) return;
+        const filter = document.getElementById("categoryFilter");
+        if (filter) filter.value = requested;
+        window._chicCharmsUrlCategoryApplied = true;
+        /* Scroll to grid after the first render cycle settles */
+        requestAnimationFrame(function () {
+          requestAnimationFrame(scrollToProducts);
+        });
+      }
+
+      /* ─────────────────────────────────────────────────
+         scrollToProducts()
+         Smoothly lands the viewport at the product grid,
+         accounting for the sticky navbar height so the
+         first product card is immediately visible.
+         Waits one rAF so the DOM settles after filtering.
+      ───────────────────────────────────────────────── */
+      function scrollToProducts() {
+        requestAnimationFrame(function () {
+          const target = document.getElementById("shopControls");
+          if (!target) return;
+          const navbar = document.getElementById("navbar");
+          const navbarH = navbar ? navbar.offsetHeight : 64;
+          const offset = 16; // breathing room above the filter bar
+          const top =
+            target.getBoundingClientRect().top +
+            window.pageYOffset -
+            navbarH -
+            offset;
+          window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+        });
+      }
+
+      function wireCategoryCards() {
+        document
+          .querySelectorAll(".cat-card[data-category]")
+          .forEach(function (card) {
+            card.addEventListener("click", function (e) {
+              const slug = normalizeCategory(card.dataset.category);
+              const filter = document.getElementById("categoryFilter");
+              if (!slug || !filter) return;
+              e.preventDefault();
+              filter.value = slug;
+              history.pushState(
+                null,
+                "",
+                "index.html?category=" +
+                  encodeURIComponent(slug) +
+                  "#bestsellers",
+              );
+              filterAndRenderProducts();
+              scrollToProducts();
+            });
+          });
+      }
+
+      function persistCategoryToUrl() {
+        const slug = document.getElementById("categoryFilter").value;
+        if (!slug || slug === "all") {
+          history.replaceState(null, "", "index.html#bestsellers");
+          return;
+        }
+        history.replaceState(
+          null,
+          "",
+          "index.html?category=" + encodeURIComponent(slug) + "#bestsellers",
+        );
+      }
+
+      /* ─────────────────────────────────────────────────
+         loadProducts() — fetches from Firestore
+      ───────────────────────────────────────────────── */
+      function loadProducts() {
+        const container = document.getElementById("products-container");
+        const controls = document.getElementById("shopControls");
+
+        // Show skeleton while waiting for first snapshot
+        container.innerHTML = `
+            ${[1, 2, 3, 4, 5, 6]
+              .map(
+                () => `
+              <div class="lux-skeleton-card">
+                <div class="lux-skeleton-img"></div>
+                <div class="lux-skeleton-body">
+                  <div class="lux-skeleton-line title"></div>
+                  <div class="lux-skeleton-line desc"></div>
+                  <div class="lux-skeleton-line desc2"></div>
+                  <div class="lux-skeleton-line price"></div>
+                </div>
+              </div>`,
+              )
+              .join("")}
+          `;
+
+        // ── PART 1: onSnapshot — fires immediately and on every Firestore change ──
+        onSnapshot(
+          collection(db, "products"),
+          function (snapshot) {
+            // ── PART 2: Clear entire UI before every re-render ──
+            container.innerHTML = "";
+
+            if (snapshot.empty) {
+              container.innerHTML = `<p class="empty">No products available right now 😢</p>`;
+              return;
+            }
+
+            // ── PART 3: Rebuild allProducts fresh from snapshot ──
+            allProducts = [];
+            snapshot.forEach(function (doc) {
+              const raw = doc.data();
+              const data = Object.assign({}, raw);
+              const rawStock = raw.stock ?? raw.Stock ?? null;
+              const parsed = Number(rawStock ?? 0);
+              data.stock = isNaN(parsed) ? 0 : parsed; // NaN failsafe
+              const migratedData = withCategoryArchitecture(data, doc.id);
+
+              console.log(
+                "[ChicCharms] onSnapshot doc:",
+                doc.id,
+                "| name:",
+                raw.name,
+                "| raw.stock:",
+                raw.stock,
+                "(type:",
+                typeof raw.stock + ")",
+                "→ normalised:",
+                data.stock,
+              );
+              allProducts.push({ data: migratedData, id: doc.id });
+            });
+
+            // Show controls now that we have data
+            controls.style.display = "flex";
+            applyCategoryFromUrl();
+
+            // ── PART 4: Re-render the whole list with current filter state ──
+            filterAndRenderProducts();
+
+            // Attach filter listeners exactly once
+            if (!window._chicCharmsListenersAttached) {
+              window._chicCharmsListenersAttached = true;
+              wireCategoryCards();
+              document
+                .getElementById("searchInput")
+                .addEventListener("input", filterAndRenderProducts);
+              document
+                .getElementById("categoryFilter")
+                .addEventListener("change", function () {
+                  persistCategoryToUrl();
+                  filterAndRenderProducts();
+                  scrollToProducts();
+                });
+              document
+                .getElementById("sortFilter")
+                .addEventListener("change", filterAndRenderProducts);
+              document
+                .getElementById("searchClear")
+                .addEventListener("click", function () {
+                  document.getElementById("searchInput").value = "";
+                  filterAndRenderProducts();
+                  document.getElementById("searchInput").focus();
+                });
+              console.log("[ChicCharms] Filter listeners attached (once)");
+            }
+          },
+          function (error) {
+            container.innerHTML = `
+            <div class="lux-empty-state">
+              <div class="lux-empty-icon">✦</div>
+              <h3 class="lux-empty-title">Something went wrong</h3>
+              <p class="lux-empty-sub">We're having trouble loading the collection right now. Please try again in a moment.</p>
+            </div>`;
+            console.error("Firebase onSnapshot error:", error);
+          },
+        );
+      }
+
+      loadProducts();
+
+      /* ═══════════════════════════════════════════════════
+         GLOBAL NAVBAR SEARCH
+         — shares the same allProducts[] array
+         — runs entirely client-side after first Firebase fetch
+      ═══════════════════════════════════════════════════ */
+
+      const globalSearchEl = document.getElementById("globalSearch");
+      const dropdownEl = document.getElementById("searchDropdown");
+      const clearBtnEl = document.getElementById("globalSearchClear");
+
+      /* ── Highlight matched text ── */
+      function highlight(text, query) {
+        if (!query) return escapeStr(text);
+        const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        return escapeStr(text).replace(
+          new RegExp("(" + escaped + ")", "gi"),
+          "<mark>$1</mark>",
+        );
+      }
+
+      function escapeStr(str) {
+        return String(str)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      /* ── Show / hide dropdown ── */
+      function openDropdown() {
+        dropdownEl.classList.add("open");
+        globalSearchEl.setAttribute("aria-expanded", "true");
+      }
+      function closeDropdown() {
+        dropdownEl.classList.remove("open");
+        globalSearchEl.setAttribute("aria-expanded", "false");
+      }
+
+      /* ── Render results ── */
+      function renderSearchResults(query) {
+        const text = query.trim().toLowerCase();
+
+        // Hide if empty
+        if (!text) {
+          closeDropdown();
+          clearBtnEl.style.display = "none";
+          return;
+        }
+
+        clearBtnEl.style.display = "flex";
+
+        // If products haven't loaded yet — show skeleton
+        if (allProducts.length === 0) {
+          dropdownEl.innerHTML = `
+            <div style="padding:14px 14px;display:flex;flex-direction:column;gap:10px;">
+              ${[1, 2, 3]
+                .map(
+                  () =>
+                    `<div style="height:44px;background:linear-gradient(90deg,#fdf8f5 25%,#f0ebe6 50%,#fdf8f5 75%);background-size:200% 100%;animation:shimmer 1.2s infinite;border-radius:8px;"></div>`,
+                )
+                .join("")}
+            </div>`;
+          openDropdown();
+          return;
+        }
+
+        // Filter — top 5 matches
+        const matches = allProducts
+          .filter(function (item) {
+            return item.data.name.toLowerCase().includes(text);
+          })
+          .slice(0, 5);
+
+        if (matches.length === 0) {
+          dropdownEl.innerHTML = `
+            <div class="search-no-results">
+              <span>🔍</span>
+              No products found for "<strong>${escapeStr(query.trim())}</strong>"
+            </div>`;
+        } else {
+          dropdownEl.innerHTML = matches
+            .map(function (item) {
+              const p = item.data;
+              const url = "product.html?id=" + item.id;
+              return `
+              <a class="search-result-item" href="${url}" tabindex="0">
+                <img class="search-result-img" src="${escapeStr(productLocalImage(p))}" alt="${escapeStr(p.name)}" loading="lazy" />
+                <div class="search-result-info">
+                  <div class="search-result-name">${highlight(p.name, query.trim())}</div>
+                  <div class="search-result-price">₹${Number(p.price).toLocaleString("en-IN")}</div>
+                </div>
+              </a>`;
+            })
+            .join("");
+        }
+
+        openDropdown();
+      }
+
+      /* ── Input handler ── */
+      globalSearchEl.addEventListener("input", function () {
+        renderSearchResults(globalSearchEl.value);
+      });
+
+      /* ── Clear button ── */
+      clearBtnEl.addEventListener("click", function () {
+        globalSearchEl.value = "";
+        closeDropdown();
+        clearBtnEl.style.display = "none";
+        globalSearchEl.focus();
+      });
+
+      /* ── Keyboard: Escape closes, Enter navigates to first result ── */
+      globalSearchEl.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+          closeDropdown();
+          globalSearchEl.blur();
+        }
+        if (e.key === "Enter") {
+          const first = dropdownEl.querySelector(".search-result-item");
+          if (first) window.location.href = first.getAttribute("href");
+        }
+      });
+
+      /* ── Click outside to close ── */
+      document.addEventListener("click", function (e) {
+        const navSearch = document.getElementById("navSearch");
+        if (navSearch && !navSearch.contains(e.target)) {
+          closeDropdown();
+        }
+      });
+
+      /* ── Re-open on focus if there's already text ── */
+      globalSearchEl.addEventListener("focus", function () {
+        if (globalSearchEl.value.trim())
+          renderSearchResults(globalSearchEl.value);
+      });
+    </script>
+
+    <!-- ░░ ADMIN RETURN BANNER SCRIPT ░░
+         Checks Firebase Auth + the same sessionStorage cache used by
+         admin-guard.js to detect a live admin session. Zero Firestore
+         reads — purely client-side. If the cache key exists for the
+         signed-in UID, the banner is shown instantly. ── -->
+    <script type="module">
+      import {
+        initializeApp,
+        getApps,
+      } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+      import {
+        getAuth,
+        onAuthStateChanged,
+      } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyA5Bh77_4HE3yQF0hi5ddvbFLZC7rEerxg",
+        authDomain: "chic-charms-store.firebaseapp.com",
+        projectId: "chic-charms-store",
+        storageBucket: "chic-charms-store.firebasestorage.app",
+        messagingSenderId: "342514318589",
+        appId: "1:342514318589:web:31c3490c10731e46d75294",
+      };
+
+      const app = getApps().length
+        ? getApps()[0]
+        : initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+
+      /* Same cache-key formula as admin-guard.js */
+      const adminCacheKey = (uid) => `cc_admin_verified_${uid}`;
+
+      const banner = document.getElementById("adminReturnBanner");
+      const emailSpan = document.getElementById("adminReturnEmail");
+
+      function setAdminBannerHeight() {
+        const height =
+          document.body.classList.contains("admin-return-active") && banner
+            ? banner.offsetHeight
+            : 0;
+        document.documentElement.style.setProperty(
+          "--admin-return-banner-height",
+          `${height}px`,
+        );
+      }
+
+      function hideAdminBanner() {
+        document.body.classList.remove("admin-return-active");
+        if (banner) {
+          banner.style.display = "none";
+          banner.setAttribute("aria-hidden", "true");
+        }
+        setAdminBannerHeight();
+      }
+
+      function showAdminBanner(user) {
+        if (!banner) return;
+        if (emailSpan) emailSpan.textContent = user.email || "admin";
+        banner.style.display = "flex";
+        banner.setAttribute("aria-hidden", "false");
+        document.body.classList.add("admin-return-active");
+        setAdminBannerHeight();
+      }
+
+      window.addEventListener("resize", setAdminBannerHeight);
+
+      onAuthStateChanged(auth, (user) => {
+        if (!user) {
+          hideAdminBanner();
+          return;
+        }
+
+        /* Only show if this UID was verified as admin in this session */
+        let isVerifiedAdmin = false;
+        try {
+          isVerifiedAdmin =
+            sessionStorage.getItem(adminCacheKey(user.uid)) === "1";
+        } catch (_) {}
+
+        if (!isVerifiedAdmin) {
+          hideAdminBanner();
+          return;
+        }
+
+        showAdminBanner(user);
+      });
+    </script>
+    <!-- ░░ ABOUT NAV — Brand Story Reveal Handler ░░
+         Intercepts the ABOUT nav click, reveals the hidden
+         brand story section + its marquee, then smooth-scrolls
+         to the section. On subsequent clicks it just scrolls.
+    ══════════════════════════════════════════════════ -->
+    <script>
+      (function () {
+        var aboutLink = document.getElementById("navAboutLink");
+        var storySection = document.getElementById("why-us");
+        var storyMarquee = storySection
+          ? storySection.nextElementSibling
+          : null;
+
+        if (!aboutLink || !storySection) return;
+
+        aboutLink.addEventListener("click", function (e) {
+          e.preventDefault();
+
+          /* Reveal section if not already shown */
+          if (!storySection.classList.contains("about-revealed")) {
+            storySection.classList.add("about-revealed");
+            if (
+              storyMarquee &&
+              storyMarquee.classList.contains("d6-marquee")
+            ) {
+              storyMarquee.classList.add("about-revealed");
+            }
+          }
+
+          /* Smooth scroll after a brief paint tick so display:block registers */
+          requestAnimationFrame(function () {
+            storySection.scrollIntoView({ behavior: "smooth", block: "start" });
+          });
+
+          /* Close mobile menu if open */
+          var navLinks = document.getElementById("navLinks");
+          if (navLinks) navLinks.classList.remove("open");
+        });
+      })();
+    </script>
+  </body>
+</html>

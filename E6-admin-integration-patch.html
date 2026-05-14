@@ -1,0 +1,93 @@
+<!-- ============================================================
+     E6 INTEGRATION SNIPPET — admin.html
+     Phase E6 — Unified Luxury Operational Ecosystem
+
+     ADD to <head> of admin.html (after admin-ops-safety.css):
+     ============================================================ -->
+
+<!-- E6: Unified ecosystem CSS — final integration layer -->
+<link rel="stylesheet" href="e6-unified-ecosystem.css" />
+
+<!-- ============================================================
+     ADD to the <script type="module"> block in admin.html.
+
+     1. Add this import at the top of the existing module:
+     ============================================================ -->
+
+<!-- IMPORT (add alongside existing E5 imports): -->
+<!--
+import {
+  initE6Ecosystem,
+  E6OperationalSearch,
+  wireExportButton,
+} from "./admin-e6-ecosystem.js";
+-->
+
+<!-- ============================================================
+     2. Inside the onGranted(user) callback, AFTER initE5Safety(),
+        add this call:
+     ============================================================ -->
+
+<!--
+// ── E6: Unified ecosystem boot ───────────────────────────────
+initE6Ecosystem({
+  page: "admin",
+  breadcrumbSel: ".admin-bar-left",
+  breadcrumbs: [
+    { label: "Chic Charms", href: "index.html" },
+    { label: "Operations", href: "admin.html" },
+  ],
+});
+
+// ── E6: Live search for product grid ─────────────────────────
+E6OperationalSearch.wire({
+  inputId:      "searchInput",    // your existing search input id
+  itemSelector: ".product-card",
+  textSelector: ".product-name, h3",
+  onFilter: (count) => {
+    const el = document.getElementById("productCount");
+    if (el) el.textContent = `${count} product${count !== 1 ? "s" : ""}`;
+  },
+});
+
+// ── E6: Category filter ───────────────────────────────────────
+E6OperationalSearch.wireSelect(
+  "categoryFilter",    // your existing select id
+  ".product-card",
+  "category",          // data-category attribute on cards
+);
+-->
+
+<!-- ============================================================
+     ADMIN SIDEBAR FOOTER — add inside .admin-side-footer:
+
+     The E6 ecosystem auto-injects the storefront link via
+     E6Nav.injectStorefrontLink(). If your sidebar footer
+     already has content, ensure .admin-side-footer exists:
+     ============================================================ -->
+
+<!--
+<div class="admin-side-footer">
+  <!-- E6 auto-injects storefront link here -->
+  <!-- E6 auto-injects session timer here -->
+</div>
+-->
+
+<!-- ============================================================
+     ADMIN SIDEBAR TOGGLE — add a mobile toggle button:
+     Place in .admin-bar or .topbar for mobile visibility:
+     ============================================================ -->
+
+<!--
+<button class="admin-bar-btn sidebar-toggle" aria-label="Toggle sidebar" data-sidebar-toggle>
+  ☰
+</button>
+-->
+
+<!-- ============================================================
+     E6 KEYBOARD SHORTCUTS — auto-registered via initE6Ecosystem:
+       /        → Focus search input
+       h        → Navigate to admin.html (dashboard)
+       o        → Navigate to admin-orders.html (orders)
+       Escape   → Dismiss active banner
+     ============================================================ -->

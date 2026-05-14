@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Order confirmed – Chic Charms" />
+  <title>Order Confirmed – Chic Charms</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ── Confirmation Page ── */
+    .confirm-page {
+      min-height: 100vh;
+      background: var(--cream);
+      padding: 100px 0 80px;
+      display: flex;
+      align-items: center;
+    }
+
+    .confirm-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 0 24px;
+    }
+
+    /* ── Success card ── */
+    .confirm-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 52px 44px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border);
+      text-align: center;
+      animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.92) translateY(16px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .confirm-icon {
+      font-size: 4rem;
+      margin-bottom: 6px;
+      animation: bounceIn 0.6s 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+    @keyframes bounceIn {
+      from { transform: scale(0.5); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+
+    .confirm-badge {
+      display: inline-block;
+      background: #e8f5e9;
+      color: #2e7d32;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 999px;
+      margin-bottom: 20px;
+    }
+
+    .confirm-headline {
+      font-family: var(--font-head);
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    .confirm-headline em { color: var(--rose-dark); font-style: italic; }
+
+    .confirm-sub {
+      font-size: 0.98rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+
+    /* ── Order detail box ── */
+    .confirm-details {
+      background: var(--blush);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      text-align: left;
+      margin-bottom: 32px;
+    }
+
+    .confirm-details h3 {
+      font-family: var(--font-head);
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(244,167,185,0.3);
+      color: var(--text);
+    }
+
+    .confirm-detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      font-size: 0.85rem;
+      padding: 6px 0;
+    }
+
+    .confirm-detail-row:not(:last-child) {
+      border-bottom: 1px dashed rgba(244,167,185,0.25);
+    }
+
+    .confirm-detail-label { color: var(--muted); flex-shrink: 0; }
+    .confirm-detail-value { color: var(--text); font-weight: 500; text-align: right; word-break: break-word; }
+    .confirm-detail-value.price {
+      font-family: var(--font-head);
+      font-size: 1.1rem;
+      color: var(--rose-dark);
+      font-weight: 600;
+    }
+
+    /* ── Items list ── */
+    .confirm-items {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    .confirm-items h3 {
+      font-family: var(--font-head);
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.72rem;
+    }
+    .confirm-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.87rem;
+      padding: 7px 0;
+      border-bottom: 1px dashed var(--border);
+    }
+    .confirm-item:last-child { border-bottom: none; }
+    .confirm-item-name { color: var(--text); }
+    .confirm-item-price { color: var(--rose-dark); font-weight: 600; flex-shrink: 0; }
+
+    /* ── Delivery estimate ── */
+    .delivery-estimate {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--sand);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 32px;
+      text-align: left;
+    }
+    .delivery-estimate-icon { font-size: 1.6rem; flex-shrink: 0; }
+    .delivery-estimate p { font-size: 0.85rem; color: var(--text); line-height: 1.5; }
+    .delivery-estimate strong { color: var(--rose-dark); }
+
+    /* ── Actions ── */
+    .confirm-actions {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-continue {
+      background: var(--rose);
+      color: var(--white);
+      border: none;
+      border-radius: 999px;
+      padding: 14px 32px;
+      font-family: var(--font-body);
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(244,167,185,0.4);
+      transition: var(--transition);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+    .btn-continue:hover {
+      background: var(--rose-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(232,128,154,0.4);
+    }
+
+    .btn-track {
+      background: transparent;
+      color: var(--text);
+      border: 1.5px solid var(--border);
+      border-radius: 999px;
+      padding: 13px 28px;
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+    .btn-track:hover {
+      border-color: var(--rose);
+      color: var(--rose-dark);
+      transform: translateY(-2px);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 560px) {
+      .confirm-page { padding-top: 88px; }
+      .confirm-card { padding: 36px 20px; }
+      .confirm-actions { flex-direction: column; align-items: stretch; }
+      .btn-continue, .btn-track { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ░░ NAVBAR ░░ -->
+  <header class="navbar" id="navbar">
+    <div class="nav-inner container">
+      <a href="index.html" class="logo" aria-label="Chic Charms home">Chic<span>Charms</span></a>
+      <nav class="nav-links" id="navLinks" aria-label="Main navigation">
+        <a href="index.html#categories">Shop</a>
+        <a href="index.html#bestsellers">Best Sellers</a>
+        <a href="index.html#why-us">About</a>
+        <a href="index.html#testimonials">Reviews</a>
+      </nav>
+      <div class="nav-actions" id="navActions">
+        <!-- auth-ui.js injects Login / My Account / Logout here -->
+      </div>
+    </div>
+  </header>
+
+  <!-- ░░ CONFIRMATION PAGE ░░ -->
+  <main class="confirm-page" aria-labelledby="confirm-heading">
+    <div class="confirm-wrap">
+      <div class="confirm-card">
+
+        <div class="confirm-icon" aria-hidden="true">🎉</div>
+        <span class="confirm-badge">✓ Order Confirmed</span>
+
+        <h1 class="confirm-headline" id="confirm-heading">
+          Order placed<br /><em>successfully!</em>
+        </h1>
+
+        <p class="confirm-sub">
+          Thank you for shopping with Chic Charms! 🌸<br />
+          Your order will be delivered soon. We'll confirm via WhatsApp.
+        </p>
+
+        <!-- Order details (populated by JS) -->
+        <div class="confirm-details" id="confirmDetails" style="display:none;">
+          <h3>📦 Order Details</h3>
+          <div id="confirmDetailRows"></div>
+        </div>
+
+        <!-- Items ordered (populated by JS) -->
+        <div class="confirm-items" id="confirmItems" style="display:none;">
+          <h3>Items in this order</h3>
+          <div id="confirmItemRows"></div>
+        </div>
+
+        <!-- Delivery estimate -->
+        <div class="delivery-estimate">
+          <span class="delivery-estimate-icon" aria-hidden="true">🚚</span>
+          <p>Estimated delivery: <strong>3–5 business days</strong> across India.<br />
+             COD — pay when your parcel arrives!</p>
+        </div>
+
+        <!-- CTA buttons -->
+        <div class="confirm-actions">
+          <a href="index.html" class="btn-continue">Continue Shopping →</a>
+          <a href="index.html#bestsellers" class="btn-track">Browse More Styles</a>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- ░░ FOOTER ░░ -->
+  <footer class="footer" aria-label="Site footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <p class="logo">Chic<span>Charms</span></p>
+        <p class="footer-tagline">Your glow-up starts here.</p>
+      </div>
+      <nav class="footer-links" aria-label="Footer links">
+        <a href="#">About Us</a>
+        <a href="#">FAQs</a>
+        <a href="#">Shipping</a>
+        <a href="#">Returns</a>
+        <a href="#">Contact</a>
+      </nav>
+    </div>
+    <p class="footer-copy">© 2025 ChicCharms. Made with 🌸 in India.</p>
+  </footer>
+
+  <script>
+    /* ============================================================
+       CONFIRMATION PAGE — Inline JS
+       Reads lastOrder from localStorage and renders it
+    ============================================================ */
+
+    // ── Navbar ──
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', function () {
+      navbar.classList.toggle('scrolled', window.scrollY > 20);
+    }, { passive: true });
+
+    const hamburger = document.getElementById('hamburger');
+    const navLinks  = document.getElementById('navLinks');
+    if (hamburger && navLinks) {
+      hamburger.addEventListener('click', function () {
+        const isOpen = navLinks.classList.toggle('open');
+        hamburger.setAttribute('aria-expanded', isOpen);
+      });
+      document.addEventListener('click', function (e) {
+        if (!navbar.contains(e.target)) {
+          navLinks.classList.remove('open');
+          hamburger.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+
+    // ── Helpers ──
+    function escapeHTML(str) {
+      return String(str)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // ── Load and display last order ──
+    (function () {
+      const raw = localStorage.getItem('lastOrder');
+      if (!raw) return; // no order data — page still shows fine without it
+
+      let order;
+      try { order = JSON.parse(raw); } catch (e) { return; }
+
+      // ── Detail rows ──
+      const payLabel = order.paymentMethod === 'razorpay' ? '💳 Paid Online' : '💵 Cash on Delivery';
+      const detailRows = [
+        { label: 'Name',     value: order.name },
+        { label: 'Phone',    value: order.phone },
+        { label: 'Address',  value: order.address + ', ' + order.pincode },
+        { label: 'Payment',  value: payLabel },
+        { label: 'Shipping', value: order.shipping === 0 ? 'Free' : '₹49' },
+        { label: 'Total',    value: '₹' + Number(order.total).toLocaleString('en-IN'), isPrice: true },
+        { label: 'Date',     value: order.date }
+      ];
+      if (order.paymentId) {
+        detailRows.push({ label: 'Payment ID', value: order.paymentId });
+      }
+
+      const detailWrap = document.getElementById('confirmDetailRows');
+      detailRows.forEach(function (row) {
+        const div = document.createElement('div');
+        div.className = 'confirm-detail-row';
+        div.innerHTML =
+          '<span class="confirm-detail-label">' + escapeHTML(row.label) + '</span>' +
+          '<span class="confirm-detail-value' + (row.isPrice ? ' price' : '') + '">' + escapeHTML(row.value) + '</span>';
+        detailWrap.appendChild(div);
+      });
+
+      document.getElementById('confirmDetails').style.display = 'block';
+
+      // ── Items ──
+      if (order.items && order.items.length) {
+        const itemWrap = document.getElementById('confirmItemRows');
+        order.items.forEach(function (item) {
+          const div = document.createElement('div');
+          div.className = 'confirm-item';
+          div.innerHTML =
+            '<span class="confirm-item-name">' + escapeHTML(item.name) + '</span>' +
+            '<span class="confirm-item-price">₹' + Number(item.price).toLocaleString('en-IN') + '</span>';
+          itemWrap.appendChild(div);
+        });
+        document.getElementById('confirmItems').style.display = 'block';
+      }
+
+      // Clean up localStorage so back-button doesn't replay order
+      localStorage.removeItem('lastOrder');
+    })();
+  </script>
+
+  <!-- Auth navbar -->
+  <script type="module">
+    import { setupAuthUI } from "./auth-ui.js";
+    setupAuthUI();
+  </script>
+
+</body>
+</html>

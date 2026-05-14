@@ -1,0 +1,2010 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="My Account - Chic Charms" />
+    <title>My Account - Chic Charms</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="admin-nav.css" />
+
+    <style>
+      /* ========================================
+       ACCOUNT PAGE
+    ======================================== */
+      .acc-page {
+        min-height: 100vh;
+        background: var(--cream);
+        padding: 90px 0 80px;
+      }
+      .acc-container {
+        max-width: 1020px;
+        margin: 0 auto;
+        padding: 32px 24px;
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 28px;
+        align-items: start;
+      }
+
+      /* Auth overlay */
+      .auth-overlay {
+        position: fixed;
+        inset: 0;
+        background: var(--cream);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 999;
+        transition: opacity 0.35s ease;
+      }
+      .auth-overlay.hide {
+        opacity: 0;
+        pointer-events: none;
+      }
+      .spinner-ring {
+        width: 36px;
+        height: 36px;
+        border: 3px solid var(--border);
+        border-top-color: var(--rose);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Sidebar */
+      .acc-sidebar {
+        position: sticky;
+        top: 100px;
+        animation: fadeUp 0.4s ease both;
+      }
+      .acc-profile-card {
+        background: var(--white);
+        border-radius: var(--radius-lg);
+        padding: 26px 18px;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+        text-align: center;
+        margin-bottom: 12px;
+      }
+      .acc-avatar {
+        width: 68px;
+        height: 68px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--blush), var(--rose));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.7rem;
+        font-weight: 700;
+        color: var(--rose-dark);
+        margin: 0 auto 12px;
+        box-shadow: 0 4px 14px rgba(244, 167, 185, 0.4);
+      }
+      .acc-displayname {
+        font-family: var(--font-head);
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 3px;
+      }
+      .acc-email-small {
+        font-size: 0.73rem;
+        color: var(--muted);
+        word-break: break-all;
+        line-height: 1.4;
+      }
+      .acc-since {
+        font-size: 0.68rem;
+        color: var(--muted);
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px solid var(--border);
+      }
+
+      /* Sidebar nav */
+      .acc-nav {
+        background: var(--white);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+        overflow: hidden;
+      }
+      .acc-nav-btn {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        padding: 13px 16px;
+        font-family: var(--font-body);
+        font-size: 0.86rem;
+        font-weight: 500;
+        color: var(--muted);
+        background: none;
+        border: none;
+        border-bottom: 1px solid var(--border);
+        cursor: pointer;
+        transition:
+          background 0.15s,
+          color 0.15s;
+        text-align: left;
+      }
+      .acc-nav-btn:last-child {
+        border-bottom: none;
+      }
+      .acc-nav-btn:hover {
+        background: var(--cream);
+        color: var(--text);
+      }
+      .acc-nav-btn.active {
+        background: var(--blush);
+        color: var(--rose-dark);
+        font-weight: 600;
+      }
+      .acc-nav-btn.logout-btn {
+        color: #c62828;
+      }
+      .acc-nav-btn.logout-btn:hover {
+        background: #fff5f5;
+      }
+
+      /* Main content */
+      .acc-main {
+        min-height: 400px;
+        animation: fadeUp 0.4s 0.1s ease both;
+      }
+      .acc-panel {
+        display: none;
+      }
+      .acc-panel.active {
+        display: block;
+      }
+
+      .panel-head {
+        margin-bottom: 20px;
+      }
+      .panel-title {
+        font-family: var(--font-head);
+        font-size: 1.9rem;
+        font-weight: 600;
+        color: var(--text);
+        line-height: 1.2;
+      }
+      .panel-title em {
+        color: var(--rose-dark);
+        font-style: italic;
+      }
+      .panel-sub {
+        font-size: 0.82rem;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+
+      /* Card */
+      .acc-card {
+        background: var(--white);
+        border-radius: var(--radius-lg);
+        padding: 26px;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+        margin-bottom: 16px;
+      }
+
+      /* Stats */
+      .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+      .stat-box {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 18px 12px;
+        text-align: center;
+        box-shadow: var(--shadow);
+      }
+      .stat-num {
+        font-family: var(--font-head);
+        font-size: 1.9rem;
+        font-weight: 600;
+        color: var(--rose-dark);
+        line-height: 1;
+      }
+      .stat-label {
+        font-size: 0.7rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        margin-top: 4px;
+      }
+
+      /* Info rows */
+      .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 11px 0;
+        border-bottom: 1px dashed var(--border);
+        font-size: 0.86rem;
+      }
+      .info-row:last-child {
+        border-bottom: none;
+      }
+      .info-label {
+        color: var(--muted);
+      }
+      .info-val {
+        color: var(--text);
+        font-weight: 500;
+        text-align: right;
+      }
+
+      /* Buttons */
+      .btn-prime {
+        background: var(--rose-dark);
+        color: white;
+        border: none;
+        border-radius: 999px;
+        padding: 11px 24px;
+        font-family: var(--font-body);
+        font-size: 0.88rem;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 4px 14px rgba(232, 128, 154, 0.35);
+        transition:
+          background 0.2s,
+          transform 0.15s;
+      }
+      .btn-prime:hover:not(:disabled) {
+        background: #d4607a;
+        transform: translateY(-1px);
+      }
+      .btn-prime:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      .btn-ghost {
+        background: none;
+        border: 1.5px solid var(--border);
+        border-radius: 999px;
+        padding: 10px 20px;
+        font-family: var(--font-body);
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--muted);
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .btn-ghost:hover {
+        border-color: var(--rose);
+        color: var(--rose-dark);
+      }
+
+      /* Orders */
+      .order-card {
+        background: var(--white);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+        margin-bottom: 14px;
+        overflow: hidden;
+      }
+      .order-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 14px 18px;
+        background: var(--cream);
+        border-bottom: 1px solid var(--border);
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .order-id {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .order-date {
+        font-size: 0.78rem;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+      .order-badge {
+        font-size: 0.66rem;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: #e8f5e9;
+        color: #2e7d32;
+      }
+      .order-badge.cod {
+        background: #fff8e1;
+        color: #e65100;
+      }
+      .order-body {
+        padding: 14px 18px;
+      }
+      .order-item {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.84rem;
+        padding: 5px 0;
+        border-bottom: 1px dashed var(--border);
+        color: var(--text);
+      }
+      .order-item:last-child {
+        border-bottom: none;
+      }
+      .order-item-price {
+        color: var(--rose-dark);
+        font-weight: 600;
+      }
+      .order-foot {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 11px 18px;
+        background: var(--blush);
+        border-top: 1px solid rgba(244, 167, 185, 0.3);
+      }
+      .order-foot-label {
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+      .order-total {
+        font-family: var(--font-head);
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--rose-dark);
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 56px 24px;
+      }
+      .empty-icon {
+        font-size: 2.8rem;
+        margin-bottom: 12px;
+      }
+      .empty-state h3 {
+        font-family: var(--font-head);
+        font-size: 1.4rem;
+        color: var(--text);
+        margin-bottom: 6px;
+      }
+      .empty-state p {
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+
+      /* Addresses */
+      .addr-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        margin-bottom: 20px;
+      }
+      .addr-card {
+        background: var(--white);
+        border-radius: var(--radius);
+        border: 2px solid var(--border);
+        padding: 18px;
+        position: relative;
+        transition: border-color 0.2s;
+      }
+      .addr-card.is-default {
+        border-color: var(--rose-dark);
+        background: var(--blush);
+      }
+      .default-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 0.6rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        background: var(--rose-dark);
+        color: white;
+        padding: 3px 8px;
+        border-radius: 999px;
+      }
+      .addr-name {
+        font-weight: 600;
+        font-size: 0.88rem;
+        color: var(--text);
+        margin-bottom: 2px;
+      }
+      .addr-phone {
+        font-size: 0.76rem;
+        color: var(--muted);
+        margin-bottom: 8px;
+      }
+      .addr-text {
+        font-size: 0.81rem;
+        color: var(--text);
+        line-height: 1.5;
+      }
+      .addr-btns {
+        display: flex;
+        gap: 7px;
+        margin-top: 12px;
+        flex-wrap: wrap;
+      }
+      .addr-btn-sm {
+        font-size: 0.7rem;
+        font-weight: 600;
+        padding: 5px 11px;
+        border-radius: 999px;
+        border: 1.5px solid var(--border);
+        background: none;
+        cursor: pointer;
+        transition: all 0.15s;
+        font-family: var(--font-body);
+      }
+      .addr-btn-sm:hover {
+        border-color: var(--rose);
+        color: var(--rose-dark);
+      }
+      .addr-btn-sm.danger:hover {
+        border-color: #e57373;
+        color: #c62828;
+        background: #fff5f5;
+      }
+      .addr-btn-sm.primary {
+        background: var(--rose);
+        color: white;
+        border-color: var(--rose);
+      }
+      .addr-btn-sm.primary:hover {
+        background: var(--rose-dark);
+      }
+
+      /* Add address form */
+      .add-addr-toggle {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 13px 16px;
+        background: var(--white);
+        border: 2px dashed var(--border);
+        border-radius: var(--radius);
+        font-family: var(--font-body);
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--rose-dark);
+        cursor: pointer;
+        transition: all 0.2s;
+        margin-bottom: 18px;
+      }
+      .add-addr-toggle:hover {
+        border-color: var(--rose);
+        background: var(--blush);
+      }
+      .addr-form-wrap {
+        display: none;
+        background: var(--white);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border);
+        padding: 22px;
+        margin-bottom: 18px;
+        box-shadow: var(--shadow);
+        animation: fadeUp 0.3s ease both;
+      }
+      .addr-form-wrap.open {
+        display: block;
+      }
+      .addr-form-title {
+        font-family: var(--font-head);
+        font-size: 1.15rem;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 16px;
+        padding-bottom: 11px;
+        border-bottom: 1px solid var(--border);
+      }
+      .fg2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .fg-full {
+        grid-column: 1 / -1;
+      }
+      .fg {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+      .fg label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--text);
+      }
+      .fg input {
+        padding: 10px 13px;
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius);
+        font-family: var(--font-body);
+        font-size: 0.88rem;
+        color: var(--text);
+        background: var(--white);
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      .fg input:focus {
+        border-color: var(--rose);
+        box-shadow: 0 0 0 3px rgba(244, 167, 185, 0.18);
+      }
+      .check-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 10px;
+        font-size: 0.84rem;
+        color: var(--text);
+        cursor: pointer;
+      }
+      .check-row input {
+        accent-color: var(--rose-dark);
+        cursor: pointer;
+      }
+      .form-acts {
+        display: flex;
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      /* Message + toast */
+      .acc-msg {
+        padding: 10px 13px;
+        border-radius: var(--radius);
+        font-size: 0.81rem;
+        font-weight: 500;
+        margin-top: 12px;
+        display: none;
+      }
+      .acc-msg.show {
+        display: block;
+      }
+      .acc-msg.err {
+        background: #fff5f5;
+        border: 1px solid #ffcdd2;
+        color: #c62828;
+      }
+      .acc-msg.ok {
+        background: #e8f5e9;
+        border: 1px solid #a5d6a7;
+        color: #2e7d32;
+      }
+
+      .acc-toast {
+        position: fixed;
+        bottom: 28px;
+        left: 50%;
+        transform: translateX(-50%) translateY(80px);
+        background: var(--text);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 999px;
+        font-size: 0.84rem;
+        font-weight: 500;
+        z-index: 9999;
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        white-space: nowrap;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+      }
+      .acc-toast.show {
+        transform: translateX(-50%) translateY(0);
+      }
+
+      /* Skeleton */
+      .skel {
+        background: linear-gradient(
+          90deg,
+          var(--border) 25%,
+          var(--blush) 50%,
+          var(--border) 75%
+        );
+        background-size: 200% 100%;
+        animation: shimmer 1.4s infinite;
+        border-radius: 6px;
+      }
+      @keyframes shimmer {
+        from {
+          background-position: 200% 0;
+        }
+        to {
+          background-position: -200% 0;
+        }
+      }
+      .skel-h {
+        height: 13px;
+        margin-bottom: 9px;
+      }
+
+      /* Operational access section - visible only to verified admins */
+      .acc-admin-section {
+        display: none;
+        margin-top: 12px;
+        opacity: 0;
+        transform: translateY(6px);
+        transition:
+          opacity 0.28s ease,
+          transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      .acc-admin-section.admin-visible {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .acc-admin-card {
+        background: var(--white, #fff);
+        border-radius: var(--radius);
+        border: 1px solid var(--border, #f0dde5);
+        overflow: hidden;
+      }
+      .acc-admin-card-head {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px 8px;
+        border-bottom: 1px solid var(--border, #f0dde5);
+      }
+      .acc-admin-card-head-icon {
+        font-size: 0.65rem;
+        line-height: 1;
+        background: var(--cream, #faf8f5);
+        color: var(--muted, #9b7b85);
+        width: 20px;
+        height: 20px;
+        border-radius: 5px;
+        border: 1px solid var(--border, #f0dde5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .acc-admin-card-head-label {
+        font-size: 0.65rem;
+        font-weight: 600;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: var(--muted, #9b7b85);
+      }
+      .acc-admin-links {
+        padding: 6px 6px;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .acc-admin-link {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 10px;
+        border-radius: 8px;
+        font-size: 0.82rem;
+        font-weight: 500;
+        color: var(--muted, #9b7b85);
+        text-decoration: none;
+        transition:
+          background 0.15s,
+          color 0.15s;
+      }
+      .acc-admin-link:hover,
+      .acc-admin-link:focus-visible {
+        background: var(--cream, #faf8f5);
+        color: var(--text, #2d2020);
+        outline: none;
+      }
+      .acc-admin-link-icon {
+        font-size: 0.72rem;
+        width: 18px;
+        text-align: center;
+        opacity: 0.5;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .acc-container {
+          grid-template-columns: 1fr;
+        }
+        .acc-sidebar {
+          position: static;
+        }
+        .acc-nav {
+          display: flex;
+          overflow-x: auto;
+        }
+        .acc-nav-btn {
+          white-space: nowrap;
+          border-bottom: none;
+          border-right: 1px solid var(--border);
+          flex-shrink: 0;
+        }
+        .stat-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .addr-grid {
+          grid-template-columns: 1fr;
+        }
+        .fg2 {
+          grid-template-columns: 1fr;
+        }
+        .fg-full {
+          grid-column: 1;
+        }
+      }
+      @media (max-width: 480px) {
+        .acc-page {
+          padding-top: 80px;
+        }
+        .stat-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Auth overlay -->
+    <div class="auth-overlay" id="authOverlay">
+      <div class="spinner-ring"></div>
+    </div>
+
+    <!-- Toast -->
+    <div class="acc-toast" id="toast"></div>
+
+    <!-- NAVBAR -->
+    <header class="navbar" id="navbar">
+      <div class="nav-inner container">
+        <a href="index.html" class="logo" aria-label="Chic Charms home"
+          >Chic<span>Charms</span></a
+        >
+        <nav class="nav-links" id="navLinks" aria-label="Main navigation">
+          <a href="index.html#categories">Shop</a>
+          <a href="index.html#bestsellers">Best Sellers</a>
+          <a href="index.html#why-us">About</a>
+          <a href="cart.html" class="nav-cart-link"><span>Cart</span></a>
+        </nav>
+        <div class="nav-actions" id="navActions">
+          <!-- injected by JS -->
+        </div>
+      </div>
+    </header>
+
+    <!-- ACCOUNT PAGE -->
+    <main class="acc-page">
+      <div class="acc-container">
+        <!-- Sidebar -->
+        <aside class="acc-sidebar">
+          <div class="acc-profile-card">
+            <div class="acc-avatar" id="accAvatar">U</div>
+            <div class="acc-displayname" id="accDisplayName">-</div>
+            <div class="acc-email-small" id="accEmailLabel">-</div>
+            <div class="acc-since" id="accSince">Member since -</div>
+          </div>
+          <nav class="acc-nav">
+            <button class="acc-nav-btn active" data-tab="profile" type="button">
+              Profile
+            </button>
+            <button class="acc-nav-btn" data-tab="orders" type="button">
+              My Orders
+            </button>
+            <button class="acc-nav-btn" data-tab="addresses" type="button">
+              Addresses
+            </button>
+            <button
+              class="acc-nav-btn logout-btn"
+              id="sidebarLogout"
+              type="button"
+            >
+              Logout
+            </button>
+          </nav>
+
+          <!-- Operational access - shown only for verified admins -->
+          <div
+            class="acc-admin-section"
+            id="accAdminSection"
+            aria-hidden="true"
+          >
+            <div class="acc-admin-card">
+              <div class="acc-admin-card-head">
+                <span class="acc-admin-card-head-icon" aria-hidden="true"
+                  ></span
+                >
+                <span class="acc-admin-card-head-label">Operations</span>
+              </div>
+              <div class="acc-admin-links">
+                <a
+                  href="admin.html"
+                  class="acc-admin-link"
+                  aria-label="Operations Panel"
+                >
+                  <span class="acc-admin-link-icon" aria-hidden="true"></span>
+                  Operations Panel
+                </a>
+                <a
+                  href="admin-orders.html"
+                  class="acc-admin-link"
+                  aria-label="Order Fulfillment"
+                >
+                  <span class="acc-admin-link-icon" aria-hidden="true"></span>
+                  Fulfillment
+                </a>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Main -->
+        <div class="acc-main">
+          <!-- PROFILE TAB -->
+          <section class="acc-panel active" id="tab-profile">
+            <div class="panel-head">
+              <h1 class="panel-title">
+                Hello, <em id="greetName">there</em>
+              </h1>
+              <p class="panel-sub">Welcome back to your Chic Charms account</p>
+            </div>
+
+            <div class="stat-grid">
+              <div class="stat-box">
+                <div class="stat-num" id="statOrders">-</div>
+                <div class="stat-label">Orders</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-num" id="statAddrs">-</div>
+                <div class="stat-label">Addresses</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-num" id="statSpend">-</div>
+                <div class="stat-label">Total Spent</div>
+              </div>
+            </div>
+
+            <div class="acc-card">
+              <div class="info-row">
+                <span class="info-label">Email</span>
+                <span class="info-val" id="infoEmail">-</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">User ID</span>
+                <span
+                  class="info-val"
+                  id="infoUid"
+                  style="font-size: 0.73rem; color: var(--muted)"
+                  >-</span
+                >
+              </div>
+              <div class="info-row">
+                <span class="info-label">Member since</span>
+                <span class="info-val" id="infoSince">-</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Status</span>
+                <span class="info-val" style="color: #2e7d32">Active</span>
+              </div>
+            </div>
+
+            <!-- -- Contact info (from users/{uid}) -- -->
+            <div class="acc-card">
+              <p
+                style="
+                  font-size: 0.84rem;
+                  color: var(--muted);
+                  margin-bottom: 12px;
+                  font-weight: 600;
+                "
+              >
+                Contact &amp; Delivery Info
+              </p>
+              <div class="info-row">
+                <span class="info-label">Name</span>
+                <span class="info-val" id="profileName">-</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Phone</span>
+                <span class="info-val" id="profilePhone">-</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Address</span>
+                <span
+                  class="info-val"
+                  id="accountAddress"
+                  style="max-width: 260px; text-align: right; line-height: 1.5"
+                  >-</span
+                >
+              </div>
+              <div style="margin-top: 14px">
+                <button
+                  class="btn-ghost"
+                  id="toggleEditProfileBtn"
+                  type="button"
+                >
+                   Edit Info
+                </button>
+              </div>
+
+              <!-- Edit profile form (hidden by default) -->
+              <div
+                id="editProfileForm"
+                style="
+                  display: none;
+                  margin-top: 18px;
+                  border-top: 1px solid var(--border);
+                  padding-top: 18px;
+                "
+              >
+                <div style="display: flex; flex-direction: column; gap: 12px">
+                  <div class="fg">
+                    <label for="editProfileName">Full Name</label>
+                    <input
+                      type="text"
+                      id="editProfileName"
+                      placeholder="Priya Sharma"
+                      maxlength="80"
+                      autocomplete="name"
+                    />
+                  </div>
+                  <div class="fg">
+                    <label for="editProfilePhone">Phone Number</label>
+                    <input
+                      type="tel"
+                      id="editProfilePhone"
+                      placeholder="9876543210"
+                      maxlength="10"
+                      autocomplete="tel"
+                    />
+                  </div>
+                  <div class="fg">
+                    <label for="editProfileAddress">Delivery Address</label>
+                    <input
+                      type="text"
+                      id="editProfileAddress"
+                      placeholder="Flat / Street, City, Pincode"
+                      maxlength="300"
+                      autocomplete="street-address"
+                    />
+                  </div>
+                </div>
+                <div class="form-acts" style="margin-top: 14px">
+                  <button class="btn-prime" id="saveProfileBtn" type="button">
+                    Save Changes
+                  </button>
+                  <button
+                    class="btn-ghost"
+                    id="cancelEditProfileBtn"
+                    type="button"
+                  >
+                    Cancel
+                  </button>
+                </div>
+                <div class="acc-msg" id="editProfileMsg"></div>
+              </div>
+            </div>
+
+            <div class="acc-card">
+              <p
+                style="
+                  font-size: 0.84rem;
+                  color: var(--muted);
+                  margin-bottom: 12px;
+                  font-weight: 600;
+                "
+              >
+                Edit Display Name
+              </p>
+              <div
+                style="
+                  display: flex;
+                  gap: 10px;
+                  align-items: center;
+                  flex-wrap: wrap;
+                "
+              >
+                <input
+                  type="text"
+                  id="editNameInput"
+                  placeholder="Your name"
+                  maxlength="12"
+                  aria-describedby="editNameMsg"
+                  style="
+                    flex: 1;
+                    padding: 10px 14px;
+                    border: 1.5px solid var(--border);
+                    border-radius: var(--radius);
+                    font-family: var(--font-body);
+                    font-size: 0.9rem;
+                    outline: none;
+                  "
+                />
+                <button class="btn-prime" id="saveNameBtn" type="button">
+                  Save Name
+                </button>
+              </div>
+              <div class="acc-msg" id="editNameMsg"></div>
+            </div>
+
+            <div class="acc-card">
+              <p
+                style="
+                  font-size: 0.84rem;
+                  color: var(--muted);
+                  margin-bottom: 14px;
+                "
+              >
+                Change your password via email reset:
+              </p>
+              <button class="btn-prime" id="pwResetBtn" type="button">
+                Send Password Reset
+              </button>
+              <div class="acc-msg" id="pwResetMsg"></div>
+            </div>
+          </section>
+
+          <!-- ORDERS TAB -->
+          <section class="acc-panel" id="tab-orders">
+            <div class="panel-head">
+              <h2 class="panel-title">My <em>Orders</em></h2>
+              <p class="panel-sub">Your complete purchase history</p>
+            </div>
+            <div id="ordersWrap">
+              <div class="acc-card">
+                <div class="skel skel-h" style="width: 40%"></div>
+                <div class="skel skel-h" style="width: 75%"></div>
+                <div class="skel skel-h" style="width: 55%"></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ADDRESSES TAB -->
+          <section class="acc-panel" id="tab-addresses">
+            <div class="panel-head">
+              <h2 class="panel-title">My <em>Addresses</em></h2>
+              <p class="panel-sub">Saved for faster checkout</p>
+            </div>
+
+            <button class="add-addr-toggle" id="addAddrToggle" type="button">
+              + Add new address
+            </button>
+
+            <div class="addr-form-wrap" id="addrFormWrap">
+              <div class="addr-form-title">" New Address</div>
+              <div class="acc-msg" id="addrMsg"></div>
+              <div class="fg2">
+                <div class="fg">
+                  <label for="addrName">Full Name *</label>
+                  <input
+                    type="text"
+                    id="addrName"
+                    placeholder="Priya Sharma"
+                    autocomplete="name"
+                  />
+                </div>
+                <div class="fg">
+                  <label for="addrPhone">Phone *</label>
+                  <input
+                    type="tel"
+                    id="addrPhone"
+                    placeholder="9876543210"
+                    maxlength="10"
+                  />
+                </div>
+                <div class="fg fg-full">
+                  <label for="addrStreet">Street / Locality *</label>
+                  <input
+                    type="text"
+                    id="addrStreet"
+                    placeholder="Flat 4, Rose Apartments, MG Road"
+                    autocomplete="street-address"
+                  />
+                </div>
+                <div class="fg">
+                  <label for="addrCity">City *</label>
+                  <input type="text" id="addrCity" placeholder="Chennai" />
+                </div>
+                <div class="fg">
+                  <label for="addrPin">Pincode *</label>
+                  <input
+                    type="text"
+                    id="addrPin"
+                    placeholder="600001"
+                    maxlength="6"
+                  />
+                </div>
+              </div>
+              <label class="check-row">
+                <input type="checkbox" id="addrDefault" /> Set as default
+                address
+              </label>
+              <div class="form-acts">
+                <button class="btn-prime" id="saveAddrBtn" type="button">
+                  Save Address
+                </button>
+                <button class="btn-ghost" id="cancelAddrBtn" type="button">
+                  Cancel
+                </button>
+              </div>
+            </div>
+
+            <div id="addrsWrap">
+              <div class="acc-card">
+                <div class="skel skel-h" style="width: 55%"></div>
+                <div class="skel skel-h" style="width: 80%"></div>
+              </div>
+            </div>
+          </section>
+        </div>
+        <!-- /acc-main -->
+      </div>
+      <!-- /acc-container -->
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="container footer-inner">
+        <div class="footer-brand">
+          <p class="logo">Chic<span>Charms</span></p>
+          <p class="footer-tagline">Your glow-up starts here.</p>
+        </div>
+        <nav class="footer-links">
+          <a href="#">About Us</a><a href="#">FAQs</a> <a href="#">Shipping</a
+          ><a href="#">Returns</a><a href="#">Contact</a>
+        </nav>
+      </div>
+      <p class="footer-copy">&copy; 2025 ChicCharms. Made in India.</p>
+    </footer>
+
+    <script type="module">
+      /* ============================================================
+       account.html - Dashboard logic
+       Single Firebase import from auth.js
+    ============================================================ */
+      import {
+        auth,
+        onAuthStateChanged,
+        signOut,
+        updateProfile,
+      } from "./auth.js";
+      import { isAdmin } from "./auth-ui.js";
+      import {
+        getFirestore,
+        collection,
+        query,
+        where,
+        orderBy,
+        getDocs,
+        addDoc,
+        deleteDoc,
+        updateDoc,
+        doc,
+        getDoc,
+        setDoc,
+        serverTimestamp,
+      } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+      import { sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+      const db = getFirestore();
+      const DISPLAY_NAME_MAX = 12;
+
+      /* ============================================================
+       STATE MANAGEMENT
+       AccountState prepares this page for future account.js extraction.
+    ============================================================ */
+      const AccountState = {
+        user: null,
+        orders: [],
+        addresses: [],
+        profile: {},
+        loaded: {
+          orders: false,
+          addresses: false,
+        },
+      };
+
+      let user = null;
+      let orders = [];
+      let addrs = [];
+      let userProfile = {}; // data from users/{uid}
+      let ordersLoaded = false;
+      let addrsLoaded = false;
+
+      function syncAccountStateAliases() {
+        AccountState.user = user;
+        AccountState.orders = orders;
+        AccountState.addresses = addrs;
+        AccountState.profile = userProfile;
+        AccountState.loaded.orders = ordersLoaded;
+        AccountState.loaded.addresses = addrsLoaded;
+      }
+
+      /* ============================================================
+       SHARED HELPERS
+       DOM, formatting, toast, messages, and Firestore mapping.
+    ============================================================ */
+      const esc = (s) =>
+        String(s || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      const normalizeDisplayName = (value) =>
+        String(value || "").replace(/\s+/g, " ").trim();
+      const getHeaderDisplayName = (u) => {
+        const raw = normalizeDisplayName(u?.displayName || u?.email?.split("@")[0] || "");
+        return raw.length > DISPLAY_NAME_MAX
+          ? raw.slice(0, DISPLAY_NAME_MAX) + "..."
+          : raw;
+      };
+      const fmtDate = (d) => {
+        if (!d) return "-";
+        try {
+          return new Date(d).toLocaleDateString("en-IN", {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+          });
+        } catch {
+          return "-";
+        }
+      };
+      const $ = (id) => document.getElementById(id);
+      const formatINR = (value) =>
+        "Rs." + Number(value || 0).toLocaleString("en-IN");
+      const mapDocs = (snap) =>
+        snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+
+      function toast(msg, dur = 2800) {
+        const el = $("toast");
+        el.textContent = msg;
+        el.classList.add("show");
+        setTimeout(() => el.classList.remove("show"), dur);
+      }
+      function msg(id, type, text) {
+        const el = $(id);
+        el.textContent = text;
+        el.className = "acc-msg show " + (type === "err" ? "err" : "ok");
+      }
+      function clearMsg(id) {
+        $(id).className = "acc-msg";
+      }
+
+      /* -- Navbar -- */
+      const navbar = $("navbar");
+      window.addEventListener(
+        "scroll",
+        () => navbar.classList.toggle("scrolled", window.scrollY > 20),
+        { passive: true },
+      );
+
+      function buildNav(u) {
+        const nav = $("navActions");
+        if (!nav) return;
+        const displayName = u ? getHeaderDisplayName(u) : "";
+        const safeEmail = u ? esc(u.email) : "";
+        const safeName = esc(displayName);
+        nav.innerHTML = u
+          ? `<span class="nav-welcome" title="${safeEmail}"><span class="nav-welcome-text">${safeName}</span></span>
+           <a href="account.html" class="btn btn-nav btn-account">My Account</a>
+           <button type="button" class="btn btn-nav btn-logout" id="navLogoutBtn">Logout</button>
+           <button type="button" class="hamburger" id="hamburger" aria-expanded="false"><span></span><span></span><span></span></button>`
+          : `<a href="auth.html" class="btn btn-nav">Login</a>
+           <button type="button" class="hamburger" id="hamburger" aria-expanded="false"><span></span><span></span><span></span></button>`;
+        const h = $("hamburger"),
+          nl = $("navLinks");
+        if (h && nl) {
+          h.addEventListener("click", () => {
+            const o = nl.classList.toggle("open");
+            h.setAttribute("aria-expanded", o);
+          });
+        }
+        const navLogout = $("navLogoutBtn");
+        if (navLogout) {
+          navLogout.addEventListener("click", async () => {
+            await signOut(auth);
+            localStorage.removeItem("userEmail");
+            localStorage.removeItem("userId");
+            window.location.href = "index.html";
+          });
+        }
+      }
+
+      /* -- Tab switching -- */
+      document.querySelectorAll(".acc-nav-btn[data-tab]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document
+            .querySelectorAll(".acc-nav-btn")
+            .forEach((b) => b.classList.remove("active"));
+          document
+            .querySelectorAll(".acc-panel")
+            .forEach((p) => p.classList.remove("active"));
+          btn.classList.add("active");
+          $("tab-" + btn.dataset.tab).classList.add("active");
+          if (btn.dataset.tab === "orders") {
+            if (!ordersLoaded) loadOrders();
+            else renderOrders();
+          }
+          if (btn.dataset.tab === "addresses") {
+            if (!addrsLoaded) loadAddrs();
+            else renderAddrs();
+          }
+        });
+      });
+
+      /* -- Logout -- */
+      $("sidebarLogout").addEventListener("click", async () => {
+        await signOut(auth);
+        localStorage.removeItem("userEmail");
+        localStorage.removeItem("userId");
+        window.location.href = "index.html";
+      });
+
+      /* ==============================
+       AUTH GATE
+    ============================== */
+      onAuthStateChanged(auth, async (u) => {
+        console.log("[account] Auth:", u?.email || "none");
+        const overlay = $("authOverlay");
+
+        if (!u) {
+          window.location.href = "auth.html";
+          return;
+        }
+
+        user = u;
+        syncAccountStateAliases();
+        overlay.classList.add("hide");
+        setTimeout(() => overlay.remove(), 400);
+
+        buildNav(u);
+        populateProfile(u);
+        loadUserProfile(); // fetch name/phone/address from users/{uid}
+
+        /* -- Show operational section for verified admins -- */
+        const adminSection = document.getElementById("accAdminSection");
+        if (adminSection) {
+          const show = isAdmin(u);
+          adminSection.classList.toggle("admin-visible", show);
+          adminSection.setAttribute("aria-hidden", String(!show));
+        }
+
+        // Prefetch orders for stat count (silent)
+        await loadOrders(true);
+        // Also prefetch address count
+        await loadAddrs(true);
+      });
+
+      /* ==============================
+       LOAD USER PROFILE from Firestore users/{uid}
+    ============================== */
+      async function loadUserProfile() {
+        try {
+          const currentUser = auth.currentUser;
+          const userSnap = await getDoc(doc(db, "users", currentUser.uid));
+          console.log("[ACCOUNT PAGE USER DATA]", userSnap.data());
+          const userData = userSnap.data();
+          if (userSnap.exists()) {
+            userProfile = userData;
+          }
+          syncAccountStateAliases();
+          // Always render - shows fallback values even if doc is missing
+          renderProfileData();
+        } catch (e) {
+          console.warn("[account] Could not load user profile doc:", e.message);
+          syncAccountStateAliases();
+          renderProfileData();
+        }
+      }
+
+      /* Renders Firestore-sourced contact info into the profile panel */
+      function renderProfileData() {
+        const name = userProfile.name || "";
+        const phone = userProfile.phone || "";
+        const address = userProfile.address || "";
+        const pincode = userProfile.pincode || "";
+
+        const nameEl = $("profileName");
+        const phoneEl = $("profilePhone");
+        const addressEl = document.getElementById("accountAddress");
+        if (nameEl) nameEl.textContent = name || "-";
+        if (phoneEl) phoneEl.textContent = phone || "-";
+        if (addressEl) addressEl.textContent = address || "No address saved";
+
+        // Sync address count stat from userProfile if addresses collection is empty
+        if (!addrsLoaded || addrs.length === 0) {
+          $("statAddrs").textContent = address ? "1" : "0";
+        }
+
+        // Re-render Addresses tab if already loaded but showing empty
+        if (addrsLoaded && addrs.length === 0) {
+          renderAddrs();
+        }
+
+        // Pre-fill edit form
+        const enEl = $("editProfileName");
+        const epEl = $("editProfilePhone");
+        const eaEl = $("editProfileAddress");
+        if (enEl && !enEl.value) enEl.value = name;
+        if (epEl && !epEl.value) epEl.value = phone;
+        if (eaEl && !eaEl.value) eaEl.value = address;
+      }
+
+      /* ==============================
+       PROFILE
+    ============================== */
+      function populateProfile(u) {
+        const email = u.email || "-";
+        const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : s);
+        const since = u.metadata?.creationTime
+          ? fmtDate(u.metadata.creationTime)
+          : "-";
+        // Use Firebase displayName if set, else derive from email
+        const firstName = u.displayName
+          ? u.displayName
+          : email.split("@")[0].replace(/[._]/g, " ").split(" ")[0];
+        const initial = firstName[0].toUpperCase();
+
+        $("accAvatar").textContent = initial;
+        $("accDisplayName").textContent = cap(firstName);
+        $("accEmailLabel").textContent = email;
+        $("accSince").textContent = "Member since " + since;
+        $("greetName").textContent = cap(firstName);
+        $("infoEmail").textContent = email;
+        $("infoUid").textContent = u.uid;
+        $("infoSince").textContent = since;
+        // Populate name edit input
+        const nameInput = $("editNameInput");
+        if (nameInput) nameInput.value = normalizeDisplayName(u.displayName || "");
+      }
+
+      function validateDisplayName(showSuccess = false) {
+        const input = $("editNameInput");
+        if (!input) return "";
+        const normalized = normalizeDisplayName(input.value);
+
+        if (!normalized) {
+          msg("editNameMsg", "err", "Please enter a display name.");
+          return "";
+        }
+
+        if (normalized.length > DISPLAY_NAME_MAX) {
+          msg(
+            "editNameMsg",
+            "err",
+            "Display name must be " + DISPLAY_NAME_MAX + " characters or fewer.",
+          );
+          return "";
+        }
+
+        if (input.value !== normalized) input.value = normalized;
+        if (showSuccess) clearMsg("editNameMsg");
+        return normalized;
+      }
+
+      const editNameInput = $("editNameInput");
+      if (editNameInput) {
+        editNameInput.addEventListener("input", () => {
+          const compact = editNameInput.value.replace(/\s{2,}/g, " ");
+          if (editNameInput.value !== compact) editNameInput.value = compact;
+
+          const normalized = normalizeDisplayName(editNameInput.value);
+          if (!normalized) {
+            clearMsg("editNameMsg");
+            return;
+          }
+
+          if (normalized.length >= DISPLAY_NAME_MAX) {
+            msg(
+              "editNameMsg",
+              "ok",
+              normalized.length + "/" + DISPLAY_NAME_MAX + " characters",
+            );
+          } else {
+            clearMsg("editNameMsg");
+          }
+        });
+
+        editNameInput.addEventListener("blur", () => {
+          editNameInput.value = normalizeDisplayName(editNameInput.value);
+        });
+      }
+
+      /* Save display name */
+      $("saveNameBtn").addEventListener("click", async () => {
+        const newName = validateDisplayName();
+        if (!newName) {
+          return;
+        }
+        const btn = $("saveNameBtn");
+        btn.disabled = true;
+        btn.textContent = "Saving...";
+        try {
+          await updateProfile(auth.currentUser, { displayName: newName });
+          localStorage.setItem("userName", newName);
+          populateProfile(auth.currentUser);
+          buildNav(auth.currentUser);
+          msg("editNameMsg", "ok", "Name updated to " + newName);
+        } catch (e) {
+          msg("editNameMsg", "err", e.message);
+        }
+        btn.disabled = false;
+        btn.textContent = "Save Name";
+      });
+
+      /* -- Edit Profile (name / phone / address -> users/{uid}) -- */
+      $("toggleEditProfileBtn").addEventListener("click", () => {
+        const form = $("editProfileForm");
+        const isOpen = form.style.display === "block";
+        form.style.display = isOpen ? "none" : "block";
+        $("toggleEditProfileBtn").textContent = isOpen
+          ? "Edit Info"
+          : "Cancel Edit";
+        if (!isOpen) {
+          // Pre-fill with latest values
+          const enEl = $("editProfileName");
+          const epEl = $("editProfilePhone");
+          const eaEl = $("editProfileAddress");
+          if (enEl) enEl.value = userProfile.name || "";
+          if (epEl) epEl.value = userProfile.phone || "";
+          if (eaEl) eaEl.value = userProfile.address || "";
+          clearMsg("editProfileMsg");
+          setTimeout(() => {
+            if ($("editProfileName")) $("editProfileName").focus();
+          }, 50);
+        }
+      });
+
+      $("cancelEditProfileBtn").addEventListener("click", () => {
+        $("editProfileForm").style.display = "none";
+        $("toggleEditProfileBtn").textContent = "Edit Info";
+        clearMsg("editProfileMsg");
+      });
+
+      $("saveProfileBtn").addEventListener("click", async () => {
+        const name = ($("editProfileName").value || "").trim();
+        const phone = ($("editProfilePhone").value || "").trim();
+        const address = ($("editProfileAddress").value || "").trim();
+
+        if (!name) {
+          msg("editProfileMsg", "err", "Please enter your name.");
+          return;
+        }
+
+        const btn = $("saveProfileBtn");
+        btn.disabled = true;
+        btn.textContent = "Saving...";
+
+        try {
+          await setDoc(
+            doc(db, "users", user.uid),
+            {
+              name,
+              phone,
+              address,
+              email: user.email,
+            },
+            { merge: true },
+          );
+
+          // Update local cache and re-render
+          userProfile = {
+            ...userProfile,
+            name,
+            phone,
+            address,
+            email: user.email,
+          };
+          syncAccountStateAliases();
+          renderProfileData();
+
+          $("editProfileForm").style.display = "none";
+          $("toggleEditProfileBtn").textContent = "Edit Info";
+          clearMsg("editProfileMsg");
+          toast("Profile updated!");
+        } catch (e) {
+          msg("editProfileMsg", "err", e.message);
+        }
+        btn.disabled = false;
+        btn.textContent = "Save Changes";
+      });
+
+      /* Password reset */
+      $("pwResetBtn").addEventListener("click", async () => {
+        const btn = $("pwResetBtn");
+        btn.disabled = true;
+        btn.textContent = "Sending...";
+        try {
+          await sendPasswordResetEmail(auth, user.email);
+          msg("pwResetMsg", "ok", "Reset email sent to " + user.email);
+        } catch (e) {
+          msg("pwResetMsg", "err", e.message);
+        }
+        btn.disabled = false;
+        btn.textContent = "Send Password Reset";
+      });
+
+      /* ==============================
+       ORDERS
+    ============================== */
+      /* Sort orders client-side (avoids requiring a Firestore composite index) */
+      function sortOrdersDesc(arr) {
+        return arr.slice().sort(function (a, b) {
+          const ta = a.createdAt?.toMillis
+            ? a.createdAt.toMillis()
+            : a.createdAt
+              ? new Date(a.createdAt).getTime()
+              : 0;
+          const tb = b.createdAt?.toMillis
+            ? b.createdAt.toMillis()
+            : b.createdAt
+              ? new Date(b.createdAt).getTime()
+              : 0;
+          return tb - ta;
+        });
+      }
+
+      async function loadOrders(silent = false) {
+        if (!silent) {
+          $("ordersWrap").innerHTML = `<div class="acc-card">
+          <div class="skel skel-h" style="width:40%"></div>
+          <div class="skel skel-h" style="width:75%"></div>
+          <div class="skel skel-h" style="width:55%"></div>
+        </div>`;
+        }
+
+        console.log("[account] Loading orders for uid:", user.uid);
+
+        /* Strategy 1: query by userId (NO orderBy - avoids composite index requirement) */
+        try {
+          const q = query(
+            collection(db, "orders"),
+            where("userId", "==", user.uid),
+          );
+          const snap = await getDocs(q);
+          orders = sortOrdersDesc(mapDocs(snap));
+          console.log(
+            "[account]  Orders loaded by userId:",
+            orders.length,
+            "orders",
+          );
+        } catch (err) {
+          console.warn(
+            "[account] userId query failed, trying userEmail fallback:",
+            err.message,
+          );
+
+          /* Strategy 2: fall back to userEmail (for orders saved before userId was added) */
+          try {
+            const q2 = query(
+              collection(db, "orders"),
+              where("userEmail", "==", user.email),
+            );
+            const snap2 = await getDocs(q2);
+            orders = sortOrdersDesc(mapDocs(snap2));
+            console.log(
+              "[account]  Orders loaded by userEmail (fallback):",
+              orders.length,
+              "orders",
+            );
+          } catch (err2) {
+            console.error(
+              "[account]  Both order queries failed:",
+              err2.message,
+            );
+            orders = [];
+            if (!silent) {
+              $("ordersWrap").innerHTML =
+                `<div class="acc-card" style="color:#c62828;font-size:0.85rem;">
+               Could not load orders. Please refresh the page or contact support.
+            </div>`;
+            }
+          }
+        }
+
+        ordersLoaded = true;
+        syncAccountStateAliases();
+
+        updateOrderStats();
+
+        if (!silent) renderOrders();
+      }
+
+      function updateOrderStats() {
+        const spend = orders.reduce(
+          (s, o) => s + Number(o.totalAmount || o.total || 0),
+          0,
+        );
+        $("statOrders").textContent = orders.length;
+        $("statSpend").textContent = orders.length ? formatINR(spend) : "Rs.0";
+      }
+
+      function renderOrders() {
+        const wrap = $("ordersWrap");
+        if (!orders.length) {
+          wrap.innerHTML = `<div class="empty-state">
+          <div class="empty-icon"></div>
+          <h3>No orders yet</h3>
+          <p>Your orders will appear here after checkout.</p>
+          <a href="index.html#bestsellers" class="btn-prime" style="display:inline-block;margin-top:16px;text-decoration:none;">Shop Now</a>
+        </div>`;
+          return;
+        }
+
+        wrap.innerHTML = orders.map(renderOrderCardHTML).join("");
+      }
+
+      function renderOrderCardHTML(order) {
+        const date =
+          order.date ||
+          (order.createdAt?.toDate ? fmtDate(order.createdAt.toDate()) : "-");
+        const items = order.items || [];
+        const isCod = order.paymentMethod !== "razorpay";
+        const total = order.totalAmount || order.total || 0;
+        const status = order.status || "Placed";
+
+        return `<div class="order-card">
+        <div class="order-head">
+          <div>
+            <div class="order-id">Order #${esc(order.id?.slice(-8) || "-")}</div>
+            <div class="order-date">${esc(date)}</div>
+            ${order.address ? `<div style="font-size:0.75rem;color:var(--muted);margin-top:2px">${esc(order.address)}</div>` : ""}
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;">
+            <span class="order-badge ${isCod ? "cod" : ""}">${isCod ? "COD" : "Paid"}</span>
+            <span style="font-size:0.65rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;padding:3px 9px;border-radius:999px;background:#e3f2fd;color:#1565c0;">${esc(status)}</span>
+          </div>
+        </div>
+        <div class="order-body">
+          ${
+            items.length
+              ? items
+                  .map(
+                    (it) => `<div class="order-item">
+                <span>${esc(it.name)}${it.quantity > 1 ? " x" + it.quantity : ""}</span>
+                <span class="order-item-price">${formatINR(it.price)}</span>
+              </div>`,
+                  )
+                  .join("")
+              : '<div class="order-item" style="color:var(--muted)">-</div>'
+          }
+        </div>
+        <div class="order-foot">
+          <span class="order-foot-label">Order Total</span>
+          <span class="order-total">${formatINR(total)}</span>
+        </div>
+      </div>`;
+      }
+
+      /* ==============================
+       ADDRESSES
+    ============================== */
+      async function loadAddrs(silent = false) {
+        if (!silent) {
+          $("addrsWrap").innerHTML = `<div class="acc-card">
+          <div class="skel skel-h" style="width:55%"></div>
+          <div class="skel skel-h" style="width:80%"></div>
+        </div>`;
+        }
+
+        try {
+          const q = query(
+            collection(db, "addresses"),
+            where("userEmail", "==", user.email),
+          );
+          const snap = await getDocs(q);
+          addrs = mapDocs(snap);
+        } catch (err) {
+          console.error("[account] Address load error:", err.message);
+          addrs = [];
+        }
+
+        addrsLoaded = true;
+        syncAccountStateAliases();
+        // Use collection count if non-zero, otherwise fall back to userProfile.address
+        $("statAddrs").textContent =
+          addrs.length > 0 ? addrs.length : userProfile.address ? "1" : "0";
+        if (!silent) renderAddrs();
+      }
+
+      function renderAddrs() {
+        const wrap = $("addrsWrap");
+
+        // If no addresses from dedicated collection, fall back to userProfile data
+        if (!addrs.length) {
+          const { name, phone, address, pincode } = userProfile;
+          if (address) {
+            wrap.innerHTML = `<div class="addr-grid">
+            <div class="addr-card is-default">
+              <span class="default-badge">Default</span>
+              <div class="addr-name">${esc(name || "-")}</div>
+              <div class="addr-phone">${esc(phone || "-")}</div>
+              <div class="addr-text">${esc(address)}${pincode ? " - " + esc(pincode) : ""}</div>
+            </div>
+          </div>`;
+            return;
+          }
+          wrap.innerHTML = `<div class="empty-state" style="padding:36px 24px">
+          <div class="empty-icon"></div>
+          <h3>No saved addresses</h3>
+          <p>Add an address above for quicker checkout.</p>
+        </div>`;
+          return;
+        }
+        wrap.innerHTML = `<div class="addr-grid">${addrs
+          .map(
+            (a) => `
+        <div class="addr-card ${a.isDefault ? "is-default" : ""}">
+          ${a.isDefault ? '<span class="default-badge">Default</span>' : ""}
+          <div class="addr-name">${esc(a.name)}</div>
+          <div class="addr-phone">${esc(a.phone)}</div>
+          <div class="addr-text">${esc(a.address)}, ${esc(a.city)} - ${esc(a.pincode)}</div>
+          <div class="addr-btns">
+            ${!a.isDefault ? `<button class="addr-btn-sm primary" data-setdef="${a.id}" type="button">Set Default</button>` : ""}
+            <button class="addr-btn-sm danger" data-del="${a.id}" type="button">Delete</button>
+          </div>
+        </div>`,
+          )
+          .join("")}</div>`;
+
+        wrap
+          .querySelectorAll("[data-setdef]")
+          .forEach((btn) =>
+            btn.addEventListener("click", () => setDefault(btn.dataset.setdef)),
+          );
+        wrap
+          .querySelectorAll("[data-del]")
+          .forEach((btn) =>
+            btn.addEventListener("click", () => delAddr(btn.dataset.del)),
+          );
+      }
+
+      async function setDefault(id) {
+        try {
+          await Promise.all(
+            addrs.map((a) =>
+              updateDoc(doc(db, "addresses", a.id), { isDefault: a.id === id }),
+            ),
+          );
+          addrs = addrs.map((a) => ({ ...a, isDefault: a.id === id }));
+          syncAccountStateAliases();
+          renderAddrs();
+          toast("Default address updated");
+        } catch (e) {
+          toast(e.message);
+        }
+      }
+
+      async function delAddr(id) {
+        if (!confirm("Delete this address?")) return;
+        try {
+          await deleteDoc(doc(db, "addresses", id));
+          addrs = addrs.filter((a) => a.id !== id);
+          syncAccountStateAliases();
+          $("statAddrs").textContent = addrs.length;
+          renderAddrs();
+          toast("Address removed");
+        } catch (e) {
+          toast(e.message);
+        }
+      }
+
+      /* -- Add address form -- */
+      $("addAddrToggle").addEventListener("click", () => {
+        const open = $("addrFormWrap").classList.toggle("open");
+        $("addAddrToggle").textContent = open
+          ? "Close form"
+          : "Add new address";
+        if (open) setTimeout(() => $("addrName").focus(), 50);
+      });
+      $("cancelAddrBtn").addEventListener("click", () => {
+        $("addrFormWrap").classList.remove("open");
+        $("addAddrToggle").textContent = "Add new address";
+        resetAddrForm();
+      });
+
+      function resetAddrForm() {
+        ["addrName", "addrPhone", "addrStreet", "addrCity", "addrPin"].forEach(
+          (id) => ($(id).value = ""),
+        );
+        $("addrDefault").checked = false;
+        clearMsg("addrMsg");
+      }
+
+      $("saveAddrBtn").addEventListener("click", async () => {
+        const name = $("addrName").value.trim();
+        const phone = $("addrPhone").value.trim();
+        const address = $("addrStreet").value.trim();
+        const city = $("addrCity").value.trim();
+        const pincode = $("addrPin").value.trim();
+        const isDef = $("addrDefault").checked;
+
+        if (!name || !phone || !address || !city || !pincode) {
+          msg("addrMsg", "err", "Please fill in all fields.");
+          return;
+        }
+        if (!/^\d{10}$/.test(phone)) {
+          msg("addrMsg", "err", "Phone must be 10 digits.");
+          return;
+        }
+        if (!/^\d{6}$/.test(pincode)) {
+          msg("addrMsg", "err", "Pincode must be 6 digits.");
+          return;
+        }
+
+        const btn = $("saveAddrBtn");
+        btn.disabled = true;
+        btn.textContent = "Saving...";
+
+        try {
+          const makeDefault = isDef || addrs.length === 0;
+          if (makeDefault) {
+            await Promise.all(
+              addrs.map((a) =>
+                updateDoc(doc(db, "addresses", a.id), { isDefault: false }),
+              ),
+            );
+            addrs = addrs.map((a) => ({ ...a, isDefault: false }));
+          }
+          const data = {
+            userEmail: user.email,
+            name,
+            phone,
+            address,
+            city,
+            pincode,
+            isDefault: makeDefault,
+            createdAt: serverTimestamp(),
+          };
+          const ref = await addDoc(collection(db, "addresses"), data);
+          addrs.push({ id: ref.id, ...data });
+          syncAccountStateAliases();
+
+          $("statAddrs").textContent = addrs.length;
+          $("addrFormWrap").classList.remove("open");
+          $("addAddrToggle").textContent = "Add new address";
+          resetAddrForm();
+          renderAddrs();
+          toast("Address saved!");
+        } catch (e) {
+          msg("addrMsg", "err", e.message);
+        }
+
+        btn.disabled = false;
+        btn.textContent = "Save Address";
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,2155 @@
+/* ============================================================
+   CHIC CHARMS — d8-luxury-polish.css
+   Phase D8 · World-Class Luxury Polish + Premium Refinement
+   Additive layer — final editorial refinement pass
+   ============================================================ */
+
+/* ── D8 Refined Token Extensions ── */
+:root {
+  /* ── Atmosphere: Richer depth palette ── */
+  --cream-warm: #FAF6F0;
+  /* warmer cream variant */
+  --blush-ultra: #FDF5F8;
+  /* near-white blush, softer */
+  --parchment-soft: #F7F2EC;
+  /* lighter parchment */
+  --charcoal-warm: #1A1714;
+  /* warmer near-black */
+  --rose-mid: #C27089;
+  /* mid rose — fills gap */
+  --rose-glow: rgba(212, 135, 156, 0.14);
+  --gold-accent: #C9A96E;
+  --gold-pale: rgba(201, 169, 110, 0.08);
+
+  /* ── Refined Shadows — softer, more layered ── */
+  --shadow-2xs: 0 1px 2px rgba(60, 40, 30, 0.04);
+  --shadow-ambient: 0 2px 8px rgba(60, 40, 30, 0.04), 0 0 1px rgba(60, 40, 30, 0.03);
+  --shadow-card-d8: 0 2px 12px rgba(60, 40, 30, 0.06), 0 6px 32px rgba(60, 40, 30, 0.07);
+  --shadow-hover-d8: 0 8px 32px rgba(60, 40, 30, 0.10), 0 20px 56px rgba(60, 40, 30, 0.08);
+  --shadow-float-d8: 0 16px 48px rgba(60, 40, 30, 0.12), 0 4px 16px rgba(60, 40, 30, 0.06);
+  --shadow-rose-d8: 0 6px 24px rgba(180, 100, 120, 0.18), 0 2px 8px rgba(180, 100, 120, 0.10);
+
+  /* ── Refined Radii — more intentional ── */
+  --radius-2xs: 4px;
+  --radius-xs: 8px;
+  --radius-pill: 100px;
+
+  /* ── Easing — cinematic luxury curves ── */
+  --ease-d8-silk: cubic-bezier(0.18, 1, 0.28, 1);
+  --ease-d8-gentle: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-d8-spring: cubic-bezier(0.34, 1.20, 0.64, 1);
+  --ease-d8-exit: cubic-bezier(0.45, 0, 0.75, 0.2);
+
+  /* ── Duration refinements ── */
+  --dur-d8-micro: 120ms;
+  --dur-d8-swift: 220ms;
+  --dur-d8-flow: 400ms;
+  --dur-d8-breath: 600ms;
+  --dur-d8-cinematic: 860ms;
+
+  /* ── Spacing: finer granularity ── */
+  --space-3xs: 4px;
+  --space-2xs: 6px;
+
+  /* ── Typography refinements ── */
+  --tracking-tight: -0.025em;
+  --tracking-normal: -0.01em;
+  --tracking-open: 0.01em;
+  --tracking-wide: 0.08em;
+  --tracking-wider: 0.15em;
+  --tracking-widest: 0.25em;
+
+  --lh-display: 1.06;
+  --lh-heading: 1.14;
+  --lh-body: 1.75;
+  --lh-loose: 1.95;
+  --lh-tight: 1.35;
+}
+
+/* ============================================================
+   D8 · GLOBAL POLISH — Body + Base Refinements
+   ============================================================ */
+
+/* Smoother, more intentional body rendering */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  line-height: var(--lh-body);
+  letter-spacing: 0.012em;
+  /* Subtly refined page entrance */
+  animation: d8-page-breath var(--dur-d8-cinematic) var(--ease-d8-silk) both;
+}
+
+@keyframes d8-page-breath {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* Image loading polish */
+img {
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* Refined focus system — luxury keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--rose);
+  outline-offset: 3px;
+  border-radius: var(--radius-2xs);
+  transition: outline-offset var(--dur-d8-micro) ease;
+}
+
+/* Selection — brand-aligned */
+::selection {
+  background: rgba(212, 135, 156, 0.20);
+  color: var(--charcoal);
+}
+
+/* Refined scrollbar — desktop luxury feel */
+@media (min-width: 901px) {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--cream);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--sand);
+    border-radius: 4px;
+    border: 2px solid var(--cream);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--taupe);
+  }
+}
+
+/* ============================================================
+   D8 · TYPOGRAPHY — Editorial Refinement Pass
+   ============================================================ */
+
+/* Heading rhythm */
+h1 {
+  font-size: clamp(2.6rem, 6vw, 5rem);
+  line-height: var(--lh-display);
+  letter-spacing: var(--tracking-tight);
+  font-weight: 500;
+}
+
+h2 {
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-normal);
+}
+
+h3 {
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-open);
+}
+
+/* Refined heading weights for Playfair */
+.font-head-d8,
+.font-editorial-d8 {
+  font-family: var(--font-head);
+  font-feature-settings: "onum" 1, "liga" 1;
+}
+
+/* Section eyebrow — tighter, more refined */
+.section-eyebrow {
+  font-size: 0.62rem;
+  letter-spacing: var(--tracking-widest);
+  font-weight: 700;
+  opacity: 0.95;
+}
+
+/* Section title — refined rhythm */
+.section-title {
+  font-size: clamp(1.9rem, 3.5vw, 3rem);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-tight);
+  margin-bottom: 52px;
+}
+
+/* ============================================================
+   D8 · NAVBAR — Ultra-Refined
+   ============================================================ */
+
+.navbar {
+  background: rgba(250, 248, 245, 0.92);
+  backdrop-filter: blur(28px) saturate(2.0) brightness(1.01);
+  -webkit-backdrop-filter: blur(28px) saturate(2.0) brightness(1.01);
+  border-bottom: 1px solid rgba(237, 230, 221, 0.6);
+  transition:
+    background var(--dur-d8-breath) var(--ease-d8-silk),
+    box-shadow var(--dur-d8-breath) var(--ease-d8-silk),
+    border-color var(--dur-d8-breath) ease;
+}
+
+.navbar.scrolled {
+  background: rgba(250, 248, 245, 0.97);
+  box-shadow:
+    0 1px 0 rgba(237, 230, 221, 0.9),
+    0 4px 24px rgba(60, 40, 30, 0.06),
+    0 12px 40px rgba(60, 40, 30, 0.04);
+  border-bottom-color: rgba(237, 230, 221, 0.8);
+}
+
+/* Logo — cinematic letter-spacing hover */
+.logo {
+  letter-spacing: 0.015em;
+  transition:
+    letter-spacing var(--dur-d8-breath) var(--ease-d8-silk),
+    opacity var(--dur-d8-flow) ease;
+}
+
+.logo:hover {
+  letter-spacing: 0.04em;
+  opacity: 0.78;
+}
+
+/* Nav links — refined underline animation */
+.nav-links a {
+  font-size: 0.68rem;
+  letter-spacing: var(--tracking-wider);
+  font-weight: 600;
+  transition: color var(--dur-d8-swift) var(--ease-d8-silk);
+  padding-bottom: 1px;
+}
+
+.nav-links a::after {
+  transform-origin: right center;
+  transition: transform var(--dur-d8-flow) var(--ease-d8-silk);
+  height: 1px;
+  bottom: -2px;
+  background: var(--rose-mid);
+  opacity: 0.85;
+}
+
+.nav-links a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+
+/* ============================================================
+   D8 · HERO — Final Cinematic Polish
+   ============================================================ */
+
+.hero {
+  background: var(--cream-warm);
+}
+
+.hero-bg-layer {
+  background:
+    radial-gradient(ellipse 75% 65% at 85% 15%, rgba(212, 135, 156, 0.09) 0%, transparent 55%),
+    radial-gradient(ellipse 55% 55% at 8% 82%, rgba(237, 230, 221, 0.5) 0%, transparent 58%),
+    radial-gradient(ellipse 40% 40% at 50% 100%, rgba(250, 241, 244, 0.3) 0%, transparent 60%);
+}
+
+.hero-headline {
+  font-size: clamp(3.4rem, 6.2vw, 5.6rem);
+  line-height: 1.10;
+  letter-spacing: -0.025em;
+  word-spacing: 0.02em;
+  font-weight: 500;
+}
+
+.hero-headline em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--rose-mid);
+  letter-spacing: -0.015em;
+  word-spacing: 0;
+}
+
+.hero-sub {
+  font-size: 0.98rem;
+  line-height: var(--lh-loose);
+  letter-spacing: 0.015em;
+  font-weight: 300;
+  color: var(--muted);
+  max-width: 370px;
+}
+
+.hero-eyebrow {
+  font-size: 0.63rem;
+  letter-spacing: var(--tracking-widest);
+  font-weight: 700;
+  color: var(--rose-dark);
+  margin-bottom: 32px;
+}
+
+/* Hero image: more refined shadow system */
+.hero-img {
+  box-shadow:
+    0 4px 16px rgba(60, 40, 30, 0.06),
+    0 16px 56px rgba(60, 40, 30, 0.10),
+    0 0 0 1px rgba(237, 230, 221, 0.35);
+}
+
+/* Float card — more refined */
+.hero-float-card {
+  box-shadow: var(--shadow-float-d8);
+  border: 1px solid rgba(237, 230, 221, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Scroll hint — softer pulsing */
+.scroll-line {
+  animation: d8-scroll-pulse 2.4s var(--ease-d8-silk) infinite;
+}
+
+@keyframes d8-scroll-pulse {
+
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scaleY(0.7);
+    transform-origin: top;
+  }
+
+  50% {
+    opacity: 0.75;
+    transform: scaleY(1);
+  }
+}
+
+/* ============================================================
+   D8 · MARQUEE — Premium Atmosphere Strip
+   ============================================================ */
+
+.marquee-wrap {
+  background: var(--charcoal-warm);
+  padding: 13px 0;
+  border-top: none;
+  border-bottom: none;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Elegant edge fade */
+.marquee-wrap::before,
+.marquee-wrap::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.marquee-wrap::before {
+  left: 0;
+  background: linear-gradient(to right, var(--charcoal-warm), transparent);
+}
+
+.marquee-wrap::after {
+  right: 0;
+  background: linear-gradient(to left, var(--charcoal-warm), transparent);
+}
+
+.marquee-track span {
+  font-size: 0.60rem;
+  letter-spacing: 0.24em;
+  color: rgba(250, 241, 244, 0.45);
+}
+
+.marquee-diamond {
+  color: rgba(212, 135, 156, 0.55) !important;
+}
+
+/* ============================================================
+   D8 · SECTION SYSTEM — Breathing Room & Visual Rhythm
+   ============================================================ */
+
+.section {
+  padding: 96px 0;
+  position: relative;
+}
+
+/* Subtle section dividers — atmospheric */
+.section+.section {
+  border-top: 1px solid rgba(237, 230, 221, 0.4);
+}
+
+/* Override for sections with contrasting backgrounds */
+.categories+.bestsellers,
+.bestsellers+.why-us,
+.why-us+.testimonials,
+.testimonials+.gallery-section,
+.gallery-section+.newsletter-section {
+  border-top: none;
+}
+
+.section-header-row {
+  margin-bottom: 56px;
+}
+
+.section-view-all {
+  font-size: 0.65rem;
+  letter-spacing: var(--tracking-wider);
+  color: var(--taupe);
+  gap: 7px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
+  transition:
+    color var(--dur-d8-swift) ease,
+    border-color var(--dur-d8-swift) ease,
+    gap var(--dur-d8-flow) var(--ease-d8-silk);
+}
+
+.section-view-all:hover {
+  color: var(--rose-dark);
+  border-bottom-color: var(--rose-light);
+  gap: 11px;
+}
+
+/* ============================================================
+   D8 · BUTTONS — Tactile Luxury Polish
+   ============================================================ */
+
+/* Global button refinement */
+.btn {
+  border-radius: var(--radius-2xs);
+  letter-spacing: var(--tracking-wider);
+  font-size: 0.76rem;
+  font-weight: 600;
+  transition:
+    background var(--dur-d8-flow) var(--ease-d8-silk),
+    color var(--dur-d8-flow) var(--ease-d8-silk),
+    transform var(--dur-d8-swift) var(--ease-d8-gentle),
+    box-shadow var(--dur-d8-flow) var(--ease-d8-silk),
+    border-color var(--dur-d8-flow) ease,
+    letter-spacing var(--dur-d8-breath) var(--ease-d8-silk);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Primary — refined glow system */
+.btn-primary {
+  background: var(--rose-dark);
+  padding: 16px 44px;
+  letter-spacing: var(--tracking-wider);
+  box-shadow: var(--shadow-rose-d8);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.10) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity var(--dur-d8-flow) ease;
+}
+
+.btn-primary:hover::before {
+  opacity: 1;
+}
+
+.btn-primary:hover {
+  background: #A5566E;
+  box-shadow:
+    0 8px 28px rgba(181, 101, 122, 0.32),
+    0 2px 8px rgba(181, 101, 122, 0.16);
+  transform: translateY(-1.5px);
+  letter-spacing: 0.155em;
+}
+
+.btn-primary:active {
+  transform: scale(0.972) translateY(0) !important;
+  box-shadow: var(--shadow-rose-d8) !important;
+  transition-duration: var(--dur-d8-micro) !important;
+}
+
+/* Ghost — refined elegance */
+.btn-ghost {
+  padding: 15px 38px;
+  border-color: var(--sand);
+  letter-spacing: var(--tracking-wide);
+}
+
+.btn-ghost:hover {
+  border-color: var(--rose-mid);
+  color: var(--rose-dark);
+  background: rgba(212, 135, 156, 0.04);
+  transform: translateY(-1.5px);
+}
+
+/* Cart button — refined */
+.btn-cart {
+  font-size: 0.68rem;
+  letter-spacing: var(--tracking-wide);
+  padding: 12px 18px;
+  border-color: var(--sand);
+  border-radius: var(--radius-2xs);
+  transition:
+    background var(--dur-d8-flow) var(--ease-d8-silk),
+    color var(--dur-d8-flow) var(--ease-d8-silk),
+    border-color var(--dur-d8-swift) ease,
+    transform var(--dur-d8-swift) var(--ease-d8-gentle);
+}
+
+.btn-cart:hover {
+  background: var(--charcoal-warm);
+  border-color: var(--charcoal-warm);
+  color: var(--white);
+  transform: translateY(-1px);
+}
+
+/* Lux quick add */
+.lux-quick-add-btn {
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  border-radius: var(--radius-2xs);
+  padding: 11px 32px;
+  box-shadow: 0 4px 16px rgba(28, 25, 23, 0.18);
+  transition:
+    background var(--dur-d8-swift) ease,
+    transform var(--dur-d8-swift) var(--ease-d8-spring),
+    box-shadow var(--dur-d8-swift) ease;
+}
+
+.lux-quick-add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(28, 25, 23, 0.22);
+}
+
+/* Lux cart btn */
+.lux-cart-btn {
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  border-radius: var(--radius-2xs);
+  border-color: var(--sand);
+}
+
+.lux-cart-btn:hover {
+  background: var(--charcoal-warm);
+  border-color: var(--charcoal-warm);
+  transform: translateY(-1px);
+}
+
+/* Large button */
+.btn-large {
+  padding: 18px 56px;
+  font-size: 0.80rem;
+  letter-spacing: var(--tracking-wider);
+}
+
+/* Nav btn */
+.btn-nav {
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  border-radius: var(--radius-2xs);
+  border-color: rgba(237, 230, 221, 0.8);
+  transition:
+    border-color var(--dur-d8-swift) ease,
+    color var(--dur-d8-swift) ease,
+    background var(--dur-d8-swift) ease;
+}
+
+.btn-nav:hover {
+  border-color: var(--rose-mid);
+  color: var(--rose-dark);
+  background: rgba(212, 135, 156, 0.04);
+}
+
+/* ============================================================
+   D8 · PRODUCT CARDS — World-Class Commerce Polish
+   ============================================================ */
+
+/* Legacy product card */
+.product-card {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-ambient);
+  border: 1px solid rgba(237, 230, 221, 0.5);
+  background: var(--white);
+  transition:
+    transform var(--dur-d8-flow) var(--ease-d8-silk),
+    box-shadow var(--dur-d8-flow) var(--ease-d8-silk),
+    border-color var(--dur-d8-flow) ease;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-hover-d8);
+  border-color: rgba(212, 135, 156, 0.18);
+}
+
+/* Image scale — softer, more cinematic */
+.product-img-wrap img {
+  transition: transform 0.72s var(--ease-d8-silk);
+}
+
+.product-card:hover .product-img-wrap img {
+  transform: scale(1.04);
+}
+
+/* Product overlay — refined */
+.product-overlay {
+  background: rgba(250, 248, 245, 0.42);
+  backdrop-filter: blur(3px) saturate(1.2);
+  -webkit-backdrop-filter: blur(3px) saturate(1.2);
+  transition: opacity var(--dur-d8-flow) ease;
+}
+
+/* Product info spacing */
+.product-info {
+  padding: 20px 22px 26px;
+}
+
+.product-name {
+  font-size: 1.03rem;
+  letter-spacing: 0.008em;
+  line-height: var(--lh-tight);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.product-desc {
+  font-size: 0.75rem;
+  line-height: 1.60;
+  letter-spacing: 0.015em;
+  color: var(--muted);
+  margin: 5px 0 12px;
+  font-weight: 300;
+}
+
+.product-price {
+  font-size: 1.18rem;
+  letter-spacing: -0.012em;
+  font-weight: 500;
+}
+
+/* Luxury product card (D3) */
+.product-card-lux {
+  /* Subtler lift — more premium feel */
+}
+
+.lux-img-container img {
+  transition: transform 0.90s var(--ease-d8-silk);
+}
+
+.product-card-lux:hover .lux-img-container img {
+  transform: scale(1.05);
+}
+
+.lux-hover-layer {
+  background: linear-gradient(155deg,
+      rgba(250, 248, 245, 0) 0%,
+      rgba(250, 241, 244, 0.14) 100%);
+  transition: opacity var(--dur-d8-flow) ease;
+}
+
+.lux-product-info {
+  padding: 20px 4px 22px;
+}
+
+.lux-product-category {
+  font-size: 0.56rem;
+  letter-spacing: 0.24em;
+  margin-bottom: 9px;
+  font-weight: 600;
+}
+
+.lux-product-name {
+  font-size: 0.98rem;
+  line-height: var(--lh-tight);
+  letter-spacing: 0.006em;
+  margin-bottom: 9px;
+  transition: color var(--dur-d8-swift) ease;
+}
+
+.lux-product-name:hover {
+  color: var(--rose-mid);
+}
+
+.lux-product-desc {
+  font-size: 0.73rem;
+  line-height: 1.62;
+  letter-spacing: 0.012em;
+  margin-bottom: 16px;
+}
+
+.lux-price {
+  font-size: 1.12rem;
+  letter-spacing: -0.012em;
+}
+
+/* Badge refinements */
+.lux-badge {
+  font-size: 0.54rem;
+  letter-spacing: 0.17em;
+  padding: 4px 11px;
+  border-radius: 2px;
+}
+
+.badge {
+  font-size: 0.58rem;
+  letter-spacing: 0.13em;
+  padding: 4px 11px;
+  border-radius: var(--radius-2xs);
+}
+
+/* ============================================================
+   D8 · CATEGORY CARDS — Premium Editorial Touch
+   ============================================================ */
+
+.cat-card {
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(237, 230, 221, 0.4);
+  transition:
+    transform var(--dur-d8-flow) var(--ease-d8-silk),
+    box-shadow var(--dur-d8-flow) var(--ease-d8-silk),
+    border-color var(--dur-d8-flow) ease;
+}
+
+.cat-card:hover {
+  transform: translateY(-7px);
+  box-shadow: var(--shadow-hover-d8);
+  border-color: rgba(212, 135, 156, 0.15);
+}
+
+.cat-img-wrap img {
+  transition: transform 0.80s var(--ease-d8-silk);
+}
+
+.cat-card:hover .cat-img-wrap img {
+  transform: scale(1.04);
+}
+
+.cat-info {
+  padding: 18px 20px 22px;
+}
+
+.cat-info h3 {
+  font-size: 1.02rem;
+  letter-spacing: 0.01em;
+  line-height: var(--lh-tight);
+  font-weight: 500;
+}
+
+.cat-info p {
+  font-size: 0.73rem;
+  letter-spacing: 0.03em;
+  line-height: 1.55;
+  font-weight: 300;
+  margin-top: 4px;
+}
+
+.cat-arrow {
+  transition:
+    opacity var(--dur-d8-swift) ease,
+    transform var(--dur-d8-flow) var(--ease-d8-silk);
+}
+
+.cat-card:hover .cat-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ============================================================
+   D8 · WHY-US — Feature Cards Refinement
+   ============================================================ */
+
+.why-grid {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  gap: 1px;
+  background: rgba(237, 230, 221, 0.5);
+}
+
+.why-card {
+  padding: 52px 36px;
+  background: var(--white);
+  transition: background var(--dur-d8-flow) ease;
+}
+
+.why-card:hover {
+  background: var(--blush-ultra);
+}
+
+.why-numeral {
+  font-size: 3.2rem;
+  font-weight: 400;
+  color: rgba(237, 230, 221, 0.9);
+  margin-bottom: 28px;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  transition: color var(--dur-d8-flow) ease;
+}
+
+.why-card:hover .why-numeral {
+  color: rgba(212, 135, 156, 0.22);
+}
+
+.why-card h3 {
+  font-size: 1.02rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  margin-bottom: 13px;
+  line-height: var(--lh-tight);
+}
+
+.why-card p {
+  font-size: 0.83rem;
+  line-height: 1.80;
+  font-weight: 300;
+  letter-spacing: 0.015em;
+  color: var(--muted);
+}
+
+/* ============================================================
+   D8 · TESTIMONIALS — Refined Social Proof
+   ============================================================ */
+
+.testi-grid {
+  gap: 22px;
+}
+
+.testi-card {
+  border-radius: var(--radius-lg);
+  padding: 36px 34px;
+  border: 1px solid rgba(237, 230, 221, 0.6);
+  background: var(--parchment-soft);
+  transition:
+    transform var(--dur-d8-flow) var(--ease-d8-silk),
+    box-shadow var(--dur-d8-flow) var(--ease-d8-silk),
+    background var(--dur-d8-flow) ease,
+    border-color var(--dur-d8-flow) ease;
+}
+
+.testi-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-card-d8);
+  background: var(--white);
+  border-color: rgba(212, 135, 156, 0.14);
+}
+
+.testi-stars {
+  font-size: 0.72rem;
+  letter-spacing: 3.5px;
+  margin-bottom: 20px;
+  color: var(--rose-mid);
+}
+
+.testi-text {
+  font-size: 0.94rem;
+  line-height: 1.92;
+  letter-spacing: 0.012em;
+  margin-bottom: 26px;
+  font-weight: 400;
+  color: var(--charcoal);
+}
+
+.testi-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.testi-handle {
+  font-size: 0.68rem;
+  color: var(--taupe);
+  font-weight: 300;
+  letter-spacing: 0.04em;
+}
+
+.testi-avatar {
+  border: 1.5px solid rgba(237, 230, 221, 0.8);
+  width: 42px;
+  height: 42px;
+}
+
+.testi-header {
+  border-top: 1px solid rgba(237, 230, 221, 0.7);
+  padding-top: 22px;
+}
+
+/* ============================================================
+   D8 · GALLERY — Editorial Image Experience
+   ============================================================ */
+
+.gallery-section {
+  background: var(--cream-warm);
+}
+
+.gallery-item {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.gallery-item img {
+  transition: transform 0.78s var(--ease-d8-silk);
+}
+
+.gallery-item:hover img {
+  transform: scale(1.04);
+}
+
+.gallery-overlay {
+  transition: background var(--dur-d8-flow) ease;
+}
+
+.gallery-item:hover .gallery-overlay {
+  background: rgba(28, 25, 23, 0.32);
+}
+
+.gallery-overlay span {
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  font-weight: 500;
+  transition:
+    opacity var(--dur-d8-swift) ease,
+    transform var(--dur-d8-flow) var(--ease-d8-silk);
+}
+
+.gallery-headline {
+  font-size: clamp(1.85rem, 3vw, 2.7rem);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--lh-heading);
+}
+
+/* ============================================================
+   D8 · NEWSLETTER — Luxury Invitation Polish
+   ============================================================ */
+
+.newsletter-section {
+  background: var(--parchment-soft);
+  border-top: 1px solid rgba(237, 230, 221, 0.5);
+  border-bottom: 1px solid rgba(237, 230, 221, 0.5);
+}
+
+.newsletter-headline {
+  font-size: clamp(1.85rem, 3.2vw, 2.9rem);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--lh-heading);
+}
+
+.newsletter-sub {
+  font-size: 0.9rem;
+  line-height: var(--lh-loose);
+  letter-spacing: 0.02em;
+}
+
+.newsletter-form-wrap {
+  border: 1px solid rgba(237, 230, 221, 0.9);
+  border-radius: var(--radius-2xs);
+  box-shadow: var(--shadow-ambient);
+  transition: box-shadow var(--dur-d8-flow) ease;
+}
+
+.newsletter-form-wrap:focus-within {
+  box-shadow:
+    0 0 0 3px rgba(212, 135, 156, 0.10),
+    var(--shadow-ambient);
+  border-color: rgba(212, 135, 156, 0.35);
+}
+
+.newsletter-input {
+  font-size: 0.88rem;
+  letter-spacing: 0.02em;
+  padding: 16px 22px;
+}
+
+.newsletter-input::placeholder {
+  color: var(--taupe);
+  font-style: italic;
+  font-weight: 300;
+}
+
+.newsletter-btn {
+  font-size: 0.72rem;
+  letter-spacing: var(--tracking-wider);
+  padding: 16px 32px;
+  border-radius: 0;
+}
+
+.newsletter-note {
+  font-size: 0.64rem;
+  letter-spacing: 0.10em;
+  color: var(--taupe);
+}
+
+/* ============================================================
+   D8 · FINAL CTA — Cinematic Dark Section
+   ============================================================ */
+
+.final-cta {
+  background: #13110F;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Refined atmospheric glow */
+.final-cta::before {
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle,
+      rgba(212, 135, 156, 0.09) 0%,
+      rgba(201, 169, 110, 0.04) 40%,
+      transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.cta-headline {
+  font-size: clamp(2.6rem, 5vw, 4rem);
+  line-height: var(--lh-display);
+  letter-spacing: -0.028em;
+  font-weight: 500;
+}
+
+.cta-headline em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--rose-light);
+  letter-spacing: -0.02em;
+}
+
+.cta-sub {
+  font-size: 0.94rem;
+  line-height: var(--lh-body);
+  color: rgba(255, 255, 255, 0.42);
+  letter-spacing: 0.04em;
+  margin-bottom: 44px;
+}
+
+.cta-trust {
+  font-size: 0.64rem;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.28);
+}
+
+/* CTA button on dark */
+.final-cta .btn-primary {
+  background: var(--rose-light);
+  color: var(--charcoal);
+  box-shadow:
+    0 4px 20px rgba(212, 135, 156, 0.22),
+    0 0 0 1px rgba(234, 181, 195, 0.25);
+  font-size: 0.78rem;
+  letter-spacing: var(--tracking-wider);
+}
+
+.final-cta .btn-primary:hover {
+  background: var(--white);
+  color: var(--charcoal-warm);
+  box-shadow:
+    0 8px 32px rgba(255, 255, 255, 0.18),
+    0 0 0 1px rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   D8 · BRAND STORY — Atmospheric Refinement
+   ============================================================ */
+
+.brand-story {
+  background: var(--white);
+}
+
+.brand-story-headline {
+  font-size: clamp(2.1rem, 3.6vw, 3.3rem);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-tight);
+}
+
+.brand-story-body {
+  font-size: 0.94rem;
+  line-height: var(--lh-loose);
+  letter-spacing: 0.02em;
+}
+
+.bsg-img img {
+  transition: transform 0.78s var(--ease-d8-silk);
+}
+
+.bsg-img:hover img {
+  transform: scale(1.03);
+}
+
+.bsg-stat {
+  background: var(--parchment-soft);
+  border: 1px solid rgba(237, 230, 221, 0.6);
+  transition:
+    background var(--dur-d8-flow) ease,
+    box-shadow var(--dur-d8-flow) ease;
+}
+
+.bsg-stat:hover {
+  background: var(--white);
+  box-shadow: var(--shadow-ambient);
+}
+
+.bsg-stat-num {
+  font-size: 2.1rem;
+  letter-spacing: -0.03em;
+  color: var(--rose-mid);
+}
+
+.bsg-stat-label {
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  margin-top: 7px;
+}
+
+/* ============================================================
+   D8 · COLLECTION HEADER — Editorial Refinement
+   ============================================================ */
+
+.collection-title {
+  font-size: clamp(2.5rem, 5.5vw, 4.4rem);
+  line-height: var(--lh-display);
+  letter-spacing: -0.02em;
+  font-weight: 300;
+  margin-bottom: 22px;
+}
+
+.collection-desc {
+  font-size: 0.92rem;
+  line-height: var(--lh-loose);
+  letter-spacing: 0.025em;
+}
+
+.collection-eyebrow {
+  font-size: 0.60rem;
+  letter-spacing: var(--tracking-widest);
+  font-weight: 700;
+  color: var(--gold-accent);
+  margin-bottom: 22px;
+}
+
+/* ============================================================
+   D8 · FILTER BAR — Refined Search UX
+   ============================================================ */
+
+.lux-filter-bar {
+  padding: 22px 0 34px;
+  margin-bottom: 56px;
+  border-bottom-color: rgba(237, 230, 221, 0.5);
+}
+
+.lux-search-input {
+  font-size: 0.82rem;
+  letter-spacing: 0.03em;
+  border-color: rgba(237, 230, 221, 0.8);
+  border-radius: var(--radius-2xs);
+  transition:
+    border-color var(--dur-d8-swift) ease,
+    box-shadow var(--dur-d8-swift) ease,
+    background var(--dur-d8-swift) ease;
+}
+
+.lux-search-input:focus {
+  border-color: var(--rose);
+  box-shadow:
+    0 0 0 3px rgba(212, 135, 156, 0.09),
+    0 2px 8px rgba(212, 135, 156, 0.08);
+}
+
+.lux-search-input::placeholder {
+  color: var(--taupe);
+  font-style: italic;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+
+.lux-select {
+  font-size: 0.72rem;
+  letter-spacing: 0.07em;
+  border-radius: var(--radius-2xs);
+  border-color: rgba(237, 230, 221, 0.8);
+  padding: 11px 30px 11px 14px;
+  transition:
+    border-color var(--dur-d8-swift) ease,
+    color var(--dur-d8-swift) ease,
+    background var(--dur-d8-swift) ease;
+}
+
+.lux-select.active {
+  background-color: var(--blush-ultra);
+  border-color: var(--rose);
+  color: var(--rose-dark);
+}
+
+.lux-result-count {
+  font-size: 0.68rem;
+  letter-spacing: 0.09em;
+  color: var(--taupe);
+  font-style: italic;
+  font-weight: 300;
+}
+
+/* ============================================================
+   D8 · LOADING + SKELETON — Premium States
+   ============================================================ */
+
+@keyframes d8-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton,
+.skeleton-line,
+.lux-skeleton-img,
+.lux-skeleton-line,
+.skeleton-img-wrap {
+  background: linear-gradient(90deg,
+      var(--blush-ultra) 25%,
+      rgba(243, 228, 233, 0.7) 50%,
+      var(--blush-ultra) 75%);
+  background-size: 200% 100%;
+  animation: d8-shimmer 1.8s ease-in-out infinite;
+}
+
+/* ── Luxury loading state message ── */
+.lux-loading-message {
+  font-family: var(--font-head);
+  font-size: 1rem;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-align: center;
+  padding: 40px 0;
+}
+
+/* ── Empty state — world-class ── */
+.lux-empty-state {
+  padding: 108px 24px;
+}
+
+.lux-empty-icon {
+  width: 72px;
+  height: 72px;
+  background: var(--blush-ultra);
+  border: 1px solid rgba(212, 135, 156, 0.15);
+  font-size: 1.7rem;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow-ambient);
+}
+
+.lux-empty-title {
+  font-size: 1.5rem;
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--lh-heading);
+  margin-bottom: 14px;
+  font-weight: 500;
+  font-style: italic;
+}
+
+.lux-empty-sub {
+  font-size: 0.86rem;
+  line-height: var(--lh-body);
+  letter-spacing: 0.02em;
+  font-weight: 300;
+  max-width: 300px;
+  margin-bottom: 36px;
+}
+
+.lux-empty-btn {
+  font-size: 0.70rem;
+  letter-spacing: var(--tracking-wider);
+  padding: 13px 36px;
+  border-radius: var(--radius-2xs);
+  border-color: var(--sand);
+  transition:
+    background var(--dur-d8-flow) ease,
+    color var(--dur-d8-flow) ease,
+    transform var(--dur-d8-swift) var(--ease-d8-spring);
+}
+
+.lux-empty-btn:hover {
+  transform: translateY(-1px);
+}
+
+/* ============================================================
+   D8 · TOAST NOTIFICATION — Premium Feedback
+   ============================================================ */
+
+.cart-toast {
+  background: rgba(26, 23, 20, 0.94);
+  backdrop-filter: blur(20px) saturate(1.5);
+  -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  padding: 14px 32px;
+  border-radius: var(--radius);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.18),
+    0 2px 8px rgba(0, 0, 0, 0.10);
+  transition:
+    opacity var(--dur-d8-flow) var(--ease-d8-silk),
+    transform var(--dur-d8-flow) var(--ease-d8-silk);
+}
+
+.cart-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ============================================================
+   D8 · SEARCH — Refined Dropdown
+   ============================================================ */
+
+.nav-search-input {
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  background: rgba(245, 240, 234, 0.7);
+  border-color: rgba(237, 230, 221, 0.6);
+  border-radius: var(--radius);
+  transition:
+    background var(--dur-d8-swift) ease,
+    border-color var(--dur-d8-swift) ease,
+    box-shadow var(--dur-d8-swift) ease;
+}
+
+.nav-search-input:focus {
+  background: var(--white);
+  border-color: rgba(212, 135, 156, 0.4);
+  box-shadow:
+    0 0 0 3px rgba(212, 135, 156, 0.09),
+    0 2px 8px rgba(60, 40, 30, 0.06);
+}
+
+.nav-search-dropdown {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-float-d8);
+  border: 1px solid rgba(237, 230, 221, 0.7);
+  animation: d8-dropdown-enter var(--dur-d8-swift) var(--ease-d8-silk) both;
+}
+
+@keyframes d8-dropdown-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.99);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.search-result-item {
+  transition: background var(--dur-d8-micro) ease;
+}
+
+.search-result-item:hover {
+  background: var(--blush-ultra);
+}
+
+.search-result-name {
+  font-size: 0.84rem;
+  letter-spacing: 0.01em;
+}
+
+.search-result-price {
+  font-size: 0.76rem;
+  font-weight: 500;
+  font-family: var(--font-head);
+  color: var(--rose-mid);
+}
+
+/* ============================================================
+   D8 · FOOTER — Refined Atmosphere
+   ============================================================ */
+
+.footer {
+  background: #100E0C;
+  padding: 72px 0 36px;
+}
+
+.footer .logo {
+  font-size: 1.3rem;
+  font-weight: 400;
+  letter-spacing: 0.025em;
+  margin-bottom: 8px;
+}
+
+.footer .logo span {
+  color: rgba(234, 181, 195, 0.85);
+}
+
+.footer-tagline {
+  font-size: 0.70rem;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.28);
+  font-weight: 300;
+  font-style: italic;
+}
+
+.footer-links a {
+  font-size: 0.74rem;
+  letter-spacing: 0.07em;
+  color: rgba(255, 255, 255, 0.45);
+  transition: color var(--dur-d8-swift) ease;
+  line-height: 1.5;
+}
+
+.footer-links a:hover {
+  color: rgba(234, 181, 195, 0.85);
+}
+
+.footer-social a {
+  font-size: 0.74rem;
+  letter-spacing: 0.07em;
+  color: rgba(255, 255, 255, 0.40);
+  transition: color var(--dur-d8-swift) ease;
+}
+
+.footer-social a:hover {
+  color: rgba(234, 181, 195, 0.85);
+}
+
+.footer-copy {
+  font-size: 0.68rem;
+  letter-spacing: 0.07em;
+  color: rgba(255, 255, 255, 0.20);
+  padding-top: 32px;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* ============================================================
+   D8 · SCROLL REVEAL — Final Refinement
+   ============================================================ */
+
+.lux-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity var(--dur-d8-cinematic) var(--ease-d8-silk),
+    transform var(--dur-d8-cinematic) var(--ease-d8-silk);
+}
+
+.lux-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.lux-reveal-delay {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity var(--dur-d8-cinematic) var(--ease-d8-silk) 0.14s,
+    transform var(--dur-d8-cinematic) var(--ease-d8-silk) 0.14s;
+}
+
+.lux-reveal-delay.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================================
+   D8 · PRODUCT CARD STAGGER — Refined Timing
+   ============================================================ */
+
+.product-card-lux {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.68s var(--ease-d8-silk),
+    transform 0.68s var(--ease-d8-silk);
+}
+
+.product-card-lux.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.product-card-lux:nth-child(6n+1) {
+  transition-delay: 0ms;
+}
+
+.product-card-lux:nth-child(6n+2) {
+  transition-delay: 55ms;
+}
+
+.product-card-lux:nth-child(6n+3) {
+  transition-delay: 110ms;
+}
+
+.product-card-lux:nth-child(6n+4) {
+  transition-delay: 165ms;
+}
+
+.product-card-lux:nth-child(6n+5) {
+  transition-delay: 220ms;
+}
+
+.product-card-lux:nth-child(6n+6) {
+  transition-delay: 275ms;
+}
+
+/* ============================================================
+   D8 · EDITORIAL QUOTE — Typography Polish
+   ============================================================ */
+
+.editorial-quote-text {
+  font-size: clamp(1.22rem, 2.2vw, 1.75rem);
+  line-height: 1.65;
+  letter-spacing: 0.012em;
+  font-weight: 300;
+}
+
+.editorial-quote-attr {
+  font-size: 0.60rem;
+  letter-spacing: 0.24em;
+  color: var(--taupe);
+  margin-top: 22px;
+}
+
+/* ============================================================
+   D8 · D6 BRAND STORY — Polish Layer
+   ============================================================ */
+
+.d6-story-headline {
+  font-size: clamp(2.7rem, 4.5vw, 4rem);
+  line-height: var(--lh-display);
+  letter-spacing: -0.022em;
+}
+
+.d6-story-body {
+  font-size: 0.96rem;
+  line-height: var(--lh-loose);
+  letter-spacing: 0.02em;
+}
+
+.d6-story-pull {
+  font-size: 1.35rem;
+  line-height: 1.65;
+  border-left: 2px solid rgba(212, 135, 156, 0.4);
+  padding-left: 26px;
+  margin: 40px 0;
+}
+
+.d6-story-cta {
+  font-size: 0.70rem;
+  letter-spacing: 0.22em;
+  border-bottom-color: rgba(237, 230, 221, 0.7);
+  transition:
+    color var(--dur-d8-flow) ease,
+    border-color var(--dur-d8-flow) ease,
+    gap var(--dur-d8-flow) var(--ease-d8-silk),
+    letter-spacing var(--dur-d8-breath) var(--ease-d8-silk);
+}
+
+.d6-story-cta:hover {
+  gap: 18px;
+  letter-spacing: 0.26em;
+}
+
+/* D6 reveal — refined timing */
+.d6-reveal {
+  transition:
+    opacity var(--dur-d8-cinematic) var(--ease-d8-silk),
+    transform var(--dur-d8-cinematic) var(--ease-d8-silk);
+}
+
+.d6-reveal-left,
+.d6-reveal-right {
+  transition:
+    opacity var(--dur-d8-cinematic) var(--ease-d8-silk),
+    transform var(--dur-d8-cinematic) var(--ease-d8-silk);
+}
+
+/* ============================================================
+   D8 · TRUST STRIP — Refined
+   ============================================================ */
+
+.trust-strip {
+  gap: 8px 20px;
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(237, 230, 221, 0.55);
+}
+
+.trust-item {
+  font-size: 0.70rem;
+  letter-spacing: 0.05em;
+  color: var(--taupe);
+  font-weight: 500;
+  gap: 6px;
+}
+
+.trust-dot {
+  width: 3px;
+  height: 3px;
+  background: rgba(212, 135, 156, 0.5);
+}
+
+/* Trust banner */
+.trust-banner {
+  background: var(--blush-ultra);
+  border: 1px solid rgba(212, 135, 156, 0.14);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+}
+
+.trust-banner-item {
+  font-size: 0.74rem;
+  letter-spacing: 0.025em;
+  gap: 7px;
+  color: var(--rose-dark);
+}
+
+/* ============================================================
+   D8 · COLLECTION DIVIDER — Refined Ornament
+   ============================================================ */
+
+.collection-divider {
+  gap: 22px;
+}
+
+.collection-divider-line {
+  width: 56px;
+  height: 1px;
+  background: rgba(237, 230, 221, 0.8);
+}
+
+.collection-divider-gem {
+  width: 5px;
+  height: 5px;
+  background: rgba(212, 135, 156, 0.55);
+  box-shadow: 0 0 0 4px rgba(212, 135, 156, 0.10);
+}
+
+/* ============================================================
+   D8 · CAMPAIGN BANNER — Premium Dark Block
+   ============================================================ */
+
+.collection-campaign-banner {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card-d8);
+  overflow: hidden;
+}
+
+.campaign-banner-img {
+  opacity: 0.42;
+  transition: transform 0.90s var(--ease-d8-silk), opacity 0.6s ease;
+}
+
+.collection-campaign-banner:hover .campaign-banner-img {
+  transform: scale(1.03);
+  opacity: 0.48;
+}
+
+.campaign-banner-overlay {
+  background: linear-gradient(108deg,
+      rgba(18, 14, 11, 0.72) 0%,
+      rgba(18, 14, 11, 0.32) 58%,
+      transparent 100%);
+}
+
+.campaign-banner-eyebrow {
+  font-size: 0.58rem;
+  letter-spacing: 0.30em;
+  color: rgba(232, 213, 176, 0.85);
+  margin-bottom: 16px;
+}
+
+.campaign-banner-title {
+  font-size: clamp(1.85rem, 3.2vw, 2.7rem);
+  letter-spacing: -0.015em;
+  line-height: var(--lh-heading);
+  margin-bottom: 20px;
+  font-weight: 300;
+}
+
+.campaign-banner-sub {
+  font-size: 0.84rem;
+  letter-spacing: 0.025em;
+  line-height: 1.80;
+  color: rgba(255, 255, 255, 0.52);
+  margin-bottom: 30px;
+}
+
+.campaign-banner-link {
+  font-size: 0.66rem;
+  letter-spacing: 0.20em;
+  transition:
+    color var(--dur-d8-flow) ease,
+    border-color var(--dur-d8-flow) ease,
+    gap var(--dur-d8-flow) var(--ease-d8-silk);
+}
+
+.campaign-banner-link:hover {
+  gap: 12px;
+}
+
+/* ============================================================
+   D8 · RESPONSIVE — TABLET REFINEMENTS (≤ 900px)
+   ============================================================ */
+
+@media (max-width: 900px) {
+  .section {
+    padding: 72px 0;
+  }
+
+  .hero-headline {
+    font-size: clamp(2.8rem, 9vw, 3.8rem);
+  }
+
+  .hero-sub {
+    font-size: 0.94rem;
+  }
+
+  .product-grid {
+    gap: 18px 14px;
+  }
+
+  .cat-grid {
+    gap: 12px;
+  }
+
+  .testi-grid {
+    gap: 14px;
+  }
+
+  .why-card {
+    padding: 32px 22px;
+  }
+
+  .testi-card {
+    padding: 28px 24px;
+  }
+
+  .section-title {
+    font-size: clamp(1.85rem, 6vw, 2.5rem);
+    margin-bottom: 40px;
+  }
+
+  .newsletter-form-wrap {
+    border-radius: var(--radius-2xs);
+  }
+
+  /* Softer transitions on tablet */
+  .product-card,
+  .product-card-lux,
+  .cat-card {
+    transition-duration: var(--dur-d8-flow);
+  }
+}
+
+/* ============================================================
+   D8 · RESPONSIVE — MOBILE REFINEMENTS (≤ 560px)
+   ============================================================ */
+
+@media (max-width: 560px) {
+  .section {
+    padding: 56px 0;
+  }
+
+  .container {
+    padding: 0 18px;
+  }
+
+  .section-title {
+    font-size: clamp(1.7rem, 5.5vw, 2.1rem);
+    letter-spacing: -0.02em;
+    margin-bottom: 30px;
+  }
+
+  .section-eyebrow {
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+  }
+
+  /* Product info mobile */
+  .product-info {
+    padding: 13px 14px 16px;
+  }
+
+  .product-name {
+    font-size: 0.90rem;
+    letter-spacing: 0.008em;
+  }
+
+  .product-desc {
+    font-size: 0.72rem;
+  }
+
+  .product-price {
+    font-size: 1.04rem;
+  }
+
+  /* Lux card mobile */
+  .lux-product-info {
+    padding: 13px 2px 16px;
+  }
+
+  .lux-product-name {
+    font-size: 0.88rem;
+  }
+
+  .lux-price {
+    font-size: 1.02rem;
+  }
+
+  /* Cat card mobile */
+  .cat-info {
+    padding: 11px 13px 16px;
+  }
+
+  .cat-info h3 {
+    font-size: 0.90rem;
+  }
+
+  .cat-info p {
+    font-size: 0.70rem;
+  }
+
+  /* Why card */
+  .why-card {
+    padding: 22px 16px;
+  }
+
+  .why-numeral {
+    font-size: 2.6rem;
+    margin-bottom: 20px;
+  }
+
+  .why-card h3 {
+    font-size: 0.90rem;
+  }
+
+  .why-card p {
+    font-size: 0.75rem;
+  }
+
+  /* Testimonial */
+  .testi-card {
+    padding: 22px 18px;
+  }
+
+  .testi-text {
+    font-size: 0.90rem;
+    line-height: 1.85;
+  }
+
+  /* Newsletter */
+  .newsletter-headline {
+    font-size: clamp(1.65rem, 5.5vw, 2.2rem);
+  }
+
+  .newsletter-sub {
+    font-size: 0.86rem;
+  }
+
+  .newsletter-input {
+    font-size: 0.86rem;
+    padding: 15px 18px;
+  }
+
+  .newsletter-btn {
+    padding: 15px 24px;
+    font-size: 0.70rem;
+  }
+
+  /* CTA */
+  .cta-headline {
+    font-size: clamp(1.9rem, 7vw, 2.6rem);
+  }
+
+  /* Footer */
+  .footer {
+    padding: 52px 0 28px;
+  }
+
+  .footer-inner {
+    gap: 24px;
+  }
+
+  /* Toast */
+  .cart-toast {
+    font-size: 0.78rem;
+    padding: 13px 16px;
+    border-radius: var(--radius);
+    left: 16px;
+    right: 16px;
+    transform: translateX(0) translateY(20px);
+  }
+
+  .cart-toast.show {
+    transform: translateX(0) translateY(0);
+  }
+
+  /* Buttons mobile */
+  .btn-primary {
+    padding: 15px 36px;
+  }
+
+  .btn-ghost {
+    padding: 14px 32px;
+  }
+
+  .btn-large {
+    padding: 16px 28px;
+    font-size: 0.77rem;
+  }
+}
+
+/* ============================================================
+   D8 · RESPONSIVE — SMALL PHONES (≤ 380px)
+   ============================================================ */
+
+@media (max-width: 380px) {
+  .section {
+    padding: 48px 0;
+  }
+
+  .container {
+    padding: 0 14px;
+  }
+
+  .hero-headline {
+    font-size: clamp(2.0rem, 8.5vw, 2.4rem);
+  }
+
+  .section-title {
+    font-size: 1.6rem;
+  }
+
+  .product-info {
+    padding: 10px 11px 13px;
+  }
+
+  .product-name {
+    font-size: 0.86rem;
+  }
+
+  .product-price {
+    font-size: 0.98rem;
+  }
+
+  .lux-product-info {
+    padding: 11px 2px 14px;
+  }
+
+  .lux-product-name {
+    font-size: 0.84rem;
+  }
+
+  .lux-price {
+    font-size: 0.98rem;
+  }
+
+  .why-card {
+    padding: 18px 12px;
+  }
+
+  .testi-card {
+    padding: 18px 14px;
+  }
+}
+
+/* ============================================================
+   D8 · LARGE SCREEN — Luxury Wide Experience (≥ 1440px)
+   ============================================================ */
+
+@media (min-width: 1440px) {
+  .container {
+    max-width: 1320px;
+    padding: 0 48px;
+  }
+
+  .section {
+    padding: 112px 0;
+  }
+
+  .hero-headline {
+    font-size: clamp(4rem, 5.5vw, 6rem);
+  }
+
+  .product-grid {
+    gap: 32px;
+  }
+
+  .product-grid-lux {
+    gap: 44px 32px;
+  }
+
+  .why-card {
+    padding: 60px 44px;
+  }
+
+  .testi-card {
+    padding: 44px 40px;
+  }
+
+  .section-title {
+    font-size: clamp(2.4rem, 3.2vw, 3.6rem);
+  }
+}
+
+/* ============================================================
+   D8 · PERFORMANCE — Animation Efficiency
+   ============================================================ */
+
+/* Will-change hints — only where motion is guaranteed */
+.navbar,
+.hero-img,
+.lux-img-container img,
+.product-img-wrap img {
+  will-change: transform;
+}
+
+.cart-toast {
+  will-change: opacity, transform;
+}
+
+/* Contain paint on cards */
+.product-card,
+.product-card-lux,
+.cat-card,
+.testi-card {
+  contain: layout style;
+}
+
+/* Image containers — explicit containment */
+.lux-img-container,
+.product-img-wrap,
+.cat-img-wrap,
+.gallery-item {
+  contain: layout style;
+}
+
+/* ============================================================
+   D8 · REDUCED MOTION — Full Accessibility Support
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+
+  .lux-reveal,
+  .lux-reveal-delay,
+  .d6-reveal,
+  .d6-reveal-left,
+  .d6-reveal-right,
+  .d6-reveal-scale,
+  .d7-reveal,
+  .d7-reveal-up,
+  .product-card-lux {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  body {
+    animation: none;
+  }
+
+  .scroll-line {
+    animation: none;
+  }
+
+  .marquee-track {
+    animation: none;
+  }
+}
+
+/* ============================================================
+   D8 · BRAND ATMOSPHERE — Final Emotional Tone Layer
+   ============================================================ */
+
+/*
+   The emotional goal of D8:
+   Calm · Expensive · Intentional · Editorial · Feminine
+
+   Every spacing decision: more breathing room
+   Every shadow: softer, more layered
+   Every transition: slower, more deliberate
+   Every typography choice: refined, editorial
+
+   The user should subconsciously feel:
+   "This brand understands me."
+*/
+
+/* Subtle warm atmospheric tint on parchment sections */
+.categories,
+.parchment-bg,
+.newsletter-section {
+  background: var(--parchment-soft);
+}
+
+.bestsellers,
+.why-us,
+.gallery-section {
+  background: var(--cream-warm);
+}
+
+/* Refined section background transitions */
+.brand-story {
+  background: var(--white);
+}
+
+.final-cta {
+  background: #13110F;
+}
+
+/* Refined stock indicators */
+.stock.in {
+  background: rgba(240, 250, 244, 0.9);
+  color: #2A7248;
+  border: 1px solid rgba(42, 114, 72, 0.14);
+  font-size: 0.60rem;
+  letter-spacing: 0.12em;
+  padding: 3px 10px;
+}
+
+.stock.out {
+  background: rgba(255, 242, 240, 0.9);
+  color: #9A2F28;
+  border: 1px solid rgba(154, 47, 40, 0.14);
+  font-size: 0.60rem;
+  letter-spacing: 0.12em;
+}
+
+/* Refined lux stock dot */
+.lux-stock-dot {
+  font-size: 0.60rem;
+  letter-spacing: 0.11em;
+}
+
+/* ============================================================
+   D8 · CODE QUALITY — CSS Custom Property Audit
+   ============================================================ */
+
+/*
+   D8 polish layer: All tokens documented and organized.
+   Phase sequence: styles.css → d3-luxury.css → d5-mobile-luxury.css
+                 → d6-brand-story.css → d7-luxury-motion.css → d8-luxury-polish.css
+
+   Naming convention:
+   --d8-*       : Phase D8 specific tokens
+   --shadow-*-d8: D8 shadow refinements (additive, don't override base)
+   --ease-d8-*  : D8 easing curves
+
+   All refinements are ADDITIVE.
+   No base functionality or Firebase logic affected.
+   All existing IDs and class names preserved.
+*/

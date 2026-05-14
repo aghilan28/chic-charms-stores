@@ -1,0 +1,97 @@
+/*
+ * d10-restore.css
+ * Proportions restore — loaded LAST to override d9-editorial-refinement.css
+ * Restores original visual scale, hero size, section spacing, and container width.
+ * DO NOT add anything here except direct value restorations.
+ */
+
+/* ── 1. Root font-size — must stay 16px (rem baseline) ── */
+html {
+  font-size: 16px !important;
+  zoom: unset !important;
+}
+
+/* ── 2. Body — no transform, no scale, no zoom ── */
+body {
+  transform: none !important;
+  zoom: unset !important;
+}
+
+/* ── 3. Container — restore to original 1240px / 32px padding ── */
+.container {
+  max-width: 1240px !important;
+  padding: 0 32px !important;
+}
+
+/* ── 4. Section padding — restore to original --space-xl (88px) ── */
+.section {
+  padding: 88px 0 !important;
+}
+
+/* ── 5. Hero — restore full-viewport height ── */
+.hero {
+  min-height: 100svh !important;
+  padding-top: 72px !important;
+}
+
+/* ── 6. Hero inner — restore original grid gap and padding ── */
+.hero-inner {
+  gap: 80px !important;
+  padding-top: 60px !important;
+  padding-bottom: 80px !important;
+}
+
+/* ── 7. Hero headline — restore original clamp scale ── */
+.hero-headline {
+  font-size: clamp(3.2rem, 6vw, 5.4rem) !important;
+}
+
+/* ── 8. Section title — restore original scale ── */
+.section-title {
+  font-size: clamp(2rem, 3.8vw, 3rem) !important;
+}
+
+/*
+ * ── Breakpoint: tablet (≤ 1024px) ──
+ * Restore tablet container and section padding
+ */
+@media (max-width: 1024px) {
+  .container {
+    max-width: 100% !important;
+    padding: 0 24px !important;
+  }
+  .section {
+    padding: 64px 0 !important;
+  }
+}
+
+/*
+ * ── Breakpoint: mobile (≤ 640px) ──
+ * Restore mobile hero and section padding
+ */
+@media (max-width: 640px) {
+  .section {
+    padding: 48px 0 !important;
+  }
+  .hero {
+    padding-top: 72px !important;
+    min-height: auto !important;
+  }
+  .hero-inner {
+    padding-top: 32px !important;
+    padding-bottom: 44px !important;
+    gap: 48px !important;
+  }
+  .container {
+    padding: 0 18px !important;
+  }
+}
+
+/*
+ * ── Breakpoint: small mobile (≤ 390px) ──
+ */
+@media (max-width: 390px) {
+  .container {
+    padding: 0 14px !important;
+  }
+}
