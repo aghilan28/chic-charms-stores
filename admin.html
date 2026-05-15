@@ -3699,6 +3699,7 @@
         Timestamp,
         where,
         limit,
+        deleteField,
       } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
       /* ══════════════════════════════════════════
@@ -4087,6 +4088,8 @@
         return product?.image ||
           product?.productImage ||
           images.productImage ||
+          product?.variantProductImage ||
+          firstVariant?.variantProductImage ||
           firstVariantImages.productImage ||
           firstVariant?.productImage ||
           product?.imageUrl ||
@@ -4105,15 +4108,15 @@
         const productImage = productImageSrc(product);
         return {
           productImage,
-          modelImage: product?.modelImage || images.modelImage || firstVariantImages.modelImage || firstVariant?.modelImage || productImage,
+          modelImage: product?.modelImage || images.modelImage || product?.variantModelImage || firstVariant?.variantModelImage || firstVariantImages.modelImage || firstVariant?.modelImage || productImage,
         };
       }
 
       function buildImagesPayload(productImage, modelImage) {
-        return {
+        return sanitizeFirestorePayload({
           productImage,
           modelImage: modelImage || productImage,
-        };
+        });
       }
 
       function variantId(color) {
@@ -4121,18 +4124,24 @@
       }
 
       function buildColorVariant(color, stock, productImage, modelImage, isPrimary = false) {
-        return {
+        const cleanProductImage = cleanUrl(productImage);
+        const cleanModelImage = cleanUrl(modelImage) || cleanProductImage;
+        return sanitizeFirestorePayload({
           id: variantId(color),
           color: String(color || "").trim(),
-          stock: Number(stock || 0),
-          images: buildImagesPayload(productImage, modelImage),
+          stock: normalizeStock(stock),
+          variantStock: normalizeStock(stock),
+          variantProductImage: cleanProductImage,
+          variantModelImage: cleanModelImage,
+          images: buildImagesPayload(cleanProductImage, cleanModelImage),
           isPrimary,
-        };
+        });
       }
 
       function mergeColorVariants(primaryVariant, variants) {
         const seen = new Set();
         return [primaryVariant, ...(variants || [])]
+          .map((variant) => sanitizeVariantPayload(variant))
           .filter((variant) => variant && variant.color)
           .filter((variant) => {
             const key = variantId(variant.color);
@@ -4140,6 +4149,66 @@
             seen.add(key);
             return true;
           });
+      }
+
+      function cleanUrl(url) {
+        const value = String(url || "").trim();
+        return isHttpUrl(value) ? value : "";
+      }
+
+      function shouldDropFirestoreValue(value) {
+        return value === undefined ||
+          value === null ||
+          value === "" ||
+          (Array.isArray(value) && value.length === 0) ||
+          (value && typeof value === "object" && !Array.isArray(value) && Object.keys(value).length === 0);
+      }
+
+      function sanitizeFirestorePayload(value) {
+        if (Array.isArray(value)) {
+          return value
+            .map((item) => sanitizeFirestorePayload(item))
+            .filter((item) => !shouldDropFirestoreValue(item));
+        }
+        if (value && typeof value === "object" && !(value instanceof Date)) {
+          return Object.entries(value).reduce((clean, [key, child]) => {
+            const safeChild = sanitizeFirestorePayload(child);
+            if (!shouldDropFirestoreValue(safeChild)) clean[key] = safeChild;
+            return clean;
+          }, {});
+        }
+        return value;
+      }
+
+      function sanitizeVariantPayload(variant = {}) {
+        const images = variant.images || {};
+        const productImage = cleanUrl(
+          variant.variantProductImage || variant.productImage || images.productImage
+        );
+        const modelImage = cleanUrl(
+          variant.variantModelImage || variant.modelImage || images.modelImage
+        ) || productImage;
+        const stockValue = normalizeStock(variant.variantStock ?? variant.stock);
+
+        return sanitizeFirestorePayload({
+          id: variant.id || variantId(variant.color),
+          color: String(variant.color || "").trim(),
+          stock: stockValue,
+          variantStock: stockValue,
+          variantProductImage: productImage,
+          variantModelImage: modelImage,
+          images: buildImagesPayload(productImage, modelImage),
+          isPrimary: variant.isPrimary === true,
+        });
+      }
+
+      function firestoreErrorMessage(err, fallback) {
+        const parts = [
+          err?.code,
+          err?.message,
+          err?.customData?.serverResponse,
+        ].filter(Boolean);
+        return parts.length ? `${fallback} ${parts.join(" | ")}` : fallback;
       }
 
       function secondaryColorVariants(product) {
@@ -4561,7 +4630,7 @@
 
       function normalizeStock(n) {
         const val = Number(n);
-        return Number.isFinite(val) ? Math.max(0, val) : 0;
+        return Number.isFinite(val) ? Math.max(0, Math.floor(val)) : 0;
       }
 
       function getProductById(productId) {
@@ -6144,6 +6213,9 @@
       ══════════════════════════════════════════ */
       function variantRowTemplate(variant = {}) {
         const images = variant.images || {};
+        const productImage = variant.variantProductImage || variant.productImage || images.productImage || "";
+        const modelImage = variant.variantModelImage || variant.modelImage || images.modelImage || "";
+        const stockValue = variant.variantStock ?? variant.stock ?? "";
         return `
           <div class="variant-row">
             <div class="form-group">
@@ -6152,15 +6224,15 @@
             </div>
             <div class="form-group">
               <label>Variant Stock <span class="opt">(optional)</span></label>
-              <input type="number" min="0" data-variant-field="stock" value="${esc(variant.stock ?? "")}" placeholder="e.g. 5" />
+              <input type="number" min="0" data-variant-field="stock" value="${esc(stockValue)}" placeholder="e.g. 5" />
             </div>
             <div class="form-group">
               <label>Variant Product Image URL <span class="req">*</span></label>
-              <input type="url" data-variant-field="productImage" value="${esc(images.productImage || "")}" placeholder="https://res.cloudinary.com/..." />
+              <input type="url" data-variant-field="productImage" value="${esc(productImage)}" placeholder="https://res.cloudinary.com/..." />
             </div>
             <div class="form-group">
               <label>Variant Model Image URL <span class="req">*</span></label>
-              <input type="url" data-variant-field="modelImage" value="${esc(images.modelImage || "")}" placeholder="https://res.cloudinary.com/..." />
+              <input type="url" data-variant-field="modelImage" value="${esc(modelImage)}" placeholder="https://res.cloudinary.com/..." />
             </div>
             <div class="variant-preview-grid">
               <div class="img-preview-wrap">
@@ -6181,7 +6253,12 @@
         "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'%3E%3Crect width='96' height='96' rx='12' fill='%23fce8ef'/%3E%3Crect x='22' y='27' width='52' height='42' rx='6' fill='none' stroke='%23e8a0b0' stroke-width='3'/%3E%3Ccircle cx='36' cy='40' r='5' fill='%23e8a0b0'/%3E%3Cpath d='M23 62 37 49l11 10 13-17 13 20' fill='none' stroke='%23e8a0b0' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E";
 
       function isHttpUrl(url) {
-        return /^https?:\/\//i.test(url || "");
+        try {
+          const parsed = new URL(String(url || "").trim());
+          return parsed.protocol === "http:" || parsed.protocol === "https:";
+        } catch {
+          return false;
+        }
       }
 
       function setPreviewImage(img, url) {
@@ -6216,8 +6293,12 @@
           const get = (field) => row.querySelector(`[data-variant-field="${field}"]`)?.value?.trim() || "";
           const values = ["color", "stock", "productImage", "modelImage"].map(get);
           if (!values.some(Boolean)) continue;
+          const color = get("color");
+          const stockRaw = get("stock");
           const productImage = get("productImage");
           const modelImage = get("modelImage");
+          if (!color) return "Each variant needs a color.";
+          if (stockRaw && (!Number.isFinite(Number(stockRaw)) || Number(stockRaw) < 0)) return "Variant stock must be 0 or greater.";
           if (!productImage || !modelImage) return "Each variant needs both Variant Product Image URL and Variant Model Image URL.";
           if (!isHttpUrl(productImage) || !isHttpUrl(modelImage)) return "Variant image URLs must start with http:// or https://.";
         }
@@ -6244,14 +6325,13 @@
             const productImage = get("productImage");
             const modelImage = get("modelImage");
             if (!color && !stockRaw && !productImage && !modelImage) return null;
-            return {
+            return sanitizeVariantPayload({
               color,
-              stock: Number(stockRaw || 0),
-              images: {
-                productImage,
-                modelImage: modelImage || productImage,
-              },
-            };
+              stock: normalizeStock(stockRaw),
+              variantStock: normalizeStock(stockRaw),
+              variantProductImage: productImage,
+              variantModelImage: modelImage || productImage,
+            });
           })
           .filter(Boolean);
       }
@@ -6328,22 +6408,26 @@
           return;
         }
 
-        const product = {
+        const primaryVariant = buildColorVariant(color, stock, image, modelImage, true);
+        const product = sanitizeFirestorePayload({
           name,
+          title: name,
           price: Number(price),
-          stock: Number(stock),
+          stock: normalizeStock(stock),
           color,
           category,
           pieceType: piecePayload.pieceType,
           pieceCount: piecePayload.pieceCount,
-          image,
+          image: cleanUrl(image),
+          variantProductImage: primaryVariant.variantProductImage,
+          variantModelImage: primaryVariant.variantModelImage,
+          variantStock: primaryVariant.variantStock,
           images: buildImagesPayload(image, modelImage),
-          variants: mergeColorVariants(buildColorVariant(color, stock, image, modelImage, true), variants),
+          variants: mergeColorVariants(primaryVariant, variants),
           createdAt: new Date().toISOString(),
-        };
-        if (tag) product.tag = tag;
-        if (desc) product.description = desc;
-
+          tag,
+          description: desc,
+        });
         setLoading(submitBtn, true);
         try {
           const productRef = doc(collection(db, "products"));
@@ -6386,14 +6470,20 @@
           setPreviewImage(imgEl, "");
           setPreviewImage(modelImgEl, "");
         } catch (err) {
-          console.error("Firestore addDoc error:", err);
+          console.error("[Admin Products] Firestore product create failed:", {
+            code: err?.code,
+            message: err?.message,
+            name: err?.name,
+            stack: err?.stack,
+            payload: product,
+          });
           showStatus(
             statusMsg,
             statusIcon,
             statusText,
             "error",
             "❌",
-            "Could not save product. Check Firestore rules and try again.",
+            firestoreErrorMessage(err, "Could not save product."),
           );
         } finally {
           setLoading(submitBtn, false);
@@ -6504,21 +6594,28 @@
           return;
         }
 
-        const updates = {
+        const primaryVariant = buildColorVariant(color, stock, image, modelImage, true);
+        const updates = sanitizeFirestorePayload({
           name,
+          title: name,
           price: Number(price),
-          stock: Number(stock),
+          stock: normalizeStock(stock),
           color,
           category,
           pieceType: piecePayload.pieceType,
           pieceCount: piecePayload.pieceCount,
-          image,
+          image: cleanUrl(image),
+          variantProductImage: primaryVariant.variantProductImage,
+          variantModelImage: primaryVariant.variantModelImage,
+          variantStock: primaryVariant.variantStock,
           images: buildImagesPayload(image, modelImage),
-          variants: mergeColorVariants(buildColorVariant(color, stock, image, modelImage, true), variants),
+          variants: mergeColorVariants(primaryVariant, variants),
           updatedAt: new Date().toISOString(),
-        };
-        if (tag) updates.tag = tag;
-        if (desc) updates.description = desc;
+          tag,
+          description: desc,
+        });
+        if (!tag) updates.tag = deleteField();
+        if (!desc) updates.description = deleteField();
 
         setLoading(editModalSave, true);
         try {
@@ -6543,14 +6640,21 @@
           );
           setTimeout(closeEditModal, 900);
         } catch (err) {
-          console.error("updateDoc error:", err);
+          console.error("[Admin Products] Firestore product update failed:", {
+            code: err?.code,
+            message: err?.message,
+            name: err?.name,
+            stack: err?.stack,
+            productId: editingId,
+            payload: updates,
+          });
           showStatus(
             editStatusMsg,
             editStatusIcon,
             editStatusText,
             "error",
             "❌",
-            "Update failed. Check Firestore permissions.",
+            firestoreErrorMessage(err, "Update failed."),
           );
         } finally {
           setLoading(editModalSave, false);
@@ -6598,8 +6702,14 @@
           showAdminToast("Product deleted.");
           closeDeleteModal();
         } catch (err) {
-          console.error("deleteDoc error:", err);
-          showAdminToast("Delete failed. Check Firestore permissions.", "error");
+          console.error("[Admin Products] Firestore product delete failed:", {
+            code: err?.code,
+            message: err?.message,
+            name: err?.name,
+            stack: err?.stack,
+            productId: deletingId,
+          });
+          showAdminToast(firestoreErrorMessage(err, "Delete failed."), "error");
         } finally {
           setLoading(deleteModalConfirm, false);
         }

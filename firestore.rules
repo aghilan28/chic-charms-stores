@@ -161,6 +161,44 @@ service cloud.firestore {
         );
     }
 
+    function validOptionalUrlValue(val) {
+      return val is string
+        && val.size() > 0
+        && val.size() <= 1000
+        && (val.matches("^https://.*") || val.matches("^http://.*"));
+    }
+
+    function validOptionalProductUrl(fieldName) {
+      return !(fieldName in request.resource.data)
+        || validOptionalUrlValue(request.resource.data[fieldName]);
+    }
+
+    function validOptionalImageBundle(fieldName) {
+      return !(fieldName in request.resource.data)
+        || (
+          request.resource.data[fieldName] is map
+          && request.resource.data[fieldName].keys().hasOnly(["productImage", "modelImage"])
+          && (!("productImage" in request.resource.data[fieldName]) || validOptionalUrlValue(request.resource.data[fieldName].productImage))
+          && (!("modelImage" in request.resource.data[fieldName]) || validOptionalUrlValue(request.resource.data[fieldName].modelImage))
+        );
+    }
+
+    function validProductNameFields() {
+      let d = request.resource.data;
+      return (
+        ("name" in d && d.name is string && d.name.size() > 0 && d.name.size() <= 120)
+        || ("title" in d && d.title is string && d.title.size() > 0 && d.title.size() <= 120)
+      );
+    }
+
+    function validOptionalVariantList() {
+      return !("variants" in request.resource.data)
+        || (
+          request.resource.data.variants is list
+          && request.resource.data.variants.size() <= 100
+        );
+    }
+
     function validProductCategory(category) {
       return category in [
         "Everyday Elegance",
@@ -172,17 +210,24 @@ service cloud.firestore {
 
     function validProductCreate() {
       let d = request.resource.data;
-      return d.keys().hasAll(["name", "price", "stock", "category", "image", "createdAt"])
+      return d.keys().hasAny(["name", "title"])
+        && d.keys().hasAll(["price", "stock", "category", "createdAt"])
         && d.keys().hasOnly([
-          "name", "price", "stock", "category", "image",
+          "name", "title", "price", "stock", "category", "image",
           "description", "tag", "createdAt", "updatedAt", "outOfStock",
-          "pieceType", "pieceCount", "images", "variants"
+          "pieceType", "pieceCount", "images", "variants", "color",
+          "variantProductImage", "variantModelImage", "variantStock"
         ])
-        && d.name is string && d.name.size() > 0 && d.name.size() <= 120
+        && validProductNameFields()
         && validPriceValue(d.price)
         && validStockValue(d.stock)
         && d.category is string && validProductCategory(d.category)
-        && d.image is string && d.image.size() > 0 && d.image.size() <= 1000
+        && (!("image" in d) || validOptionalUrlValue(d.image))
+        && validOptionalProductUrl("variantProductImage")
+        && validOptionalProductUrl("variantModelImage")
+        && (!("variantStock" in d) || validStockValue(d.variantStock))
+        && validOptionalImageBundle("images")
+        && validOptionalVariantList()
         && validOptionalText("description", 5000)
         && validOptionalText("tag", 80);
     }
@@ -192,15 +237,22 @@ service cloud.firestore {
       let changed = request.resource.data.diff(resource.data).affectedKeys();
       return isAdmin()
         && changed.hasOnly([
-          "name", "price", "stock", "category", "image",
+          "name", "title", "price", "stock", "category", "image",
           "description", "tag", "updatedAt", "outOfStock",
-          "pieceType", "pieceCount", "images", "variants"
+          "pieceType", "pieceCount", "images", "variants", "color",
+          "variantProductImage", "variantModelImage", "variantStock"
         ])
         && (!changed.hasAny(["stock"]) || validStockValue(d.stock))
         && (!changed.hasAny(["price"]) || validPriceValue(d.price))
         && (!changed.hasAny(["name"]) || (d.name is string && d.name.size() > 0 && d.name.size() <= 120))
+        && (!changed.hasAny(["title"]) || (d.title is string && d.title.size() > 0 && d.title.size() <= 120))
         && (!changed.hasAny(["category"]) || (d.category is string && validProductCategory(d.category)))
-        && (!changed.hasAny(["image"]) || (d.image is string && d.image.size() > 0 && d.image.size() <= 1000))
+        && (!changed.hasAny(["image"]) || validOptionalUrlValue(d.image))
+        && (!changed.hasAny(["variantProductImage"]) || validOptionalUrlValue(d.variantProductImage))
+        && (!changed.hasAny(["variantModelImage"]) || validOptionalUrlValue(d.variantModelImage))
+        && (!changed.hasAny(["variantStock"]) || validStockValue(d.variantStock))
+        && (!changed.hasAny(["images"]) || validOptionalImageBundle("images"))
+        && (!changed.hasAny(["variants"]) || validOptionalVariantList())
         && validOptionalText("description", 5000)
         && validOptionalText("tag", 80)
         && (!changed.hasAny(["outOfStock"]) || d.outOfStock is bool);
