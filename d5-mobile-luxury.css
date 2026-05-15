@@ -30,11 +30,13 @@
   html {
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
+    overflow-y: auto;
   }
 
   body {
-    /* Prevent bounce jank interfering with luxury feel */
-    overscroll-behavior-y: contain;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    /* overscroll-behavior-y: contain removed — was trapping scroll on some Android Chrome */
   }
 
   /* ── Touch targets — minimum 44px everywhere ── */
@@ -167,7 +169,7 @@
   .hero {
     min-height: 100svh;
     padding-top: var(--mob-nav-h);
-    overflow: hidden;
+    /* overflow:hidden removed — was blocking touch-scroll on mobile */
   }
 
   .hero-bg-layer {
@@ -1894,4 +1896,30 @@
   }
 
   .hero-bg-layer { animation: none; }
+}
+
+/* ============================================================
+   D5 · MOBILE SCROLL FIX — Prevent accidental scroll blocking
+   ============================================================ */
+
+/* Safety: ensure no invisible/transparent fixed layer swallows touch events */
+@media (max-width: 900px) {
+  /* The hero background decorative layer must never intercept gestures */
+  .hero-bg-layer,
+  [class*="-bg-layer"] {
+    pointer-events: none !important;
+  }
+
+  /* Ensure html and body always allow vertical scroll when nav is closed */
+  html:not(.scroll-locked),
+  body:not([data-scroll-y]) {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Hero: use clip instead of hidden — clips visuals without trapping scroll */
+  .hero {
+    overflow: clip;
+    overflow-x: clip;
+  }
 }
