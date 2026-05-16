@@ -316,11 +316,12 @@
         img.loading = "lazy";
       }
     });
-    $all(".cc-final-category-rail, .cc-final-rail, .cc-final-gallery-rail, .product-gallery-thumbs, .related-grid, .pdp-review-rail").forEach(function (rail) {
+    $all(".cc-final-category-rail, .cc-final-promo-rail, .cc-final-rail, .cc-final-gallery-rail, .product-gallery-thumbs, .related-grid, .pdp-review-rail").forEach(function (rail) {
       rail.style.webkitOverflowScrolling = "touch";
       rail.style.overflowX = "auto";
       rail.style.overflowY = "hidden";
       rail.style.scrollSnapType = "x mandatory";
+      rail.style.scrollPaddingInline = "16px";
     });
     $all(".product-card-lux").forEach(function (card) {
       card.classList.add("lux-visible", "revealed");

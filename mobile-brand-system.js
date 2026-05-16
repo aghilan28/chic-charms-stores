@@ -291,11 +291,12 @@
     modal.className = "cc-newsletter-modal";
     modal.setAttribute("role", "dialog");
     modal.setAttribute("aria-modal", "true");
+    modal.setAttribute("aria-labelledby", "ccNewsletterTitle");
     modal.innerHTML =
       '<button type="button" class="cc-newsletter-close" aria-label="Close newsletter">×</button>' +
-      '<div class="cc-sheet-handle"></div><h2 class="cc-sheet-title">Join the inner circle</h2>' +
+      '<div class="cc-sheet-handle"></div><h2 class="cc-sheet-title" id="ccNewsletterTitle">Join the inner circle</h2>' +
       '<p class="cc-sheet-copy">Get first access to weekly handpicked drops and a soft welcome discount.</p>' +
-      '<input type="email" placeholder="Email address" aria-label="Email address" />' +
+      '<input type="email" inputmode="email" autocomplete="email" placeholder="Email address" aria-label="Email address" />' +
       '<button type="button" class="cc-newsletter-submit">Unlock first access</button>';
 
     document.body.appendChild(backdrop);
@@ -319,7 +320,9 @@
     if (!backdrop || !modal) return;
     backdrop.classList.add("is-open");
     modal.classList.add("is-open");
+    modal.scrollTop = 0;
     document.body.classList.add("cc-modal-open");
+    document.body.classList.add("cc-newsletter-open");
   }
 
   function closeNewsletter() {
@@ -328,6 +331,7 @@
     if (backdrop) backdrop.classList.remove("is-open");
     if (modal) modal.classList.remove("is-open");
     document.body.classList.remove("cc-modal-open");
+    document.body.classList.remove("cc-newsletter-open");
     try { localStorage.setItem("ccNewsletterSeen", "1"); } catch (err) {}
     window.setTimeout(cleanupStuckVisualState, 280);
   }
