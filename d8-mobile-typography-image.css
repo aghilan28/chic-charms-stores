@@ -1,0 +1,1174 @@
+/* ============================================================
+   CHIC CHARMS — d8-mobile-typography-image.css
+   Stage 1 · Part 3: Luxury Mobile Typography System
+             Part 4: Luxury Mobile Image Intelligence
+   Mobile-only additive layer — desktop untouched
+   ============================================================ */
+
+/* ============================================================
+   D8 · TYPOGRAPHY TOKENS
+   ============================================================ */
+:root {
+  /* Editorial type scale */
+  --d8-font-head:      var(--font-head, 'Playfair Display', 'Cormorant Garamond', Georgia, serif);
+  --d8-font-body:      var(--font-body, 'Jost', 'Inter', system-ui, sans-serif);
+
+  /* Luxury line-height rhythm */
+  --d8-lh-display:     1.06;
+  --d8-lh-heading:     1.12;
+  --d8-lh-subheading:  1.22;
+  --d8-lh-body:        1.82;
+  --d8-lh-label:       1.3;
+
+  /* Luxury letter-spacing */
+  --d8-ls-display:     -0.03em;
+  --d8-ls-heading:     -0.025em;
+  --d8-ls-sub:         -0.015em;
+  --d8-ls-eyebrow:     0.26em;
+  --d8-ls-label:       0.14em;
+  --d8-ls-btn:         0.18em;
+  --d8-ls-meta:        0.08em;
+
+  /* Image rendering */
+  --d8-img-contrast:   contrast(1.04) saturate(1.06);
+  --d8-img-warmth:     contrast(1.05) saturate(1.08) brightness(1.01);
+  --d8-img-cinematic:  contrast(1.06) saturate(1.05) brightness(0.99);
+}
+
+/* ============================================================
+   PART 3 — LUXURY MOBILE TYPOGRAPHY SYSTEM
+   ============================================================ */
+
+/* ── 3.1 HERO TYPOGRAPHY — Cinematic Editorial ── */
+@media (max-width: 900px) {
+
+  .hero-headline {
+    font-family: var(--d8-font-head);
+    font-size: clamp(2.75rem, 9.5vw, 3.8rem);
+    font-weight: 400;
+    line-height: var(--d8-lh-display);
+    letter-spacing: var(--d8-ls-display);
+    color: var(--charcoal, #1C1917);
+    word-spacing: -0.02em;
+    /* Prevent awkward orphaned single words */
+    text-wrap: balance;
+    -webkit-text-wrap: balance;
+    hyphens: none;
+    margin-bottom: 22px;
+  }
+
+  /* "Quiet" — italic grace */
+  .hero-headline em,
+  .hero-headline .italic-word {
+    font-style: italic;
+    font-weight: 300;
+    letter-spacing: -0.035em;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--d8-font-body);
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: var(--d8-ls-eyebrow);
+    text-transform: uppercase;
+    color: var(--rose-dark, #b5657a);
+    line-height: var(--d8-lh-label);
+    margin-bottom: 20px;
+  }
+
+  .hero-sub {
+    font-family: var(--d8-font-body);
+    font-size: clamp(0.88rem, 3.2vw, 1rem);
+    font-weight: 300;
+    line-height: var(--d8-lh-body);
+    color: var(--muted, #6e6460);
+    letter-spacing: 0.008em;
+    max-width: 300px;
+    margin: 0 auto 36px;
+    text-wrap: pretty;
+    -webkit-text-wrap: pretty;
+  }
+}
+
+/* ── Narrow phones: tighter hero ── */
+@media (max-width: 560px) {
+  .hero-headline {
+    font-size: clamp(2.4rem, 8.5vw, 2.9rem);
+    line-height: 1.07;
+    letter-spacing: -0.028em;
+    margin-bottom: 18px;
+  }
+
+  .hero-sub {
+    font-size: 0.86rem;
+    max-width: 270px;
+    line-height: 1.8;
+  }
+}
+
+@media (max-width: 380px) {
+  .hero-headline {
+    font-size: 2.25rem;
+    letter-spacing: -0.025em;
+    line-height: 1.08;
+  }
+}
+
+/* ── 3.2 SECTION HEADINGS — Editorial Hierarchy ── */
+@media (max-width: 900px) {
+
+  .section-title,
+  .section-heading {
+    font-family: var(--d8-font-head);
+    font-size: clamp(1.85rem, 6.2vw, 2.5rem);
+    font-weight: 400;
+    line-height: var(--d8-lh-heading);
+    letter-spacing: var(--d8-ls-heading);
+    color: var(--charcoal, #1C1917);
+    text-wrap: balance;
+    -webkit-text-wrap: balance;
+    hyphens: none;
+    margin-bottom: 14px;
+  }
+
+  .section-title em,
+  .section-heading em {
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  .section-eyebrow {
+    font-family: var(--d8-font-body);
+    font-size: 0.59rem;
+    font-weight: 600;
+    letter-spacing: var(--d8-ls-eyebrow);
+    text-transform: uppercase;
+    color: var(--rose-dark, #b5657a);
+    line-height: var(--d8-lh-label);
+    margin-bottom: 14px;
+  }
+
+  .section-sub,
+  .section-desc {
+    font-family: var(--d8-font-body);
+    font-size: clamp(0.86rem, 3vw, 0.96rem);
+    font-weight: 300;
+    line-height: var(--d8-lh-body);
+    color: var(--muted, #6e6460);
+    letter-spacing: 0.006em;
+    text-wrap: pretty;
+    -webkit-text-wrap: pretty;
+    max-width: 30ch;
+    margin-bottom: 32px;
+  }
+}
+
+@media (max-width: 560px) {
+  .section-title,
+  .section-heading {
+    font-size: clamp(1.68rem, 5.8vw, 2.1rem);
+    line-height: 1.13;
+    margin-bottom: 12px;
+  }
+
+  .section-sub,
+  .section-desc {
+    font-size: 0.84rem;
+    line-height: 1.78;
+    max-width: 28ch;
+  }
+}
+
+/* ── 3.3 PRODUCT TYPOGRAPHY — Precise & Premium ── */
+@media (max-width: 900px) {
+
+  .product-name,
+  .lux-product-name {
+    font-family: var(--d8-font-body);
+    font-size: clamp(0.88rem, 3vw, 0.95rem);
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: 0.012em;
+    color: var(--charcoal, #1C1917);
+    hyphens: none;
+    text-wrap: balance;
+    -webkit-text-wrap: balance;
+    /* Max two clean lines */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .product-price,
+  .lux-price {
+    font-family: var(--d8-font-head);
+    font-size: clamp(1rem, 3.5vw, 1.1rem);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: var(--rose-dark, #b5657a);
+    line-height: 1.2;
+  }
+
+  /* Product meta — material, size labels */
+  .product-meta,
+  .lux-product-desc,
+  .product-material,
+  .product-variant-label {
+    font-family: var(--d8-font-body);
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: var(--d8-ls-meta);
+    line-height: 1.55;
+    color: var(--muted, #6e6460);
+  }
+
+  /* Product detail page name */
+  .product-detail-name,
+  .product-title-lux,
+  .pdp-name {
+    font-family: var(--d8-font-head);
+    font-size: clamp(1.7rem, 5.8vw, 2.1rem);
+    font-weight: 400;
+    line-height: 1.14;
+    letter-spacing: -0.022em;
+    color: var(--charcoal, #1C1917);
+    text-wrap: balance;
+    -webkit-text-wrap: balance;
+    margin-bottom: 14px;
+  }
+
+  .product-detail-desc,
+  .pdp-desc {
+    font-family: var(--d8-font-body);
+    font-size: 0.9rem;
+    font-weight: 300;
+    line-height: 1.85;
+    letter-spacing: 0.006em;
+    color: var(--muted, #6e6460);
+    text-wrap: pretty;
+    -webkit-text-wrap: pretty;
+    margin-bottom: 26px;
+  }
+}
+
+@media (max-width: 560px) {
+  .product-detail-name,
+  .product-title-lux,
+  .pdp-name {
+    font-size: clamp(1.5rem, 5.2vw, 1.85rem);
+    line-height: 1.15;
+  }
+
+  .product-detail-desc,
+  .pdp-desc {
+    font-size: 0.86rem;
+    line-height: 1.82;
+  }
+}
+
+/* ── 3.4 LUXURY LABELS & BADGES ── */
+@media (max-width: 900px) {
+
+  .luxury-label,
+  .lux-label,
+  .editorial-label {
+    font-family: var(--d8-font-body);
+    font-size: 0.56rem;
+    font-weight: 700;
+    letter-spacing: var(--d8-ls-label);
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .lux-badge,
+  .product-badge,
+  .badge {
+    font-size: 0.53rem;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+}
+
+/* ── 3.5 CTA / BUTTON TYPOGRAPHY — Premium Proportions ── */
+@media (max-width: 900px) {
+
+  .btn-primary,
+  .btn-ghost,
+  .btn-cart,
+  .btn-large,
+  .lux-cart-btn,
+  .btn-checkout,
+  .pdp-add-btn {
+    font-family: var(--d8-font-body);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: var(--d8-ls-btn);
+    text-transform: uppercase;
+    line-height: 1;
+    /* Guaranteed luxury tap target */
+    min-height: 52px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Primary CTA — full-width hero variant */
+  .hero-ctas .btn-primary {
+    font-size: 0.74rem;
+    letter-spacing: 0.2em;
+    min-height: 54px;
+    padding: 18px 32px;
+  }
+
+  .hero-ctas .btn-ghost {
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    min-height: 50px;
+    padding: 16px 32px;
+  }
+
+  /* Sticky product bar */
+  .product-sticky-cta .btn-primary,
+  .pdp-sticky-bar .btn-primary {
+    font-size: 0.76rem;
+    letter-spacing: 0.2em;
+    min-height: 54px;
+  }
+}
+
+@media (max-width: 560px) {
+  .btn-primary,
+  .btn-ghost,
+  .btn-cart,
+  .lux-cart-btn {
+    font-size: 0.7rem;
+    letter-spacing: 0.17em;
+    min-height: 50px;
+  }
+}
+
+/* ── 3.6 NAVIGATION TYPOGRAPHY ── */
+@media (max-width: 900px) {
+
+  .logo {
+    font-family: var(--d8-font-head);
+    letter-spacing: 0.04em;
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  .nav-links.open a,
+  .nav-link {
+    font-family: var(--d8-font-body);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .btn-nav {
+    font-family: var(--d8-font-body);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+}
+
+/* ── 3.7 EDITORIAL SECTION BODY COPY ── */
+@media (max-width: 900px) {
+
+  /* Brand story, about copy, editorial paragraphs */
+  .brand-story-text p,
+  .editorial-copy p,
+  .about-text p,
+  .collection-desc {
+    font-family: var(--d8-font-body);
+    font-size: clamp(0.86rem, 3vw, 0.95rem);
+    font-weight: 300;
+    line-height: var(--d8-lh-body);
+    letter-spacing: 0.008em;
+    color: var(--muted, #6e6460);
+    text-wrap: pretty;
+    -webkit-text-wrap: pretty;
+    /* Prevent single-word orphan lines */
+    orphans: 3;
+    widows: 3;
+    margin-bottom: 20px;
+  }
+
+  .brand-story-text p:last-child,
+  .editorial-copy p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Collection header desc */
+  .collection-desc {
+    font-size: 0.88rem;
+    line-height: 1.88;
+    max-width: 300px;
+  }
+
+  /* Testimonial text */
+  .testi-text,
+  .testimonial-quote {
+    font-family: var(--d8-font-head);
+    font-size: clamp(0.95rem, 3.2vw, 1.05rem);
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.65;
+    letter-spacing: -0.005em;
+    color: var(--charcoal, #1C1917);
+    text-wrap: balance;
+    -webkit-text-wrap: balance;
+  }
+
+  .testi-author,
+  .testimonial-author {
+    font-family: var(--d8-font-body);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--rose-dark, #b5657a);
+    margin-top: 14px;
+  }
+
+  /* Why-card typography */
+  .why-card h3 {
+    font-family: var(--d8-font-body);
+    font-size: 0.88rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    line-height: 1.3;
+    margin-bottom: 8px;
+    color: var(--charcoal, #1C1917);
+  }
+
+  .why-card p {
+    font-size: 0.73rem;
+    font-weight: 300;
+    line-height: 1.65;
+    color: var(--muted, #6e6460);
+  }
+
+  /* Category card typography */
+  .cat-info h3 {
+    font-family: var(--d8-font-body);
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    line-height: 1.28;
+    color: var(--charcoal, #1C1917);
+  }
+
+  .cat-info p {
+    font-size: 0.7rem;
+    font-weight: 300;
+    line-height: 1.58;
+    color: var(--muted, #6e6460);
+    margin-top: 4px;
+  }
+}
+
+/* ── 3.8 SECTION SPACING RHYTHM ── */
+@media (max-width: 900px) {
+
+  .section {
+    padding: 72px 0;
+  }
+
+  /* Breathing room between eyebrow → title → body */
+  .section-eyebrow + .section-title,
+  .section-eyebrow + .section-heading {
+    margin-top: 0;
+  }
+
+  .section-title + .section-sub,
+  .section-heading + .section-desc {
+    margin-top: 10px;
+  }
+
+  .section-title + p,
+  .section-heading + p {
+    margin-top: 12px;
+  }
+
+  /* Collection header vertical rhythm */
+  .collection-header {
+    padding: 64px 0 48px;
+  }
+
+  .collection-eyebrow {
+    margin-bottom: 18px;
+  }
+
+  .collection-title {
+    font-family: var(--d8-font-head);
+    font-size: clamp(2.3rem, 7.8vw, 3.1rem);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.018em;
+    text-wrap: balance;
+    -webkit-text-wrap: balance;
+    margin-bottom: 18px;
+  }
+
+  .collection-desc {
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 560px) {
+  .section {
+    padding: 58px 0;
+  }
+
+  .collection-header {
+    padding: 52px 0 38px;
+  }
+
+  .collection-title {
+    font-size: clamp(1.95rem, 7.2vw, 2.5rem);
+  }
+}
+
+@media (max-width: 380px) {
+  .section {
+    padding: 48px 0;
+  }
+}
+
+/* ── 3.9 CTA SECTION HEADING ── */
+@media (max-width: 900px) {
+
+  .cta-headline {
+    font-family: var(--d8-font-head);
+    font-size: clamp(2.1rem, 7.2vw, 2.9rem);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.022em;
+    text-wrap: balance;
+    -webkit-text-wrap: balance;
+    margin-bottom: 14px;
+  }
+
+  .cta-sub {
+    font-family: var(--d8-font-body);
+    font-size: 0.88rem;
+    font-weight: 300;
+    line-height: 1.82;
+    color: var(--muted, #6e6460);
+    max-width: 28ch;
+    margin: 0 auto 32px;
+    text-wrap: pretty;
+    -webkit-text-wrap: pretty;
+  }
+}
+
+@media (max-width: 560px) {
+  .cta-headline {
+    font-size: clamp(1.9rem, 6.8vw, 2.4rem);
+  }
+}
+
+/* ── 3.10 CAMPAIGN BANNER TYPOGRAPHY ── */
+@media (max-width: 900px) {
+
+  .campaign-banner-title {
+    font-family: var(--d8-font-head);
+    font-size: clamp(1.65rem, 5.5vw, 1.9rem);
+    font-weight: 400;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+    -webkit-text-wrap: balance;
+    margin-bottom: 10px;
+  }
+
+  .campaign-banner-sub {
+    font-size: 0.78rem;
+    font-weight: 300;
+    line-height: 1.72;
+    letter-spacing: 0.006em;
+    margin-bottom: 22px;
+  }
+}
+
+@media (max-width: 560px) {
+  .campaign-banner-title {
+    font-size: 1.5rem;
+  }
+}
+
+/* ── 3.11 TRUST / MARQUEE STRIP ── */
+@media (max-width: 900px) {
+
+  .marquee-item {
+    font-family: var(--d8-font-body);
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .hero-trust-item {
+    font-family: var(--d8-font-body);
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted, #6e6460);
+  }
+}
+
+/* ── 3.12 FORM & INPUT TYPOGRAPHY ── */
+@media (max-width: 900px) {
+
+  .form-label,
+  label {
+    font-family: var(--d8-font-body);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted, #6e6460);
+    line-height: 1.2;
+  }
+
+  .form-input,
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="number"],
+  input[type="password"],
+  textarea,
+  select {
+    font-family: var(--d8-font-body);
+    font-size: 0.9rem;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    line-height: 1.5;
+    color: var(--text, #2c2420);
+  }
+
+  ::placeholder {
+    font-style: italic;
+    font-weight: 300;
+    letter-spacing: 0.01em;
+    opacity: 0.55;
+  }
+}
+
+/* ── 3.13 PREVENT ORPHANED WORDS SYSTEM-WIDE ── */
+@media (max-width: 900px) {
+
+  h1, h2, h3, h4,
+  .hero-headline,
+  .section-title,
+  .section-heading,
+  .collection-title,
+  .cta-headline,
+  .product-detail-name,
+  .pdp-name,
+  .campaign-banner-title {
+    text-wrap: balance;
+    -webkit-text-wrap: balance;
+    hyphens: none;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+
+  p,
+  .hero-sub,
+  .section-sub,
+  .section-desc,
+  .collection-desc,
+  .product-detail-desc,
+  .pdp-desc,
+  .brand-story-text p,
+  .editorial-copy p {
+    text-wrap: pretty;
+    -webkit-text-wrap: pretty;
+    hyphens: none;
+    overflow-wrap: break-word;
+  }
+}
+
+
+/* ============================================================
+   PART 4 — LUXURY MOBILE IMAGE INTELLIGENCE
+   ============================================================ */
+
+/* ── 4.1 GLOBAL IMAGE RENDERING — Cinematic Quality ── */
+@media (max-width: 900px) {
+
+  img {
+    /* Crisp sub-pixel rendering */
+    image-rendering: -webkit-optimize-contrast;
+    -webkit-font-smoothing: antialiased;
+    /* Prevent layout jitter */
+    display: block;
+    /* Reserve space to eliminate layout shift */
+    content-visibility: auto;
+  }
+
+  /* Premium lazy load — no abrupt flash */
+  img[loading="lazy"] {
+    opacity: 0;
+    transition: opacity 0.45s ease;
+  }
+
+  img[loading="lazy"].loaded,
+  img[loading="lazy"]:not([src=""]) {
+    opacity: 1;
+  }
+}
+
+/* ── 4.2 HERO IMAGE — Cinematic Mobile Framing ── */
+@media (max-width: 900px) {
+
+  .hero-img-wrap {
+    border-radius: var(--mob-radius, 20px) var(--mob-radius, 20px) 0 0;
+    overflow: hidden;
+    /* Stabilize against layout shift */
+    position: relative;
+    /* Cinematic aspect container */
+    aspect-ratio: 3 / 4;
+    width: 100%;
+  }
+
+  .hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Frame faces in upper center — critical for portrait jewelry/model shots */
+    object-position: 50% 18%;
+    /* Cinematic rendering */
+    filter: var(--d8-img-cinematic);
+    /* Remove max-height constraint — aspect-ratio controls this now */
+    max-height: none;
+    border-radius: 0;
+    box-shadow: none;
+    /* GPU compositing layer for sharp rendering */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+}
+
+/* ── 4.3 HERO IMAGE — Narrower phones ── */
+@media (max-width: 560px) {
+
+  .hero-img-wrap {
+    /* Taller aspect for small screens — more cinematic fill */
+    aspect-ratio: 3 / 4.2;
+    border-radius: var(--mob-radius-sm, 12px) var(--mob-radius-sm, 12px) 0 0;
+  }
+
+  .hero-img {
+    object-position: 50% 15%;
+    filter: var(--d8-img-cinematic);
+  }
+}
+
+@media (max-width: 380px) {
+
+  .hero-img-wrap {
+    aspect-ratio: 3 / 4;
+  }
+
+  .hero-img {
+    object-position: 50% 12%;
+  }
+}
+
+/* ── 4.4 PRODUCT CARD IMAGES — Premium Framing ── */
+@media (max-width: 900px) {
+
+  /* Legacy product cards */
+  .product-img-wrap {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: var(--mob-radius, 20px) var(--mob-radius, 20px) 0 0;
+    position: relative;
+    background: var(--blush, #f5ece8);
+  }
+
+  .product-img-wrap img,
+  .product-img-wrap > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Center jewelry slightly above center — shows detail, avoids base crop */
+    object-position: 50% 40%;
+    filter: var(--d8-img-warmth);
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transition: transform 0.85s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
+  }
+
+  .product-card:active .product-img-wrap img {
+    transform: scale(1.04) translateZ(0);
+  }
+
+  /* D3 Luxury cards */
+  .lux-img-container {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: var(--mob-radius, 20px) var(--mob-radius, 20px) 0 0;
+    position: relative;
+    background: var(--blush, #f5ece8);
+  }
+
+  .lux-img-container img,
+  .lux-img-container > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 40%;
+    filter: var(--d8-img-warmth);
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transition: transform 0.85s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
+  }
+
+  .product-card-lux:active .lux-img-container img {
+    transform: scale(1.04) translateZ(0);
+  }
+}
+
+/* ── 4.5 PRODUCT DETAIL / GALLERY IMAGES ── */
+@media (max-width: 900px) {
+
+  .product-gallery,
+  .product-img-section,
+  .product-main-img-wrap {
+    width: calc(100% + 40px);
+    margin-left: -20px;
+    margin-right: -20px;
+    overflow: hidden;
+    background: var(--cream, #faf8f5);
+    /* Stable aspect — no max-height guessing */
+    aspect-ratio: 1 / 1.15;
+    max-height: 60svh;
+    position: relative;
+  }
+
+  .product-gallery img,
+  .product-main-img,
+  .product-img-large {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Frame product jewellery centered slightly above mid */
+    object-position: 50% 35%;
+    filter: var(--d8-img-warmth);
+    border-radius: 0;
+    max-height: none;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  /* Thumbnail strip — clean, sharp */
+  .product-thumb img,
+  .thumb-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 40%;
+    filter: var(--d8-img-contrast);
+    image-rendering: -webkit-optimize-contrast;
+    border-radius: var(--mob-radius-xs, 8px);
+  }
+}
+
+@media (max-width: 560px) {
+
+  .product-gallery,
+  .product-img-section,
+  .product-main-img-wrap {
+    width: calc(100% + 36px);
+    margin-left: -18px;
+    margin-right: -18px;
+    aspect-ratio: 1 / 1.2;
+    max-height: 58svh;
+  }
+}
+
+/* ── 4.6 CATEGORY CARD IMAGES ── */
+@media (max-width: 900px) {
+
+  .cat-img-wrap {
+    height: 165px;
+    overflow: hidden;
+    position: relative;
+    background: var(--blush, #f5ece8);
+  }
+
+  .cat-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Categories: show full scene — centered */
+    object-position: 50% 45%;
+    filter: var(--d8-img-cinematic);
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transition: transform 0.85s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
+  }
+
+  .cat-card:active .cat-img-wrap img {
+    transform: scale(1.03) translateZ(0);
+  }
+}
+
+@media (max-width: 560px) {
+  .cat-img-wrap {
+    height: 145px;
+  }
+}
+
+/* ── 4.7 BRAND STORY / GALLERY IMAGES ── */
+@media (max-width: 900px) {
+
+  .brand-story-grid,
+  .brand-story-img-wrap {
+    height: 290px;
+    border-radius: var(--mob-radius, 20px);
+    overflow: hidden;
+    position: relative;
+    background: var(--blush, #f5ece8);
+  }
+
+  .brand-story-grid img,
+  .brand-story-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 30%;
+    filter: var(--d8-img-cinematic);
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  /* Gallery grid items */
+  .gallery-item,
+  .gallery-item--tall,
+  .gallery-item--wide {
+    height: 185px;
+    border-radius: var(--mob-radius-sm, 12px);
+    overflow: hidden;
+    position: relative;
+    background: var(--blush, #f5ece8);
+  }
+
+  .gallery-item img,
+  .gallery-item--tall img,
+  .gallery-item--wide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 40%;
+    filter: var(--d8-img-warmth);
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+}
+
+@media (max-width: 560px) {
+  .brand-story-grid,
+  .brand-story-img-wrap {
+    height: 245px;
+  }
+
+  .gallery-item,
+  .gallery-item--tall,
+  .gallery-item--wide {
+    height: 155px;
+  }
+}
+
+/* ── 4.8 CART ITEM IMAGES ── */
+@media (max-width: 900px) {
+
+  .cart-item-img,
+  .cart-item-image {
+    width: 100px;
+    height: 100px;
+    border-radius: var(--mob-radius-sm, 12px);
+    object-fit: cover;
+    object-position: 50% 40%;
+    filter: var(--d8-img-warmth);
+    border: 1px solid var(--border, #ede6dd);
+    flex-shrink: 0;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+}
+
+/* ── 4.9 SEARCH RESULT THUMBNAIL IMAGES ── */
+@media (max-width: 900px) {
+
+  .search-result-img {
+    width: 50px;
+    height: 50px;
+    border-radius: var(--mob-radius-xs, 8px);
+    object-fit: cover;
+    object-position: 50% 40%;
+    filter: var(--d8-img-contrast);
+    flex-shrink: 0;
+  }
+}
+
+/* ── 4.10 CAMPAIGN BANNER BACKGROUND ── */
+@media (max-width: 900px) {
+
+  .collection-campaign-banner {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .collection-campaign-banner img,
+  .campaign-banner-img,
+  .campaign-bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 35%;
+    filter: var(--d8-img-cinematic);
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  /* Preserve cinematic warmth over banner overlay */
+  .collection-campaign-banner::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      160deg,
+      rgba(28, 25, 23, 0.32) 0%,
+      rgba(28, 25, 23, 0.08) 55%,
+      rgba(28, 25, 23, 0.18) 100%
+    );
+    pointer-events: none;
+  }
+}
+
+/* ── 4.11 IMAGE PLACEHOLDER — Luxury Loading State ── */
+@media (max-width: 900px) {
+
+  .product-img-wrap:empty,
+  .lux-img-container:empty,
+  .hero-img-wrap:empty {
+    background: linear-gradient(
+      135deg,
+      var(--blush, #f5ece8) 0%,
+      var(--cream, #faf8f5) 50%,
+      var(--blush, #f5ece8) 100%
+    );
+    background-size: 200% 200%;
+    animation: d8ShimmerLux 1.8s ease infinite;
+  }
+
+  @keyframes d8ShimmerLux {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Skeleton image placeholders */
+  .skeleton-img-wrap {
+    background: linear-gradient(
+      90deg,
+      var(--cream, #faf8f5) 25%,
+      var(--blush, #f5ece8) 50%,
+      var(--cream, #faf8f5) 75%
+    );
+    background-size: 200% 100%;
+    animation: d8SkeletonPulse 1.6s ease infinite;
+    border-radius: var(--mob-radius, 20px) var(--mob-radius, 20px) 0 0;
+    aspect-ratio: 4/5;
+  }
+
+  @keyframes d8SkeletonPulse {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+}
+
+/* ── 4.12 REDUCED MOTION — Preserve quality, skip animation ── */
+@media (prefers-reduced-motion: reduce) {
+
+  .hero-img,
+  .product-img-wrap img,
+  .lux-img-container img,
+  .cat-img-wrap img,
+  .brand-story-grid img,
+  .gallery-item img {
+    transition: none !important;
+    will-change: auto;
+  }
+
+  .product-img-wrap:empty,
+  .lux-img-container:empty,
+  .skeleton-img-wrap {
+    animation: none !important;
+  }
+}
+
+/* ── 4.13 PERFORMANCE — Lazy loading stability ── */
+@media (max-width: 900px) {
+
+  /* Reserve space for all main images before load */
+  .product-img-wrap,
+  .lux-img-container,
+  .cat-img-wrap,
+  .hero-img-wrap {
+    contain: layout style paint;
+  }
+
+  /* Decode async — prevents decode blocking render */
+  img {
+    -webkit-decode: async;
+  }
+}
+
+/* ── 4.14 HIGH-DPI / RETINA — Crisp rendering ── */
+@media (max-width: 900px) and (-webkit-min-device-pixel-ratio: 2),
+       (max-width: 900px) and (min-resolution: 192dpi) {
+
+  .hero-img,
+  .product-img-wrap img,
+  .lux-img-container img,
+  .cat-img-wrap img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}

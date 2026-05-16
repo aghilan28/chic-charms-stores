@@ -1,0 +1,664 @@
+/* ============================================================
+   CHIC CHARMS — d10-luxury-motion.css
+   Stage 2 · Part 7: Luxury Mobile Motion & Animation System
+   Mobile-only additive layer — desktop completely untouched
+   ============================================================ */
+
+/* ============================================================
+   D10 · MOTION TOKENS
+   Luxury easing suite — cinematic, restrained, premium
+   ============================================================ */
+:root {
+  /* Easing library */
+  --d10-ease-silk:      cubic-bezier(0.16, 1, 0.3, 1);       /* hero reveals, card entrances */
+  --d10-ease-drift:     cubic-bezier(0.25, 0.46, 0.45, 0.94); /* gentle fades, section reveals */
+  --d10-ease-cinematic: cubic-bezier(0.12, 0.8, 0.32, 1);    /* gallery, PDP image transitions */
+  --d10-ease-snap:      cubic-bezier(0.22, 1, 0.36, 1);      /* quick interaction feedback */
+  --d10-ease-editorial: cubic-bezier(0.06, 0.95, 0.22, 1);   /* staggered content reveals */
+
+  /* Duration scale */
+  --d10-dur-instant:    0.08s;
+  --d10-dur-fast:       0.16s;
+  --d10-dur-medium:     0.38s;
+  --d10-dur-slow:       0.58s;
+  --d10-dur-cinematic:  0.74s;
+
+  /* Stagger rhythm */
+  --d10-stagger-xs:     0.04s;
+  --d10-stagger-sm:     0.08s;
+  --d10-stagger-md:     0.12s;
+  --d10-stagger-lg:     0.18s;
+}
+
+/* ============================================================
+   D10 · SCROLL REVEAL SYSTEM
+   Intersection-observer-driven section entrances
+   ============================================================ */
+@media (max-width: 900px) {
+
+  /* Base hidden state for all reveal targets */
+  .d10-reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity   var(--d10-dur-slow) var(--d10-ease-silk),
+      transform var(--d10-dur-slow) var(--d10-ease-silk);
+    will-change: opacity, transform;
+  }
+
+  .d10-reveal.d10-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Reveal variants */
+  .d10-reveal-fade {
+    opacity: 0;
+    transition: opacity var(--d10-dur-slow) var(--d10-ease-drift);
+  }
+
+  .d10-reveal-fade.d10-visible {
+    opacity: 1;
+  }
+
+  .d10-reveal-up {
+    opacity: 0;
+    transform: translateY(32px);
+    transition:
+      opacity   var(--d10-dur-cinematic) var(--d10-ease-editorial),
+      transform var(--d10-dur-cinematic) var(--d10-ease-editorial);
+  }
+
+  .d10-reveal-up.d10-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .d10-reveal-scale {
+    opacity: 0;
+    transform: scale(0.96);
+    transition:
+      opacity   var(--d10-dur-slow) var(--d10-ease-silk),
+      transform var(--d10-dur-slow) var(--d10-ease-silk);
+  }
+
+  .d10-reveal-scale.d10-visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Stagger delays */
+  .d10-reveal:nth-child(1),
+  .d10-reveal-up:nth-child(1) { transition-delay: 0s; }
+  .d10-reveal:nth-child(2),
+  .d10-reveal-up:nth-child(2) { transition-delay: var(--d10-stagger-sm); }
+  .d10-reveal:nth-child(3),
+  .d10-reveal-up:nth-child(3) { transition-delay: var(--d10-stagger-md); }
+  .d10-reveal:nth-child(4),
+  .d10-reveal-up:nth-child(4) { transition-delay: var(--d10-stagger-lg); }
+  .d10-reveal:nth-child(5),
+  .d10-reveal-up:nth-child(5) { transition-delay: calc(var(--d10-stagger-lg) * 1.5); }
+}
+
+/* ============================================================
+   D10 · SECTION REVEAL — Page-level sections
+   ============================================================ */
+@media (max-width: 900px) {
+
+  /* Collection / products section */
+  .collections-section,
+  .products-section,
+  .featured-section {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity   var(--d10-dur-slow) var(--d10-ease-drift),
+      transform var(--d10-dur-slow) var(--d10-ease-drift);
+  }
+
+  .collections-section.d10-visible,
+  .products-section.d10-visible,
+  .featured-section.d10-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Editorial / marquee sections */
+  .editorial-section,
+  .marquee-section,
+  .testimonials-section {
+    opacity: 0;
+    transition: opacity var(--d10-dur-cinematic) var(--d10-ease-drift);
+  }
+
+  .editorial-section.d10-visible,
+  .marquee-section.d10-visible,
+  .testimonials-section.d10-visible {
+    opacity: 1;
+  }
+
+  /* Section headers: editorial stagger */
+  .section-header,
+  .products-header,
+  .collection-header {
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity   var(--d10-dur-medium) var(--d10-ease-editorial),
+      transform var(--d10-dur-medium) var(--d10-ease-editorial);
+  }
+
+  .section-header.d10-visible,
+  .products-header.d10-visible,
+  .collection-header.d10-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   D10 · COLLECTION CARD MOTION
+   Refinement on top of D5 base card transitions
+   ============================================================ */
+@media (max-width: 900px) {
+
+  /* Collection cards: editorial tilt reveal */
+  .collection-card {
+    transition:
+      box-shadow var(--d10-dur-medium) var(--d10-ease-drift),
+      transform  var(--d10-dur-medium) var(--d10-ease-drift);
+  }
+
+  .collection-card:active {
+    transform: scale(0.975) !important;
+    box-shadow: 0 2px 8px rgba(60, 40, 30, 0.06) !important;
+    transition-duration: var(--d10-dur-instant) !important;
+  }
+
+  /* Collection card image zoom */
+  .collection-card .card-img,
+  .collection-card img {
+    transition: transform 1.2s var(--d10-ease-drift) !important;
+    will-change: transform;
+  }
+
+  .collection-card:active .card-img,
+  .collection-card:active img {
+    transform: scale(1.035) !important;
+    transition-duration: 0.4s !important;
+  }
+}
+
+/* ============================================================
+   D10 · BUTTON INTERACTION SYSTEM
+   Global premium tap feedback — all interactive elements
+   ============================================================ */
+@media (max-width: 900px) {
+
+  /* Primary CTA buttons */
+  .btn-primary,
+  .btn-secondary {
+    transition:
+      background    var(--d10-dur-medium) var(--d10-ease-drift),
+      color         var(--d10-dur-medium) var(--d10-ease-drift),
+      border-color  var(--d10-dur-medium) var(--d10-ease-drift),
+      box-shadow    var(--d10-dur-medium) var(--d10-ease-drift),
+      transform     var(--d10-dur-instant) ease;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .btn-primary:active {
+    transform: scale(0.974) !important;
+    transition-duration: var(--d10-dur-instant) !important;
+  }
+
+  .btn-secondary:active,
+  .btn-ghost:active {
+    transform: scale(0.968) !important;
+    transition-duration: var(--d10-dur-instant) !important;
+  }
+
+  /* Ghost / outline buttons */
+  .btn-ghost {
+    transition:
+      background  var(--d10-dur-medium) var(--d10-ease-drift),
+      color       var(--d10-dur-medium) var(--d10-ease-drift),
+      transform   var(--d10-dur-instant) ease;
+  }
+}
+
+/* ============================================================
+   D10 · IMAGE CROSSFADE SYSTEM
+   Luxury fade between image states (gallery, swatches)
+   ============================================================ */
+@media (max-width: 900px) {
+
+  /* Any image inside a gallery or card participates in crossfade */
+  .lux-img-container img,
+  .gallery-slide img,
+  .product-img-frame img {
+    transition:
+      opacity   0.28s var(--d10-ease-drift),
+      transform var(--d10-dur-slow) var(--d10-ease-cinematic);
+  }
+
+  /* Image loading state */
+  img.d10-loading {
+    opacity: 0;
+    transform: scale(1.02);
+  }
+
+  img.d10-loaded {
+    opacity: 1;
+    transform: scale(1);
+    transition:
+      opacity   0.36s var(--d10-ease-drift),
+      transform 0.52s var(--d10-ease-cinematic);
+  }
+}
+
+/* ============================================================
+   D10 · SCROLL EXPERIENCE — Page motion rhythm
+   ============================================================ */
+@media (max-width: 900px) {
+
+  /* Smooth scroll baseline — already on html via D5,
+     reinforce with consistent momentum */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Prevent momentum scroll bleed between sections */
+  .product-gallery-thumbs,
+  .related-grid,
+  .collection-cards-row {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+
+  /* Section fade-in: triggered by scroll, not on load */
+  .products-filter-bar,
+  .sort-bar {
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity   var(--d10-dur-medium) var(--d10-ease-drift),
+      transform var(--d10-dur-medium) var(--d10-ease-drift);
+  }
+
+  .products-filter-bar.d10-visible,
+  .sort-bar.d10-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   D10 · LUXURY MARQUEE REFINEMENT
+   Slow, hypnotic scroll — editorial feel
+   ============================================================ */
+@media (max-width: 900px) {
+
+  .marquee-track,
+  .ticker-track {
+    animation-duration: 28s !important;
+    animation-timing-function: linear !important;
+  }
+
+  /* Pause on press — tactile editorial pause */
+  .marquee-track:hover,
+  .ticker-track:hover,
+  .marquee-track:active,
+  .ticker-track:active {
+    animation-play-state: paused;
+  }
+}
+
+/* ============================================================
+   D10 · NOTIFICATION / FEEDBACK TOAST
+   Luxury positioning and animation
+   ============================================================ */
+@media (max-width: 900px) {
+
+  .cart-toast,
+  .feedback-toast,
+  .success-toast {
+    position: fixed;
+    bottom: calc(var(--d9-sticky-h, 76px) + 12px + env(safe-area-inset-bottom, 0px));
+    left: 20px;
+    right: 20px;
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    z-index: 100;
+    box-shadow:
+      0 8px 28px rgba(28, 25, 23, 0.14),
+      0 2px 8px rgba(28, 25, 23, 0.06);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    animation: d10ToastIn var(--d10-dur-slow) var(--d10-ease-silk) both;
+  }
+
+  @keyframes d10ToastIn {
+    from {
+      opacity: 0;
+      transform: translateY(12px) scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .cart-toast.d10-exit,
+  .feedback-toast.d10-exit,
+  .success-toast.d10-exit {
+    animation: d10ToastOut 0.3s var(--d10-ease-drift) both;
+  }
+
+  @keyframes d10ToastOut {
+    to {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+}
+
+/* ============================================================
+   D10 · MODAL & OVERLAY SYSTEM
+   Luxury drawer and sheet animations
+   ============================================================ */
+@media (max-width: 900px) {
+
+  /* Bottom sheet / modal backdrop */
+  .modal-overlay,
+  .drawer-overlay,
+  .sheet-overlay {
+    background: rgba(28, 25, 23, 0);
+    transition: background var(--d10-dur-medium) var(--d10-ease-drift);
+  }
+
+  .modal-overlay.open,
+  .drawer-overlay.open,
+  .sheet-overlay.open {
+    background: rgba(28, 25, 23, 0.36);
+  }
+
+  /* Bottom sheet */
+  .bottom-sheet,
+  .modal-sheet {
+    transform: translateY(100%);
+    border-radius: 20px 20px 0 0;
+    transition: transform var(--d10-dur-slow) var(--d10-ease-silk);
+  }
+
+  .bottom-sheet.open,
+  .modal-sheet.open {
+    transform: translateY(0);
+  }
+
+  /* Sheet handle indicator */
+  .sheet-handle {
+    width: 36px;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(60, 40, 30, 0.18);
+    margin: 10px auto 0;
+  }
+}
+
+/* ============================================================
+   D10 · LOADING STATES
+   Skeleton shimmer — restrained, elegant
+   ============================================================ */
+@media (max-width: 900px) {
+
+  .skeleton,
+  .skel,
+  [data-skeleton] {
+    background: linear-gradient(
+      90deg,
+      var(--parchment, #f9f5ef) 25%,
+      rgba(237, 230, 221, 0.7) 50%,
+      var(--parchment, #f9f5ef) 75%
+    );
+    background-size: 300% 100%;
+    animation: d10Shimmer 1.8s ease infinite;
+    border-radius: 6px;
+  }
+
+  @keyframes d10Shimmer {
+    0%   { background-position: 100% 0; }
+    100% { background-position: -100% 0; }
+  }
+
+  /* Pause shimmer when tab is hidden (performance) */
+  @media (prefers-reduced-motion: no-preference) {
+    .skeleton,
+    .skel,
+    [data-skeleton] {
+      animation-duration: 1.8s;
+    }
+  }
+}
+
+/* ============================================================
+   D10 · WISHLIST / HEART FEEDBACK
+   ============================================================ */
+@media (max-width: 900px) {
+
+  .wishlist-icon,
+  .lux-wishlist-btn svg {
+    transition:
+      transform var(--d10-dur-fast) var(--d10-ease-snap),
+      fill      var(--d10-dur-medium) ease;
+  }
+
+  .lux-wishlist-btn.is-wishlisted svg,
+  .wishlist-icon.active {
+    fill: var(--rose-dark, #b5657a);
+    transform: scale(1.15);
+  }
+
+  .lux-wishlist-btn:active svg {
+    transform: scale(0.88);
+    transition-duration: var(--d10-dur-instant);
+  }
+}
+
+/* ============================================================
+   D10 · PRICE TRANSITION
+   Subtle crossfade when variant changes price
+   ============================================================ */
+@media (max-width: 900px) {
+
+  .product-price-main,
+  .lux-price,
+  .pdp-sticky-amount {
+    transition: opacity 0.2s var(--d10-ease-drift);
+  }
+
+  .product-price-main.d10-price-updating,
+  .lux-price.d10-price-updating,
+  .pdp-sticky-amount.d10-price-updating {
+    opacity: 0.4;
+  }
+}
+
+/* ============================================================
+   D10 · FILTER / SORT INTERACTION
+   ============================================================ */
+@media (max-width: 900px) {
+
+  .filter-chip,
+  .sort-chip {
+    transition:
+      background    var(--d10-dur-medium) var(--d10-ease-drift),
+      border-color  var(--d10-dur-medium) var(--d10-ease-drift),
+      color         var(--d10-dur-medium) var(--d10-ease-drift),
+      transform     var(--d10-dur-instant) ease;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .filter-chip:active,
+  .sort-chip:active {
+    transform: scale(0.94);
+    transition-duration: var(--d10-dur-instant);
+  }
+}
+
+/* ============================================================
+   D10 · RELATED PRODUCTS — Horizontal scroll momentum
+   ============================================================ */
+@media (max-width: 900px) {
+
+  .related-scroll-row {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    scroll-snap-type: x mandatory;
+  }
+
+  .related-scroll-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .related-card {
+    scroll-snap-align: start;
+    transition:
+      transform  var(--d10-dur-medium) var(--d10-ease-drift),
+      box-shadow var(--d10-dur-medium) var(--d10-ease-drift);
+  }
+
+  .related-card:active {
+    transform: scale(0.974);
+    transition-duration: var(--d10-dur-instant);
+  }
+}
+
+/* ============================================================
+   D10 · CATEGORY EYEBROW — Luxury reveal line
+   ============================================================ */
+@media (max-width: 900px) {
+
+  .product-category-tag,
+  .lux-cat-label,
+  .section-eyebrow {
+    position: relative;
+  }
+
+  .product-category-tag::before,
+  .section-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 0;
+    height: 1px;
+    background: var(--rose-dark, #b5657a);
+    vertical-align: middle;
+    margin-right: 8px;
+    transition: width 0.5s var(--d10-ease-editorial);
+    opacity: 0.7;
+  }
+
+  .product-category-tag.d10-visible::before,
+  .section-eyebrow.d10-visible::before {
+    width: 18px;
+  }
+}
+
+/* ============================================================
+   D10 · SCROLL PROGRESS INDICATOR (Optional)
+   Thin rose line at top of PDP image
+   ============================================================ */
+@media (max-width: 900px) {
+
+  .pdp-scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 2px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--rose-dark, #b5657a), rgba(181, 101, 122, 0.5));
+    z-index: 100;
+    transition: width 0.1s linear;
+    pointer-events: none;
+  }
+}
+
+/* ============================================================
+   D10 · REDUCED MOTION OVERRIDE
+   All D10 animations gracefully removed
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+
+  .d10-reveal,
+  .d10-reveal-fade,
+  .d10-reveal-up,
+  .d10-reveal-scale,
+  .collections-section,
+  .products-section,
+  .featured-section,
+  .editorial-section,
+  .marquee-section,
+  .testimonials-section,
+  .section-header,
+  .products-filter-bar,
+  .sort-bar,
+  .cart-toast,
+  .feedback-toast,
+  .success-toast,
+  .bottom-sheet,
+  .modal-sheet {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .skeleton,
+  .skel,
+  [data-skeleton] {
+    animation: none !important;
+    background: var(--parchment, #f9f5ef) !important;
+  }
+
+  .marquee-track,
+  .ticker-track {
+    animation-play-state: paused !important;
+  }
+}
+
+/* ============================================================
+   D10 · PERFORMANCE SAFEGUARDS
+   Prevent layout thrashing on scroll
+   ============================================================ */
+@media (max-width: 900px) {
+
+  /* Promote composited layers for animated elements */
+  .product-card-lux,
+  .lux-img-container img,
+  .product-img-frame img,
+  .product-sticky-cta,
+  .pdp-sticky-bar,
+  .bottom-sheet,
+  .nav-links::after {
+    will-change: transform;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+  }
+
+  /* Remove will-change once animation settles */
+  .product-card-lux.lux-visible {
+    will-change: auto;
+  }
+
+  /* Contain paint for card grid */
+  .product-grid-lux {
+    contain: layout;
+  }
+}

@@ -1,0 +1,992 @@
+/* ============================================================
+   CHIC CHARMS — d11-luxury-cart-checkout.css
+   Stage 3 · Parts 8–10: Luxury Mobile Cart + Checkout + Performance
+   Mobile-only additive layer (max-width: 900px)
+   Desktop completely untouched.
+   ============================================================ */
+
+/* ============================================================
+   D11 · MOBILE TOKENS
+   ============================================================ */
+:root {
+  --d11-ease-silk:      cubic-bezier(0.16, 1, 0.3, 1);
+  --d11-ease-soft:      cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --d11-ease-snap:      cubic-bezier(0.22, 1, 0.36, 1);
+  --d11-dur-fast:       0.18s;
+  --d11-dur-med:        0.36s;
+  --d11-dur-slow:       0.52s;
+  --d11-item-radius:    18px;
+  --d11-input-h:        54px;
+  --d11-cta-h:          58px;
+  --d11-shadow-card:    0 2px 20px rgba(60,40,30,0.07), 0 1px 4px rgba(60,40,30,0.04);
+  --d11-shadow-cta:     0 8px 28px rgba(181,101,122,0.32);
+  --d11-border:         rgba(237,230,221,0.9);
+}
+
+/* ============================================================
+   PART 8 — LUXURY MOBILE CART
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+  /* ── Page container ── */
+  .cart-page {
+    padding-top: 72px;
+    padding-bottom: 120px; /* room for sticky CTA */
+    background: var(--cream);
+    min-height: 100svh;
+  }
+
+  .cart-page .container {
+    padding: 0 20px;
+  }
+
+  /* ── Cart header ── */
+  .cart-header {
+    margin-bottom: 28px;
+    padding-top: 12px;
+  }
+
+  .cart-header h1 {
+    font-size: 2rem;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+
+  .cart-count-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.76rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0;
+    border-radius: 0;
+    margin-top: 6px;
+  }
+
+  /* ── Cart layout: single column on mobile ── */
+  .cart-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* ── Cart items list ── */
+  .cart-items {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  /* ── Individual cart item ── */
+  .cart-item {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    grid-template-rows: auto auto;
+    gap: 0 14px;
+    background: var(--white);
+    border-radius: var(--d11-item-radius);
+    padding: 18px 18px 16px;
+    box-shadow: var(--d11-shadow-card);
+    border: 1px solid var(--d11-border);
+    position: relative;
+    /* GPU-accelerated will-change for list animations */
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    animation: d11-item-in var(--d11-dur-med) var(--d11-ease-silk) both;
+  }
+
+  @keyframes d11-item-in {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .cart-item:active {
+    transform: scale(0.99) translateZ(0);
+    transition: transform var(--d11-dur-fast) var(--d11-ease-snap);
+  }
+
+  /* ── Item icon: editorial product visual ── */
+  .cart-item-icon {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    width: 64px;
+    height: 64px;
+    background: var(--blush);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    flex-shrink: 0;
+    align-self: start;
+    will-change: auto;
+  }
+
+  /* ── Item details ── */
+  .cart-item-details {
+    grid-column: 2;
+    grid-row: 1;
+    min-width: 0;
+    padding-right: 28px; /* room for remove button */
+  }
+
+  .cart-item-name {
+    font-family: var(--font-head);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: -0.005em;
+  }
+
+  .cart-item-price {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--muted);
+    margin-top: 3px;
+    letter-spacing: 0.01em;
+  }
+
+  /* ── Item right: qty + subtotal ── */
+  .cart-item-right {
+    grid-column: 2;
+    grid-row: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 12px;
+    gap: 10px;
+  }
+
+  /* ── Quantity controls ── */
+  .qty-controls {
+    display: inline-flex;
+    align-items: center;
+    background: var(--cream);
+    border: 1px solid var(--d11-border);
+    border-radius: 999px;
+    overflow: hidden;
+    gap: 0;
+    height: 38px;
+  }
+
+  .qty-btn {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    background: transparent;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+      background var(--d11-dur-fast) var(--d11-ease-snap),
+      color var(--d11-dur-fast),
+      transform var(--d11-dur-fast) var(--d11-ease-snap);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    flex-shrink: 0;
+    will-change: transform;
+  }
+
+  .qty-btn:active {
+    background: var(--blush);
+    color: var(--rose-dark);
+    transform: scale(0.88);
+  }
+
+  .qty-value {
+    min-width: 30px;
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+    border-left: 1px solid var(--d11-border);
+    border-right: 1px solid var(--d11-border);
+    padding: 0;
+    line-height: 38px;
+    height: 38px;
+    font-family: var(--font-body);
+    letter-spacing: 0.01em;
+    will-change: auto;
+  }
+
+  /* Qty value pulse on change */
+  .qty-value.d11-pulse {
+    animation: d11-qty-pulse var(--d11-dur-fast) var(--d11-ease-snap);
+  }
+
+  @keyframes d11-qty-pulse {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.22); color: var(--rose-dark); }
+    100% { transform: scale(1); }
+  }
+
+  /* ── Item subtotal ── */
+  .cart-item-subtotal {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-align: right;
+    line-height: 1.4;
+  }
+
+  .cart-item-subtotal strong {
+    display: block;
+    font-family: var(--font-head);
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+
+  /* ── Remove button: minimal X in corner ── */
+  .btn-remove {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 28px;
+    height: 28px;
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    font-size: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: background var(--d11-dur-fast), transform var(--d11-dur-fast) var(--d11-ease-snap);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    color: var(--muted);
+  }
+
+  .btn-remove::before {
+    content: "×";
+    font-size: 1.3rem;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1;
+    transition: color var(--d11-dur-fast);
+  }
+
+  .btn-remove:active {
+    transform: scale(0.85);
+    background: #fff0f0;
+  }
+
+  .btn-remove:active::before {
+    color: #e57373;
+  }
+
+  /* Out-of-stock label */
+  .cart-item [style*="c0392b"] {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  /* ── Order summary card (cart page) ── */
+  .cart-summary {
+    background: var(--white);
+    border-radius: var(--d11-item-radius);
+    padding: 24px 20px;
+    box-shadow: var(--d11-shadow-card);
+    border: 1px solid var(--d11-border);
+    position: static;
+    margin-bottom: 100px;
+  }
+
+  .cart-summary h2 {
+    font-family: var(--font-head);
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--d11-border);
+    letter-spacing: -0.01em;
+  }
+
+  .summary-row {
+    font-size: 0.84rem;
+    margin-bottom: 8px;
+  }
+
+  .summary-total {
+    margin-bottom: 20px;
+    margin-top: 4px;
+  }
+
+  .summary-total-price {
+    font-size: 1.7rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  /* ── Desktop checkout button in summary: hidden on mobile — sticky CTA handles it ── */
+  .cart-summary .btn-checkout {
+    display: none !important;
+  }
+
+  /* ── Cart trust strip ── */
+  .cart-trust-strip {
+    display: none; /* replaced by subtle trust line in sticky bar */
+  }
+
+  /* ── Empty cart state ── */
+  .cart-empty {
+    background: var(--white);
+    border-radius: var(--d11-item-radius);
+    border: 1px solid var(--d11-border);
+    padding: 64px 28px 56px;
+    text-align: center;
+    box-shadow: var(--d11-shadow-card);
+  }
+
+  .cart-empty-icon {
+    font-size: 2.8rem;
+    margin-bottom: 20px;
+    display: block;
+    opacity: 0.5;
+    filter: grayscale(0.3);
+  }
+
+  .cart-empty h2 {
+    font-family: var(--font-head);
+    font-size: 1.55rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+
+  .cart-empty p {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 30px;
+    max-width: 260px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .cart-empty .btn {
+    font-size: 0.84rem;
+    letter-spacing: 0.04em;
+    padding: 14px 28px;
+  }
+
+  /* ── Stock toast: luxury refinement ── */
+  #cartStockToast {
+    bottom: 100px !important;
+    border-radius: 14px !important;
+    font-size: 0.8rem !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.02em !important;
+    background: var(--charcoal) !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2) !important;
+    padding: 12px 20px !important;
+  }
+}
+
+/* ============================================================
+   D11 · STICKY CHECKOUT CTA — LUXURY MOBILE
+   ============================================================ */
+@media (max-width: 900px) {
+
+  /* Fixed bar at bottom */
+  .d11-sticky-cart-cta {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    background: rgba(250, 248, 245, 0.97);
+    backdrop-filter: blur(20px) saturate(1.6);
+    -webkit-backdrop-filter: blur(20px) saturate(1.6);
+    border-top: 1px solid var(--d11-border);
+    padding: 14px 20px calc(14px + env(safe-area-inset-bottom));
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transform: translateY(0);
+    transition: transform var(--d11-dur-med) var(--d11-ease-silk);
+    will-change: transform;
+  }
+
+  .d11-sticky-cart-cta.d11-hidden {
+    transform: translateY(110%);
+  }
+
+  /* Total row inside sticky */
+  .d11-sticky-total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .d11-sticky-total-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .d11-sticky-total-price {
+    font-family: var(--font-head);
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+
+  /* CTA button */
+  .d11-sticky-cta-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: var(--d11-cta-h);
+    background: var(--rose-dark);
+    color: var(--white);
+    border: none;
+    border-radius: 16px;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    box-shadow: var(--d11-shadow-cta);
+    transition:
+      transform var(--d11-dur-fast) var(--d11-ease-snap),
+      box-shadow var(--d11-dur-fast),
+      background var(--d11-dur-fast);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    will-change: transform;
+    width: 100%;
+  }
+
+  .d11-sticky-cta-btn:active {
+    transform: scale(0.97);
+    box-shadow: 0 4px 16px rgba(181,101,122,0.25);
+  }
+
+  .d11-sticky-cta-btn:disabled {
+    opacity: 0.65;
+    pointer-events: none;
+  }
+
+  /* Trust micro-copy */
+  .d11-sticky-trust {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding-top: 2px;
+  }
+
+  .d11-sticky-trust-item {
+    font-size: 0.7rem;
+    color: var(--muted);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+}
+
+/* ============================================================
+   PART 9 — LUXURY MOBILE CHECKOUT
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+  /* ── Page ── */
+  .checkout-page {
+    padding-top: 72px;
+    padding-bottom: 40px;
+    min-height: 100svh;
+  }
+
+  .checkout-page .container {
+    padding: 0 20px;
+  }
+
+  /* ── Header ── */
+  .checkout-header {
+    margin-bottom: 22px;
+    padding-top: 12px;
+  }
+
+  .checkout-header h1 {
+    font-size: 1.9rem;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  .breadcrumb {
+    font-size: 0.72rem;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  /* ── Layout: summary first, form second on mobile ── */
+  .checkout-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* ── Order summary pulls to top ── */
+  .checkout-summary {
+    order: -1;
+    position: static;
+    background: var(--white);
+    border-radius: var(--d11-item-radius);
+    padding: 20px;
+    box-shadow: var(--d11-shadow-card);
+    border: 1px solid var(--d11-border);
+  }
+
+  .checkout-summary h2 {
+    font-family: var(--font-head);
+    font-size: 1.05rem;
+    font-weight: 500;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--d11-border);
+    letter-spacing: -0.01em;
+  }
+
+  .summary-items {
+    margin-bottom: 12px;
+  }
+
+  .summary-item {
+    padding: 8px 0;
+    font-size: 0.84rem;
+  }
+
+  .summary-item-name {
+    font-size: 0.84rem;
+    color: var(--text);
+  }
+
+  .summary-item-price {
+    font-size: 0.84rem;
+    color: var(--rose-dark);
+    font-weight: 500;
+  }
+
+  .summary-grand-price {
+    font-size: 1.5rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  .summary-trust {
+    font-size: 0.7rem;
+    line-height: 1.8;
+    margin-top: 10px;
+  }
+
+  /* ── Trust banner ── */
+  .trust-banner {
+    display: none; /* folded into form-card for mobile */
+  }
+
+  /* ── Form card ── */
+  .form-card {
+    background: var(--white);
+    border-radius: var(--d11-item-radius);
+    padding: 24px 20px 28px;
+    box-shadow: var(--d11-shadow-card);
+    border: 1px solid var(--d11-border);
+  }
+
+  .form-card h2 {
+    font-family: var(--font-head);
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--d11-border);
+    letter-spacing: -0.01em;
+  }
+
+  /* ── Compact mobile trust inside form ── */
+  .form-card::before {
+    content: "🔒 Secure · 7-Day Returns · Free shipping ₹399+";
+    display: block;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.03em;
+    font-weight: 500;
+    text-align: center;
+    padding: 10px 0 18px;
+    margin: -20px 0 18px;
+    border-bottom: 1px solid var(--d11-border);
+  }
+
+  /* ── Form groups ── */
+  .form-group {
+    margin-bottom: 16px;
+  }
+
+  .form-group label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  /* ── Input fields: luxury mobile ── */
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    height: var(--d11-input-h);
+    padding: 0 18px;
+    border: 1.5px solid var(--d11-border);
+    border-radius: 14px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--text);
+    background: var(--cream);
+    transition:
+      border-color var(--d11-dur-fast) var(--d11-ease-soft),
+      box-shadow var(--d11-dur-fast) var(--d11-ease-soft),
+      background var(--d11-dur-fast);
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    resize: none;
+    box-sizing: border-box;
+  }
+
+  .form-group textarea {
+    height: auto;
+    padding: 16px 18px;
+    line-height: 1.6;
+  }
+
+  .form-group input::placeholder,
+  .form-group textarea::placeholder {
+    color: #cac2bb;
+    font-weight: 400;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus {
+    border-color: var(--rose);
+    background: var(--white);
+    box-shadow: 0 0 0 4px rgba(244,167,185,0.14);
+  }
+
+  .form-group input.error,
+  .form-group textarea.error {
+    border-color: #e57373;
+    background: var(--white);
+    box-shadow: 0 0 0 4px rgba(229,115,115,0.1);
+  }
+
+  /* ── Field error ── */
+  .field-error {
+    font-size: 0.72rem;
+    color: #d9534f;
+    margin-top: 5px;
+    letter-spacing: 0.01em;
+  }
+
+  /* ── Form row: stack on mobile ── */
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  /* ── Global error banner ── */
+  .form-global-error {
+    border-radius: 12px;
+    padding: 13px 16px;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  .stock-error-banner {
+    border-radius: 12px;
+    padding: 13px 16px;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  /* ── Payment methods ── */
+  .payment-methods {
+    margin-bottom: 22px;
+    margin-top: 4px;
+  }
+
+  .payment-methods-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.07em;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .payment-method-options {
+    gap: 8px;
+  }
+
+  .payment-method-option {
+    padding: 15px 16px;
+    border-radius: 14px;
+    border: 1.5px solid var(--d11-border);
+    gap: 12px;
+    transition:
+      border-color var(--d11-dur-fast) var(--d11-ease-soft),
+      background var(--d11-dur-fast),
+      box-shadow var(--d11-dur-fast);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .payment-method-option:has(input:checked) {
+    border-color: var(--rose-dark);
+    background: rgba(244,167,185,0.07);
+    box-shadow: 0 0 0 3px rgba(244,167,185,0.14);
+  }
+
+  .payment-method-option:active {
+    transform: scale(0.99);
+    transition: transform var(--d11-dur-fast) var(--d11-ease-snap);
+  }
+
+  .method-icon {
+    font-size: 1.2rem;
+  }
+
+  .method-text strong {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .method-text small {
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+
+  .method-badge {
+    font-size: 0.6rem;
+    padding: 3px 7px;
+    letter-spacing: 0.07em;
+  }
+
+  /* ── Place order buttons ── */
+  .btn-place-order {
+    height: var(--d11-cta-h);
+    border-radius: 16px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    transition:
+      transform var(--d11-dur-fast) var(--d11-ease-snap),
+      box-shadow var(--d11-dur-fast),
+      background var(--d11-dur-fast);
+    will-change: transform;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    padding: 0 24px;
+  }
+
+  .btn-place-order:active:not(:disabled) {
+    transform: scale(0.97);
+    box-shadow: 0 3px 12px rgba(181,101,122,0.2) !important;
+  }
+
+  .btn-pay-online {
+    box-shadow: var(--d11-shadow-cta);
+  }
+
+  .btn-cod {
+    border: 1.5px solid rgba(181,101,122,0.35);
+  }
+
+  /* ── Payment secure note ── */
+  .payment-secure-note {
+    font-size: 0.7rem;
+    letter-spacing: 0.02em;
+    color: var(--muted);
+    margin-top: 10px;
+  }
+
+  /* ── Empty redirect ── */
+  .empty-redirect {
+    border-radius: var(--d11-item-radius);
+    padding: 60px 24px;
+  }
+}
+
+/* ============================================================
+   PART 10 — LUXURY MOBILE PERFORMANCE LAYER
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+  /* ── Layout stability: prevent CLS on images ── */
+  img {
+    content-visibility: auto;
+  }
+
+  .cart-item-icon img,
+  .lux-img-container img,
+  .product-img-frame img,
+  .product-card-lux img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Prevent layout shift while loading */
+    aspect-ratio: inherit;
+  }
+
+  /* ── Contain layout for list items to reduce repaint ── */
+  .cart-item,
+  .summary-item,
+  .payment-method-option {
+    contain: layout style;
+  }
+
+  /* ── GPU acceleration for animated elements only ── */
+  .d11-sticky-cart-cta,
+  .d11-sticky-cta-btn,
+  .qty-btn,
+  .cart-item,
+  .btn-place-order,
+  .payment-method-option {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  /* ── Scroll: compositor-only properties ── */
+  .cart-items,
+  .checkout-layout,
+  .cart-page,
+  .checkout-page {
+    will-change: auto; /* reset — only set on actively animating elements */
+  }
+
+  /* ── Touch momentum scrolling everywhere ── */
+  .cart-items,
+  .checkout-layout,
+  .summary-items,
+  main {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* ── Interaction: prevent 300ms tap delay ── */
+  .qty-btn,
+  .btn-remove,
+  .btn-place-order,
+  .d11-sticky-cta-btn,
+  .payment-method-option,
+  .btn-checkout {
+    touch-action: manipulation;
+  }
+
+  /* ── Reduce paint on transitions: only transform + opacity ── */
+  .cart-item,
+  .qty-btn,
+  .btn-place-order,
+  .d11-sticky-cta-btn {
+    transition-property: transform, opacity, box-shadow, background, border-color;
+  }
+
+  /* ── Image decoding: async for off-screen images ── */
+  .product-card-lux img,
+  .lux-img-container img {
+    decoding: async;
+    loading: lazy;
+  }
+
+  /* ── Prevent subpixel font rendering jitter on animated elements ── */
+  .cart-item-name,
+  .cart-item-subtotal strong,
+  .d11-sticky-total-price,
+  .summary-grand-price {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ── Reduce input rendering cost ── */
+  .form-group input,
+  .form-group textarea {
+    /* Force GPU layer for inputs during scroll */
+    transform: translateZ(0);
+  }
+
+  /* ── Skeleton shimmer for cart items loading ── */
+  .cart-item.d11-loading {
+    background: linear-gradient(
+      90deg,
+      var(--white) 25%,
+      #f8f4f0 50%,
+      var(--white) 75%
+    );
+    background-size: 200% 100%;
+    animation: d11-shimmer 1.4s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes d11-shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* ── Smooth height transitions for dynamic content ── */
+  #cartItemsList,
+  #summaryItems {
+    transition: height var(--d11-dur-med) var(--d11-ease-silk);
+  }
+
+  /* ── Prevent scroll-linked layout thrashing ── */
+  .navbar {
+    contain: layout style;
+  }
+}
+
+/* ============================================================
+   D11 · SAFE AREA SUPPORT (notched phones)
+   ============================================================ */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  @media (max-width: 900px) {
+    .d11-sticky-cart-cta {
+      padding-bottom: calc(14px + env(safe-area-inset-bottom));
+    }
+    .cart-page {
+      padding-bottom: calc(120px + env(safe-area-inset-bottom));
+    }
+  }
+}

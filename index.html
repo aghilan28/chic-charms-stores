@@ -22,6 +22,9 @@
     <link rel="stylesheet" href="d3-luxury.css" />
     <link rel="stylesheet" href="d6-brand-story.css" />
     <link rel="stylesheet" href="d5-mobile-luxury.css" />
+    <link rel="stylesheet" href="d7-luxury-motion.css" />
+    <link rel="stylesheet" href="d8-mobile-typography-image.css" />
+    <link rel="stylesheet" href="d9-luxury-mobile-pdp.css" />
     <link rel="stylesheet" href="admin-nav.css" />
     <link rel="stylesheet" href="d9-editorial-refinement.css" />
     <link rel="stylesheet" href="d10-restore.css" />
@@ -2339,9 +2342,13 @@
 
           /* Close mobile menu if open */
           var navLinks = document.getElementById("navLinks");
+          var hamburger = document.getElementById("hamburger");
           if (navLinks) navLinks.classList.remove("open");
+          if (hamburger) hamburger.setAttribute("aria-expanded", "false");
+          document.body.classList.remove("d7-menu-open");
         });
       })();
     </script>
+    <script src="d9-luxury-mobile-pdp.js" defer></script>
   </body>
 </html>

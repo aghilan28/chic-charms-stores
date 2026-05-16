@@ -1,0 +1,1257 @@
+/* ============================================================
+   CHIC CHARMS — d14-luxury-stage4.css
+   Stage 4 · Parts 14–16
+   Micro-Interactions · Emotional Visual Layer · Conversion Psychology
+   Mobile-only additive layer (max-width: 900px)
+   Desktop completely untouched.
+   ============================================================ */
+
+/* ============================================================
+   STAGE 4 · MOTION TOKENS
+   ============================================================ */
+:root {
+  /* Part 14 micro-interaction easing */
+  --s4-ease-silk:    cubic-bezier(0.25, 0.46, 0.45, 0.94);   /* silken press release */
+  --s4-ease-petal:   cubic-bezier(0.16, 1, 0.3, 1);           /* weightless expansion */
+  --s4-ease-stone:   cubic-bezier(0.55, 0, 0.1, 1);           /* weighted settle */
+  --s4-ease-breath:  cubic-bezier(0.37, 0, 0.63, 1);          /* natural inhale/exhale */
+
+  /* Durations */
+  --s4-dur-tap:      0.12s;   /* immediate tactile response */
+  --s4-dur-reveal:   0.38s;   /* state change */
+  --s4-dur-unfurl:   0.62s;   /* entrance, atmospheric */
+  --s4-dur-ambient:  1.8s;    /* background atmosphere */
+
+  /* Emotional palette additions */
+  --s4-rose-glow:    rgba(232, 128, 154, 0.12);
+  --s4-rose-rim:     rgba(232, 128, 154, 0.28);
+  --s4-cream-warm:   rgba(250, 246, 240, 0.92);
+  --s4-shadow-warm:  rgba(80, 40, 30, 0.07);
+  --s4-shadow-lift:  rgba(80, 40, 30, 0.14);
+  --s4-ink-whisper:  rgba(45, 32, 32, 0.035);
+}
+
+/* ============================================================
+   PART 14 — LUXURY MOBILE MICRO-INTERACTIONS
+   ============================================================ */
+
+/* ── Button taps: tactile silk press ── */
+@media (max-width: 900px) {
+
+  /* Primary CTA: press depth without aggression */
+  .btn-primary,
+  .btn-add-cart,
+  .d11-sticky-cta-btn {
+    transition:
+      transform      var(--s4-dur-tap)    var(--s4-ease-stone),
+      box-shadow     var(--s4-dur-tap)    var(--s4-ease-stone),
+      background     var(--s4-dur-reveal) var(--s4-ease-silk),
+      letter-spacing var(--s4-dur-reveal) var(--s4-ease-silk);
+    will-change: transform;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .btn-primary:active,
+  .btn-add-cart:active,
+  .d11-sticky-cta-btn:active {
+    transform:  scale(0.97) translateZ(0);
+    box-shadow: 0 1px 8px var(--s4-shadow-warm);
+    transition-duration: var(--s4-dur-tap);
+  }
+
+  /* Release: spring back with gentle overshoot */
+  .btn-primary:not(:active),
+  .btn-add-cart:not(:active) {
+    transform:  scale(1) translateZ(0);
+    transition:
+      transform  0.44s var(--s4-ease-petal),
+      box-shadow 0.44s var(--s4-ease-silk);
+  }
+
+  /* Secondary: lighter press signature */
+  .btn-secondary,
+  .btn-outline,
+  .btn-ghost {
+    transition:
+      transform  var(--s4-dur-tap)    var(--s4-ease-stone),
+      opacity    var(--s4-dur-tap)    var(--s4-ease-silk),
+      background var(--s4-dur-reveal) var(--s4-ease-silk),
+      border-color var(--s4-dur-reveal) var(--s4-ease-silk);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .btn-secondary:active,
+  .btn-outline:active,
+  .btn-ghost:active {
+    transform: scale(0.975) translateZ(0);
+    opacity: 0.82;
+    transition-duration: var(--s4-dur-tap);
+  }
+
+  /* ── Icon buttons: intimate press ── */
+  .d7-icon-btn,
+  .nav-auth-logout,
+  .btn-remove,
+  .gallery-dot {
+    transition:
+      transform  var(--s4-dur-tap)    var(--s4-ease-stone),
+      opacity    var(--s4-dur-tap)    var(--s4-ease-silk),
+      background var(--s4-dur-reveal) var(--s4-ease-silk);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .d7-icon-btn:active {
+    transform:  scale(0.88) translateZ(0);
+    opacity:    0.7;
+    transition-duration: var(--s4-dur-tap);
+  }
+
+  /* ── Cart icon: organic bump on update ── */
+  @keyframes s4-badge-bump {
+    0%   { transform: scale(1); }
+    35%  { transform: scale(1.35) rotate(8deg); }
+    60%  { transform: scale(0.92) rotate(-4deg); }
+    80%  { transform: scale(1.06); }
+    100% { transform: scale(1) rotate(0); }
+  }
+
+  .d7-cart-count.s4-bumping {
+    animation: s4-badge-bump 0.52s var(--s4-ease-petal) both;
+  }
+
+  /* ── Product card: couture touch state ── */
+  .product-card-lux {
+    transition:
+      transform     0.28s var(--s4-ease-silk),
+      box-shadow    0.28s var(--s4-ease-silk),
+      border-color  0.28s var(--s4-ease-silk);
+    will-change: transform;
+    cursor: pointer;
+  }
+
+  .product-card-lux.lux-pressing {
+    transform:  scale(0.978) translateZ(0);
+    box-shadow:
+      0 2px 12px var(--s4-shadow-warm),
+      0 0 0 1.5px var(--s4-rose-rim);
+    transition-duration: 0.09s;
+  }
+
+  /* Release: breathe back out */
+  .product-card-lux:not(.lux-pressing) {
+    transform:  scale(1) translateZ(0);
+    transition:
+      transform  0.55s var(--s4-ease-petal),
+      box-shadow 0.4s  var(--s4-ease-silk),
+      border-color 0.3s var(--s4-ease-silk);
+  }
+
+  /* ── Color/variant selection: refined selection feedback ── */
+  .variant-option {
+    position: relative;
+    overflow: hidden;
+    transition:
+      transform    var(--s4-dur-tap)    var(--s4-ease-stone),
+      border-color var(--s4-dur-reveal) var(--s4-ease-silk),
+      box-shadow   var(--s4-dur-reveal) var(--s4-ease-silk);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Ripple on select */
+  .variant-option::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--s4-rose-glow);
+    opacity: 0;
+    border-radius: inherit;
+    transform: scale(0.6);
+    transition:
+      opacity   0.28s var(--s4-ease-silk),
+      transform 0.38s var(--s4-ease-petal);
+    pointer-events: none;
+  }
+
+  .variant-option.is-active::after {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .variant-option:active {
+    transform: scale(0.93) translateZ(0);
+    transition-duration: var(--s4-dur-tap);
+  }
+
+  .variant-option.is-active {
+    border-color: var(--rose-dark, #b5657a);
+    box-shadow:
+      0 0 0 2px var(--s4-rose-glow),
+      inset 0 0 0 1px var(--rose-dark, #b5657a);
+    transition:
+      border-color 0.22s var(--s4-ease-petal),
+      box-shadow   0.28s var(--s4-ease-petal);
+  }
+
+  /* ── Quantity controls: precision haptic feel ── */
+  .qty-btn {
+    position: relative;
+    overflow: hidden;
+    transition:
+      transform     var(--s4-dur-tap)    var(--s4-ease-stone),
+      background    var(--s4-dur-reveal) var(--s4-ease-silk),
+      border-color  var(--s4-dur-reveal) var(--s4-ease-silk);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .qty-btn:active {
+    transform: scale(0.85) translateZ(0);
+    background: var(--s4-rose-glow);
+    border-color: var(--s4-rose-rim);
+    transition-duration: var(--s4-dur-tap);
+  }
+
+  /* Qty value: quiet acknowledgment pulse */
+  @keyframes s4-qty-pulse {
+    0%   { transform: scale(1); color: inherit; }
+    30%  { transform: scale(1.18); color: var(--rose-dark, #b5657a); }
+    100% { transform: scale(1); color: inherit; }
+  }
+
+  .qty-value.d11-pulse {
+    animation: s4-qty-pulse 0.42s var(--s4-ease-petal) both;
+  }
+
+  /* ── Form inputs: editorial focus ceremony ── */
+  .form-group {
+    position: relative;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    transition:
+      border-color var(--s4-dur-reveal) var(--s4-ease-silk),
+      box-shadow   var(--s4-dur-reveal) var(--s4-ease-silk),
+      background   var(--s4-dur-reveal) var(--s4-ease-silk),
+      transform    var(--s4-dur-reveal) var(--s4-ease-silk);
+    will-change: box-shadow;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: var(--rose-dark, #b5657a);
+    box-shadow:
+      0 0 0 3px var(--s4-rose-glow),
+      0 2px 12px var(--s4-shadow-warm);
+    background: rgba(255, 252, 250, 0.98);
+    outline: none;
+    transition-duration: 0.24s;
+  }
+
+  /* Floating label lift on focus */
+  .form-group:focus-within label {
+    color: var(--rose-dark, #b5657a);
+    transition: color 0.2s var(--s4-ease-silk);
+  }
+
+  /* ── Gallery dots: liquid selection ── */
+  .gallery-dot {
+    transition:
+      transform    0.3s  var(--s4-ease-petal),
+      opacity      0.22s var(--s4-ease-silk),
+      background   0.22s var(--s4-ease-silk),
+      width        0.3s  var(--s4-ease-petal);
+    border-radius: 999px;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .gallery-dot.active {
+    transform:  scale(1.15) translateZ(0);
+    opacity:    1;
+    transition-duration: 0.32s;
+  }
+
+  .gallery-dot:active {
+    transform:  scale(0.8) translateZ(0);
+    opacity:    0.6;
+    transition-duration: var(--s4-dur-tap);
+  }
+
+  /* ── Navigation hamburger: refined toggle ── */
+  .hamburger {
+    -webkit-tap-highlight-color: transparent;
+    transition: opacity var(--s4-dur-tap) var(--s4-ease-silk);
+  }
+
+  .hamburger:active {
+    opacity: 0.55;
+    transition-duration: var(--s4-dur-tap);
+  }
+
+  .hamburger span {
+    transition:
+      transform  0.28s var(--s4-ease-petal),
+      opacity    0.2s  var(--s4-ease-silk),
+      width      0.28s var(--s4-ease-petal);
+  }
+
+  /* Open state: silk cross */
+  .hamburger[aria-expanded="true"] span:nth-child(1) {
+    transform: rotate(45deg) translate(4px, 4px);
+  }
+
+  .hamburger[aria-expanded="true"] span:nth-child(2) {
+    transform: rotate(-45deg) translate(4px, -4px);
+  }
+
+  /* ── Remove item button: understated elegance ── */
+  .btn-remove {
+    transition:
+      opacity   var(--s4-dur-reveal) var(--s4-ease-silk),
+      transform var(--s4-dur-reveal) var(--s4-ease-silk),
+      color     var(--s4-dur-reveal) var(--s4-ease-silk);
+  }
+
+  .btn-remove:active {
+    opacity: 0.5;
+    transform: scale(0.88) translateZ(0);
+    transition-duration: var(--s4-dur-tap);
+  }
+
+  /* ── Cart item: entrance choreography ── */
+  @keyframes s4-cart-item-in {
+    from {
+      opacity:   0;
+      transform: translateY(10px) translateZ(0);
+    }
+    to {
+      opacity:   1;
+      transform: translateY(0) translateZ(0);
+    }
+  }
+
+  .cart-item {
+    animation: s4-cart-item-in var(--s4-dur-unfurl) var(--s4-ease-petal) both;
+  }
+
+  /* ── Payment method: intimate toggle feel ── */
+  .payment-method-option {
+    transition:
+      border-color var(--s4-dur-reveal) var(--s4-ease-silk),
+      background   var(--s4-dur-reveal) var(--s4-ease-silk),
+      box-shadow   var(--s4-dur-reveal) var(--s4-ease-silk),
+      transform    var(--s4-dur-tap)    var(--s4-ease-stone);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .payment-method-option:active {
+    transform: scale(0.985) translateZ(0);
+    transition-duration: var(--s4-dur-tap);
+  }
+
+  .payment-method-option:has(input:checked) {
+    border-color: var(--rose-dark, #b5657a);
+    background:   var(--s4-rose-glow);
+    box-shadow:   0 0 0 1.5px var(--s4-rose-glow), 0 2px 12px var(--s4-shadow-warm);
+    transition:
+      border-color 0.24s var(--s4-ease-petal),
+      background   0.24s var(--s4-ease-petal),
+      box-shadow   0.28s var(--s4-ease-petal);
+  }
+
+  /* ── Collection card: premium touch ── */
+  .collection-card {
+    transition:
+      transform  0.32s var(--s4-ease-silk),
+      box-shadow 0.32s var(--s4-ease-silk);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .collection-card:active {
+    transform:  scale(0.974) translateZ(0);
+    box-shadow: 0 2px 10px var(--s4-shadow-warm);
+    transition-duration: 0.10s;
+  }
+
+  /* ── Nav links (menu items): silk reveal ── */
+  .nav-link {
+    transition:
+      color      0.2s var(--s4-ease-silk),
+      opacity    0.16s var(--s4-ease-silk),
+      transform  0.16s var(--s4-ease-silk);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .nav-link:active {
+    opacity: 0.6;
+    transform: translateX(3px) translateZ(0);
+    transition-duration: var(--s4-dur-tap);
+  }
+
+  /* ── Wishlist / save: intimate heart beat ── */
+  @keyframes s4-heart {
+    0%   { transform: scale(1); }
+    25%  { transform: scale(1.4); }
+    50%  { transform: scale(0.92); }
+    75%  { transform: scale(1.12); }
+    100% { transform: scale(1); }
+  }
+
+  .btn-wishlist.s4-saved,
+  .btn-save.s4-saved {
+    animation: s4-heart 0.55s var(--s4-ease-petal) both;
+  }
+
+  /* ── Filter pills: clean selection transition ── */
+  .filter-btn,
+  .sort-option,
+  .lux-filter-btn {
+    transition:
+      background    var(--s4-dur-reveal) var(--s4-ease-silk),
+      color         var(--s4-dur-reveal) var(--s4-ease-silk),
+      border-color  var(--s4-dur-reveal) var(--s4-ease-silk),
+      transform     var(--s4-dur-tap)    var(--s4-ease-stone),
+      box-shadow    var(--s4-dur-reveal) var(--s4-ease-silk);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .filter-btn:active,
+  .sort-option:active,
+  .lux-filter-btn:active {
+    transform: scale(0.95) translateZ(0);
+    transition-duration: var(--s4-dur-tap);
+  }
+
+  .filter-btn.active,
+  .lux-filter-btn.active {
+    background:   var(--rose-dark, #b5657a);
+    color:        #fff;
+    border-color: var(--rose-dark, #b5657a);
+    box-shadow:   0 4px 16px rgba(181, 101, 122, 0.22);
+    transition:
+      background   0.26s var(--s4-ease-petal),
+      box-shadow   0.3s  var(--s4-ease-petal),
+      color        0.2s  var(--s4-ease-silk);
+  }
+
+}
+
+/* ============================================================
+   PART 15 — LUXURY MOBILE EMOTIONAL VISUAL LAYER
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+  /* ── Body: warm atmospheric base ── */
+  body {
+    background: var(--bg, #fdf9f6);
+    /* Subtle warm paper texture via layered gradient */
+    background-image:
+      radial-gradient(
+        ellipse 140% 60% at 50% -10%,
+        rgba(244, 167, 185, 0.045) 0%,
+        transparent 70%
+      );
+    background-attachment: fixed;
+  }
+
+  /* ── Hero: cinematic vignette atmosphere ── */
+  .hero {
+    position: relative;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      /* Bottom fade to body */
+      linear-gradient(
+        to bottom,
+        transparent 50%,
+        rgba(253, 249, 246, 0.55) 100%
+      ),
+      /* Edges: intimate vignette */
+      radial-gradient(
+        ellipse 100% 100% at 50% 50%,
+        transparent 60%,
+        rgba(45, 32, 32, 0.06) 100%
+      );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .hero-text,
+  .hero-inner > *:not(.hero-img-wrap) {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ── Section separation: atmospheric depth ── */
+  section + section,
+  .section + section,
+  section + .section {
+    position: relative;
+  }
+
+  /* Soft light bleed between sections */
+  .bestsellers.section,
+  .featured-section,
+  .products-section {
+    background:
+      radial-gradient(
+        ellipse 80% 40% at 50% 0%,
+        rgba(244, 167, 185, 0.05) 0%,
+        transparent 70%
+      )
+      var(--bg, #fdf9f6);
+  }
+
+  .why-us.section,
+  .testimonials-section {
+    background:
+      radial-gradient(
+        ellipse 90% 50% at 50% 100%,
+        rgba(244, 167, 185, 0.055) 0%,
+        transparent 70%
+      )
+      var(--cream, #faf7f2);
+  }
+
+  /* ── Product cards: elevated material feel ── */
+  .product-card-lux {
+    background: #fff;
+    box-shadow:
+      0 1px 3px var(--s4-ink-whisper),
+      0 4px 16px var(--s4-shadow-warm),
+      0 0 0 1px rgba(237, 230, 221, 0.55);
+    border: none;
+  }
+
+  /* Image: soft cinematic crop */
+  .product-card-lux .lux-img-container,
+  .product-card-lux .product-img-wrap {
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Subtle warm overlay on product images — editorial mood */
+  .product-card-lux .lux-img-container::after,
+  .product-card-lux .product-img-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      170deg,
+      transparent 55%,
+      rgba(253, 240, 234, 0.25) 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* ── Image presentation: cinematic depth ── */
+  .product-card-lux img,
+  .lux-img-container img {
+    transition:
+      transform  0.72s var(--s4-ease-breath),
+      filter     0.5s  var(--s4-ease-silk);
+  }
+
+  /* Hover lift for devices that support it */
+  @media (hover: hover) {
+    .product-card-lux:hover img {
+      transform: scale(1.04) translateZ(0);
+      filter: brightness(1.02) contrast(1.01);
+    }
+  }
+
+  /* ── Cart: warm lifted card ── */
+  .cart-item {
+    background: #fff;
+    box-shadow:
+      0 1px 4px var(--s4-ink-whisper),
+      0 3px 14px var(--s4-shadow-warm);
+    border: 1px solid rgba(237, 230, 221, 0.65);
+  }
+
+  /* ── Checkout / form cards: paper-like warmth ── */
+  .form-card,
+  .checkout-form-card {
+    background: #fff;
+    box-shadow:
+      0 2px 20px var(--s4-shadow-warm),
+      0 0 0 1px rgba(237, 230, 221, 0.5);
+    border: none;
+  }
+
+  /* ── Summary cards: suspended depth ── */
+  .cart-summary,
+  .checkout-summary,
+  .order-summary-card {
+    background: #fff;
+    box-shadow:
+      0 4px 32px rgba(80, 40, 30, 0.09),
+      0 1px 4px var(--s4-ink-whisper),
+      0 0 0 1px rgba(237, 230, 221, 0.55);
+  }
+
+  /* ── Sticky CTA: frosted glass luxury ── */
+  .d11-sticky-cart-cta {
+    background: rgba(255, 252, 249, 0.96);
+    backdrop-filter: blur(24px) saturate(1.2);
+    -webkit-backdrop-filter: blur(24px) saturate(1.2);
+    border-top: 1px solid rgba(244, 167, 185, 0.18);
+    box-shadow:
+      0 -6px 32px rgba(80, 40, 30, 0.09),
+      0 -1px 0 rgba(244, 167, 185, 0.12);
+  }
+
+  /* ── Navbar: atmospheric header ── */
+  #navbar,
+  .navbar,
+  .site-nav {
+    background: rgba(253, 249, 246, 0.94);
+    backdrop-filter: blur(18px) saturate(1.15);
+    -webkit-backdrop-filter: blur(18px) saturate(1.15);
+    border-bottom: 1px solid rgba(237, 230, 221, 0.5);
+    transition:
+      box-shadow   0.32s var(--s4-ease-silk),
+      background   0.32s var(--s4-ease-silk),
+      border-color 0.32s var(--s4-ease-silk);
+  }
+
+  #navbar.scrolled,
+  .navbar.scrolled {
+    background: rgba(253, 249, 246, 0.98);
+    box-shadow:
+      0 1px 0 rgba(237, 230, 221, 0.7),
+      0 4px 24px var(--s4-shadow-warm);
+    border-bottom-color: rgba(244, 167, 185, 0.15);
+  }
+
+  /* ── Collection cards: editorial depth ── */
+  .collection-card {
+    box-shadow:
+      0 2px 14px var(--s4-shadow-warm),
+      0 0 0 1px rgba(237, 230, 221, 0.4);
+  }
+
+  /* Warm cinematic overlay */
+  .collection-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent 40%,
+      rgba(45, 22, 18, 0.28) 100%
+    );
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  /* ── PDP image frame: gallery atmosphere ── */
+  .product-img-frame {
+    background: var(--cream, #faf7f2);
+    box-shadow:
+      0 4px 32px var(--s4-shadow-warm),
+      0 0 0 1px rgba(237, 230, 221, 0.4);
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Gallery top vignette */
+  .product-img-frame::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: linear-gradient(
+      to bottom,
+      rgba(253, 249, 246, 0.3),
+      transparent
+    );
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  /* ── Section eyebrow: refined typographic line ── */
+  .section-eyebrow {
+    color: var(--rose-dark, #b5657a);
+    opacity: 0.85;
+  }
+
+  /* ── Testimonial cards: intimate lift ── */
+  .testimonial-card,
+  .review-card {
+    background: #fff;
+    box-shadow:
+      0 2px 16px var(--s4-shadow-warm),
+      0 0 0 1px rgba(237, 230, 221, 0.5);
+    border: none;
+  }
+
+  /* Pull quote mark: editorial atmosphere */
+  .testimonial-card::before,
+  .review-card::before {
+    content: '\201C';
+    position: absolute;
+    top: 12px;
+    left: 18px;
+    font-size: 3.2rem;
+    line-height: 1;
+    color: var(--rose, #f4a7b9);
+    opacity: 0.25;
+    font-family: var(--font-head, "Cormorant Garamond", Georgia, serif);
+    pointer-events: none;
+  }
+
+  /* ── Why-us cards: editorial feature warmth ── */
+  .why-us-card,
+  .why-feature,
+  .feature-card {
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow:
+      0 2px 14px var(--s4-shadow-warm),
+      0 0 0 1px rgba(237, 230, 221, 0.4);
+    border: none;
+  }
+
+  /* ── Newsletter: intimate warmth ── */
+  .d6-newsletter,
+  .newsletter-section {
+    background:
+      radial-gradient(
+        ellipse 80% 60% at 50% 0%,
+        rgba(244, 167, 185, 0.09) 0%,
+        transparent 70%
+      )
+      var(--cream, #faf7f2);
+  }
+
+  /* ── Footer: editorial grounding ── */
+  footer {
+    background: var(--cream, #faf7f2);
+    border-top: 1px solid rgba(237, 230, 221, 0.7);
+    position: relative;
+  }
+
+  footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(244, 167, 185, 0.4) 40%,
+      rgba(244, 167, 185, 0.4) 60%,
+      transparent
+    );
+  }
+
+  /* ── Auth card: elevated intimacy ── */
+  .auth-card,
+  .login-card {
+    background: rgba(255, 255, 255, 0.97);
+    box-shadow:
+      0 8px 48px rgba(80, 40, 30, 0.11),
+      0 2px 8px var(--s4-shadow-warm),
+      0 0 0 1px rgba(237, 230, 221, 0.5);
+  }
+
+  /* ── Menu panel: ambient softness ── */
+  #navLinks.open,
+  .nav-links.open {
+    background: rgba(253, 249, 246, 0.98);
+    backdrop-filter: blur(28px) saturate(1.15);
+    -webkit-backdrop-filter: blur(28px) saturate(1.15);
+  }
+
+  /* ── Scroll progress bar: rose thread ── */
+  .pdp-scroll-progress {
+    background: linear-gradient(
+      90deg,
+      var(--rose, #f4a7b9) 0%,
+      var(--rose-dark, #b5657a) 100%
+    );
+    box-shadow: 0 0 8px rgba(181, 101, 122, 0.28);
+    opacity: 0.85;
+  }
+
+  /* ── Brand logo: editorial weight ── */
+  .brand-logo,
+  .logo,
+  .site-logo {
+    letter-spacing: 0.08em;
+    transition: opacity 0.2s var(--s4-ease-silk);
+  }
+
+  .brand-logo:active,
+  .logo:active {
+    opacity: 0.7;
+    transition-duration: var(--s4-dur-tap);
+  }
+
+  /* ── Marquee: atmospheric text strip ── */
+  .marquee-wrap,
+  .d6-marquee {
+    background: rgba(253, 249, 246, 0.7);
+    border-top:    1px solid rgba(237, 230, 221, 0.35);
+    border-bottom: 1px solid rgba(237, 230, 221, 0.35);
+  }
+
+  /* ── Campaign section: full cinematic bleed ── */
+  .d6-campaign {
+    position: relative;
+  }
+
+  .d6-campaign img {
+    filter: brightness(0.95) contrast(1.03);
+    transition: filter 0.5s var(--s4-ease-silk);
+  }
+
+  /* ── Editorial section divider: invisible felt seam ── */
+  .section-divider,
+  .divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(237, 230, 221, 0.7) 30%,
+      rgba(244, 167, 185, 0.25) 50%,
+      rgba(237, 230, 221, 0.7) 70%,
+      transparent
+    );
+    margin: 0;
+  }
+}
+
+/* ============================================================
+   PART 16 — LUXURY MOBILE CONVERSION PSYCHOLOGY
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+  /* ── Primary CTA: premium presence ── */
+  .btn-primary,
+  .btn-add-cart {
+    position:      relative;
+    overflow:      hidden;
+    border-radius: 14px;
+    font-weight:   600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    font-size:     0.88rem;
+    /* Luminous shimmer: subconscious quality signal */
+    background-image: linear-gradient(
+      108deg,
+      var(--rose-dark, #b5657a) 0%,
+      #c76b83 42%,
+      var(--rose-dark, #b5657a) 100%
+    );
+    background-size: 200% 100%;
+    background-position: 0% 0%;
+    transition:
+      background-position 0.7s var(--s4-ease-silk),
+      transform           var(--s4-dur-tap) var(--s4-ease-stone),
+      box-shadow          var(--s4-dur-reveal) var(--s4-ease-silk);
+    box-shadow:
+      0 4px 20px rgba(181, 101, 122, 0.26),
+      0 1px 4px rgba(181, 101, 122, 0.14),
+      inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  }
+
+  /* Sweep shimmer on entry/hover */
+  @keyframes s4-cta-shimmer {
+    0%   { background-position: 150% 0%; }
+    100% { background-position: -50% 0%; }
+  }
+
+  .btn-primary.s4-shimmer,
+  .btn-add-cart.s4-shimmer {
+    animation: s4-cta-shimmer 0.9s var(--s4-ease-silk) forwards;
+  }
+
+  /* ── Sticky CTA button: maximum conversion presence ── */
+  .d11-sticky-cta-btn {
+    background-image: linear-gradient(
+      105deg,
+      #c0576f 0%,
+      var(--rose-dark, #b5657a) 50%,
+      #c0576f 100%
+    );
+    background-size: 200% 100%;
+    letter-spacing: 0.09em;
+    font-size: 0.9rem;
+    box-shadow:
+      0 6px 28px rgba(181, 101, 122, 0.32),
+      0 2px 8px rgba(181, 101, 122, 0.16),
+      inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+  }
+
+  /* ── Price: premium typographic emphasis ── */
+  .product-price,
+  .lux-product-price,
+  .price-current,
+  .cart-item-price {
+    font-family: var(--font-head, "Cormorant Garamond", Georgia, serif);
+    font-size: 1.08rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    color: var(--text, #2d2020);
+  }
+
+  /* Original price: restrained strikethrough */
+  .price-original,
+  .price-was {
+    text-decoration: line-through;
+    text-decoration-color: rgba(45, 32, 32, 0.3);
+    color: var(--muted, #9b7b85);
+    font-size: 0.82rem;
+    font-family: var(--font-body, "DM Sans", sans-serif);
+    font-weight: 400;
+  }
+
+  /* Sale badge: premium, not garish */
+  .badge-sale,
+  .sale-badge,
+  .product-badge-sale {
+    background:   rgba(192, 87, 111, 0.1);
+    color:        #c0576f;
+    border:       1px solid rgba(192, 87, 111, 0.2);
+    border-radius: 999px;
+    font-size:    0.62rem;
+    font-weight:  700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding:      3px 9px;
+  }
+
+  /* ── New / bestseller badge: editorial identity ── */
+  .badge-new,
+  .new-badge,
+  .badge-best {
+    background:   rgba(244, 167, 185, 0.14);
+    color:        var(--rose-dark, #b5657a);
+    border:       1px solid rgba(244, 167, 185, 0.32);
+    border-radius: 999px;
+    font-size:    0.62rem;
+    font-weight:  700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding:      3px 9px;
+  }
+
+  /* ── Product name: editorial typographic voice ── */
+  .lux-product-name,
+  .product-name,
+  .cart-item-name {
+    font-family:    var(--font-head, "Cormorant Garamond", Georgia, serif);
+    letter-spacing: 0.01em;
+    line-height:    1.3;
+    font-weight:    600;
+  }
+
+  /* ── Product subtitle / material: quiet authority ── */
+  .lux-product-sub,
+  .product-subtitle,
+  .product-material {
+    font-size:      0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color:          var(--muted, #9b7b85);
+    opacity:        0.8;
+  }
+
+  /* ── View all: editorial directional CTA ── */
+  .section-view-all,
+  .view-all-link {
+    display:         inline-flex;
+    align-items:     center;
+    gap:             7px;
+    font-size:       0.72rem;
+    font-weight:     600;
+    letter-spacing:  0.1em;
+    text-transform:  uppercase;
+    color:           var(--rose-dark, #b5657a);
+    text-decoration: none;
+    padding-bottom:  1px;
+    border-bottom:   1px solid rgba(181, 101, 122, 0.28);
+    transition:
+      gap          0.32s var(--s4-ease-petal),
+      border-color 0.2s  var(--s4-ease-silk),
+      color        0.2s  var(--s4-ease-silk);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .section-view-all:active,
+  .view-all-link:active {
+    gap:   12px;
+    color: #c0576f;
+    border-color: rgba(192, 87, 111, 0.5);
+    transition-duration: var(--s4-dur-tap);
+  }
+
+  /* ── Trust signals: minimal, confident ── */
+  .d11-sticky-trust {
+    display:         flex;
+    justify-content: center;
+    align-items:     center;
+    gap:             14px;
+    padding-top:     8px;
+  }
+
+  .d11-sticky-trust-item {
+    font-size:      0.65rem;
+    letter-spacing: 0.05em;
+    color:          var(--muted, #9b7b85);
+    font-weight:    500;
+  }
+
+  /* ── Cart item info: emotional hierarchy ── */
+  .cart-item-info {
+    display:        flex;
+    flex-direction: column;
+    gap:            4px;
+  }
+
+  /* ── Summary total: editorial emphasis ── */
+  .summary-total,
+  #summaryTotal,
+  .d11-sticky-total-price {
+    font-family:    var(--font-head, "Cormorant Garamond", Georgia, serif);
+    font-size:      1.22rem;
+    font-weight:    700;
+    color:          var(--text, #2d2020);
+    letter-spacing: 0.01em;
+    transition:     color 0.2s var(--s4-ease-silk);
+  }
+
+  /* ── Checkout steps: calming progress presence ── */
+  .checkout-step,
+  .step-indicator {
+    transition:
+      opacity   0.28s var(--s4-ease-silk),
+      transform 0.28s var(--s4-ease-petal);
+  }
+
+  /* ── Order success: editorial confirmation ── */
+  .order-success,
+  .checkout-success {
+    animation: s4-page-reveal 0.72s var(--s4-ease-petal) both;
+  }
+
+  @keyframes s4-page-reveal {
+    from {
+      opacity:   0;
+      transform: translateY(16px) scale(0.99);
+    }
+    to {
+      opacity:   1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  /* ── Accordion: conversion-supporting product info ── */
+  .product-accordion-item,
+  .accordion-item {
+    border-bottom: 1px solid rgba(237, 230, 221, 0.6);
+    transition: background 0.2s var(--s4-ease-silk);
+  }
+
+  .product-accordion-item.open,
+  .accordion-item.open {
+    background: rgba(253, 249, 246, 0.7);
+  }
+
+  .product-accordion-header,
+  .accordion-header {
+    font-size:      0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight:    600;
+    color:          var(--text, #2d2020);
+    padding:        16px 0;
+    transition:     color 0.2s var(--s4-ease-silk);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .product-accordion-item.open .product-accordion-header,
+  .accordion-item.open .accordion-header {
+    color: var(--rose-dark, #b5657a);
+  }
+
+  /* ── PDP sticky bar: emotional urgency without pressure ── */
+  .product-sticky-cta,
+  .pdp-sticky-bar {
+    background: rgba(255, 252, 249, 0.96);
+    backdrop-filter: blur(24px) saturate(1.15);
+    -webkit-backdrop-filter: blur(24px) saturate(1.15);
+    border-top: 1px solid rgba(244, 167, 185, 0.18);
+    box-shadow:
+      0 -4px 28px rgba(80, 40, 30, 0.09),
+      0 -1px 0 rgba(244, 167, 185, 0.1);
+    padding-bottom: max(16px, env(safe-area-inset-bottom, 16px));
+  }
+
+  /* ── Empty states: inviting not disappointing ── */
+  .cart-empty,
+  .products-empty {
+    color:       var(--muted, #9b7b85);
+    text-align:  center;
+    padding:     80px 28px;
+    line-height: 1.75;
+  }
+
+  .cart-empty a,
+  .products-empty a {
+    color:           var(--rose-dark, #b5657a);
+    text-decoration: none;
+    border-bottom:   1px solid rgba(181, 101, 122, 0.3);
+    transition:
+      border-color 0.2s var(--s4-ease-silk),
+      color        0.2s var(--s4-ease-silk);
+  }
+
+  /* ── Global link: elevated interaction ── */
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ── Subtle divider lines in summaries: editorial refinement ── */
+  .summary-row,
+  .cart-summary-row {
+    border-bottom: 1px solid rgba(237, 230, 221, 0.5);
+    transition: background 0.18s var(--s4-ease-silk);
+  }
+
+  .summary-row:last-child,
+  .cart-summary-row:last-child {
+    border-bottom: none;
+  }
+
+  /* ── Loading skeleton: warm shimmer ── */
+  @keyframes s4-warm-shimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position: 200%  0; }
+  }
+
+  .skeleton,
+  .product-skeleton {
+    background: linear-gradient(
+      90deg,
+      rgba(245, 238, 229, 0.9) 25%,
+      rgba(253, 249, 246, 0.98) 50%,
+      rgba(245, 238, 229, 0.9) 75%
+    );
+    background-size: 200% 100%;
+    animation: s4-warm-shimmer 1.6s var(--s4-ease-silk) infinite;
+    border-radius: var(--radius, 12px);
+  }
+
+  /* ── Subtle conversion: "add to cart" confirmation ── */
+  @keyframes s4-added-to-cart {
+    0%   { box-shadow: 0 0 0 0 rgba(181, 101, 122, 0); }
+    40%  { box-shadow: 0 0 0 12px rgba(181, 101, 122, 0.10); }
+    100% { box-shadow: 0 0 0 0 rgba(181, 101, 122, 0); }
+  }
+
+  .btn-add-cart.s4-added {
+    animation: s4-added-to-cart 0.6s var(--s4-ease-petal) both;
+  }
+
+  /* ── Coupon / promo: editorial calm ── */
+  .promo-input,
+  .coupon-input {
+    font-size:   0.86rem;
+    border:      1px solid rgba(237, 230, 221, 0.8);
+    transition:
+      border-color var(--s4-dur-reveal) var(--s4-ease-silk),
+      box-shadow   var(--s4-dur-reveal) var(--s4-ease-silk);
+  }
+
+  .promo-input:focus,
+  .coupon-input:focus {
+    border-color: var(--rose-dark, #b5657a);
+    box-shadow:   0 0 0 3px var(--s4-rose-glow);
+    outline:      none;
+  }
+
+  /* ── Free shipping progress bar: invisible momentum ── */
+  .free-shipping-bar,
+  .shipping-progress-bar {
+    height:        3px;
+    border-radius: 999px;
+    background:    rgba(237, 230, 221, 0.6);
+    overflow:      hidden;
+    margin:        8px 0;
+  }
+
+  .free-shipping-fill,
+  .shipping-progress-fill {
+    height:          100%;
+    border-radius:   999px;
+    background:      linear-gradient(
+      90deg,
+      var(--rose, #f4a7b9),
+      var(--rose-dark, #b5657a)
+    );
+    transition:      width 0.6s var(--s4-ease-petal);
+    box-shadow:      0 0 6px rgba(181, 101, 122, 0.3);
+  }
+
+  /* ── Stagger product grid: editorial breathing ── */
+  .product-card-lux:nth-child(1)  { animation-delay: 0s; }
+  .product-card-lux:nth-child(2)  { animation-delay: 0.05s; }
+  .product-card-lux:nth-child(3)  { animation-delay: 0.10s; }
+  .product-card-lux:nth-child(4)  { animation-delay: 0.15s; }
+  .product-card-lux:nth-child(n+5){ animation-delay: 0.20s; }
+
+}
+
+/* ============================================================
+   STAGE 4 · REDUCED MOTION OVERRIDE
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  @media (max-width: 900px) {
+    .btn-primary,
+    .btn-add-cart,
+    .d11-sticky-cta-btn,
+    .product-card-lux,
+    .cart-item,
+    .variant-option,
+    .qty-btn,
+    .gallery-dot,
+    .collection-card,
+    .filter-btn,
+    .payment-method-option,
+    .form-group input,
+    .form-group textarea,
+    .form-group select,
+    body,
+    section,
+    .testimonial-card,
+    .review-card {
+      transition:     none !important;
+      animation:      none !important;
+      transform:      none !important;
+      opacity:        1    !important;
+    }
+
+    .skeleton,
+    .product-skeleton {
+      animation: none !important;
+      background: rgba(245, 238, 229, 0.9) !important;
+    }
+  }
+}
