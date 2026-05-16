@@ -28,15 +28,20 @@
       }
 
       html {
-        overflow-x: clip;
+        height: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+        overflow-y: hidden;
         scroll-behavior: smooth;
         -webkit-text-size-adjust: 100%;
       }
 
       body {
         margin: 0;
+        height: 100dvh;
+        max-width: 100%;
         min-height: 100dvh;
-        overflow-x: clip;
+        overflow-x: hidden;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
         touch-action: pan-y;
@@ -165,9 +170,11 @@
       .shop-chips,
       .shop-category-circles {
         display: flex;
+        gap: 14px;
         overflow-x: auto;
         overflow-y: hidden;
         scroll-snap-type: x mandatory;
+        scroll-padding-inline: 16px;
         scrollbar-width: none;
         -webkit-overflow-scrolling: touch;
       }
@@ -179,8 +186,7 @@
       }
 
       .shop-category-circles {
-        gap: 12px;
-        padding: 0 14px 14px;
+        padding: 0 16px 14px;
       }
 
       .shop-circle {
@@ -511,7 +517,7 @@
         left: 10px;
         right: 10px;
         bottom: calc(8px + env(safe-area-inset-bottom, 0px));
-        z-index: 90;
+        z-index: 120;
         display: grid;
         grid-template-columns: repeat(5, 1fr);
         min-height: 62px;

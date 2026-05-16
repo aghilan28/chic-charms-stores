@@ -82,7 +82,7 @@
 
   function promoCard(title, copy, tag, slug, img) {
     return '<a class="cc-final-promo-card" href="#bestsellers" data-final-category="' + slug + '">' +
-      '<img src="' + img + '" alt="" loading="lazy" decoding="async">' +
+      '<img src="' + img + '" alt="" loading="eager" decoding="async" fetchpriority="high">' +
       '<span>' + tag + '</span><strong>' + title + '</strong><em>' + copy + '</em></a>';
   }
 
@@ -300,8 +300,8 @@
       document.documentElement.style.filter = "";
       document.body.style.filter = "";
     }
-    document.documentElement.style.overflowX = "clip";
-    document.body.style.overflowX = "clip";
+    document.documentElement.style.overflowX = "hidden";
+    document.body.style.overflowX = "hidden";
     if (!document.body.style.minHeight) document.body.style.minHeight = "100dvh";
     $all(".lux-search-panel, .lux-drawer-scroll, .cc-filter-sheet, .cc-bottom-sheet, .cc-newsletter-modal").forEach(function (node) {
       node.style.webkitOverflowScrolling = "touch";
@@ -318,6 +318,8 @@
     });
     $all(".cc-final-category-rail, .cc-final-rail, .cc-final-gallery-rail, .product-gallery-thumbs, .related-grid, .pdp-review-rail").forEach(function (rail) {
       rail.style.webkitOverflowScrolling = "touch";
+      rail.style.overflowX = "auto";
+      rail.style.overflowY = "hidden";
       rail.style.scrollSnapType = "x mandatory";
     });
     $all(".product-card-lux").forEach(function (card) {
