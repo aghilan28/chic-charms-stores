@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="d5-mobile-luxury.css" />
   <link rel="stylesheet" href="d11-luxury-cart-checkout.css" />
   <link rel="stylesheet" href="mobile-brand-system.css" />
+  <link rel="stylesheet" href="payment-system.css" />
   <style>
     /* ── Checkout Page ── */
     .checkout-page {
@@ -537,16 +538,16 @@
                   <span class="method-icon">💳</span>
                   <span class="method-text">
                     <strong>Pay Online</strong>
-                    <small>UPI, Cards, Net Banking</small>
+                    <small>UPI • Cards • Net Banking • Wallets</small>
                   </span>
                   <span class="method-badge">Recommended</span>
                 </label>
                 <label class="payment-method-option" id="optCod">
                   <input type="radio" name="paymentMethod" value="cod" />
-                  <span class="method-icon">💵</span>
+                  <span class="method-icon">🏠</span>
                   <span class="method-text">
                     <strong>Cash on Delivery</strong>
-                    <small>Pay when order arrives</small>
+                    <small>Pay when your order arrives</small>
                   </span>
                 </label>
               </div>
@@ -554,15 +555,18 @@
 
             <!-- Pay Online button -->
             <button class="btn-place-order btn-pay-online" id="payOnlineBtn">
-              💳 Pay Now →
+              🔐 Pay Securely →
             </button>
 
             <!-- COD button (hidden until COD selected) -->
             <button class="btn-place-order btn-cod" id="placeOrderBtn" style="display:none;">
-              🔒 Place Order (COD) →
+              🏠 Place Order (COD) →
             </button>
 
-            <p class="payment-secure-note">🔒 256-bit encrypted · Powered by Razorpay</p>
+            <!-- Secure payment note with trust signals -->
+            <p class="payment-secure-note">
+              🔒 256-bit Encrypted &nbsp;·&nbsp; Secured by Razorpay &nbsp;·&nbsp; UPI • Cards • Wallets
+            </p>
           </div>
         </section>
 
@@ -613,6 +617,10 @@
 
   <!-- ░░ RAZORPAY SDK ░░ -->
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+  <!-- ░░ RAZORPAY DEMO SYSTEM — Test mode only ░░ -->
+  <!-- ⚠️  Remove or replace with live config before production -->
+  <script src="razorpay-demo.js"></script>
 
   <!-- ░░ EMAILJS — raw fetch (no SDK) ░░ -->
   <script>
@@ -783,7 +791,7 @@
     }
 
     function getDefaultButtonLabel(paymentMethod) {
-      return paymentMethod === 'cod' ? '🔒 Place Order (COD) →' : '💳 Pay Now →';
+      return paymentMethod === 'cod' ? '🏠 Place Order (COD) →' : '🔐 Pay Securely →';
     }
 
     function resetCheckoutButton(btn, paymentMethod) {
@@ -1261,7 +1269,9 @@
     }
 
     /* ============================================================
-       PAYMENT: RAZORPAY
+       PAYMENT: RAZORPAY (TEST MODE via RazorpayDemo helper)
+       ⚠️  Uses rzp_test_xxxxxxxxxxxx placeholder.
+           Replace with live key before production.
     ============================================================ */
     window.payWithRazorpay = async function () {
       clearCheckoutErrors();
@@ -1282,15 +1292,14 @@
       const fields = getValidatedForm();
       if (!fields) return;
 
-      const cart     = loadCart();
+      const cart = loadCart();
       if (!cart.length) {
         showGlobalCheckoutError('⚠️ Your cart is empty.');
         return;
       }
 
       const totals = getCartTotals(cart);
-
-      const btn = $id('payOnlineBtn');
+      const btn    = $id('payOnlineBtn');
 
       console.log('[Checkout] Step: validating stock before opening Razorpay');
       CheckoutState.isSubmitting = true;
@@ -1314,34 +1323,26 @@
         return;
       }
 
-      console.log('[Checkout] Stock valid — opening Razorpay modal');
+      console.log('[Checkout] Stock valid — opening Razorpay modal (TEST MODE)');
       btn.innerHTML = '<span class="btn-spinner"></span> Opening payment…';
 
-      const options = {
-        key:         'rzp_test_SfHZQiuyXtogKu',
-        amount:      totals.total * 100,
-        currency:    'INR',
-        name:        'Chic Charms',
-        description: 'Order Payment',
-        image:       '',
-        prefill: {
-          name:    fields.fullName,
-          contact: fields.phone,
-        },
-        notes: {
-          address: fields.address + ', ' + fields.pincode,
-        },
-        theme: { color: '#e8809a' },
+      /* Use the RazorpayDemo helper for test mode payment + success/failure modals */
+      window.RazorpayDemo.open({
+        amount:  totals.total,   // INR (not paise — RazorpayDemo converts internally)
+        name:    fields.fullName,
+        phone:   fields.phone,
+        email:   currentUser.email || '',
+        address: fields.address + ', ' + fields.pincode,
 
-        handler: async function (response) {
-          console.log('[Checkout] Razorpay payment success. Payment ID:', response.razorpay_payment_id);
+        onSuccess: async function (result) {
+          console.log('[Checkout] Razorpay payment success. Payment ID:', result.paymentId);
           setCheckoutButtonState(btn, true, '<span class="btn-spinner"></span> Saving order…');
 
           try {
-            await saveOrderAndRedirect(fields, 'razorpay', response.razorpay_payment_id);
+            await saveOrderAndRedirect(fields, 'razorpay', result.paymentId);
           } catch (err) {
-            console.error('[Checkout] ❌ Order save failed after Razorpay payment — stock NOT deducted. Payment ID:', response.razorpay_payment_id, err);
-            showGlobalCheckoutError('⚠️ Payment succeeded but order save failed. Please contact support with Payment ID: ' + response.razorpay_payment_id);
+            console.error('[Checkout] ❌ Order save failed after Razorpay. Payment ID:', result.paymentId, err);
+            showGlobalCheckoutError('⚠️ Payment succeeded but order save failed. Contact support with Payment ID: ' + result.paymentId);
             resetCheckoutButton(btn, 'razorpay');
             CheckoutState.isSubmitting = false;
             return;
@@ -1352,33 +1353,26 @@
             await commitStockDeductionTransaction(cart);
             console.log('[Checkout] ✅ Stock batch committed after Razorpay order.');
           } catch (err) {
-            /* Order already saved — do NOT block. Log for admin reconciliation. */
-            console.error('[Checkout] ⚠️ Stock batch commit failed after Razorpay order — reconciliation needed. Payment ID:', response.razorpay_payment_id, err);
+            console.error('[Checkout] ⚠️ Stock batch commit failed after Razorpay — reconciliation needed. Payment ID:', result.paymentId, err);
           }
 
           CheckoutState.isSubmitting = false;
-          redirectToConfirmation();
+          /* Redirect handled after modal is closed by user in demo mode */
+          setTimeout(redirectToConfirmation, 4000);
         },
 
-        modal: {
-          ondismiss: function () {
-            console.log('[Checkout] Razorpay modal dismissed by user.');
-            resetCheckoutButton(btn, 'razorpay');
-            CheckoutState.isSubmitting = false;
-          }
-        }
-      };
+        onFailure: function (error) {
+          console.error('[Checkout] ❌ Razorpay payment.failed:', error);
+          resetCheckoutButton(btn, 'razorpay');
+          CheckoutState.isSubmitting = false;
+        },
 
-      const rzp = new Razorpay(options);
-
-      rzp.on('payment.failed', function (response) {
-        console.error('[Checkout] ❌ Razorpay payment.failed event:', response.error);
-        showGlobalCheckoutError('⚠️ Payment failed: ' + (response.error.description || 'Unknown error') + '. Please try again.');
-        resetCheckoutButton(btn, 'razorpay');
-        CheckoutState.isSubmitting = false;
+        onDismiss: function () {
+          console.log('[Checkout] Razorpay modal dismissed by user.');
+          resetCheckoutButton(btn, 'razorpay');
+          CheckoutState.isSubmitting = false;
+        },
       });
-
-      rzp.open();
     };
 
     /* ============================================================

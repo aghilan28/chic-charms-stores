@@ -7,6 +7,40 @@
 (function () {
   "use strict";
 
+  function finalMobileCartCheckoutPolish() {
+    if (window.innerWidth > 1023 || window.__ccFinalCartCheckoutPolish) return;
+    window.__ccFinalCartCheckoutPolish = true;
+
+    document.querySelectorAll("img:not([decoding])").forEach(function (img) {
+      img.decoding = "async";
+      if (!img.hasAttribute("loading")) img.loading = "lazy";
+    });
+
+    var resizeTimer;
+    function setStickySpace() {
+      clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(function () {
+        var sticky = document.querySelector(".d11-sticky-cart-cta:not(.d11-hidden), .d11-sticky-checkout-pay");
+        document.documentElement.style.setProperty("--cc-final-sticky-space", sticky ? sticky.offsetHeight + "px" : "0px");
+      }, 80);
+    }
+
+    window.addEventListener("resize", setStickySpace, { passive: true });
+    window.addEventListener("orientationchange", setStickySpace, { passive: true });
+    setStickySpace();
+
+    var root = document.getElementById("cartItemsList") || document.getElementById("summaryItems") || document.body;
+    if (root && "MutationObserver" in window) {
+      new MutationObserver(setStickySpace).observe(root, { childList: true, subtree: true });
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", finalMobileCartCheckoutPolish);
+  } else {
+    finalMobileCartCheckoutPolish();
+  }
+
   const IS_MOBILE = () => window.innerWidth <= 900;
 
   /* ============================================================

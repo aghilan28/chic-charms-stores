@@ -2341,19 +2341,22 @@
       }
 
       /* ── Input handler ── */
-      globalSearchEl.addEventListener("input", function () {
-        renderSearchResults(globalSearchEl.value);
-      });
+      if (globalSearchEl && dropdownEl && clearBtnEl) {
+        globalSearchEl.addEventListener("input", function () {
+          renderSearchResults(globalSearchEl.value);
+        });
 
       /* ── Clear button ── */
-      clearBtnEl.addEventListener("click", function () {
-        globalSearchEl.value = "";
-        closeDropdown();
-        clearBtnEl.style.display = "none";
-        globalSearchEl.focus();
-      });
+        clearBtnEl.addEventListener("click", function () {
+          globalSearchEl.value = "";
+          closeDropdown();
+          clearBtnEl.style.display = "none";
+          globalSearchEl.focus();
+        });
+      }
 
       /* ── Keyboard: Escape closes, Enter navigates to first result ── */
+      if (globalSearchEl && dropdownEl && clearBtnEl) {
       globalSearchEl.addEventListener("keydown", function (e) {
         if (e.key === "Escape") {
           closeDropdown();
@@ -2378,6 +2381,7 @@
         if (globalSearchEl.value.trim())
           renderSearchResults(globalSearchEl.value);
       });
+      }
     </script>
 
     <!-- ░░ ADMIN RETURN BANNER SCRIPT ░░

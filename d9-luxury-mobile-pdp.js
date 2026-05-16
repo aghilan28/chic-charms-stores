@@ -617,10 +617,76 @@
   }
 
   /* Boot on DOM ready */
+  function initFinalPDPInteractions() {
+    if (!IS_MOBILE() || window.__ccFinalPdpInteractions) return;
+    window.__ccFinalPdpInteractions = true;
+
+    let qty = 1;
+    const setQty = (next) => {
+      qty = Math.max(1, Math.min(9, next));
+      const label = document.getElementById("pdpStickyQty");
+      if (label) label.textContent = String(qty);
+    };
+
+    document.addEventListener("click", (event) => {
+      const qtyBtn = event.target.closest("[data-pdp-qty]");
+      if (qtyBtn) {
+        setQty(qty + Number(qtyBtn.getAttribute("data-pdp-qty") || 0));
+        return;
+      }
+
+      const zoom = event.target.closest(".pdp-zoom-trigger");
+      if (zoom) {
+        const frame = zoom.closest(".product-img-frame");
+        const img = frame ? frame.querySelector("img") : null;
+        if (!img || !img.src) return;
+        let modal = document.querySelector(".pdp-image-modal");
+        if (!modal) {
+          modal = document.createElement("div");
+          modal.className = "pdp-image-modal";
+          modal.innerHTML = '<button type="button" aria-label="Close image zoom">x</button><img alt="" />';
+          document.body.appendChild(modal);
+        }
+        modal.querySelector("img").src = img.src;
+        modal.querySelector("img").alt = img.alt || "Product image";
+        modal.classList.add("is-open");
+        document.body.classList.add("cc-modal-open");
+        return;
+      }
+
+      const closeModal = event.target.closest(".pdp-image-modal button, .pdp-image-modal");
+      if (closeModal && event.target === closeModal) {
+        const modal = document.querySelector(".pdp-image-modal");
+        if (modal) modal.classList.remove("is-open");
+        document.body.classList.remove("cc-modal-open");
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape") return;
+      const modal = document.querySelector(".pdp-image-modal.is-open");
+      if (modal) {
+        modal.classList.remove("is-open");
+        document.body.classList.remove("cc-modal-open");
+      }
+    });
+
+    const content = document.getElementById("productContent");
+    if (content && !window.__ccFinalPdpObserver) {
+      window.__ccFinalPdpObserver = true;
+      new MutationObserver(() => setQty(1)).observe(content, { childList: true });
+    }
+  }
+
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init);
   } else {
     init();
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initFinalPDPInteractions);
+  } else {
+    initFinalPDPInteractions();
   }
 
   /* Re-evaluate on resize (orientation change) */

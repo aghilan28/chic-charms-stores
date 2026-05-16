@@ -417,6 +417,22 @@
     document.body.appendChild(footer);
   }
 
+  function createGlobalBottomNav() {
+    if (!isMobile() || $(".mobile-bottom-nav")) return;
+    var nav = document.createElement("nav");
+    nav.className = "mobile-bottom-nav cc-global-bottom-nav";
+    nav.setAttribute("aria-label", "Mobile bottom navigation");
+    var current = location.pathname.split("/").pop() || "index.html";
+    function active(files) { return files.indexOf(current) !== -1 ? " is-active" : ""; }
+    nav.innerHTML =
+      '<a class="mobile-bottom-tab' + active(["index.html", ""]) + '" href="index.html" aria-label="Home"><svg viewBox="0 0 24 24"><path d="M3 10.8 12 3l9 7.8V21h-6v-6H9v6H3z"/></svg><span>Home</span></a>' +
+      '<a class="mobile-bottom-tab' + active(["shop.html"]) + '" href="index.html#bestsellers" aria-label="Shop"><svg viewBox="0 0 24 24"><path d="M6 2h12l3 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z"/><path d="M3 9h18M9 13a3 3 0 0 0 6 0"/></svg><span>Shop</span></a>' +
+      '<a class="mobile-bottom-tab' + active(["product.html"]) + '" href="index.html#bestsellers" aria-label="Discover"><svg viewBox="0 0 24 24"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"/></svg><span>Discover</span></a>' +
+      '<a class="mobile-bottom-tab' + active(["account.html", "auth.html"]) + '" href="account.html" aria-label="Account"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 22c1.6-4 4.2-6 8-6s6.4 2 8 6"/></svg><span>Account</span></a>' +
+      '<a class="mobile-bottom-tab' + active(["cart.html", "checkout.html"]) + '" href="cart.html" aria-label="Cart"><svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></svg><span>Cart</span></a>';
+    document.body.appendChild(nav);
+  }
+
   function rewriteFooterLinks() {
     var map = {
       "About Us": "about.html",
@@ -501,6 +517,7 @@
     createRecentPurchase();
     createOnboardingToast();
     enhanceEmptyStates();
+    createGlobalBottomNav();
     createMobileFooter();
     observeReveals(document);
     initSheetTriggers(document);

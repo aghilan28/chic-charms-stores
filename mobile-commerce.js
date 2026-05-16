@@ -462,6 +462,114 @@
     if (!document.hidden) cleanupOverlayState();
   });
 
+  function createFinalFilterSheet() {
+    if (!isMobile() || window.__ccFinalFilterSheet) return;
+    window.__ccFinalFilterSheet = true;
+    var category = document.getElementById("categoryFilter");
+    var sort = document.getElementById("sortFilter");
+    if (!category && !sort) return;
+
+    var filterBtn = document.createElement("button");
+    filterBtn.type = "button";
+    filterBtn.className = "cc-mobile-filter-trigger";
+    filterBtn.innerHTML = icon("spark") + "<span>Filter</span>";
+
+    var sortBtn = document.createElement("button");
+    sortBtn.type = "button";
+    sortBtn.className = "cc-mobile-sort-trigger";
+    sortBtn.innerHTML = icon("bag") + "<span>Sort</span>";
+
+    var backdrop = document.createElement("button");
+    backdrop.type = "button";
+    backdrop.className = "cc-filter-sheet-backdrop";
+    backdrop.setAttribute("aria-label", "Close filters");
+
+    var sheet = document.createElement("section");
+    sheet.className = "cc-filter-sheet";
+    sheet.setAttribute("aria-label", "Shop filters");
+    sheet.innerHTML =
+      "<h3>Refine your edit</h3>" +
+      '<div class="cc-filter-sheet-row"><label for="ccSheetCategory">Collection</label><select id="ccSheetCategory"></select></div>' +
+      '<div class="cc-filter-sheet-row"><label for="ccSheetSort">Sort by</label><select id="ccSheetSort"></select></div>' +
+      '<div class="cc-filter-sheet-actions"><button type="button" data-cc-filter-reset>Reset</button><button type="button" class="is-primary" data-cc-filter-apply>Apply</button></div>';
+
+    document.body.appendChild(filterBtn);
+    document.body.appendChild(sortBtn);
+    document.body.appendChild(backdrop);
+    document.body.appendChild(sheet);
+
+    var sheetCategory = document.getElementById("ccSheetCategory");
+    var sheetSort = document.getElementById("ccSheetSort");
+    if (category && sheetCategory) sheetCategory.innerHTML = category.innerHTML;
+    if (sort && sheetSort) sheetSort.innerHTML = sort.innerHTML;
+
+    function syncToSheet() {
+      if (category && sheetCategory) sheetCategory.value = category.value;
+      if (sort && sheetSort) sheetSort.value = sort.value;
+    }
+
+    function openSheet(mode) {
+      syncToSheet();
+      sheet.classList.add("is-open");
+      backdrop.classList.add("is-open");
+      document.body.classList.add("cc-modal-open");
+      window.setTimeout(function () {
+        var target = mode === "sort" ? sheetSort : sheetCategory;
+        if (target) target.focus({ preventScroll: true });
+      }, 80);
+    }
+
+    function closeSheet() {
+      sheet.classList.remove("is-open");
+      backdrop.classList.remove("is-open");
+      document.body.classList.remove("cc-modal-open");
+    }
+
+    function applySheet() {
+      if (category && sheetCategory) {
+        category.value = sheetCategory.value;
+        category.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+      if (sort && sheetSort) {
+        sort.value = sheetSort.value;
+        sort.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+      closeSheet();
+      scrollToShop();
+    }
+
+    filterBtn.addEventListener("click", function () { openSheet("filter"); });
+    sortBtn.addEventListener("click", function () { openSheet("sort"); });
+    backdrop.addEventListener("click", closeSheet);
+    sheet.querySelector("[data-cc-filter-apply]").addEventListener("click", applySheet);
+    sheet.querySelector("[data-cc-filter-reset]").addEventListener("click", function () {
+      if (sheetCategory) sheetCategory.value = "all";
+      if (sheetSort) sheetSort.value = "default";
+      applySheet();
+    });
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") closeSheet();
+    });
+  }
+
+  function initFinalCommercePolish() {
+    if (!isMobile() || window.__ccFinalCommercePolish) return;
+    window.__ccFinalCommercePolish = true;
+
+    document.querySelectorAll("img:not([decoding])").forEach(function (img) {
+      img.decoding = "async";
+      if (!img.hasAttribute("loading") && !img.closest(".hero, .mobile-promo-card")) img.loading = "lazy";
+    });
+
+    document.addEventListener("click", function (event) {
+      var card = event.target.closest(".product-card-lux");
+      if (card) {
+        card.classList.add("cc-card-tapped");
+        window.setTimeout(function () { card.classList.remove("cc-card-tapped"); }, 220);
+      }
+    });
+  }
+
   var productContainer = document.getElementById("products-container");
   if (productContainer) {
     var railTimer;
@@ -476,4 +584,9 @@
     originalSetItem.apply(this, arguments);
     if (key === "cart") syncCartCount();
   };
+
+  document.addEventListener("DOMContentLoaded", function () {
+    createFinalFilterSheet();
+    initFinalCommercePolish();
+  });
 })();
