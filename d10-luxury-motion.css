@@ -337,8 +337,8 @@
     box-shadow:
       0 8px 28px rgba(28, 25, 23, 0.14),
       0 2px 8px rgba(28, 25, 23, 0.06);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     animation: d10ToastIn var(--d10-dur-slow) var(--d10-ease-silk) both;
   }
 

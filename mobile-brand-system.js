@@ -81,6 +81,28 @@
     }, prefersReduced.matches ? 120 : 720);
   }
 
+  function cleanupStuckVisualState() {
+    var activeModal =
+      $(".cc-bottom-sheet.is-open") ||
+      $(".cc-newsletter-modal.is-open") ||
+      $(".lux-search-overlay.is-open") ||
+      $(".lux-mobile-drawer.is-open");
+
+    if (!activeModal) {
+      document.body.classList.remove("cc-modal-open", "lux-search-open", "lux-drawer-open", "d7-menu-open");
+      document.documentElement.style.filter = "";
+      document.body.style.filter = "";
+      document.body.style.overflow = "";
+      document.body.style.touchAction = "";
+    }
+
+    $all(".cc-loading-screen.is-hidden").forEach(function (el) { el.remove(); });
+    $all(".cc-newsletter-backdrop:not(.is-open), .cc-bottom-sheet-backdrop:not(.is-open), .lux-mobile-drawer-backdrop:not(.is-open)").forEach(function (el) {
+      el.style.backdropFilter = "none";
+      el.style.webkitBackdropFilter = "none";
+    });
+  }
+
   function createBrandHomepage() {
     if (!isMobile() || $(".cc-mobile-brand") || !$("#bestsellers")) return;
 
@@ -229,6 +251,7 @@
       sheet.style.transform = "";
     }
     document.body.classList.remove("cc-modal-open");
+    window.setTimeout(cleanupStuckVisualState, 280);
   }
 
   function startSheetGesture(event) {
@@ -306,6 +329,7 @@
     if (modal) modal.classList.remove("is-open");
     document.body.classList.remove("cc-modal-open");
     try { localStorage.setItem("ccNewsletterSeen", "1"); } catch (err) {}
+    window.setTimeout(cleanupStuckVisualState, 280);
   }
 
   function createMiniCart() {
@@ -482,6 +506,7 @@
     initSheetTriggers(document);
     initMotionHardening();
     patchStorageForCart();
+    cleanupStuckVisualState();
 
     var productContainer = $("#products-container");
     if (productContainer && !window.__ccBrandProductObserver) {
@@ -497,6 +522,8 @@
     }
 
     window.setInterval(syncMiniCart, 900);
+    window.setTimeout(cleanupStuckVisualState, 1200);
+    window.setTimeout(cleanupStuckVisualState, 2600);
   }
 
   if (document.readyState === "loading") {
@@ -506,4 +533,9 @@
   }
 
   mobileQuery.addEventListener ? mobileQuery.addEventListener("change", init) : mobileQuery.addListener(init);
+  window.addEventListener("load", cleanupStuckVisualState);
+  window.addEventListener("pageshow", cleanupStuckVisualState);
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden) cleanupStuckVisualState();
+  });
 })();

@@ -266,6 +266,21 @@
     document.body.classList.remove("lux-search-open");
   }
 
+  function cleanupOverlayState() {
+    if (!document.querySelector(".lux-mobile-drawer.is-open")) {
+      document.body.classList.remove("lux-drawer-open", "d7-menu-open");
+      if (menuBtn) menuBtn.setAttribute("aria-expanded", "false");
+      if (drawerBackdrop) drawerBackdrop.classList.remove("is-open");
+    }
+
+    if (!document.querySelector(".lux-search-overlay.is-open")) {
+      document.body.classList.remove("lux-search-open");
+    }
+
+    document.documentElement.style.filter = "";
+    document.body.style.filter = "";
+  }
+
   function createCommerceRails() {
     if (!isMobile() || document.querySelector(".mobile-commerce-rails")) return;
     var products = getProductCards(10);
@@ -431,6 +446,7 @@
     initRipples();
     setCompactHeader();
     syncCartCount();
+    cleanupOverlayState();
   });
 
   window.addEventListener("keydown", function (event) {
@@ -438,6 +454,12 @@
       closeMenu();
       closeSearchOverlay();
     }
+  });
+
+  window.addEventListener("load", cleanupOverlayState);
+  window.addEventListener("pageshow", cleanupOverlayState);
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden) cleanupOverlayState();
   });
 
   var productContainer = document.getElementById("products-container");

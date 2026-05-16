@@ -262,8 +262,8 @@
   .hero-float-card,
   .d6-story-stat-float {
     border-radius: 16px;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     border: 1px solid rgba(255, 255, 255, 0.6);
     box-shadow:
       0 8px 32px rgba(60, 40, 30, 0.10),
@@ -312,13 +312,13 @@
   .d10-loading {
     opacity: 0;
     transform: scale(1.03);
-    filter: blur(2px);
+    filter: none;
   }
 
   .d10-loaded {
     opacity: 1;
     transform: scale(1);
-    filter: blur(0);
+    filter: none;
   }
 }
 
@@ -452,8 +452,8 @@
     padding: 8px 12px;
     background: rgba(255, 255, 255, 0.3);
     border-radius: 99px;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 
   .gallery-dot {
@@ -761,8 +761,8 @@
   /* ── Navbar: calm authority, not pressure ── */
   .navbar {
     height: 60px;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     border-bottom: 1px solid transparent;
     transition:
       border-color  0.3s ease,
@@ -867,7 +867,6 @@
   /* Body lock when menu open: prevent double-scroll */
   body.d7-menu-open {
     overflow: hidden;
-    position: fixed;
     width: 100%;
   }
 
@@ -1280,8 +1279,8 @@
     right: 0;
     z-index: 90;
     background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     border-top: 1px solid rgba(237, 230, 221, 0.7);
     box-shadow: 0 -4px 24px rgba(60, 40, 30, 0.08);
     padding: 14px 20px max(20px, env(safe-area-inset-bottom, 20px));

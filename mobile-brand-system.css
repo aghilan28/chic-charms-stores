@@ -58,6 +58,8 @@
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 
   .cc-loading-mark {
@@ -100,8 +102,8 @@
     align-items: center;
     border-block: 1px solid rgba(181, 101, 122, 0.1);
     background: rgba(255, 250, 247, 0.86);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 
   .cc-announce-track {
@@ -260,8 +262,8 @@
     background: var(--cc-app-glass);
     color: rgba(34, 25, 23, 0.76);
     box-shadow: 0 8px 18px rgba(78, 45, 38, 0.06);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     font: 800 0.7rem/1 var(--font-body, system-ui);
     white-space: nowrap;
   }
@@ -574,8 +576,8 @@
     background: rgba(255, 252, 249, 0.92);
     color: var(--cc-app-ink);
     box-shadow: 0 14px 30px rgba(62, 38, 34, 0.16);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     text-decoration: none;
     transform: translateY(120%);
     transition: transform 340ms var(--cc-app-ease);
@@ -613,8 +615,8 @@
     border-radius: 20px;
     background: rgba(255, 252, 249, 0.94);
     box-shadow: 0 16px 34px rgba(62, 38, 34, 0.16);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     opacity: 0;
     pointer-events: none;
     transform: translateY(18px);
@@ -653,17 +655,20 @@
     z-index: 360;
     display: block;
     opacity: 0;
+    visibility: hidden;
     pointer-events: none;
     background: rgba(30, 21, 19, 0.24);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    transition: opacity 260ms ease;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    transition: opacity 260ms ease, visibility 0s linear 260ms;
   }
 
   .cc-bottom-sheet-backdrop.is-open,
   .cc-newsletter-backdrop.is-open {
     opacity: 1;
+    visibility: visible;
     pointer-events: auto;
+    transition-delay: 0s;
   }
 
   .cc-bottom-sheet,
@@ -679,8 +684,8 @@
     border: 1px solid rgba(255,255,255,0.52);
     background: rgba(255, 252, 249, 0.96);
     box-shadow: 0 -24px 60px rgba(50, 31, 28, 0.2);
-    backdrop-filter: blur(24px) saturate(1.24);
-    -webkit-backdrop-filter: blur(24px) saturate(1.24);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     transform: translateY(110%);
     transition: transform 420ms var(--cc-app-ease);
   }
@@ -883,6 +888,99 @@
 
   img {
     max-width: 100%;
+  }
+
+  /* Production image crop normalization: crisp, face-safe, no over-zoom. */
+  .mobile-category-img {
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #fff8f7;
+  }
+
+  .mobile-category-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    image-rendering: auto;
+    transform: translateZ(0);
+  }
+
+  .product-card-lux .lux-img-container,
+  .cc-product-card,
+  .mobile-rail-card,
+  .lux-search-product {
+    background: #fffaf7;
+  }
+
+  .product-card-lux .lux-img-container {
+    aspect-ratio: 4 / 5 !important;
+  }
+
+  .product-card-lux .lux-img-container img,
+  .cc-product-card img,
+  .mobile-rail-card img,
+  .lux-search-product img,
+  .related-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    image-rendering: auto;
+    filter: none !important;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+  }
+
+  .product-card-lux .lux-img-container img[src*="product-"],
+  .cc-product-card img[src*="product-"],
+  .mobile-rail-card img[src*="product-"],
+  .lux-search-product img[src*="product-"] {
+    object-fit: contain;
+    object-position: center center;
+    padding: 8%;
+    background: #fffaf7;
+    box-sizing: border-box;
+  }
+
+  .cc-promo-card img,
+  .cc-look-card img,
+  .cc-masonry-card img,
+  .cc-community-card img,
+  .cc-story-card img,
+  .mobile-promo-card img,
+  .hero-img,
+  .product-img-frame img {
+    object-fit: cover;
+    object-position: center top;
+    image-rendering: auto;
+    filter: none !important;
+  }
+
+  .cc-promo-card img,
+  .mobile-promo-card img {
+    object-position: center 18%;
+  }
+
+  .cc-look-card img,
+  .cc-masonry-card img,
+  .cc-community-card img {
+    object-position: center top;
+  }
+
+  @media (max-width: 420px) {
+    .cc-promo-card,
+    .mobile-promo-card {
+      min-height: 132px;
+    }
+
+    .cc-look-card img {
+      aspect-ratio: 4 / 5.2;
+    }
+
+    .product-card-lux .lux-img-container {
+      aspect-ratio: 1 / 1.22 !important;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
