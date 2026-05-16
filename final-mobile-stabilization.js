@@ -53,23 +53,37 @@
   }
 
   function productCard(product) {
+    var numeric = Number(String(product.price || "").replace(/[^\d.]/g, "")) || 299;
+    var oldPrice = Math.max(numeric + 80, Math.ceil(numeric * 1.45));
+    var discount = Math.max(15, Math.round(((oldPrice - numeric) / oldPrice) * 100));
     return [
       '<a class="cc-final-product" href="' + product.url + '">',
+      '<span class="cc-final-product-media">',
       '<img src="' + product.img + '" alt="' + escapeAttr(product.name) + '" loading="lazy" decoding="async">',
-      '<span>' + product.name + '</span>',
-      '<strong>' + product.price + '</strong>',
+      '<i class="cc-final-badge">' + (discount > 35 ? "Viral" : "Hot") + '</i>',
+      '<button class="cc-final-heart" type="button" aria-label="Wishlist" data-final-card-action>♡</button>',
+      '<button class="cc-final-quick" type="button" aria-label="Quick add" data-final-card-action>+</button>',
+      '</span>',
+      '<span class="cc-final-product-name">' + product.name + '</span>',
+      '<span class="cc-final-price-row"><strong>' + product.price + '</strong><s>Rs.' + oldPrice + '</s><em>' + discount + '% off</em></span>',
       '</a>'
     ].join("");
   }
 
-  function rail(title, kicker, products) {
+  function rail(title, kicker, products, modifier) {
     return [
-      '<section class="cc-final-section">',
+      '<section class="cc-final-section ' + (modifier || "") + '">',
       '<div class="cc-final-head"><div><p class="cc-final-kicker">' + kicker + '</p><h2 class="cc-final-title">' + title + '</h2></div><a class="cc-final-link" href="#bestsellers">View all</a></div>',
       '<div class="cc-final-rail">',
       products.map(productCard).join(""),
       '</div></section>'
     ].join("");
+  }
+
+  function promoCard(title, copy, tag, slug, img) {
+    return '<a class="cc-final-promo-card" href="#bestsellers" data-final-category="' + slug + '">' +
+      '<img src="' + img + '" alt="" loading="lazy" decoding="async">' +
+      '<span>' + tag + '</span><strong>' + title + '</strong><em>' + copy + '</em></a>';
   }
 
   function buildAnnouncement() {
@@ -101,6 +115,8 @@
 
     var products = getProducts(12);
     var rotated = products.slice(3).concat(products.slice(0, 3));
+    var viral = products.slice(1).concat(products.slice(0, 1));
+    var under = products.slice(2).concat(products.slice(0, 2));
     var home = document.createElement("section");
     home.id = HOME_ID;
     home.className = "cc-final-home";
@@ -108,29 +124,36 @@
     home.innerHTML = [
       '<button class="cc-final-search-button" type="button" data-final-search><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.8-3.8"></path></svg><span>Search pearls, hoops, Korean edits</span><strong>Search</strong></button>',
       '<nav class="cc-final-category-rail" aria-label="Quick categories">',
-      categoryLink("New", "all", "images/editorial-light-meets-gold.png"),
-      categoryLink("Daily", "everyday-elegance", "images/style-everyday-elegance.png"),
-      categoryLink("Pearls", "heritage-muse", "images/story-soft-pearl-drop.png"),
-      categoryLink("Romance", "modern-romance", "images/style-modern-romance.jpg"),
-      categoryLink("Evening", "after-dark", "images/style-after-dark.png"),
-      categoryLink("Under 299", "all", "images/editorial-korean-morning-coffee.png"),
+      categoryLink("Earrings", "everyday-elegance", "images/editorial-everyday-hoops.png"),
+      categoryLink("Korean", "after-dark", "images/editorial-korean-morning-coffee.png"),
+      categoryLink("Bridal", "heritage-muse", "images/style-heritage-muse.png"),
+      categoryLink("Pearl", "heritage-muse", "images/story-soft-pearl-drop.png"),
+      categoryLink("Daily Wear", "everyday-elegance", "images/style-everyday-elegance.png"),
+      categoryLink("Minimal", "everyday-elegance", "images/editorial-minimal-soul-closeup.png"),
+      categoryLink("Gold", "modern-romance", "images/editorial-light-meets-gold.png"),
+      categoryLink("Party", "after-dark", "images/style-after-dark.png"),
       '</nav>',
-      '<section class="cc-final-hero"><a class="cc-final-hero-card" href="#bestsellers"><img src="images/hero-quiet-luxury-main.png" alt="ChicCharms quiet luxury jewelry editorial" decoding="async"><div class="cc-final-hero-content"><p class="cc-final-kicker">Quiet luxury, easy checkout</p><h1>ChicCharms</h1><p>Jewelry edits that look considered, feel light, and stay under Rs.299.</p><span class="cc-final-cta">Shop the edit</span></div></a></section>',
-      '<section class="cc-final-trust" aria-label="Shopping promises"><span>COD available pan-India</span><span>Ships within 24 hours</span><span>Skin-friendly lightweight finish</span></section>',
-      rail("Trending Pieces", "Trending now", products),
-      rail("New Arrivals", "Just dropped", rotated),
-      '<section class="cc-final-section cc-final-section--break"><article class="cc-final-editorial"><p class="cc-final-kicker">Editorial story</p><h2 class="cc-final-title">Jewelry that finishes the mood.</h2><p class="cc-final-copy">A tighter, calmer way to browse: fewer distractions, stronger imagery, and product paths that move naturally toward checkout.</p><img src="images/editorial-soft-date-night.png" alt="Editorial jewelry styling" loading="lazy" decoding="async"></article></section>',
+      '<section class="cc-final-promo-rail" aria-label="Featured offers">',
+      promoCard("New Arrivals", "Fresh drops under Rs.299", "Just In", "all", "images/editorial-light-meets-gold.png"),
+      promoCard("Under Rs.299", "Cute picks, easy checkout", "Offer", "all", "images/editorial-everyday-hoops.png"),
+      promoCard("Korean Edit", "Soft bows, pearls, shine", "Viral", "after-dark", "images/editorial-korean-morning-coffee.png"),
+      promoCard("Bridal Picks", "Festive glow without weight", "Wedding", "heritage-muse", "images/style-heritage-muse.png"),
+      '</section>',
+      '<section class="cc-final-trust" aria-label="Shopping promises"><span>COD</span><span>Ships 24h</span><span>Under Rs.299</span></section>',
+      rail("Trending Products", "Everyone's adding", products, "cc-final-section--tight"),
+      rail("Viral Picks", "Instagram-loved", viral, "cc-final-section--tight"),
+      rail("New Arrivals", "Fresh drops", rotated, "cc-final-section--tight"),
+      rail("Under Rs.299", "Budget cute", under, "cc-final-section--tight"),
+      rail("Korean Collection", "Soft-girl sparkle", rotated.slice(1).concat(rotated.slice(0, 1)), "cc-final-section--tight"),
+      rail("Bridal Picks", "Festive ready", products.slice(4).concat(products.slice(0, 4)), "cc-final-section--tight"),
       '<section class="cc-final-section"><div class="cc-final-head"><div><p class="cc-final-kicker">Collections</p><h2 class="cc-final-title">Shop by feeling</h2></div></div><div class="cc-final-collection-grid">',
       collectionCard("Everyday Elegance", "Light pieces for repeat wear", "everyday-elegance", "images/editorial-everyday-hoops.png"),
       collectionCard("Modern Romance", "Pearls, bows, and softer shine", "modern-romance", "images/style-modern-romance.jpg"),
       collectionCard("After Dark", "Statement sparkle without weight", "after-dark", "images/style-after-dark.png"),
       '</div></section>',
-      '<section class="cc-final-section cc-final-section--break"><div class="cc-final-head"><div><p class="cc-final-kicker">Social proof</p><h2 class="cc-final-title">Loved in daily rotation</h2></div></div><div class="cc-final-proof"><blockquote>"The finish looks premium, the pieces feel light, and the styling works from coffee runs to functions."</blockquote></div></section>',
-      '<section class="cc-final-section"><div class="cc-final-head"><div><p class="cc-final-kicker">Community</p><h2 class="cc-final-title">Styled by you</h2></div></div><div class="cc-final-gallery-rail"><img src="images/avatar-sahana-cafe-edit.png" alt="" loading="lazy" decoding="async"><img src="images/avatar-ritu-weekend-edit.jpg" alt="" loading="lazy" decoding="async"><img src="images/avatar-subashree-event-edit.jpeg" alt="" loading="lazy" decoding="async"><img src="images/newsletter-inner-circle-portrait.png" alt="" loading="lazy" decoding="async"></div></section>',
-      '<section class="cc-final-section"><div class="cc-final-head"><div><p class="cc-final-kicker">Reviews</p><h2 class="cc-final-title">Customer notes</h2></div></div><div class="cc-final-review-grid"><article class="cc-final-review"><strong>4.8 stars from repeat shoppers</strong><p>Delicate, polished, and easy to pair with Indian and western outfits.</p></article><article class="cc-final-review"><strong>Gift-ready packaging</strong><p>Small pieces arrive feeling thoughtful without slowing checkout.</p></article></div></section>',
-      '<section class="cc-final-section"><div class="cc-final-head"><div><p class="cc-final-kicker">FAQ</p><h2 class="cc-final-title">Before you order</h2></div><a class="cc-final-link" href="faq.html">All FAQ</a></div><div class="cc-final-faq"><details><summary>Is COD available?</summary><p>Yes, COD is available on eligible orders across India.</p></details><details><summary>When will my order ship?</summary><p>Most orders are packed quickly and usually ship within 24 hours.</p></details></div></section>',
-      '<section class="cc-final-section cc-final-section--break"><article class="cc-final-newsletter"><p class="cc-final-kicker">Inner circle</p><h2 class="cc-final-title">Get first access</h2><p class="cc-final-copy">New edits, limited drops, and styling notes without clutter.</p><form><input type="email" placeholder="Email address" aria-label="Email address"><button type="submit">Join</button></form></article></section>',
-      '<footer class="cc-final-footer" id="footer"><div class="cc-final-footer-brand">ChicCharms</div><p class="cc-final-copy">Premium jewelry shopping with COD, fast shipping, and handpicked weekly edits.</p><nav aria-label="Footer links"><a href="about.html">About</a><a href="index.html#bestsellers">Collections</a><a href="shipping.html">Shipping</a><a href="returns.html">Returns</a><a href="contact.html">Contact</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="faq.html">FAQ</a></nav></footer>'
+      '<section class="cc-final-section"><div class="cc-final-head"><div><p class="cc-final-kicker">Community Looks</p><h2 class="cc-final-title">Styled by the girls</h2></div></div><div class="cc-final-gallery-rail"><img src="images/avatar-sahana-cafe-edit.png" alt="" loading="lazy" decoding="async"><img src="images/avatar-ritu-weekend-edit.jpg" alt="" loading="lazy" decoding="async"><img src="images/avatar-subashree-event-edit.jpeg" alt="" loading="lazy" decoding="async"><img src="images/newsletter-inner-circle-portrait.png" alt="" loading="lazy" decoding="async"></div></section>',
+      '<section class="cc-final-section"><div class="cc-final-head"><div><p class="cc-final-kicker">Reviews</p><h2 class="cc-final-title">Real shopper notes</h2></div></div><div class="cc-final-review-grid"><article class="cc-final-review"><strong>4.8 stars</strong><p>Looks cute in selfies and feels light for full-day wear.</p></article><article class="cc-final-review"><strong>Gift-ready</strong><p>Packaging feels sweet and premium without slowing checkout.</p></article></div></section>',
+      '<footer class="cc-final-footer" id="footer"><div class="cc-final-footer-brand">ChicCharms</div><p class="cc-final-copy">Trendy Indian accessories, COD, fast shipping, and weekly viral drops.</p><nav aria-label="Footer links"><a href="about.html">About</a><a href="shop.html">Shop</a><a href="shipping.html">Shipping</a><a href="returns.html">Returns</a><a href="contact.html">Contact</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="faq.html">FAQ</a></nav></footer>'
     ].join("");
 
     var bestsellers = $("#bestsellers");
@@ -215,6 +238,14 @@
     }, true);
 
     document.addEventListener("click", function (event) {
+      var cardAction = event.target.closest("[data-final-card-action]");
+      if (cardAction) {
+        event.preventDefault();
+        event.stopPropagation();
+        cardAction.classList.toggle("is-active");
+        return;
+      }
+
       var search = event.target.closest("[data-final-search]");
       if (search) {
         openSearchOverlay();
