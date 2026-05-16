@@ -1618,6 +1618,13 @@
       ];
 
       const CATEGORY_ALIASES = {
+        all: "",
+        jewellery: "",
+        jewelry: "",
+        collection: "",
+        collections: "",
+        earring: "everyday-elegance",
+        earrings: "everyday-elegance",
         studs: "everyday-elegance",
         stud: "everyday-elegance",
         simple: "everyday-elegance",
@@ -1939,19 +1946,51 @@
           .getElementById("sortFilter")
           .classList.toggle("active", sort !== "default");
 
+        const normalizedCategory = normalizeCategory(category) || "all";
+
         // 1. Filter
         let filtered = allProducts.filter(function (item) {
           const p = item.data;
+          const searchable = [
+            p.name,
+            p.tag,
+            p.description,
+            p.category,
+            categoryDisplayLabel(p.categorySlug),
+            p.categorySlug,
+          ]
+            .join(" ")
+            .toLowerCase();
 
           // Search match
-          const matchSearch =
-            !searchText || p.name.toLowerCase().includes(searchText);
+          const matchSearch = !searchText || searchable.includes(searchText);
 
           // Category match
-          const matchCat = category === "all" || p.categorySlug === category;
+          const matchCat =
+            normalizedCategory === "all" || p.categorySlug === normalizedCategory;
 
           return matchSearch && matchCat;
         });
+
+        let usedFallbackResults = false;
+        if (filtered.length === 0 && allProducts.length) {
+          usedFallbackResults = true;
+          filtered = allProducts.filter(function (item) {
+            const p = item.data;
+            const searchable = [
+              p.name,
+              p.tag,
+              p.description,
+              p.category,
+              categoryDisplayLabel(p.categorySlug),
+              p.categorySlug,
+            ]
+              .join(" ")
+              .toLowerCase();
+            return !searchText || searchable.includes(searchText);
+          });
+          if (filtered.length === 0) filtered = allProducts.slice();
+        }
 
         // 2. Sort
         if (sort === "low-high") {
@@ -1978,8 +2017,8 @@
           container.innerHTML = `
             <div class="lux-empty-state">
               <div class="lux-empty-icon">🌸</div>
-              <h3 class="lux-empty-title">Nothing found</h3>
-              <p class="lux-empty-sub">We couldn't find any pieces matching your selection. Try a different search or browse the full collection.</p>
+              <h3 class="lux-empty-title">The edit is refreshing</h3>
+              <p class="lux-empty-sub">Our collection is loading. Please hold on for a moment.</p>
               <button class="lux-empty-btn" onclick="resetFilters()">View All Pieces</button>
             </div>`;
           resultCount.style.display = "none";
@@ -2005,8 +2044,10 @@
           container.innerHTML = cards.join("");
 
           // Show result count only when filters are active
-          if (isFiltered) {
-            resultCount.innerHTML = `Showing <strong>${filtered.length}</strong> of <strong>${allProducts.length}</strong> pieces`;
+          if (isFiltered || usedFallbackResults) {
+            resultCount.innerHTML = usedFallbackResults
+              ? `Showing the closest <strong>${filtered.length}</strong> pieces from the full ChicCharms edit`
+              : `Showing <strong>${filtered.length}</strong> of <strong>${allProducts.length}</strong> pieces`;
             resultCount.style.display = "block";
           } else {
             resultCount.style.display = "none";

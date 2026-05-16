@@ -269,6 +269,12 @@
       document.documentElement.style.filter = "";
       document.body.style.filter = "";
     }
+    document.documentElement.style.overflowX = "clip";
+    document.body.style.overflowX = "clip";
+    if (!document.body.style.minHeight) document.body.style.minHeight = "100dvh";
+    $all(".lux-search-panel, .lux-drawer-scroll, .cc-filter-sheet, .cc-bottom-sheet, .cc-newsletter-modal").forEach(function (node) {
+      node.style.webkitOverflowScrolling = "touch";
+    });
   }
 
   function hardenImagesAndRails() {
@@ -278,6 +284,13 @@
       if (!img.hasAttribute("loading") && !img.closest(".cc-final-hero-card, .product-img-frame")) {
         img.loading = "lazy";
       }
+    });
+    $all(".cc-final-category-rail, .cc-final-rail, .cc-final-gallery-rail, .product-gallery-thumbs, .related-grid, .pdp-review-rail").forEach(function (rail) {
+      rail.style.webkitOverflowScrolling = "touch";
+      rail.style.scrollSnapType = "x mandatory";
+    });
+    $all(".product-card-lux").forEach(function (card) {
+      card.classList.add("lux-visible", "revealed");
     });
   }
 

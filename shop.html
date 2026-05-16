@@ -2,28 +2,676 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="refresh" content="0; url=index.html#bestsellers" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Shop ChicCharms</title>
-    <link rel="canonical" href="index.html#bestsellers" />
+    <meta name="description" content="Shop ChicCharms premium Indian jewellery edits with fast mobile browsing, COD, and curated pieces under Rs.299." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="mobile-brand-system.css" />
+    <link rel="stylesheet" href="final-mobile-stabilization.css" />
     <style>
+      :root {
+        --shop-ink: #211816;
+        --shop-muted: rgba(33, 24, 22, 0.62);
+        --shop-rose: #a85f72;
+        --shop-gold: #b89561;
+        --shop-bg: #fffaf6;
+        --shop-line: rgba(33, 24, 22, 0.1);
+        --shop-radius: 8px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        overflow-x: clip;
+        scroll-behavior: smooth;
+        -webkit-text-size-adjust: 100%;
+      }
+
       body {
-        min-height: 100vh;
-        display: grid;
-        place-items: center;
         margin: 0;
-        background: #fffaf7;
-        color: #211816;
+        min-height: 100dvh;
+        overflow-x: clip;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-y;
+        background: var(--shop-bg);
+        color: var(--shop-ink);
         font-family: Jost, system-ui, sans-serif;
+        padding-bottom: calc(92px + env(safe-area-inset-bottom, 0px));
+      }
+
+      img {
+        display: block;
+        max-width: 100%;
       }
 
       a {
-        color: #a85f72;
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .shop-announcement {
+        position: sticky;
+        top: 0;
+        z-index: 80;
+        overflow: hidden;
+        background: var(--shop-ink);
+        color: #fffaf6;
+      }
+
+      .shop-announcement div {
+        display: flex;
+        width: max-content;
+        animation: ticker 28s linear infinite;
+      }
+
+      .shop-announcement span {
+        flex: 0 0 auto;
+        padding: 10px 18px;
+        font-size: 0.62rem;
         font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      @keyframes ticker {
+        to {
+          transform: translateX(-50%);
+        }
+      }
+
+      .shop-header {
+        position: sticky;
+        top: 32px;
+        z-index: 70;
+        display: grid;
+        grid-template-columns: 42px minmax(0, 1fr) 42px;
+        align-items: center;
+        gap: 10px;
+        min-height: 68px;
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--shop-line);
+        background: rgba(255, 250, 246, 0.98);
+        box-shadow: 0 8px 22px rgba(56, 34, 30, 0.06);
+      }
+
+      .shop-icon {
+        width: 40px;
+        height: 40px;
+        display: grid;
+        place-items: center;
+        border: 1px solid var(--shop-line);
+        border-radius: var(--shop-radius);
+        background: #fff;
+      }
+
+      .shop-logo {
+        justify-self: center;
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: 1.18rem;
+        font-weight: 600;
+        line-height: 1;
+      }
+
+      .shop-logo span {
+        color: var(--shop-rose);
+      }
+
+      .shop-shell {
+        width: min(100%, 760px);
+        margin: 0 auto;
+      }
+
+      .shop-search {
+        width: calc(100% - 32px);
+        display: grid;
+        grid-template-columns: 18px minmax(0, 1fr);
+        align-items: center;
+        gap: 10px;
+        margin: 16px;
+        min-height: 50px;
+        padding: 0 14px;
+        border: 1px solid var(--shop-line);
+        border-radius: var(--shop-radius);
+        background: #fff;
+        box-shadow: 0 10px 24px rgba(56, 34, 30, 0.08);
+      }
+
+      .shop-search input {
+        width: 100%;
+        min-width: 0;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        font: 500 0.92rem/1 Jost, system-ui, sans-serif;
+      }
+
+      .shop-tabs,
+      .shop-chips {
+        display: flex;
+        gap: 9px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 0 16px 10px;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .shop-tabs::-webkit-scrollbar,
+      .shop-chips::-webkit-scrollbar {
+        display: none;
+      }
+
+      .shop-tab,
+      .shop-chip {
+        flex: 0 0 auto;
+        min-height: 38px;
+        padding: 0 14px;
+        border: 1px solid var(--shop-line);
+        border-radius: var(--shop-radius);
+        background: #fff;
+        color: var(--shop-muted);
+        font: 700 0.68rem/1 Jost, system-ui, sans-serif;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        scroll-snap-align: start;
+      }
+
+      .shop-tab.is-active,
+      .shop-chip.is-active {
+        border-color: rgba(168, 95, 114, 0.42);
+        background: #fff1f4;
+        color: var(--shop-rose);
+      }
+
+      .shop-hero {
+        position: relative;
+        min-height: 284px;
+        margin: 8px 16px 18px;
+        overflow: hidden;
+        border-radius: var(--shop-radius);
+        background: var(--shop-ink);
+        color: #fffaf6;
+      }
+
+      .shop-hero img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center top;
+      }
+
+      .shop-hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(33, 24, 22, 0.08), rgba(33, 24, 22, 0.68));
+      }
+
+      .shop-hero-content {
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        bottom: 16px;
+        z-index: 1;
+      }
+
+      .shop-kicker {
+        margin: 0 0 8px;
+        color: var(--shop-rose);
+        font: 700 0.64rem/1 Jost, system-ui, sans-serif;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .shop-hero .shop-kicker {
+        color: #ffd6df;
+      }
+
+      h1,
+      h2 {
+        margin: 0;
+        font-family: "Playfair Display", Georgia, serif;
+        font-weight: 500;
+        letter-spacing: 0;
+      }
+
+      h1 {
+        max-width: 11ch;
+        font-size: 2rem;
+        line-height: 1;
+      }
+
+      .shop-hero p {
+        max-width: 29ch;
+        margin: 10px 0 0;
+        color: rgba(255, 250, 246, 0.82);
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+
+      .shop-bar {
+        position: sticky;
+        top: 100px;
+        z-index: 60;
+        display: grid;
+        gap: 10px;
+        padding: 12px 16px;
+        border-block: 1px solid var(--shop-line);
+        background: rgba(255, 250, 246, 0.98);
+      }
+
+      .shop-bar-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .shop-count {
+        color: var(--shop-muted);
+        font-size: 0.78rem;
+        font-weight: 600;
+      }
+
+      .shop-sort {
+        min-height: 38px;
+        max-width: 152px;
+        border: 1px solid var(--shop-line);
+        border-radius: var(--shop-radius);
+        background: #fff;
+        color: var(--shop-ink);
+        font: 700 0.68rem/1 Jost, system-ui, sans-serif;
+        letter-spacing: 0.04em;
+        padding: 0 10px;
+      }
+
+      .shop-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-auto-rows: 1fr;
+        align-items: stretch;
+        gap: 14px 10px;
+        padding: 16px;
+      }
+
+      .shop-card {
+        min-width: 0;
+        height: 100%;
+        display: grid;
+        grid-template-rows: auto 1fr;
+        overflow: hidden;
+        border: 1px solid var(--shop-line);
+        border-radius: var(--shop-radius);
+        background: #fff;
+        contain: layout paint;
+      }
+
+      .shop-card-media {
+        position: relative;
+        aspect-ratio: 4 / 5;
+        background: #fff1f4;
+      }
+
+      .shop-card-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center top;
+      }
+
+      .shop-card-badge {
+        position: absolute;
+        left: 8px;
+        top: 8px;
+        padding: 5px 7px;
+        border-radius: var(--shop-radius);
+        background: rgba(255, 250, 246, 0.92);
+        color: var(--shop-rose);
+        font-size: 0.58rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .shop-card-body {
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        gap: 6px;
+        padding: 10px;
+      }
+
+      .shop-card h2 {
+        min-height: 38px;
+        display: -webkit-box;
+        overflow: hidden;
+        color: var(--shop-ink);
+        font: 600 0.82rem/1.22 Jost, system-ui, sans-serif;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
+
+      .shop-card small {
+        color: var(--shop-muted);
+        font-size: 0.68rem;
+      }
+
+      .shop-card-price {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 6px;
+        color: var(--shop-rose);
+        font-weight: 800;
+      }
+
+      .shop-card-price span {
+        color: var(--shop-muted);
+        font-size: 0.68rem;
+        font-weight: 600;
+        text-decoration: line-through;
+      }
+
+      .shop-card button {
+        width: 100%;
+        min-height: 38px;
+        border: 0;
+        border-radius: var(--shop-radius);
+        background: var(--shop-ink);
+        color: #fffaf6;
+        font: 800 0.68rem/1 Jost, system-ui, sans-serif;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .shop-story,
+      .shop-footer {
+        margin: 10px 16px 0;
+        padding: 18px 16px;
+        border: 1px solid var(--shop-line);
+        border-radius: var(--shop-radius);
+        background: #fff;
+      }
+
+      .shop-story p,
+      .shop-footer p {
+        margin: 8px 0 0;
+        color: var(--shop-muted);
+        font-size: 0.86rem;
+        line-height: 1.5;
+      }
+
+      .shop-footer {
+        margin-bottom: 16px;
+        background: var(--shop-ink);
+        color: rgba(255, 250, 246, 0.82);
+      }
+
+      .shop-footer h2 {
+        color: #fffaf6;
+      }
+
+      .shop-footer nav {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .shop-footer a {
+        color: rgba(255, 250, 246, 0.78);
+        font-size: 0.78rem;
+        font-weight: 600;
+      }
+
+      .mobile-bottom-nav {
+        position: fixed;
+        left: 10px;
+        right: 10px;
+        bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+        z-index: 90;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        min-height: 62px;
+        padding: 7px 8px;
+        border: 1px solid var(--shop-line);
+        border-radius: var(--shop-radius);
+        background: rgba(255, 250, 246, 0.98);
+        box-shadow: 0 12px 30px rgba(56, 34, 30, 0.14);
+      }
+
+      .mobile-bottom-tab {
+        min-width: 0;
+        display: grid;
+        place-items: center;
+        gap: 3px;
+        color: var(--shop-muted);
+        font: 700 0.62rem/1 Jost, system-ui, sans-serif;
+      }
+
+      .mobile-bottom-tab.is-active {
+        color: var(--shop-rose);
+      }
+
+      .mobile-bottom-tab svg {
+        width: 18px;
+        height: 18px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+      }
+
+      @media (min-width: 760px) {
+        .shop-grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.001ms !important;
+          animation-iteration-count: 1 !important;
+          scroll-behavior: auto !important;
+          transition-duration: 0.001ms !important;
+        }
       }
     </style>
   </head>
   <body>
-    <p>Opening the ChicCharms shop. <a href="index.html#bestsellers">Continue to shop</a></p>
+    <div class="shop-announcement" aria-label="Store updates">
+      <div>
+        <span>COD available</span><span>Ships in 24 hours</span><span>Skin-friendly finish</span><span>Free shipping above Rs.399</span>
+        <span>COD available</span><span>Ships in 24 hours</span><span>Skin-friendly finish</span><span>Free shipping above Rs.399</span>
+      </div>
+    </div>
+
+    <header class="shop-header">
+      <a class="shop-icon" href="index.html" aria-label="Home">‹</a>
+      <a class="shop-logo" href="index.html">Chic<span>Charms</span></a>
+      <a class="shop-icon" href="cart.html" aria-label="Cart">Bag</a>
+    </header>
+
+    <main class="shop-shell">
+      <label class="shop-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.8-3.8"></path></svg>
+        <input id="shopSearch" type="search" placeholder="Search pearls, hoops, Korean edits" autocomplete="off" />
+      </label>
+
+      <nav class="shop-tabs" aria-label="Featured collections">
+        <button class="shop-tab is-active" type="button" data-category="all">All</button>
+        <button class="shop-tab" type="button" data-category="everyday-elegance">Daily</button>
+        <button class="shop-tab" type="button" data-category="modern-romance">Romance</button>
+        <button class="shop-tab" type="button" data-category="heritage-muse">Pearls</button>
+        <button class="shop-tab" type="button" data-category="after-dark">Evening</button>
+      </nav>
+
+      <section class="shop-hero" aria-label="ChicCharms editorial shop banner">
+        <img src="images/hero-quiet-luxury-main.png" alt="ChicCharms jewellery editorial" decoding="async" />
+        <div class="shop-hero-content">
+          <p class="shop-kicker">Luxury mobile edit</p>
+          <h1>Shop the Glow</h1>
+          <p>Fast, compact jewellery discovery for daily wear, gifting, and soft statement moments.</p>
+        </div>
+      </section>
+
+      <section class="shop-bar" aria-label="Product filters">
+        <div class="shop-bar-top">
+          <span class="shop-count" id="shopCount"></span>
+          <select class="shop-sort" id="shopSort" aria-label="Sort products">
+            <option value="featured">Featured</option>
+            <option value="low-high">Price: Low to High</option>
+            <option value="high-low">Price: High to Low</option>
+            <option value="new">Newest</option>
+          </select>
+        </div>
+        <div class="shop-chips" aria-label="Quick filters">
+          <button class="shop-chip is-active" type="button" data-chip="all">All Pieces</button>
+          <button class="shop-chip" type="button" data-chip="under-199">Under Rs.199</button>
+          <button class="shop-chip" type="button" data-chip="gift">Gift Ready</button>
+          <button class="shop-chip" type="button" data-chip="new">New Drop</button>
+          <button class="shop-chip" type="button" data-chip="bestseller">Bestseller</button>
+        </div>
+      </section>
+
+      <section class="shop-grid" id="shopGrid" aria-label="Shop products"></section>
+
+      <section class="shop-story">
+        <p class="shop-kicker">Styled with intention</p>
+        <h2>Compact discovery, polished details.</h2>
+        <p>Each piece is presented with stable image ratios, aligned pricing, and quick mobile actions so browsing stays smooth from first swipe to checkout.</p>
+      </section>
+
+      <footer class="shop-footer">
+        <h2>ChicCharms</h2>
+        <p>Premium Indian jewellery shopping with fast shipping, COD, support links, and curated weekly edits.</p>
+        <nav aria-label="Footer links">
+          <a href="about.html">About</a>
+          <a href="shipping.html">Shipping</a>
+          <a href="returns.html">Returns</a>
+          <a href="contact.html">Contact</a>
+          <a href="privacy.html">Privacy</a>
+          <a href="terms.html">Terms</a>
+        </nav>
+      </footer>
+    </main>
+
+    <nav class="mobile-bottom-nav" aria-label="Mobile bottom navigation">
+      <a class="mobile-bottom-tab" href="index.html" aria-label="Home"><svg viewBox="0 0 24 24"><path d="M3 10.8 12 3l9 7.8V21h-6v-6H9v6H3z"/></svg><span>Home</span></a>
+      <a class="mobile-bottom-tab is-active" href="shop.html" aria-label="Shop"><svg viewBox="0 0 24 24"><path d="M6 2h12l3 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z"/><path d="M3 9h18M9 13a3 3 0 0 0 6 0"/></svg><span>Shop</span></a>
+      <a class="mobile-bottom-tab" href="index.html#bestsellers" aria-label="Discover"><svg viewBox="0 0 24 24"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"/></svg><span>Discover</span></a>
+      <a class="mobile-bottom-tab" href="account.html" aria-label="Account"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 22c1.6-4 4.2-6 8-6s6.4 2 8 6"/></svg><span>Account</span></a>
+      <a class="mobile-bottom-tab" href="cart.html" aria-label="Cart"><svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></svg><span>Cart</span></a>
+    </nav>
+
+    <script>
+      (function () {
+        "use strict";
+        var products = [
+          { id: "everyday-gold-hoops", name: "Everyday Gold Hoops", category: "everyday-elegance", price: 199, old: 249, img: "images/editorial-everyday-hoops.png", tag: "Bestseller", chips: ["bestseller", "under-199"] },
+          { id: "pearl-drop-earrings", name: "Soft Pearl Drop Earrings", category: "heritage-muse", price: 249, old: 329, img: "images/story-soft-pearl-drop.png", tag: "Gift Ready", chips: ["gift"] },
+          { id: "korean-bow-studs", name: "Korean Bow Studs", category: "modern-romance", price: 299, old: 399, img: "images/editorial-korean-morning-coffee.png", tag: "New Drop", chips: ["new"] },
+          { id: "minimal-soul-studs", name: "Minimal Soul Studs", category: "everyday-elegance", price: 179, old: 229, img: "images/editorial-minimal-soul-closeup.png", tag: "Daily", chips: ["under-199"] },
+          { id: "heritage-muse-drops", name: "Heritage Muse Drops", category: "heritage-muse", price: 299, old: 379, img: "images/style-heritage-muse.png", tag: "Festive", chips: ["gift"] },
+          { id: "golden-hour-hoops", name: "Golden Hour Hoops", category: "after-dark", price: 229, old: 299, img: "images/editorial-light-meets-gold.png", tag: "Viral", chips: ["bestseller"] },
+          { id: "modern-romance-edit", name: "Modern Romance Earrings", category: "modern-romance", price: 199, old: 269, img: "images/style-modern-romance.jpg", tag: "Romance", chips: ["under-199"] },
+          { id: "after-dark-drops", name: "After Dark Statement Drops", category: "after-dark", price: 289, old: 379, img: "images/style-after-dark.png", tag: "Evening", chips: ["new"] }
+        ];
+
+        var activeCategory = "all";
+        var activeChip = "all";
+        var search = document.getElementById("shopSearch");
+        var sort = document.getElementById("shopSort");
+        var grid = document.getElementById("shopGrid");
+        var count = document.getElementById("shopCount");
+
+        function label(slug) {
+          return {
+            "everyday-elegance": "Everyday Elegance",
+            "modern-romance": "Modern Romance",
+            "heritage-muse": "Pearls",
+            "after-dark": "After Dark"
+          }[slug] || "ChicCharms";
+        }
+
+        function productUrl(product) {
+          return "product.html?id=" + encodeURIComponent(product.id) + "&category=" + encodeURIComponent(product.category);
+        }
+
+        function renderCard(product) {
+          return '<article class="shop-card">' +
+            '<a class="shop-card-media" href="' + productUrl(product) + '"><img src="' + product.img + '" alt="' + product.name + '" loading="lazy" decoding="async"><span class="shop-card-badge">' + product.tag + '</span></a>' +
+            '<div class="shop-card-body"><small>' + label(product.category) + ' · 4.8 stars</small><a href="' + productUrl(product) + '"><h2>' + product.name + '</h2></a><div class="shop-card-price">Rs.' + product.price + '<span>Rs.' + product.old + '</span></div><button type="button" data-add="' + product.id + '">Add to Cart</button></div>' +
+            '</article>';
+        }
+
+        function currentProducts() {
+          var q = search.value.trim().toLowerCase();
+          var list = products.filter(function (product) {
+            var matchesCategory = activeCategory === "all" || product.category === activeCategory;
+            var matchesChip = activeChip === "all" || product.chips.indexOf(activeChip) !== -1;
+            var matchesSearch = !q || [product.name, product.tag, label(product.category), product.category].join(" ").toLowerCase().indexOf(q) !== -1;
+            return matchesCategory && matchesChip && matchesSearch;
+          });
+          if (!list.length) {
+            list = products.filter(function (product) {
+              return activeCategory === "all" || product.category === activeCategory;
+            });
+          }
+          if (!list.length) list = products.slice();
+          if (sort.value === "low-high") list.sort(function (a, b) { return a.price - b.price; });
+          if (sort.value === "high-low") list.sort(function (a, b) { return b.price - a.price; });
+          if (sort.value === "new") list = list.slice().reverse();
+          return list;
+        }
+
+        function render() {
+          var list = currentProducts();
+          grid.innerHTML = list.map(renderCard).join("");
+          count.innerHTML = "Showing <strong>" + list.length + "</strong> polished pieces";
+        }
+
+        document.querySelectorAll(".shop-tab").forEach(function (button) {
+          button.addEventListener("click", function () {
+            activeCategory = button.dataset.category || "all";
+            document.querySelectorAll(".shop-tab").forEach(function (item) { item.classList.toggle("is-active", item === button); });
+            render();
+          });
+        });
+
+        document.querySelectorAll(".shop-chip").forEach(function (button) {
+          button.addEventListener("click", function () {
+            activeChip = button.dataset.chip || "all";
+            document.querySelectorAll(".shop-chip").forEach(function (item) { item.classList.toggle("is-active", item === button); });
+            render();
+          });
+        });
+
+        search.addEventListener("input", render);
+        sort.addEventListener("change", render);
+        grid.addEventListener("click", function (event) {
+          var button = event.target.closest("[data-add]");
+          if (!button) return;
+          button.textContent = "Added";
+          button.disabled = true;
+          window.setTimeout(function () {
+            button.textContent = "Add to Cart";
+            button.disabled = false;
+          }, 1200);
+        });
+
+        render();
+      })();
+    </script>
   </body>
 </html>
