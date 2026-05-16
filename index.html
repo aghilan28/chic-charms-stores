@@ -28,6 +28,8 @@
     <link rel="stylesheet" href="admin-nav.css" />
     <link rel="stylesheet" href="d9-editorial-refinement.css" />
     <link rel="stylesheet" href="d10-restore.css" />
+    <link rel="stylesheet" href="mobile-commerce.css" />
+    <link rel="stylesheet" href="mobile-brand-system.css" />
     <script>
       (function () {
         if (window.__chicLocalImageFallbackReady) return;
@@ -550,9 +552,32 @@
     <!-- ░░ NAVBAR ░░ -->
     <header class="navbar" id="navbar">
       <div class="nav-inner container">
+        <button
+          type="button"
+          class="mobile-commerce-menu"
+          id="mobileCommerceMenu"
+          aria-expanded="false"
+          aria-label="Open menu"
+        >
+          <span></span><span></span>
+        </button>
         <a href="index.html" class="logo" aria-label="Chic Charms home">
           Chic<span>Charms</span>
         </a>
+        <div class="mobile-commerce-actions" aria-label="Mobile shopping actions">
+          <a href="#bestsellers" class="mobile-commerce-icon" aria-label="Wishlist">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20.8 4.6c-1.8-1.7-4.6-1.6-6.3.2L12 7.3 9.5 4.8C7.8 3 5 2.9 3.2 4.6 1.3 6.4 1.3 9.4 3.1 11.2L12 20l8.9-8.8c1.8-1.8 1.8-4.8-.1-6.6Z" />
+            </svg>
+          </a>
+          <a href="cart.html" class="mobile-commerce-icon mobile-commerce-cart" aria-label="Cart">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4H6Z" />
+              <path d="M3 6h18M16 10a4 4 0 0 1-8 0" />
+            </svg>
+            <span class="mobile-cart-count" aria-hidden="true"></span>
+          </a>
+        </div>
         <nav class="nav-links" id="navLinks" aria-label="Main navigation">
           <a href="#categories">Shop</a>
           <a href="#bestsellers">Best Sellers</a>
@@ -563,10 +588,89 @@
         <div class="nav-actions" id="navActions">
           <!-- Auth state injected by auth-nav.js -->
         </div>
+
+        <div class="mobile-commerce-search" role="search">
+          <label class="mobile-search-shell" for="mobileCommerceSearch">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" />
+              <path d="m20 20-3.8-3.8" />
+            </svg>
+            <input
+              type="search"
+              id="mobileCommerceSearch"
+              placeholder="Search earrings, pearls, rings..."
+              autocomplete="off"
+              aria-label="Search earrings, pearls, rings"
+            />
+          </label>
+        </div>
+
+        <div class="mobile-category-strip" aria-label="Shop quick categories">
+          <a href="#bestsellers" class="mobile-category-pill" data-mobile-category="all">
+            <span class="mobile-category-img"><img src="images/editorial-everyday-hoops.png" alt="" loading="lazy" /></span>
+            <span>All</span>
+          </a>
+          <a href="#bestsellers" class="mobile-category-pill" data-mobile-category="everyday-elegance">
+            <span class="mobile-category-img"><img src="images/style-everyday-elegance.png" alt="" loading="lazy" /></span>
+            <span>Earrings</span>
+          </a>
+          <a href="#bestsellers" class="mobile-category-pill" data-mobile-category="everyday-elegance">
+            <span class="mobile-category-img"><img src="images/editorial-minimal-soul-closeup.png" alt="" loading="lazy" /></span>
+            <span>Minimal</span>
+          </a>
+          <a href="#bestsellers" class="mobile-category-pill" data-mobile-category="modern-romance">
+            <span class="mobile-category-img"><img src="images/story-soft-pearl-drop.png" alt="" loading="lazy" /></span>
+            <span>Pearl</span>
+          </a>
+          <a href="#bestsellers" class="mobile-category-pill" data-mobile-category="modern-romance">
+            <span class="mobile-category-img"><img src="images/editorial-korean-morning-coffee.png" alt="" loading="lazy" /></span>
+            <span>Korean</span>
+          </a>
+          <a href="#bestsellers" class="mobile-category-pill" data-mobile-category="heritage-muse">
+            <span class="mobile-category-img"><img src="images/style-heritage-muse.png" alt="" loading="lazy" /></span>
+            <span>Bridal</span>
+          </a>
+          <a href="#bestsellers" class="mobile-category-pill" data-mobile-category="everyday-elegance">
+            <span class="mobile-category-img"><img src="images/editorial-light-meets-gold.png" alt="" loading="lazy" /></span>
+            <span>Gold</span>
+          </a>
+          <a href="#bestsellers" class="mobile-category-pill" data-mobile-category="after-dark">
+            <span class="mobile-category-img"><img src="images/style-after-dark.png" alt="" loading="lazy" /></span>
+            <span>Party</span>
+          </a>
+          <a href="#bestsellers" class="mobile-category-pill" data-mobile-category="all">
+            <span class="mobile-category-img mobile-category-price">₹299</span>
+            <span>Under ₹299</span>
+          </a>
+        </div>
       </div>
     </header>
 
     <main>
+      <section class="mobile-promo-slider" aria-label="Featured mobile offers">
+        <div class="mobile-promo-track" id="mobilePromoTrack">
+          <a href="#bestsellers" class="mobile-promo-card mobile-promo-card--new">
+            <img src="images/editorial-light-meets-gold.png" alt="Gold jewelry new arrivals" loading="eager" />
+            <span>New Arrivals</span>
+            <strong>Fresh drops under ₹299</strong>
+          </a>
+          <a href="#bestsellers" class="mobile-promo-card mobile-promo-card--deal">
+            <img src="images/editorial-everyday-hoops.png" alt="Everyday earrings under 299" loading="lazy" />
+            <span>Under ₹299</span>
+            <strong>Everyday shine, easy prices</strong>
+          </a>
+          <a href="#bestsellers" class="mobile-promo-card mobile-promo-card--bridal">
+            <img src="images/style-heritage-muse.png" alt="Bridal jewelry edit" loading="lazy" />
+            <span>Bridal Edit</span>
+            <strong>Soft statement pieces</strong>
+          </a>
+          <a href="#bestsellers" class="mobile-promo-card mobile-promo-card--minimal">
+            <img src="images/editorial-minimal-soul-closeup.png" alt="Minimal jewelry collection" loading="lazy" />
+            <span>Minimal Collection</span>
+            <strong>Quiet luxury for daily wear</strong>
+          </a>
+        </div>
+      </section>
       <!-- ░░ HERO — LUXURY CINEMATIC ░░ -->
       <section class="hero" aria-label="Hero banner">
         <div class="hero-bg-layer" aria-hidden="true"></div>
@@ -1408,6 +1512,29 @@
       aria-live="polite"
     ></div>
 
+    <nav class="mobile-bottom-nav" aria-label="Mobile bottom navigation">
+      <a href="index.html" class="mobile-bottom-tab is-active">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3V10.5Z" /></svg>
+        <span>Home</span>
+      </a>
+      <a href="#bestsellers" class="mobile-bottom-tab">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4H6Z" /><path d="M3 6h18M16 10a4 4 0 0 1-8 0" /></svg>
+        <span>Shop</span>
+      </a>
+      <a href="#bestsellers" class="mobile-bottom-tab">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6c-1.8-1.7-4.6-1.6-6.3.2L12 7.3 9.5 4.8C7.8 3 5 2.9 3.2 4.6 1.3 6.4 1.3 9.4 3.1 11.2L12 20l8.9-8.8c1.8-1.8 1.8-4.8-.1-6.6Z" /></svg>
+        <span>Wishlist</span>
+      </a>
+      <a href="cart.html" class="mobile-bottom-tab">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L22 6H6" /></svg>
+        <span>Cart</span>
+      </a>
+      <a href="account.html" class="mobile-bottom-tab">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21a8 8 0 0 0-16 0" /><circle cx="12" cy="7" r="4" /></svg>
+        <span>Account</span>
+      </a>
+    </nav>
+
     <!-- ░░ D6 SCROLL REVEAL ░░ -->
     <script>
       (function () {
@@ -1438,6 +1565,8 @@
       })();
     </script>
     <script src="script.js"></script>
+    <script src="mobile-commerce.js"></script>
+    <script src="mobile-brand-system.js"></script>
     <script type="module" src="auth-nav.js"></script>
     <script type="module">
       import {
@@ -1677,6 +1806,26 @@
 
         const productUrl = `product.html?id=${docId}&category=${product.categorySlug}`;
         const safeName = product.name.replace(/'/g, "\\'");
+        const price = Number(product.price || 0);
+        const oldPrice = Number(
+          product.oldPrice ||
+            product.compareAtPrice ||
+            product.mrp ||
+            (price ? Math.ceil(price * 1.28) : 0),
+        );
+        const discount =
+          oldPrice > price && price
+            ? Math.max(5, Math.round(((oldPrice - price) / oldPrice) * 100))
+            : 0;
+        const ratingSeed = String(product.name || docId || "").length % 4;
+        const rating = product.rating || (4.6 + ratingSeed / 10).toFixed(1);
+        const commerceBadge =
+          product.tag ||
+          (ratingSeed === 0
+            ? "Bestseller"
+            : ratingSeed === 1
+              ? "New"
+              : "Viral");
 
         /* ── Badge system — luxury edition ── */
         let badgesHTML = "";
@@ -1725,6 +1874,7 @@
         return `
           <article class="product-card-lux" data-category="${product.categorySlug}">
             <div class="lux-img-container">
+              <span class="mobile-product-badge">${commerceBadge}</span>
               ${badgesHTML ? `<div class="lux-badges">${badgesHTML}</div>` : ""}
               <a href="${productUrl}" class="lux-img-link" aria-label="View ${product.name}">
                 <img
@@ -1740,10 +1890,18 @@
             <div class="lux-product-info">
               ${catLabel}
               <a href="${productUrl}" class="lux-product-name">${product.name}</a>
+              <div class="mobile-product-rating" aria-label="${rating} out of 5 rating">
+                <span aria-hidden="true">★</span> ${rating}
+              </div>
               ${descHTML}
               <div class="lux-product-bottom">
                 <div class="lux-price-wrap">
                   <span class="lux-price">₹${product.price}</span>
+                  ${
+                    oldPrice > price
+                      ? `<span class="mobile-old-price">₹${oldPrice}</span><span class="mobile-discount">${discount}% off</span>`
+                      : ""
+                  }
                 </div>
                 ${stockDot}
               </div>

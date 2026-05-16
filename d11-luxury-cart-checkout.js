@@ -119,6 +119,65 @@
     });
   }
 
+  function getCart() {
+    try {
+      return JSON.parse(localStorage.getItem("cart") || "[]");
+    } catch (err) {
+      return [];
+    }
+  }
+
+  function cartSubtotal() {
+    return getCart().reduce((sum, item) => sum + Number(item.price || 0) * Number(item.quantity || 1), 0);
+  }
+
+  function formatINR(value) {
+    return "₹" + Number(value || 0).toLocaleString("en-IN");
+  }
+
+  function initPremiumCartCommerce() {
+    if (!IS_MOBILE()) return;
+    const cartPage = document.querySelector(".cart-page");
+    if (!cartPage) return;
+
+    const summary = document.querySelector(".cart-summary");
+    if (summary && !summary.querySelector(".cart-progress-card")) {
+      const progress = document.createElement("div");
+      progress.className = "cart-progress-card";
+      progress.innerHTML =
+        '<div class="cart-progress-top"><strong>Free delivery progress</strong><span id="cartProgressText"></span></div>' +
+        '<div class="cart-progress-track"><div class="cart-progress-fill" id="cartProgressFill"></div></div>';
+      summary.insertBefore(progress, summary.firstChild);
+    }
+
+    if (summary && !summary.querySelector(".cart-secure-badges")) {
+      const badges = document.createElement("div");
+      badges.className = "cart-secure-badges";
+      badges.innerHTML =
+        '<span class="cart-secure-badge">Secure checkout</span>' +
+        '<span class="cart-secure-badge">COD available</span>' +
+        '<span class="cart-secure-badge">7-day returns</span>' +
+        '<span class="cart-secure-badge">Packed with care</span>';
+      const checkoutBtn = summary.querySelector(".btn-checkout");
+      if (checkoutBtn) summary.insertBefore(badges, checkoutBtn);
+      else summary.appendChild(badges);
+    }
+
+    syncCartProgress();
+  }
+
+  function syncCartProgress() {
+    if (!IS_MOBILE()) return;
+    const fill = document.getElementById("cartProgressFill");
+    const text = document.getElementById("cartProgressText");
+    if (!fill || !text) return;
+    const subtotal = cartSubtotal();
+    const target = 399;
+    const pct = Math.min(100, Math.round((subtotal / target) * 100));
+    fill.style.setProperty("--progress", pct + "%");
+    text.textContent = subtotal >= target ? "Unlocked" : formatINR(target - subtotal) + " away";
+  }
+
   /* Re-stagger whenever cart re-renders */
   function watchCartRenders() {
     if (!IS_MOBILE()) return;
@@ -283,6 +342,57 @@
     });
   }
 
+  function initPremiumCheckoutFlow() {
+    if (!IS_MOBILE()) return;
+    const checkoutPage = document.querySelector(".checkout-page");
+    if (!checkoutPage) return;
+
+    const header = document.querySelector(".checkout-header");
+    if (header && !header.querySelector(".checkout-progress-card")) {
+      const card = document.createElement("div");
+      card.className = "checkout-progress-card";
+      card.innerHTML =
+        '<div class="checkout-progress-top"><strong>Checkout</strong><span>Fast, secure, app-like</span></div>' +
+        '<div class="checkout-progress-track"><div class="checkout-progress-fill" style="--progress:66%"></div></div>' +
+        '<div class="checkout-progress-steps"><span class="checkout-step-pill is-active">Address</span><span class="checkout-step-pill is-active">Payment</span><span class="checkout-step-pill">Confirm</span></div>';
+      header.appendChild(card);
+    }
+
+    const formCard = document.querySelector(".form-card");
+    if (formCard && !formCard.querySelector(".checkout-trust-badges")) {
+      const badges = document.createElement("div");
+      badges.className = "checkout-trust-badges";
+      badges.innerHTML =
+        '<span class="checkout-trust-badge">COD badge</span>' +
+        '<span class="checkout-trust-badge">Encrypted payment</span>' +
+        '<span class="checkout-trust-badge">No hidden charges</span>' +
+        '<span class="checkout-trust-badge">Order support</span>';
+      const methods = formCard.querySelector(".payment-methods");
+      if (methods) formCard.insertBefore(badges, methods);
+      else formCard.appendChild(badges);
+    }
+
+    if (!document.querySelector(".d11-sticky-checkout-pay")) {
+      const sticky = document.createElement("div");
+      sticky.className = "d11-sticky-checkout-pay";
+      sticky.innerHTML = '<div><span>Payable</span><strong id="d11CheckoutStickyTotal">₹0</strong></div><button type="button" class="d11-sticky-pay-btn">Pay securely</button>';
+      document.body.appendChild(sticky);
+      sticky.querySelector(".d11-sticky-pay-btn").addEventListener("click", () => {
+        const payBtn = document.querySelector(".btn-pay-online:not([disabled]), .btn-place-order:not([disabled]), .btn-cod:not([disabled])");
+        if (payBtn) payBtn.click();
+      });
+    }
+
+    syncCheckoutStickyPay();
+  }
+
+  function syncCheckoutStickyPay() {
+    const total = document.getElementById("d11CheckoutStickyTotal");
+    if (!total) return;
+    const summaryTotal = document.getElementById("summaryTotal") || document.querySelector(".summary-grand-price, .summary-total strong");
+    total.textContent = summaryTotal ? summaryTotal.textContent.trim() : formatINR(cartSubtotal());
+  }
+
   /* ============================================================
      PART 10 — LUXURY MOBILE PERFORMANCE
      ============================================================ */
@@ -325,6 +435,18 @@
       const rect = img.getBoundingClientRect();
       if (rect.top > window.innerHeight) {
         img.loading = "lazy";
+      }
+    });
+  }
+
+  function initLuxuryButtonFeedback() {
+    if (!IS_MOBILE()) return;
+    document.addEventListener("click", (event) => {
+      const cartIcon = document.querySelector(".mobile-commerce-cart, .nav-cart-link");
+      if (event.target.closest(".btn-checkout, .btn-place-order, .d11-sticky-cta-btn, .d11-sticky-pay-btn") && cartIcon) {
+        cartIcon.classList.remove("lux-cart-bounce");
+        void cartIcon.offsetWidth;
+        cartIcon.classList.add("lux-cart-bounce");
       }
     });
   }
@@ -373,6 +495,8 @@
         if (nowMobile) {
           initCartItemStagger();
           upgradeRemoveButtons();
+          initPremiumCartCommerce();
+          initPremiumCheckoutFlow();
         }
       }
     });
@@ -443,6 +567,7 @@
     watchCartRenders();
     upgradeRemoveButtons();
     watchRemoveButtons();
+    initPremiumCartCommerce();
     prefetchCheckout();
 
     /* Checkout */
@@ -450,9 +575,15 @@
     initPaymentMethodAnimation();
     initFormValidationEnhancement();
     initCheckoutSummaryCollapse();
+    initPremiumCheckoutFlow();
+    initLuxuryButtonFeedback();
 
     /* Patch render after a tick to ensure window.renderCart is defined */
     setTimeout(patchCartRenderDebounce, 100);
+    setInterval(() => {
+      syncCartProgress();
+      syncCheckoutStickyPay();
+    }, 700);
   }
 
   if (document.readyState === "loading") {

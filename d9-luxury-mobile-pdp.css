@@ -42,6 +42,293 @@
 }
 
 /* ============================================================
+   Phase 8: Premium App-Like Mobile PDP
+   ============================================================ */
+@media (max-width: 900px) {
+  .product-page {
+    background: linear-gradient(180deg, #fffaf7 0%, #fff 48%, #fff8f7 100%);
+  }
+
+  .product-img-frame {
+    background: #fff;
+  }
+
+  .product-img-frame img {
+    filter: none !important;
+    image-rendering: auto;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  .pdp-floating-actions {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 6;
+    display: grid;
+    gap: 8px;
+  }
+
+  .pdp-float-btn {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(181, 101, 122, 0.18);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.82);
+    color: #221917;
+    box-shadow: 0 12px 26px rgba(62, 38, 34, 0.14);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    transition: transform 180ms ease, color 180ms ease, background 180ms ease;
+  }
+
+  .pdp-float-btn:active {
+    transform: scale(0.92);
+  }
+
+  .pdp-float-btn.is-loved {
+    color: #b5657a;
+    background: #fff1f5;
+  }
+
+  .pdp-float-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .pdp-float-btn.is-loved svg {
+    fill: rgba(181, 101, 122, 0.18);
+  }
+
+  .pdp-delivery-card {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 10px;
+    align-items: center;
+    margin: 16px 0 0;
+    padding: 12px;
+    border: 1px solid rgba(181, 101, 122, 0.12);
+    border-radius: 18px;
+    background: linear-gradient(135deg, #fff, #fff7f8);
+    box-shadow: 0 12px 24px rgba(78, 45, 38, 0.07);
+  }
+
+  .pdp-delivery-icon {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    color: #b5657a;
+    background: #fff0f4;
+    font-weight: 800;
+  }
+
+  .pdp-delivery-card strong {
+    display: block;
+    color: #221917;
+    font: 800 0.84rem/1.15 var(--font-body, system-ui);
+  }
+
+  .pdp-delivery-card span {
+    display: block;
+    margin-top: 3px;
+    color: rgba(34, 25, 23, 0.58);
+    font: 600 0.72rem/1.3 var(--font-body, system-ui);
+  }
+
+  .pdp-premium-accordions {
+    display: grid;
+    gap: 10px;
+    margin: 18px 0 4px;
+  }
+
+  .pdp-premium-accordion {
+    overflow: hidden;
+    border: 1px solid rgba(181, 101, 122, 0.12);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.78);
+  }
+
+  .pdp-premium-accordion button {
+    width: 100%;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 14px;
+    border: 0;
+    background: transparent;
+    color: #221917;
+    font: 800 0.82rem/1 var(--font-body, system-ui);
+  }
+
+  .pdp-premium-accordion button span:last-child {
+    color: rgba(34, 25, 23, 0.42);
+    transition: transform 280ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .pdp-premium-accordion.is-open button span:last-child {
+    transform: rotate(90deg);
+  }
+
+  .pdp-premium-panel {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    color: rgba(34, 25, 23, 0.66);
+    font: 600 0.78rem/1.55 var(--font-body, system-ui);
+    transition:
+      max-height 320ms cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 220ms ease;
+  }
+
+  .pdp-premium-accordion.is-open .pdp-premium-panel {
+    max-height: 170px;
+    opacity: 1;
+  }
+
+  .pdp-premium-panel-inner {
+    padding: 0 14px 14px;
+  }
+
+  .pdp-review-strip {
+    display: flex;
+    gap: 10px;
+    margin: 18px -18px 2px;
+    padding: 0 18px 8px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .pdp-review-strip::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pdp-review-card {
+    flex: 0 0 78%;
+    scroll-snap-align: start;
+    padding: 14px;
+    border: 1px solid rgba(181, 101, 122, 0.1);
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 10px 22px rgba(78, 45, 38, 0.07);
+  }
+
+  .pdp-review-card strong {
+    display: block;
+    color: #221917;
+    font: 800 0.8rem/1 var(--font-body, system-ui);
+  }
+
+  .pdp-review-card span {
+    display: block;
+    margin-top: 7px;
+    color: rgba(34, 25, 23, 0.6);
+    font: 600 0.76rem/1.45 var(--font-body, system-ui);
+  }
+
+  .pdp-sticky-buy {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 260;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+    padding: 12px 14px calc(12px + env(safe-area-inset-bottom));
+    border-top: 1px solid rgba(181, 101, 122, 0.14);
+    background: rgba(255, 252, 249, 0.92);
+    box-shadow: 0 -18px 36px rgba(55, 34, 30, 0.12);
+    backdrop-filter: blur(22px) saturate(1.25);
+    -webkit-backdrop-filter: blur(22px) saturate(1.25);
+    transform: translateY(112%);
+    transition: transform 380ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .pdp-sticky-buy.is-visible {
+    transform: translateY(0);
+  }
+
+  .pdp-sticky-buy button,
+  .pdp-sticky-buy a {
+    min-height: 52px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 18px;
+    font: 850 0.86rem/1 var(--font-body, system-ui);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+
+  .pdp-sticky-add {
+    border: 1.5px solid rgba(181, 101, 122, 0.36);
+    background: #fff;
+    color: #221917;
+  }
+
+  .pdp-sticky-buy-now {
+    border: 0;
+    color: #fff;
+    background: linear-gradient(135deg, #221917, #6e4740 58%, #b5657a);
+    box-shadow: 0 12px 26px rgba(181, 101, 122, 0.2);
+  }
+
+  .pdp-zoom-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 380;
+    display: grid;
+    place-items: center;
+    padding: 18px;
+    background: rgba(25, 17, 16, 0.76);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 260ms ease;
+  }
+
+  .pdp-zoom-overlay.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .pdp-zoom-overlay img {
+    max-width: 100%;
+    max-height: 82svh;
+    object-fit: contain;
+    border-radius: 22px;
+    background: #fff;
+    box-shadow: 0 22px 60px rgba(0,0,0,0.26);
+  }
+
+  .pdp-zoom-close {
+    position: fixed;
+    top: calc(16px + env(safe-area-inset-top));
+    right: 16px;
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(255,255,255,0.24);
+    border-radius: 50%;
+    background: rgba(255,255,255,0.16);
+    color: #fff;
+    font-size: 1.4rem;
+  }
+}
+
+/* ============================================================
    PART 1 — LUXURY MOBILE PRODUCT CARDS
    ============================================================ */
 

@@ -286,6 +286,147 @@
     obs.observe(inlineBtn);
   }
 
+  function iconSVG(name) {
+    const icons = {
+      heart: '<svg viewBox="0 0 24 24"><path d="M20.8 4.6c-1.8-1.7-4.6-1.6-6.3.2L12 7.3 9.5 4.8C7.8 3 5 2.9 3.2 4.6 1.3 6.4 1.3 9.4 3.1 11.2L12 20l8.9-8.8c1.8-1.8 1.8-4.8-.1-6.6Z"/></svg>',
+      zoom: '<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8M11 8v6M8 11h6"/></svg>',
+      share: '<svg viewBox="0 0 24 24"><path d="M18 8a3 3 0 1 0-2.8-4M6 14a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm12-1a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z"/><path d="m8.7 15.4 6.6-3.8M8.7 18.6l6.6 3.8"/></svg>'
+    };
+    return icons[name] || icons.heart;
+  }
+
+  function ensureZoomOverlay() {
+    let overlay = document.querySelector(".pdp-zoom-overlay");
+    if (overlay) return overlay;
+    overlay = document.createElement("div");
+    overlay.className = "pdp-zoom-overlay";
+    overlay.innerHTML = '<button type="button" class="pdp-zoom-close" aria-label="Close image zoom">×</button><img alt="Product zoom" />';
+    document.body.appendChild(overlay);
+    overlay.querySelector(".pdp-zoom-close").addEventListener("click", () => overlay.classList.remove("is-open"));
+    overlay.addEventListener("click", (event) => {
+      if (event.target === overlay) overlay.classList.remove("is-open");
+    });
+    return overlay;
+  }
+
+  function enhancePremiumPDP() {
+    if (!IS_MOBILE()) return;
+    const layout = document.querySelector(".product-layout");
+    const frame = document.querySelector(".product-img-frame");
+    const info = document.querySelector(".product-info-col");
+    const addBtn = document.querySelector("#addToCartBtn, .btn-add-cart:not(:disabled)");
+    if (!layout || !frame || !info) return;
+
+    if (!frame.querySelector(".pdp-floating-actions")) {
+      const actions = document.createElement("div");
+      actions.className = "pdp-floating-actions";
+      actions.innerHTML =
+        '<button type="button" class="pdp-float-btn pdp-wishlist-float" aria-label="Add to wishlist">' + iconSVG("heart") + '</button>' +
+        '<button type="button" class="pdp-float-btn pdp-zoom-float" aria-label="Zoom product image">' + iconSVG("zoom") + '</button>' +
+        '<button type="button" class="pdp-float-btn pdp-share-float" aria-label="Share product">' + iconSVG("share") + '</button>';
+      frame.appendChild(actions);
+
+      actions.querySelector(".pdp-wishlist-float").addEventListener("click", (event) => {
+        const btn = event.currentTarget;
+        btn.classList.toggle("is-loved");
+        btn.classList.remove("lux-heart-pop");
+        void btn.offsetWidth;
+        btn.classList.add("lux-heart-pop");
+      });
+
+      actions.querySelector(".pdp-zoom-float").addEventListener("click", () => {
+        const img = frame.querySelector("img");
+        const overlay = ensureZoomOverlay();
+        if (img) overlay.querySelector("img").src = img.currentSrc || img.src;
+        overlay.classList.add("is-open");
+      });
+
+      actions.querySelector(".pdp-share-float").addEventListener("click", async () => {
+        try {
+          if (navigator.share) await navigator.share({ title: document.title, url: location.href });
+        } catch (err) {}
+      });
+    }
+
+    if (!info.querySelector(".pdp-delivery-card")) {
+      const delivery = document.createElement("div");
+      delivery.className = "pdp-delivery-card";
+      delivery.innerHTML = '<span class="pdp-delivery-icon">✓</span><span><strong>Delivery in 3-5 days</strong><span>Free shipping above ₹399 · COD available</span></span>';
+      const meta = info.querySelector(".product-meta-grid");
+      if (meta) meta.parentNode.insertBefore(delivery, meta);
+      else info.appendChild(delivery);
+    }
+
+    if (!info.querySelector(".pdp-premium-accordions")) {
+      const accordions = document.createElement("div");
+      accordions.className = "pdp-premium-accordions";
+      accordions.innerHTML = [
+        ["Details", "Skin-friendly finish, lightweight feel, and curated styling for everyday luxury."],
+        ["Delivery & Returns", "Ships quickly across India. COD available and easy 7-day returns on eligible orders."],
+        ["Care Guide", "Keep away from perfumes and moisture. Store in a soft pouch after every wear."]
+      ].map((item, index) =>
+        '<div class="pdp-premium-accordion' + (index === 0 ? " is-open" : "") + '">' +
+          '<button type="button" aria-expanded="' + (index === 0 ? "true" : "false") + '"><span>' + item[0] + '</span><span>›</span></button>' +
+          '<div class="pdp-premium-panel"><div class="pdp-premium-panel-inner">' + item[1] + '</div></div>' +
+        '</div>'
+      ).join("");
+      const actions = info.querySelector(".product-actions");
+      if (actions) actions.parentNode.insertBefore(accordions, actions);
+      else info.appendChild(accordions);
+      accordions.querySelectorAll("button").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const item = btn.closest(".pdp-premium-accordion");
+          const open = item.classList.toggle("is-open");
+          btn.setAttribute("aria-expanded", open ? "true" : "false");
+        });
+      });
+    }
+
+    if (!info.querySelector(".pdp-review-strip")) {
+      const reviews = document.createElement("div");
+      reviews.className = "pdp-review-strip";
+      reviews.innerHTML =
+        '<div class="pdp-review-card"><strong>4.8 ★ · Verified</strong><span>Looks premium and feels light enough for full-day wear.</span></div>' +
+        '<div class="pdp-review-card"><strong>Loved for gifting</strong><span>The finish photographs beautifully and the packaging feels special.</span></div>';
+      const trust = info.querySelector(".trust-pillars");
+      if (trust) trust.parentNode.insertBefore(reviews, trust);
+      else info.appendChild(reviews);
+    }
+
+    let sticky = document.querySelector(".pdp-sticky-buy");
+    if (!sticky) {
+      sticky = document.createElement("div");
+      sticky.className = "pdp-sticky-buy";
+      sticky.innerHTML = '<button type="button" class="pdp-sticky-add">Add to Cart</button><button type="button" class="pdp-sticky-buy-now">Buy Now</button>';
+      document.body.appendChild(sticky);
+      sticky.querySelector(".pdp-sticky-add").addEventListener("click", () => {
+        const current = document.querySelector("#addToCartBtn, .btn-add-cart:not(:disabled)");
+        if (current) current.click();
+      });
+      sticky.querySelector(".pdp-sticky-buy-now").addEventListener("click", () => {
+        const current = document.querySelector("#addToCartBtn, .btn-add-cart:not(:disabled)");
+        if (current) current.click();
+        setTimeout(() => { window.location.href = "checkout.html"; }, 220);
+      });
+    }
+
+    if (addBtn && !sticky.dataset.observing) {
+      sticky.dataset.observing = "1";
+      const obs = new IntersectionObserver(([entry]) => {
+        sticky.classList.toggle("is-visible", !entry.isIntersecting);
+      }, { threshold: 0.12 });
+      obs.observe(addBtn);
+    } else if (!addBtn) {
+      sticky.classList.add("is-visible");
+    }
+
+    document.querySelectorAll(".product-img-frame img, .related-card img").forEach((img) => {
+      img.decoding = "async";
+      if (!img.closest(".product-img-frame")) img.loading = "lazy";
+      img.style.filter = "none";
+    });
+  }
+
   /* ============================================================
      PART 5 — CARD PREMIUM TOUCH FEEDBACK
      Adds .lux-pressing class for CSS-driven press state
@@ -446,16 +587,32 @@
     } else {
       /* Wait for product page JS to populate */
       const pdpObs = new MutationObserver(() => {
-        if (document.querySelector(".product-img-frame")) {
+      if (document.querySelector(".product-img-frame")) {
           pdpObs.disconnect();
           initPDPGallery();
           initPDPAccordions();
           initStickyBar();
           initVariantOptions();
           initScrollProgress();
+          enhancePremiumPDP();
         }
       });
       pdpObs.observe(document.body, { childList: true, subtree: true });
+    }
+
+    enhancePremiumPDP();
+
+    const productContent = document.getElementById("productContent");
+    if (productContent) {
+      let premiumTimer;
+      new MutationObserver(() => {
+        clearTimeout(premiumTimer);
+        premiumTimer = setTimeout(() => {
+          initPDPGallery();
+          initImageLoadReveal();
+          enhancePremiumPDP();
+        }, 90);
+      }).observe(productContent, { childList: true, subtree: true });
     }
   }
 
