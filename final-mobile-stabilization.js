@@ -136,9 +136,10 @@
     saveCart(cart);
   }
 
+  /* ─── EARRINGS ONLY: single category for homepage ─── */
   function categoryLink(label, slug, img) {
     return [
-      '<a class="cc-final-category" href="index.html#bestsellers" data-final-category="' + slug + '">',
+      '<a class="cc-final-category cc-cat-earrings" href="index.html#bestsellers" data-final-category="' + slug + '">',
       '<span><img src="' + img + '" alt="" loading="lazy" decoding="async"></span>',
       '<b>' + label + '</b>',
       '</a>'
@@ -237,17 +238,13 @@
     home.id = HOME_ID;
     home.className = "cc-final-home cc-app-home";
     home.setAttribute("aria-label", "ChicCharms mobile luxury storefront");
+
+    /* ── Category rail: EARRINGS ONLY ── */
     home.innerHTML = [
       '<button class="cc-final-search-button cc-app-search-pill" type="button" data-final-search>' + icon("search") + '<span>Search earrings, pearls, gift sets</span><strong>Search</strong></button>',
       '<nav class="cc-final-category-rail" aria-label="Quick categories">',
+      /* Only earrings — single focused category */
       categoryLink("Earrings", "everyday-elegance", "images/editorial-everyday-hoops.png"),
-      categoryLink("Rings", "modern-romance", "images/editorial-light-meets-gold.png"),
-      categoryLink("Necklaces", "heritage-muse", "images/style-heritage-muse.png"),
-      categoryLink("Bracelets", "everyday-elegance", "images/story-intimate-jewelry-detail.png"),
-      categoryLink("Pearls", "heritage-muse", "images/story-soft-pearl-drop.png"),
-      categoryLink("Korean", "after-dark", "images/editorial-korean-morning-coffee.png"),
-      categoryLink("Minimal", "everyday-elegance", "images/editorial-minimal-soul-closeup.png"),
-      categoryLink("Party", "after-dark", "images/style-after-dark.png"),
       '</nav>',
       '<section class="cc-app-hero" aria-label="Luxury campaign">',
       '<a class="cc-app-hero-card" href="index.html#bestsellers">',
@@ -326,7 +323,7 @@
     nav.setAttribute("aria-label", "Mobile bottom navigation");
     nav.innerHTML =
       '<a class="mobile-bottom-tab' + active(["index.html", ""]) + '" href="index.html" aria-label="Home">' + icon("home") + '<span>Home</span></a>' +
-      '<a class="mobile-bottom-tab' + active(["shop.html"]) + '" href="index.html#bestsellers" data-bottom-category aria-label="Categories">' + icon("shop") + '<span>Categories</span></a>' +
+      '<a class="mobile-bottom-tab' + active(["shop.html"]) + '" href="index.html#bestsellers" data-bottom-category aria-label="Categories">' + icon("shop") + '<span>Shop</span></a>' +
       '<button class="mobile-bottom-tab cc-app-nav-button" type="button" data-final-search aria-label="Search">' + icon("search") + '<span>Search</span></button>' +
       '<a class="mobile-bottom-tab" href="index.html#bestsellers" aria-label="Wishlist">' + icon("heart") + '<span>Wishlist</span></a>' +
       '<a class="mobile-bottom-tab' + active(["account.html", "auth.html"]) + '" href="account.html" aria-label="Account">' + icon("account") + '<span>Account</span></a>';
@@ -464,6 +461,12 @@
     });
   }
 
+  /* ──────────────────────────────────────────────
+     CART DRAWER — FIXED IMPLEMENTATION
+     - Flex column layout: header + scrollable area + sticky footer
+     - body overflow restored correctly on close
+     - No z-index conflicts with bottom nav
+  ─────────────────────────────────────────────── */
   function createCartDrawer() {
     if (!isMobile() || $(".cc-app-cart-drawer")) return;
     var backdrop = document.createElement("button");
@@ -487,34 +490,88 @@
     var subtotal = cartTotal(items);
     var left = Math.max(0, 399 - subtotal);
     var progress = Math.min(100, Math.round((subtotal / 399) * 100));
+
+    /* Build inner HTML using flex column structure */
     drawer.innerHTML = [
+      /* Grabber */
       '<div class="cc-app-cart-grabber" aria-hidden="true"></div>',
-      '<div class="cc-app-cart-head"><div><span>Your bag</span><strong>' + (items.length ? items.length + " style" + (items.length > 1 ? "s" : "") + " selected" : "Ready for a new favorite") + '</strong></div><button type="button" class="cc-app-icon-btn" data-cc-cart-close aria-label="Close cart">' + icon("close") + '</button></div>',
-      '<div class="cc-app-ship"><div><span>' + (left ? "Add Rs." + left + " for free shipping" : "Free shipping unlocked") + '</span><b>' + progress + '%</b></div><i style="--p:' + progress + '%"></i></div>',
-      '<div class="cc-app-cart-items">' + (items.length ? items.map(function (item, index) {
-        return '<article><div class="cc-app-cart-img">' + (item.image ? '<img src="' + escapeHTML(item.image) + '" alt="">' : 'CC') + '</div><div><strong>' + escapeHTML(item.name || "ChicCharms piece") + '</strong><span>Rs.' + (Number(item.price) || 0) + '</span><div class="cc-app-cart-qty"><button type="button" data-cart-qty="' + index + '" data-delta="-1" aria-label="Decrease quantity">' + icon("minus") + '</button><em>' + (item.quantity || 1) + '</em><button type="button" data-cart-qty="' + index + '" data-delta="1" aria-label="Increase quantity">' + icon("plus") + '</button></div></div><b>Rs.' + ((Number(item.price) || 0) * (Number(item.quantity) || 1)) + '</b></article>';
-      }).join("") : '<div class="cc-app-empty-cart"><strong>Your cart is waiting</strong><span>Save your favorite sparkle and checkout in a few taps.</span><a href="index.html#bestsellers">Explore bestsellers</a></div>') + '</div>',
-      '<div class="cc-app-cart-trust"><span>Secure checkout</span><span>COD available</span><span>7-day returns</span></div>',
+      /* Head — fixed top */
+      '<div class="cc-app-cart-head">',
+        '<div>',
+          '<span>Your bag</span>',
+          '<strong>' + (items.length ? items.length + " style" + (items.length > 1 ? "s" : "") + " selected" : "Ready for a new favourite") + '</strong>',
+        '</div>',
+        '<button type="button" class="cc-app-icon-btn" data-cc-cart-close aria-label="Close cart">' + icon("close") + '</button>',
+      '</div>',
+      /* Shipping bar */
+      '<div class="cc-app-ship" style="margin: 0 16px 2px;">',
+        '<div>',
+          '<span>' + (left ? "Add Rs." + left + " for free shipping" : "Free shipping unlocked ✓") + '</span>',
+          '<b>' + progress + '%</b>',
+        '</div>',
+        '<i style="--p:' + progress + '%"></i>',
+      '</div>',
+      /* Scrollable items area */
+      '<div class="cc-app-cart-items" style="overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;flex:1;min-height:0;padding:0 16px;gap:10px;display:grid;">',
+        (items.length
+          ? items.map(function (item, index) {
+              return [
+                '<article>',
+                  '<div class="cc-app-cart-img">' + (item.image ? '<img src="' + escapeHTML(item.image) + '" alt="">' : 'CC') + '</div>',
+                  '<div>',
+                    '<strong>' + escapeHTML(item.name || "ChicCharms piece") + '</strong>',
+                    '<span>Rs.' + (Number(item.price) || 0) + '</span>',
+                    '<div class="cc-app-cart-qty">',
+                      '<button type="button" data-cart-qty="' + index + '" data-delta="-1" aria-label="Decrease">' + icon("minus") + '</button>',
+                      '<em>' + (item.quantity || 1) + '</em>',
+                      '<button type="button" data-cart-qty="' + index + '" data-delta="1" aria-label="Increase">' + icon("plus") + '</button>',
+                    '</div>',
+                  '</div>',
+                  '<b>Rs.' + ((Number(item.price) || 0) * (Number(item.quantity) || 1)) + '</b>',
+                '</article>'
+              ].join("");
+            }).join("")
+          : '<div class="cc-app-empty-cart"><strong>Your cart is waiting</strong><span>Save your favourite sparkle and checkout in a few taps.</span><a href="index.html#bestsellers">Explore bestsellers</a></div>'
+        ),
+      '</div>',
+      /* Trust strip */
+      '<div class="cc-app-cart-trust" style="padding:8px 16px;flex:0 0 auto;"><span>Secure checkout</span><span>COD available</span><span>7-day returns</span></div>',
+      /* Checkout button — sticky footer */
       '<a class="cc-app-checkout" href="checkout.html"><span>Checkout</span><strong>Rs.' + subtotal + '</strong></a>'
     ].join("");
   }
 
+  /* ─── openCartDrawer: clean, no scroll-position side-effects ─── */
   function openCartDrawer() {
     createCartDrawer();
     syncCartDrawer();
     var drawer = $(".cc-app-cart-drawer");
     var backdrop = $(".cc-app-cart-backdrop");
-    if (drawer) drawer.classList.add("is-open");
-    if (backdrop) backdrop.classList.add("is-open");
+    if (!drawer || !backdrop) return;
+
+    /* Capture current scroll position so we don't jump */
+    window.__ccScrollY = window.scrollY;
+
+    drawer.classList.add("is-open");
+    backdrop.classList.add("is-open");
+
+    /* Lock body scroll without position:fixed (avoids scroll jump) */
     document.body.classList.add("cc-modal-open");
+    document.body.style.overscrollBehavior = "none";
   }
 
+  /* ─── closeCartDrawer: full cleanup, scroll restoration ─── */
   function closeCartDrawer() {
     var drawer = $(".cc-app-cart-drawer");
     var backdrop = $(".cc-app-cart-backdrop");
+
     if (drawer) drawer.classList.remove("is-open");
     if (backdrop) backdrop.classList.remove("is-open");
+
+    /* Remove body lock */
     document.body.classList.remove("cc-modal-open");
+    document.body.style.overscrollBehavior = "";
+
     stabilizeScrollState();
   }
 
@@ -567,16 +624,39 @@
     });
   }
 
+  /* ─── stabilizeScrollState: the authoritative scroll cleanup ─── */
   function stabilizeScrollState() {
     if (!isMobile()) return;
-    var modalOpen = $(".cc-app-drawer.is-open, .cc-app-search-overlay.is-open, .cc-app-cart-drawer.is-open, .lux-mobile-drawer.is-open, .lux-search-overlay.is-open, .cc-bottom-sheet.is-open, .pdp-image-modal.is-open");
-    if (!modalOpen) {
+
+    /* Check if any overlay is still open */
+    var anyOpen = !!$(".cc-app-drawer.is-open, .cc-app-search-overlay.is-open, .cc-app-cart-drawer.is-open, .lux-mobile-drawer.is-open, .lux-search-overlay.is-open");
+
+    if (!anyOpen) {
+      /* Remove all modal-open classes */
       document.body.classList.remove("lux-drawer-open", "lux-search-open", "cc-modal-open", "d7-menu-open");
+
+      /* Restore body scroll — clear inline overrides */
       document.body.style.overflow = "";
+      document.body.style.overflowX = "hidden";
+      document.body.style.overflowY = "";
       document.body.style.position = "";
+      document.body.style.top = "";
       document.body.style.width = "";
+      document.body.style.overscrollBehavior = "";
+
+      /* Restore html */
       document.documentElement.style.overflow = "";
+      document.documentElement.style.overflowX = "hidden";
+      document.documentElement.style.overflowY = "";
+
+      /* Restore scroll position if we saved it */
+      if (window.__ccScrollY !== undefined) {
+        window.scrollTo(0, window.__ccScrollY);
+        window.__ccScrollY = undefined;
+      }
     }
+
+    /* Always ensure x-overflow is hidden */
     document.documentElement.style.overflowX = "hidden";
     document.body.style.overflowX = "hidden";
     document.body.style.minHeight = "100dvh";
@@ -615,6 +695,7 @@
         return;
       }
 
+      /* Close cart: backdrop click OR close button */
       if (event.target.closest(".cc-app-cart-backdrop, [data-cc-cart-close]")) {
         event.preventDefault();
         closeCartDrawer();
@@ -675,7 +756,7 @@
         event.preventDefault();
         activateCategory(category.getAttribute("data-final-category") || "all");
       }
-    });
+    }, true); /* Use capture phase so backdrop clicks are caught even inside modals */
 
     document.addEventListener("input", function (event) {
       if (event.target && event.target.id === "ccAppSearchInput") renderSearchResults(event.target.value);
@@ -692,6 +773,49 @@
         renderSearchResults(event.target.value);
       }
     });
+
+    /* Swipe-down to close cart drawer */
+    (function () {
+      var startY = 0;
+      var isDraggingCart = false;
+
+      document.addEventListener("touchstart", function (e) {
+        var drawer = $(".cc-app-cart-drawer.is-open");
+        if (!drawer) return;
+        var grabber = drawer.querySelector(".cc-app-cart-grabber");
+        if (!grabber) return;
+        var touch = e.touches[0];
+        /* Only start drag if touching the grabber or cart head */
+        if (touch.clientY < drawer.getBoundingClientRect().top + 60) {
+          startY = touch.clientY;
+          isDraggingCart = true;
+        }
+      }, { passive: true });
+
+      document.addEventListener("touchmove", function (e) {
+        if (!isDraggingCart) return;
+        var delta = e.touches[0].clientY - startY;
+        var drawer = $(".cc-app-cart-drawer.is-open");
+        if (drawer && delta > 0) {
+          drawer.style.transition = "none";
+          drawer.style.transform = "translateY(" + delta + "px)";
+        }
+      }, { passive: true });
+
+      document.addEventListener("touchend", function (e) {
+        if (!isDraggingCart) return;
+        isDraggingCart = false;
+        var delta = e.changedTouches[0].clientY - startY;
+        var drawer = $(".cc-app-cart-drawer.is-open");
+        if (!drawer) return;
+        drawer.style.transition = "";
+        drawer.style.transform = "";
+        /* If swiped down 90px+, close cart */
+        if (delta > 90) {
+          closeCartDrawer();
+        }
+      }, { passive: true });
+    })();
   }
 
   function init() {
