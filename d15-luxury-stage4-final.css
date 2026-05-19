@@ -3,49 +3,51 @@
    Stage 4 · Parts 17–20 (FINAL)
    Navigation Ecosystem · Sensory Smoothness ·
    Editorial Cohesion · Production Polish
-   Mobile-only additive layer (max-width: 900px)
+   Mobile-only additive layer (max-width: 767px)
    Desktop completely untouched.
    ============================================================ */
 
 /* ============================================================
    STAGE 4 FINAL · MOTION TOKENS
    ============================================================ */
-:root {
-  /* Navigation ecosystem timing */
-  --s5-ease-menu:      cubic-bezier(0.22, 1, 0.36, 1);     /* menu panel unfurl */
-  --s5-ease-link:      cubic-bezier(0.16, 1, 0.3, 1);      /* link hover spring */
-  --s5-ease-overlay:   cubic-bezier(0.4, 0, 0.2, 1);       /* overlay dissolve */
-  --s5-ease-page:      cubic-bezier(0.25, 0.46, 0.45, 0.94); /* page-level silk */
-  --s5-ease-editorial: cubic-bezier(0.37, 0, 0.63, 1);     /* editorial breath */
+@media (max-width: 767px) {
+  :root {
+    /* Navigation ecosystem timing */
+    --s5-ease-menu:      cubic-bezier(0.22, 1, 0.36, 1);     /* menu panel unfurl */
+    --s5-ease-link:      cubic-bezier(0.16, 1, 0.3, 1);      /* link hover spring */
+    --s5-ease-overlay:   cubic-bezier(0.4, 0, 0.2, 1);       /* overlay dissolve */
+    --s5-ease-page:      cubic-bezier(0.25, 0.46, 0.45, 0.94); /* page-level silk */
+    --s5-ease-editorial: cubic-bezier(0.37, 0, 0.63, 1);     /* editorial breath */
 
-  /* Durations */
-  --s5-dur-instant:   0.08s;
-  --s5-dur-fast:      0.18s;
-  --s5-dur-menu:      0.44s;
-  --s5-dur-reveal:    0.58s;
-  --s5-dur-cinematic: 0.76s;
+    /* Durations */
+    --s5-dur-instant:   0.08s;
+    --s5-dur-fast:      0.18s;
+    --s5-dur-menu:      0.44s;
+    --s5-dur-reveal:    0.58s;
+    --s5-dur-cinematic: 0.76s;
 
-  /* Navigation palette */
-  --s5-nav-bg:         rgba(255, 252, 249, 0.97);
-  --s5-nav-blur:       blur(28px) saturate(1.18);
-  --s5-nav-border:     rgba(244, 167, 185, 0.15);
-  --s5-panel-bg:       rgba(255, 252, 249, 0.99);
-  --s5-overlay-bg:     rgba(35, 18, 18, 0.32);
-  --s5-link-hover-bg:  rgba(244, 167, 185, 0.07);
-  --s5-divider:        rgba(237, 230, 221, 0.55);
+    /* Navigation palette */
+    --s5-nav-bg:         rgba(255, 252, 249, 0.97);
+    --s5-nav-blur:       blur(28px) saturate(1.18);
+    --s5-nav-border:     rgba(244, 167, 185, 0.15);
+    --s5-panel-bg:       rgba(255, 252, 249, 0.99);
+    --s5-overlay-bg:     rgba(35, 18, 18, 0.32);
+    --s5-link-hover-bg:  rgba(244, 167, 185, 0.07);
+    --s5-divider:        rgba(237, 230, 221, 0.55);
 
-  /* Sensory palette */
-  --s5-glow-rose:    rgba(232, 128, 154, 0.10);
-  --s5-glow-warm:    rgba(255, 245, 235, 0.80);
-  --s5-shadow-nav:   0 2px 24px rgba(80, 40, 30, 0.08), 0 1px 0 rgba(244, 167, 185, 0.12);
-  --s5-shadow-panel: -8px 0 48px rgba(60, 30, 25, 0.12), -1px 0 0 rgba(244, 167, 185, 0.1);
+    /* Sensory palette */
+    --s5-glow-rose:    rgba(232, 128, 154, 0.10);
+    --s5-glow-warm:    rgba(255, 245, 235, 0.80);
+    --s5-shadow-nav:   0 2px 24px rgba(80, 40, 30, 0.08), 0 1px 0 rgba(244, 167, 185, 0.12);
+    --s5-shadow-panel: -8px 0 48px rgba(60, 30, 25, 0.12), -1px 0 0 rgba(244, 167, 185, 0.1);
+  }
 }
 
 /* ============================================================
    PART 17 — LUXURY MOBILE PREMIUM NAVIGATION ECOSYSTEM
    ============================================================ */
 
-@media (max-width: 900px) {
+@media (max-width: 767px) {
 
   /* ── Navbar: elevated glass surface ── */
   .navbar,
@@ -486,7 +488,7 @@
    PART 18 — LUXURY MOBILE SENSORY SMOOTHNESS
    ============================================================ */
 
-@media (max-width: 900px) {
+@media (max-width: 767px) {
 
   /* ── Scroll physics: momentum-based natural feel ── */
   html {
@@ -685,7 +687,7 @@
    PART 19 — LUXURY MOBILE EDITORIAL COHESION
    ============================================================ */
 
-@media (max-width: 900px) {
+@media (max-width: 767px) {
 
   /* ── Typography scale: unified editorial rhythm ── */
 
@@ -956,12 +958,26 @@
   .sale-badge,
   .product-badge,
   .collection-badge {
+    /* Layout: inline-flex ensures text stays inside the pill */
+    display:        inline-flex;
+    align-items:    center;
+    justify-content: center;
+    /* Text containment: never let text bleed outside */
+    white-space:    nowrap;
+    overflow:       hidden;
+    text-overflow:  ellipsis;
+    max-width:      calc(100% - 24px);
+    /* No transform on badges */
+    transform:      none;
+    flex-shrink:    0;
+    align-self:     flex-start;
+    /* Typography */
     font-family:    var(--font-body, "Jost", sans-serif);
     font-size:      0.58rem;
     font-weight:    700;
     letter-spacing: 0.10em;
     text-transform: uppercase;
-    padding:        4px 9px;
+    padding:        5px 11px;
     border-radius:  999px;
     line-height:    1;
   }
@@ -1081,7 +1097,7 @@
    PART 20 — LUXURY MOBILE FINAL PREMIUM PRODUCTION POLISH
    ============================================================ */
 
-@media (max-width: 900px) {
+@media (max-width: 767px) {
 
   /* ── Hero: immersive, commanding, editorial ── */
   .hero {
@@ -1477,7 +1493,7 @@
    PART 20 · FINAL REDUCED MOTION OVERRIDES
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
-  @media (max-width: 900px) {
+  @media (max-width: 767px) {
     body,
     .s5-reveal,
     .s5-breath-enter,

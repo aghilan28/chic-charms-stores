@@ -1,7 +1,13 @@
 (function () {
   "use strict";
 
-  var mobileQuery = window.matchMedia("(max-width: 1023px)");
+  /* ── DESKTOP SAFETY LOCK ── */
+  if (window.innerWidth > 767) {
+    document.documentElement.classList.remove('mobile-home', 'cc-mobile', 'app-shell-active');
+    return;
+  }
+
+  var mobileQuery = window.matchMedia("(max-width: 767px)");
   var HOME_ID = "ccFinalHome";
   var ANNOUNCEMENT_ID = "ccFinalAnnouncement";
   var RECENT_SEARCHES_KEY = "ccRecentSearches";
@@ -219,6 +225,7 @@
     var bar = document.createElement("div");
     bar.id = ANNOUNCEMENT_ID;
     bar.className = "cc-final-announcement";
+    bar.setAttribute("data-cc-injected", "1");
     bar.innerHTML = '<div class="cc-final-announcement-track">' + items.concat(items).map(function (item) {
       return "<span>" + item + "</span>";
     }).join("") + "</div>";
@@ -237,6 +244,7 @@
     var home = document.createElement("section");
     home.id = HOME_ID;
     home.className = "cc-final-home cc-app-home";
+    home.setAttribute("data-cc-injected", "1");
     home.setAttribute("aria-label", "ChicCharms mobile luxury storefront");
 
     /* ── Category rail: EARRINGS ONLY ── */
@@ -320,6 +328,7 @@
     }
     var nav = document.createElement("nav");
     nav.className = "mobile-bottom-nav cc-global-bottom-nav cc-app-bottom-nav";
+    nav.setAttribute("data-cc-injected", "1");
     nav.setAttribute("aria-label", "Mobile bottom navigation");
     nav.innerHTML =
       '<a class="mobile-bottom-tab' + active(["index.html", ""]) + '" href="index.html" aria-label="Home">' + icon("home") + '<span>Home</span></a>' +
@@ -367,6 +376,7 @@
     if (!isMobile() || $(".cc-app-search-overlay")) return;
     var overlay = document.createElement("section");
     overlay.className = "cc-app-search-overlay";
+    overlay.setAttribute("data-cc-injected", "1");
     overlay.setAttribute("role", "dialog");
     overlay.setAttribute("aria-modal", "true");
     overlay.setAttribute("aria-label", "Search ChicCharms");
@@ -409,8 +419,10 @@
     backdrop.type = "button";
     backdrop.className = "cc-app-backdrop";
     backdrop.setAttribute("aria-label", "Close menu");
+    backdrop.setAttribute("data-cc-injected", "1");
     var drawer = document.createElement("aside");
     drawer.className = "cc-app-drawer";
+    drawer.setAttribute("data-cc-injected", "1");
     drawer.setAttribute("role", "dialog");
     drawer.setAttribute("aria-modal", "true");
     drawer.setAttribute("aria-label", "Mobile menu");
@@ -473,8 +485,10 @@
     backdrop.type = "button";
     backdrop.className = "cc-app-cart-backdrop";
     backdrop.setAttribute("aria-label", "Close cart");
+    backdrop.setAttribute("data-cc-injected", "1");
     var drawer = document.createElement("aside");
     drawer.className = "cc-app-cart-drawer";
+    drawer.setAttribute("data-cc-injected", "1");
     drawer.setAttribute("role", "dialog");
     drawer.setAttribute("aria-modal", "true");
     drawer.setAttribute("aria-label", "Cart drawer");
@@ -849,24 +863,60 @@
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
+    document.addEventListener("DOMContentLoaded", function () { if (isMobile()) init(); });
   } else {
-    init();
+    if (isMobile()) init();
   }
 
-  window.addEventListener("load", init);
-  window.addEventListener("pageshow", init);
+  /* DESKTOP SAFE: Only run deferred inits when confirmed mobile */
+  window.addEventListener("load", function () { if (isMobile()) init(); });
+  window.addEventListener("pageshow", function () { if (isMobile()) init(); });
   window.addEventListener("storage", function () {
+    if (!isMobile()) return;
     syncCartBadges();
     syncCartDrawer();
   });
+  function cleanupForDesktop() {
+    if (isMobile()) return;
+    // Remove all injected mobile DOM elements when viewport expands to desktop
+    var mobileNodes = [
+      "#ccFinalHome", ".cc-app-bottom-nav", ".cc-app-drawer",
+      ".cc-app-backdrop", ".cc-app-cart-drawer", ".cc-app-cart-backdrop",
+      ".cc-app-search-overlay", ".cc-app-header"
+    ];
+    mobileNodes.forEach(function(sel) {
+      var el = document.querySelector(sel);
+      // Remove if injected by mobile JS (has data-cc-injected) OR is a known mobile-only node
+      if (el) {
+        el.parentNode && el.parentNode.removeChild(el);
+      }
+    });
+    // Restore body scroll
+    document.body.style.overflow = "";
+    document.body.style.touchAction = "";
+    document.body.classList.remove("cc-modal-open", "lux-drawer-open", "lux-search-open");
+    // Reset init flags so mobile can re-init if resized back
+    window.__ccFinalChromeBuilt = false;
+    window.__ccFinalHomeBuilt = false;
+    window.__ccFinalSearchBuilt = false;
+    window.__ccFinalDrawerBuilt = false;
+    window.__ccFinalCartBuilt = false;
+  }
   window.addEventListener("resize", function () {
     clearTimeout(window.__ccFinalResizeTimer);
-    window.__ccFinalResizeTimer = setTimeout(init, 120);
+    window.__ccFinalResizeTimer = setTimeout(function() {
+      if (isMobile()) {
+        init();
+      } else {
+        cleanupForDesktop();
+      }
+    }, 120);
   }, { passive: true });
   window.addEventListener("scroll", function () {
+    if (!isMobile()) return;
     var header = $(".cc-app-header");
     if (header) header.classList.toggle("is-glass", window.scrollY > 12);
   }, { passive: true });
-  window.setTimeout(init, 450);
+  /* DESKTOP SAFE: Only fire delayed init on mobile */
+  window.setTimeout(function () { if (isMobile()) init(); }, 450);
 })();

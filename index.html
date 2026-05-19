@@ -537,7 +537,35 @@
         display: block;
       }
     </style>
-    <link rel="stylesheet" href="mobile-app.css" />
+    <link rel="stylesheet" href="mobile-app.css" media="(max-width: 767px)" />
+    <!-- ░░ DESKTOP RESTORATION GUARD ░░
+         Ensures mobile-only HTML elements are never visible on desktop.
+         All mobile JS/CSS is scoped to max-width:767px already, but
+         these HTML-present elements need explicit desktop suppression.
+    ══════════════════════════════════════════════════ -->
+    <style>
+      @media (min-width: 768px) {
+        .mobile-promo-slider,
+        .mobile-commerce-search,
+        .mobile-category-strip,
+        .mobile-commerce-menu,
+        .mobile-commerce-actions,
+        .mobile-bottom-nav,
+        .cc-app-bottom-nav,
+        .cc-final-home,
+        .cc-final-announcement,
+        .cc-app-search-overlay,
+        .cc-app-drawer,
+        .cc-app-backdrop,
+        .cc-app-cart-drawer,
+        .cc-app-cart-backdrop,
+        [data-cc-injected] {
+          display: none !important;
+          visibility: hidden !important;
+          pointer-events: none !important;
+        }
+      }
+    </style>
 </head>
   <body>
     <!-- ░░ ADMIN RETURN BANNER — only visible when admin is logged in ░░ -->
@@ -1511,7 +1539,11 @@
       aria-live="polite"
     ></div>
 
-    <nav class="mobile-bottom-nav" aria-label="Mobile bottom navigation">
+    <!-- ░░ BOTTOM NAV — injected by final-mobile-stabilization.js on mobile ░░
+         This static fallback is hidden; the JS authority (createMobileChrome)
+         removes it and injects the authoritative cc-app-bottom-nav version.
+    ══════════════════════════════════════════════════ -->
+    <nav class="mobile-bottom-nav mobile-bottom-nav--static" aria-label="Mobile bottom navigation" aria-hidden="true" style="display:none">
       <a href="index.html" class="mobile-bottom-tab is-active">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3V10.5Z" /></svg>
         <span>Home</span>

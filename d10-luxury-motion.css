@@ -639,8 +639,10 @@
    ============================================================ */
 @media (max-width: 900px) {
 
-  /* Promote composited layers for animated elements */
-  .product-card-lux,
+  /* Promote composited layers for animated elements.
+     NOTE: product-card-lux is intentionally excluded from translateZ(0) because
+     creating a new stacking context on the card would cause badge z-index conflicts.
+     The image inside the card still gets the compositing hint. */
   .lux-img-container img,
   .product-img-frame img,
   .product-sticky-cta,
@@ -650,6 +652,11 @@
     will-change: transform;
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
+  }
+
+  /* Cards: use isolation instead of translateZ to avoid stacking context issues */
+  .product-card-lux {
+    isolation: isolate;
   }
 
   /* Remove will-change once animation settles */

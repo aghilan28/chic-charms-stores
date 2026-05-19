@@ -685,18 +685,40 @@ h3 {
   letter-spacing: -0.012em;
 }
 
-/* Badge refinements */
+/* Badge refinements — stable, non-leaking structure */
 .lux-badge {
+  /* Layout — must be inline-flex to contain text within pill */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Text containment */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 20px);
+  /* Typography */
   font-size: 0.54rem;
+  font-weight: 700;
   letter-spacing: 0.17em;
-  padding: 4px 11px;
-  border-radius: 2px;
+  line-height: 1;
+  /* Geometry */
+  padding: 5px 11px;
+  border-radius: 999px;
 }
 
 .badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 20px);
   font-size: 0.58rem;
+  font-weight: 700;
   letter-spacing: 0.13em;
-  padding: 4px 11px;
+  line-height: 1;
+  padding: 5px 11px;
   border-radius: var(--radius-2xs);
 }
 
@@ -2023,12 +2045,18 @@ h3 {
   contain: layout style;
 }
 
-/* Image containers — explicit containment */
-.lux-img-container,
+/* Image containers — explicit containment.
+   NOTE: .lux-img-container is excluded here because it has overflow:hidden
+   and absolutely-positioned badge children. contain:layout style would create
+   a new containing block that clips those badges. It gets only paint containment below. */
 .product-img-wrap,
 .cat-img-wrap,
 .gallery-item {
   contain: layout style;
+}
+/* Badge-safe containment for the product image wrapper */
+.lux-img-container {
+  contain: paint;
 }
 
 /* ============================================================
@@ -2153,3 +2181,105 @@ h3 {
    No base functionality or Firebase logic affected.
    All existing IDs and class names preserved.
 */
+
+/* ============================================================
+   D8 · BADGE / TAG SYSTEM — Global Stability Layer
+   Ensures all product badge variants render correctly:
+   text inside pill, no floating, no clipping, no jitter.
+   ============================================================ */
+
+/* ── .lux-badges wrapper: positioned inside .lux-img-container ── */
+.lux-badges {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  /* Prevent wrapper from clipping children */
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* ── Universal badge reset: every badge variant ── */
+.lux-badge,
+.badge,
+.product-badge,
+.new-badge,
+.sale-badge,
+.collection-badge,
+.mobile-product-badge,
+.cc-final-badge,
+.product-tag {
+  /* ─ Layout: inline-flex keeps text + pill unified ─ */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* ─ Text must never escape the pill ─ */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 24px);
+  /* ─ Stable line-height prevents vertical bleed ─ */
+  line-height: 1;
+  /* ─ No transform on the badge itself ─ */
+  transform: none;
+  /* ─ Geometry ─ */
+  border-radius: 999px;
+  padding: 5px 12px;
+  /* ─ Stacking ─ */
+  position: relative;
+  z-index: 0;
+  /* ─ No inherited flex/grid stretching ─ */
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
+/* ── .badge (desktop editorial style from styles.css): keep absolute positioning ── */
+.badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 5;
+}
+
+/* ── .mobile-product-badge: absolutely positioned on card image ── */
+.mobile-product-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 5;
+}
+
+/* ── .cc-final-badge (mobile app injected cards) ── */
+.cc-final-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 5;
+}
+
+/* ── Span inside any badge: ensure text stays inline, no transform inheritance ── */
+.lux-badge span,
+.badge span,
+.product-badge span,
+.mobile-product-badge span,
+.cc-final-badge span,
+.new-badge span,
+.sale-badge span {
+  position: relative;
+  display: inline;
+  line-height: 1;
+  transform: none;
+  white-space: nowrap;
+}
+
+/* ── Hover/animation: only the card image scales, never the badge ── */
+.product-card-lux:hover .lux-badges,
+.product-card-lux:hover .lux-badge,
+.product-card-lux:hover .badge,
+.product-card-lux:hover .mobile-product-badge,
+.product-card-lux:hover .cc-final-badge {
+  transform: none;
+}

@@ -9,7 +9,13 @@
 (function () {
   "use strict";
 
-  const IS_MOBILE = () => window.innerWidth <= 900;
+  /* ── DESKTOP SAFETY LOCK ── */
+  if (window.innerWidth > 767) {
+    document.documentElement.classList.remove('mobile-home', 'cc-mobile', 'app-shell-active');
+    return;
+  }
+
+  const IS_MOBILE = () => window.innerWidth <= 767;
   const REDUCED   = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ============================================================
@@ -646,6 +652,7 @@
 
   /* ── Prefetch: anticipatory page loading ── */
   function initAnticipatoryPrefetch() {
+    if (!IS_MOBILE()) return;
     function prefetch(href) {
       if (!href) return;
       if (document.querySelector(`link[rel='prefetch'][href='${href}']`)) return;
@@ -674,6 +681,7 @@
 
   /* ── iOS: prevent 300ms tap delay legacy browsers ── */
   function initFastTap() {
+    if (!IS_MOBILE()) return;
     /* Modern browsers handle this with touch-action: manipulation */
     /* Belt-and-suspenders for older iOS WebViews */
     if ("ontouchstart" in window) {
@@ -683,6 +691,7 @@
 
   /* ── Final: graceful image error fallback ── */
   function initImageErrorFallback() {
+    if (!IS_MOBILE()) return;
     document.addEventListener("error", (e) => {
       const img = e.target;
       if (img.tagName !== "IMG") return;
@@ -696,6 +705,7 @@
 
   /* ── Accessibility: announce page transitions to screen readers ── */
   function initARIALiveRegion() {
+    if (!IS_MOBILE()) return;
     if (document.querySelector("#s5-live")) return;
     const live = document.createElement("div");
     live.id                = "s5-live";
@@ -769,6 +779,20 @@
         initNavbarScrollState();
         initSensoryReveals();
         initSectionChildStagger();
+      } else {
+        // Desktop cleanup: remove mobile-only classes added by this module
+        document.querySelectorAll(".s5-at-top, .s5-scrolled").forEach(el => {
+          el.classList.remove("s5-at-top", "s5-scrolled");
+        });
+        document.querySelectorAll(".s5-revealed, .s5-reveal-pending").forEach(el => {
+          el.classList.remove("s5-revealed", "s5-reveal-pending");
+        });
+        // Close any open mobile panels
+        const panel = document.querySelector(".s5-mega-panel.s5-open");
+        if (panel) panel.classList.remove("s5-open");
+        const overlay = document.querySelector(".s5-nav-overlay.s5-open");
+        if (overlay) overlay.classList.remove("s5-open");
+        document.body.classList.remove("s5-nav-open");
       }
     }, 240);
   }, { passive: true });

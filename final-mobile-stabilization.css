@@ -1,12 +1,13 @@
 /* ChicCharms final mobile architecture and stabilization layer */
 
-.cc-final-announcement,
-.cc-final-home {
-  display: none;
-}
-
 /* Rebuilt mobile luxury app experience */
-@media (max-width: 1023px) {
+@media (max-width: 767px) {
+  /* Hide desktop hero/home elements that are replaced by the mobile app shell */
+  .cc-final-announcement,
+  .cc-final-home {
+    display: none;
+  }
+
   :root {
     --cc-app-ink: #201716;
     --cc-app-muted: rgba(32, 23, 22, 0.58);
@@ -447,14 +448,27 @@
     position: absolute;
     left: 10px;
     top: 10px;
-    padding: 6px 9px;
+    z-index: 5;
+    /* Pill layout — text must stay inside */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: calc(100% - 24px);
+    /* Geometry */
+    padding: 6px 10px;
     border-radius: 999px;
+    /* Appearance */
     background: rgba(255, 250, 245, 0.92);
     color: var(--cc-app-rose);
     font: 900 0.58rem/1 Jost, system-ui, sans-serif;
     font-style: normal;
     letter-spacing: 0.1em;
     text-transform: uppercase;
+    /* No transform on badge */
+    transform: none;
   }
 
   .cc-final-heart,
@@ -1108,7 +1122,7 @@
 }
 
 /* Final app-authority overrides: keep the rebuilt mobile experience above older layers. */
-@media (max-width: 1023px) {
+@media (max-width: 767px) {
   .cc-app-header {
     min-height: 62px !important;
     background: rgba(255, 250, 245, 0.78) !important;
@@ -1221,7 +1235,7 @@
   }
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 767px) {
   :root {
     --cc-ink: #241316;
     --cc-soft-ink: rgba(36, 19, 22, 0.72);
@@ -1492,7 +1506,15 @@
   .cc-final-badge {
     left: 9px;
     top: 9px;
-    padding: 5px 8px;
+    z-index: 5;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: calc(100% - 24px);
+    padding: 5px 10px;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.92);
     color: var(--cc-hot);
@@ -1500,6 +1522,7 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
     font-style: normal;
+    transform: none;
   }
 
   .cc-final-heart,
@@ -1625,9 +1648,28 @@
     border-radius: 22px 22px 16px 16px !important;
   }
 
-  .lux-badges,
+  .lux-badges {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 5px !important;
+    position: absolute !important;
+    top: 10px !important;
+    left: 10px !important;
+    z-index: 5 !important;
+    overflow: visible !important;
+    pointer-events: none !important;
+  }
+
   .mobile-product-badge {
-    display: block !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: calc(100% - 20px) !important;
+    line-height: 1 !important;
+    transform: none !important;
   }
 
   .mobile-product-badge,
@@ -1754,7 +1796,7 @@
   }
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 767px) {
   :root {
     --cc-ink: #211816;
     --cc-soft-ink: rgba(33, 24, 22, 0.68);
@@ -2496,7 +2538,9 @@
     box-shadow: none !important;
     transform: none !important;
     will-change: auto !important;
-    contain: layout paint;
+    /* paint-only containment: does NOT create a new layout containing block,
+       so absolutely-positioned badge children render correctly */
+    contain: paint;
   }
 
   .lux-img-container {
@@ -2518,10 +2562,33 @@
   }
 
   .lux-hover-layer,
-  .lux-quick-add,
-  .mobile-product-badge,
-  .lux-badges {
+  .lux-quick-add {
     display: none !important;
+  }
+
+  /* ── Badge visibility: show badges, hide non-badge overlay elements ── */
+  .lux-badges {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 5px !important;
+    position: absolute !important;
+    top: 10px !important;
+    left: 10px !important;
+    z-index: 5 !important;
+    overflow: visible !important;
+    pointer-events: none !important;
+  }
+
+  .mobile-product-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: calc(100% - 20px) !important;
+    line-height: 1 !important;
+    transform: none !important;
   }
 
   .lux-product-info {
@@ -3002,7 +3069,7 @@
 }
 
 /* Mobile commerce hotfix: sheet, rail, safe-area and overflow stability. */
-@media (max-width: 1023px) {
+@media (max-width: 767px) {
   html,
   body {
     max-width: 100% !important;
@@ -3269,7 +3336,7 @@
 }
 
 /* Final app-authority overrides: keep the rebuilt mobile experience above older layers. */
-@media (max-width: 1023px) {
+@media (max-width: 767px) {
   .cc-app-header {
     min-height: 62px !important;
     background: rgba(255, 250, 245, 0.78) !important;
@@ -3324,7 +3391,7 @@
 }
 
 /* D16 mobile-first luxury app authority layer */
-@media (max-width: 1023px) {
+@media (max-width: 767px) {
   :root {
     --cc-app-ink: #211816;
     --cc-app-muted: rgba(33, 24, 22, 0.62);
@@ -3901,19 +3968,23 @@
     position: absolute;
     left: 9px;
     top: 9px;
-    z-index: 1;
+    z-index: 5;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     max-width: calc(100% - 52px);
     overflow: hidden;
-    padding: 6px 8px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding: 6px 10px;
     border-radius: 999px;
     background: rgba(255, 250, 245, 0.92);
     color: var(--cc-app-rose);
     font: 900 0.55rem/1 Jost, system-ui, sans-serif;
     font-style: normal;
     letter-spacing: 0.09em;
-    text-overflow: ellipsis;
     text-transform: uppercase;
-    white-space: nowrap;
+    transform: none;
   }
 
   .cc-final-heart,
@@ -5051,7 +5122,7 @@
    5. Full mobile spacing luxury pass
    ============================================================ */
 
-@media (max-width: 1023px) {
+@media (max-width: 767px) {
 
   /* ──────────────────────────────────────────────
      CART / BOTTOM-SHEET — COMPLETE FIX
