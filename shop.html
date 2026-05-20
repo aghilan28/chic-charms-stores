@@ -565,6 +565,8 @@
       }
     </style>
     <link rel="stylesheet" href="final-mobile-stabilization.css" media="(max-width: 768px)" />
+    <link rel="stylesheet" href="phase6-polish.css" media="(max-width: 767px)" />
+    <link rel="stylesheet" href="mobile-phase3.css" media="(max-width: 767px)" />
 </head>
   <body>
     <div class="shop-announcement" aria-label="Store updates">
@@ -619,12 +621,14 @@
       <section class="shop-bar" aria-label="Product filters">
         <div class="shop-bar-top">
           <span class="shop-count" id="shopCount"></span>
-          <select class="shop-sort" id="shopSort" aria-label="Sort products">
-            <option value="featured">Featured</option>
-            <option value="low-high">Price: Low to High</option>
-            <option value="high-low">Price: High to Low</option>
-            <option value="new">Newest</option>
-          </select>
+          <div style="display:flex;gap:7px;align-items:center;">
+            <button class="p3-bar-btn" type="button" id="p3FilterBtn" aria-label="Open filters">
+              <svg viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Filter
+            </button>
+            <button class="p3-bar-btn" type="button" id="p3SortBtn" aria-label="Open sort" data-sort-label="Featured">
+              <svg viewBox="0 0 24 24"><path d="M3 6h18M6 12h12M9 18h6"/></svg><span id="p3SortLabel">Featured</span>
+            </button>
+          </div>
         </div>
         <div class="shop-chips" aria-label="Quick filters">
           <button class="shop-chip is-active" type="button" data-chip="all">All Pieces</button>
@@ -634,6 +638,14 @@
           <button class="shop-chip" type="button" data-chip="bestseller">Bestseller</button>
         </div>
       </section>
+
+      <!-- Hidden sort value for script compatibility -->
+      <select id="shopSort" style="display:none;" aria-hidden="true">
+        <option value="featured">Featured</option>
+        <option value="low-high">Price: Low to High</option>
+        <option value="high-low">Price: High to Low</option>
+        <option value="new">Newest</option>
+      </select>
 
       <section class="shop-grid" id="shopGrid" aria-label="Shop products"></section>
 
@@ -656,6 +668,61 @@
         </nav>
       </footer>
     </main>
+
+    <!-- ── Phase 3: Filter Bottom Sheet ── -->
+    <div class="p3-sheet-backdrop" id="p3FilterBackdrop" aria-hidden="true"></div>
+    <div class="p3-sheet" id="p3FilterSheet" role="dialog" aria-modal="true" aria-label="Filter products">
+      <div class="p3-sheet-handle"></div>
+      <div class="p3-sheet-header">
+        <h2 class="p3-sheet-title">Filter</h2>
+        <button class="p3-sheet-close" id="p3FilterClose" type="button" aria-label="Close filters">✕</button>
+      </div>
+      <div class="p3-filter-section">
+        <span class="p3-filter-label">Category</span>
+        <div class="p3-filter-chips">
+          <button class="p3-filter-chip is-active" type="button" data-category="all">All</button>
+          <button class="p3-filter-chip" type="button" data-category="everyday-elegance">Daily Wear</button>
+          <button class="p3-filter-chip" type="button" data-category="modern-romance">Romance</button>
+          <button class="p3-filter-chip" type="button" data-category="heritage-muse">Pearls</button>
+          <button class="p3-filter-chip" type="button" data-category="after-dark">Evening</button>
+        </div>
+      </div>
+      <div class="p3-filter-section">
+        <span class="p3-filter-label">Price</span>
+        <div class="p3-filter-chips">
+          <button class="p3-filter-chip is-active" type="button" data-chip="all">All Prices</button>
+          <button class="p3-filter-chip" type="button" data-chip="under-199">Under Rs.199</button>
+          <button class="p3-filter-chip" type="button" data-chip="gift">Gift Ready</button>
+        </div>
+      </div>
+      <div class="p3-filter-section">
+        <span class="p3-filter-label">Collection</span>
+        <div class="p3-filter-chips">
+          <button class="p3-filter-chip" type="button" data-chip="new">New Drop</button>
+          <button class="p3-filter-chip" type="button" data-chip="bestseller">Bestseller</button>
+        </div>
+      </div>
+      <div class="p3-sheet-cta">
+        <button class="p3-sheet-btn" type="button" id="p3FilterReset">Clear All</button>
+        <button class="p3-sheet-btn p3-sheet-btn-apply" type="button" id="p3FilterApply">Show Results</button>
+      </div>
+    </div>
+
+    <!-- ── Phase 3: Sort Bottom Sheet ── -->
+    <div class="p3-sheet-backdrop" id="p3SortBackdrop" aria-hidden="true"></div>
+    <div class="p3-sheet" id="p3SortSheet" role="dialog" aria-modal="true" aria-label="Sort products">
+      <div class="p3-sheet-handle"></div>
+      <div class="p3-sheet-header">
+        <h2 class="p3-sheet-title">Sort By</h2>
+        <button class="p3-sheet-close" id="p3SortClose" type="button" aria-label="Close sort">✕</button>
+      </div>
+      <ul class="p3-sort-list">
+        <li class="p3-sort-item is-active" data-sort="featured">Featured</li>
+        <li class="p3-sort-item" data-sort="low-high">Price: Low to High</li>
+        <li class="p3-sort-item" data-sort="high-low">Price: High to Low</li>
+        <li class="p3-sort-item" data-sort="new">Newest First</li>
+      </ul>
+    </div>
 
     <nav class="mobile-bottom-nav" aria-label="Mobile bottom navigation">
       <a class="mobile-bottom-tab" href="index.html" aria-label="Home"><svg viewBox="0 0 24 24"><path d="M3 10.8 12 3l9 7.8V21h-6v-6H9v6H3z"/></svg><span>Home</span></a>
@@ -780,6 +847,115 @@
         render();
       })();
     </script>
+    <script>
+    /* ── Phase 3: Bottom Sheet Logic ── */
+    (function () {
+      'use strict';
+      var sortLabels = {
+        'featured':  'Featured',
+        'low-high':  'Low–High',
+        'high-low':  'High–Low',
+        'new':       'Newest'
+      };
+
+      function openSheet(backdrop, sheet) {
+        backdrop.classList.add('is-open');
+        sheet.classList.add('is-open');
+        document.body.classList.add('p3-sheet-open');
+        backdrop.setAttribute('aria-hidden', 'false');
+      }
+
+      function closeSheet(backdrop, sheet) {
+        backdrop.classList.remove('is-open');
+        sheet.classList.remove('is-open');
+        document.body.classList.remove('p3-sheet-open');
+        backdrop.setAttribute('aria-hidden', 'true');
+      }
+
+      /* Sort sheet */
+      var sortBtn      = document.getElementById('p3SortBtn');
+      var sortLabel    = document.getElementById('p3SortLabel');
+      var sortBackdrop = document.getElementById('p3SortBackdrop');
+      var sortSheet    = document.getElementById('p3SortSheet');
+      var sortClose    = document.getElementById('p3SortClose');
+      var shopSort     = document.getElementById('shopSort');
+
+      if (sortBtn && sortSheet) {
+        sortBtn.addEventListener('click', function () { openSheet(sortBackdrop, sortSheet); });
+        sortClose.addEventListener('click', function () { closeSheet(sortBackdrop, sortSheet); });
+        sortBackdrop.addEventListener('click', function () { closeSheet(sortBackdrop, sortSheet); });
+
+        sortSheet.querySelectorAll('.p3-sort-item').forEach(function (item) {
+          item.addEventListener('click', function () {
+            sortSheet.querySelectorAll('.p3-sort-item').forEach(function (i) { i.classList.remove('is-active'); });
+            item.classList.add('is-active');
+            var val = item.dataset.sort || 'featured';
+            /* Sync hidden select + trigger change */
+            shopSort.value = val;
+            shopSort.dispatchEvent(new Event('change'));
+            if (sortLabel) sortLabel.textContent = sortLabels[val] || 'Featured';
+            sortBtn.classList.toggle('is-active', val !== 'featured');
+            closeSheet(sortBackdrop, sortSheet);
+          });
+        });
+      }
+
+      /* Filter sheet */
+      var filterBtn      = document.getElementById('p3FilterBtn');
+      var filterBackdrop = document.getElementById('p3FilterBackdrop');
+      var filterSheet    = document.getElementById('p3FilterSheet');
+      var filterClose    = document.getElementById('p3FilterClose');
+      var filterApply    = document.getElementById('p3FilterApply');
+      var filterReset    = document.getElementById('p3FilterReset');
+
+      if (filterBtn && filterSheet) {
+        filterBtn.addEventListener('click', function () { openSheet(filterBackdrop, filterSheet); });
+        filterClose.addEventListener('click', function () { closeSheet(filterBackdrop, filterSheet); });
+        filterBackdrop.addEventListener('click', function () { closeSheet(filterBackdrop, filterSheet); });
+
+        /* Category chips inside filter sheet sync with shop-tab */
+        filterSheet.querySelectorAll('.p3-filter-chip[data-category]').forEach(function (chip) {
+          chip.addEventListener('click', function () {
+            filterSheet.querySelectorAll('.p3-filter-chip[data-category]').forEach(function (c) { c.classList.remove('is-active'); });
+            chip.classList.add('is-active');
+            /* Sync with main tab row */
+            var cat = chip.dataset.category || 'all';
+            document.querySelectorAll('.shop-tab').forEach(function (tab) {
+              tab.classList.toggle('is-active', tab.dataset.category === cat);
+            });
+            document.querySelectorAll('.shop-tab').forEach(function (tab) {
+              if (tab.dataset.category === cat) tab.click();
+            });
+          });
+        });
+
+        /* Price/collection chips inside filter sheet sync with shop-chip */
+        filterSheet.querySelectorAll('.p3-filter-chip[data-chip]').forEach(function (chip) {
+          chip.addEventListener('click', function () {
+            filterSheet.querySelectorAll('.p3-filter-chip[data-chip]').forEach(function (c) { c.classList.remove('is-active'); });
+            chip.classList.add('is-active');
+            var chipVal = chip.dataset.chip || 'all';
+            document.querySelectorAll('.shop-chip').forEach(function (c) {
+              if (c.dataset.chip === chipVal) c.click();
+            });
+          });
+        });
+
+        filterApply.addEventListener('click', function () { closeSheet(filterBackdrop, filterSheet); });
+        filterReset.addEventListener('click', function () {
+          /* Reset all filter sheet selections */
+          filterSheet.querySelectorAll('.p3-filter-chip').forEach(function (c) { c.classList.remove('is-active'); });
+          filterSheet.querySelector('.p3-filter-chip[data-category="all"]').classList.add('is-active');
+          filterSheet.querySelector('.p3-filter-chip[data-chip="all"]').classList.add('is-active');
+          /* Sync main UI */
+          document.querySelector('.shop-tab[data-category="all"]').click();
+          document.querySelector('.shop-chip[data-chip="all"]').click();
+          filterBtn.classList.remove('is-active');
+          closeSheet(filterBackdrop, filterSheet);
+        });
+      }
+    })();
+    </script>
     <script src="final-mobile-stabilization.js" defer></script>
-</body>
+  </body>
 </html>

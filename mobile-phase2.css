@@ -1,0 +1,924 @@
+/*
+ * mobile-phase2.css — CHIC CHARMS Phase 2
+ * Homepage Luxury Experience — Mobile Editorial Rhythm
+ *
+ * Scope: ALL rules are wrapped in @media (max-width: 767px).
+ *        Desktop is NEVER touched.
+ *
+ * Sections:
+ *   2.1  Hero — cinematic mobile treatment
+ *   2.2  Mobile Search Bar — luxury pill
+ *   2.3  Category Rail — premium horizontal scroll
+ *   2.4  Trust Strip — subtle promise row
+ *   2.5  Homepage Section Rhythm — editorial spacing
+ *   2.6  Scroll Experience — polish & smoothness
+ *   2.7  Product Grid — mobile card refinements
+ */
+
+
+/* ══════════════════════════════════════════════════════════════
+   2.1  HERO  — Cinematic mobile campaign treatment
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* ── Hero wrapper ── */
+  .hero {
+    padding-top: calc(var(--m-header-h, 56px) + var(--admin-return-banner-height, 0px)) !important;
+    min-height: 100svh !important;
+    background: #fffaf5 !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    position: relative !important;
+  }
+
+  /* Luxury ambient gradient */
+  .hero::before {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    background:
+      radial-gradient(ellipse 80% 55% at 60% 0%, rgba(185, 150, 99, 0.08) 0%, transparent 65%),
+      radial-gradient(ellipse 60% 60% at 5% 90%, rgba(168, 95, 114, 0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 95% 50%, rgba(237, 230, 221, 0.4) 0%, transparent 55%) !important;
+    pointer-events: none !important;
+    z-index: 0 !important;
+  }
+
+  /* Hero background layer override */
+  .hero-bg-layer {
+    background:
+      radial-gradient(ellipse 80% 55% at 60% 0%, rgba(185, 150, 99, 0.07) 0%, transparent 65%),
+      radial-gradient(ellipse 60% 60% at 5% 90%, rgba(168, 95, 114, 0.07) 0%, transparent 60%) !important;
+  }
+
+  /* ── Hero inner — single column vertical ── */
+  .hero-inner {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 40px 24px 36px !important;
+    gap: 0 !important;
+    position: relative !important;
+    z-index: 1 !important;
+    flex: 1 !important;
+  }
+
+  /* ── Hero text block ── */
+  .hero-text {
+    order: 1 !important;
+    text-align: left !important;
+    padding: 0 !important;
+  }
+
+  /* ── Eyebrow ── */
+  .hero-eyebrow {
+    font-size: 0.58rem !important;
+    letter-spacing: 0.28em !important;
+    margin-bottom: 20px !important;
+    justify-content: flex-start !important;
+    gap: 12px !important;
+    color: var(--m-rose, #a85f72) !important;
+    opacity: 0.85 !important;
+  }
+
+  .eyebrow-line {
+    width: 28px !important;
+    background: var(--m-rose, #a85f72) !important;
+    opacity: 0.6 !important;
+  }
+
+  /* ── Headline — editorial luxury scale ── */
+  .hero-headline {
+    font-size: clamp(2rem, 9.5vw, 2.6rem) !important;
+    line-height: 1.08 !important;
+    letter-spacing: -0.025em !important;
+    margin-bottom: 20px !important;
+    color: #201716 !important;
+    font-weight: 500 !important;
+  }
+
+  /* ── Subtitle ── */
+  .hero-sub {
+    font-size: 0.88rem !important;
+    line-height: 1.8 !important;
+    color: rgba(32, 23, 22, 0.62) !important;
+    margin-bottom: 28px !important;
+    max-width: 100% !important;
+    letter-spacing: 0.008em !important;
+  }
+
+  /* ── CTAs — full width stacked ── */
+  .hero-ctas {
+    flex-direction: column !important;
+    gap: 12px !important;
+    margin-bottom: 32px !important;
+    align-items: stretch !important;
+  }
+
+  .hero-ctas .btn-primary,
+  .hero-ctas .btn-ghost {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 15px 24px !important;
+    font-size: 0.76rem !important;
+    letter-spacing: 0.1em !important;
+    border-radius: 100px !important;
+    min-height: 50px !important;
+  }
+
+  .hero-ctas .btn-primary {
+    background: linear-gradient(135deg, #a85f72 0%, #8e4a5f 100%) !important;
+    border: none !important;
+    box-shadow: 0 8px 24px rgba(168, 95, 114, 0.28) !important;
+  }
+
+  .hero-ctas .btn-ghost {
+    border: 1px solid rgba(168, 95, 114, 0.3) !important;
+    color: #a85f72 !important;
+    background: rgba(168, 95, 114, 0.04) !important;
+  }
+
+  /* ── Trust row below CTAs ── */
+  .hero-trust-row {
+    justify-content: flex-start !important;
+    gap: 16px !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    padding-bottom: 2px !important;
+    margin-bottom: 36px !important;
+  }
+
+  .hero-trust-row::-webkit-scrollbar { display: none !important; }
+
+  .hero-trust-item {
+    font-size: 0.64rem !important;
+    letter-spacing: 0.1em !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    gap: 5px !important;
+    color: rgba(32, 23, 22, 0.5) !important;
+  }
+
+  .trust-dot {
+    background: var(--m-rose, #a85f72) !important;
+    opacity: 0.5 !important;
+  }
+
+  /* ── Hero visual — cinematic image ── */
+  .hero-visual {
+    order: 2 !important;
+    margin: 0 -24px !important; /* bleed to edges */
+    position: relative !important;
+  }
+
+  .hero-img-wrap {
+    border-radius: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .hero-img-frame {
+    display: none !important;
+  }
+
+  .hero-img {
+    width: 100% !important;
+    height: 52vw !important;
+    max-height: 280px !important;
+    min-height: 200px !important;
+    object-fit: cover !important;
+    object-position: center 20% !important;
+    border-radius: 0 !important;
+    display: block !important;
+    box-shadow: none !important;
+  }
+
+  /* ── Floating elements hidden on mobile ── */
+  .hero-float-card,
+  .hero-float-tag,
+  .hero-scroll-hint {
+    display: none !important;
+  }
+
+  /* ── Hero editorial strip (mobile-app.js) ── */
+  .ma-hero-strip {
+    display: flex !important;
+    gap: 10px !important;
+    margin: 20px 0 0 !important;
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-snap-type: x mandatory !important;
+    padding-bottom: 4px !important;
+  }
+
+  .ma-hero-strip::-webkit-scrollbar { display: none !important; }
+
+  .ma-hero-strip img {
+    width: 44vw !important;
+    max-width: 180px !important;
+    height: 58vw !important;
+    max-height: 230px !important;
+    object-fit: cover !important;
+    object-position: center top !important;
+    border-radius: 16px !important;
+    flex-shrink: 0 !important;
+    scroll-snap-align: start !important;
+    box-shadow: 0 6px 20px rgba(64, 39, 34, 0.10) !important;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   2.2  MOBILE SEARCH BAR — Luxury pill (injected by phase2 JS)
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* ── Search pill wrapper ── */
+  .m2-search-wrap {
+    margin: 0 20px 0 !important;
+    padding: 20px 0 16px !important;
+    position: relative !important;
+    z-index: 2 !important;
+  }
+
+  /* ── The pill itself ── */
+  .m2-search-pill {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    background: #fff !important;
+    border: 1.5px solid rgba(185, 150, 99, 0.18) !important;
+    border-radius: 100px !important;
+    padding: 0 20px !important;
+    height: 50px !important;
+    box-shadow:
+      0 2px 8px rgba(64, 39, 34, 0.06),
+      0 0 0 0px rgba(168, 95, 114, 0) !important;
+    transition:
+      box-shadow 220ms ease,
+      border-color 220ms ease !important;
+    cursor: text !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  .m2-search-pill:focus-within {
+    border-color: rgba(168, 95, 114, 0.35) !important;
+    box-shadow:
+      0 4px 16px rgba(64, 39, 34, 0.08),
+      0 0 0 3px rgba(168, 95, 114, 0.08) !important;
+  }
+
+  .m2-search-icon {
+    display: flex !important;
+    align-items: center !important;
+    color: rgba(32, 23, 22, 0.36) !important;
+    flex-shrink: 0 !important;
+  }
+
+  .m2-search-icon svg {
+    width: 18px !important;
+    height: 18px !important;
+    fill: none !important;
+    stroke: currentColor !important;
+    stroke-width: 1.8 !important;
+    stroke-linecap: round !important;
+  }
+
+  .m2-search-input {
+    flex: 1 !important;
+    border: none !important;
+    outline: none !important;
+    background: transparent !important;
+    font-family: "Jost", system-ui, sans-serif !important;
+    font-size: 0.88rem !important;
+    color: #201716 !important;
+    letter-spacing: 0.01em !important;
+    min-width: 0 !important;
+    -webkit-appearance: none !important;
+  }
+
+  .m2-search-input::placeholder {
+    color: rgba(32, 23, 22, 0.38) !important;
+    font-weight: 400 !important;
+  }
+
+  .m2-search-input:focus {
+    outline: none !important;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   2.3  CATEGORY RAIL — Premium horizontal scroll
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* ── Section wrapper ── */
+  .m2-cat-section {
+    padding: 4px 0 24px !important;
+    overflow: hidden !important;
+  }
+
+  /* ── Section label ── */
+  .m2-cat-label {
+    font-family: "Jost", system-ui, sans-serif !important;
+    font-size: 0.58rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.24em !important;
+    text-transform: uppercase !important;
+    color: rgba(32, 23, 22, 0.42) !important;
+    padding: 0 20px 14px !important;
+    display: block !important;
+  }
+
+  /* ── Scroll track ── */
+  .m2-cat-rail {
+    display: flex !important;
+    gap: 20px !important;
+    padding: 0 20px 6px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    scroll-behavior: smooth !important;
+    -ms-overflow-style: none !important;
+    /* No scroll-snap — let it float naturally for luxury feel */
+  }
+
+  .m2-cat-rail::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  /* ── Individual category item ── */
+  .m2-cat-item {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 10px !important;
+    flex-shrink: 0 !important;
+    text-decoration: none !important;
+    color: #201716 !important;
+    -webkit-tap-highlight-color: transparent !important;
+    touch-action: manipulation !important;
+    transition: opacity 180ms ease !important;
+  }
+
+  .m2-cat-item:active {
+    opacity: 0.72 !important;
+  }
+
+  /* ── Circle thumbnail ── */
+  .m2-cat-thumb {
+    width: 68px !important;
+    height: 68px !important;
+    border-radius: 50% !important;
+    overflow: hidden !important;
+    background: rgba(237, 230, 221, 0.7) !important;
+    border: 1.5px solid rgba(185, 150, 99, 0.16) !important;
+    box-shadow:
+      0 3px 12px rgba(64, 39, 34, 0.08),
+      inset 0 0 0 2px rgba(255, 250, 245, 0.5) !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition:
+      box-shadow 200ms ease,
+      border-color 200ms ease,
+      transform 200ms var(--m-ease, cubic-bezier(0.16, 1, 0.3, 1)) !important;
+    position: relative !important;
+  }
+
+  .m2-cat-item:active .m2-cat-thumb {
+    transform: scale(0.94) !important;
+  }
+
+  .m2-cat-thumb img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center top !important;
+    display: block !important;
+  }
+
+  /* ── Emoji fallback ── */
+  .m2-cat-thumb-emoji {
+    font-size: 1.6rem !important;
+    line-height: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  /* ── Category label ── */
+  .m2-cat-name {
+    font-family: "Jost", system-ui, sans-serif !important;
+    font-size: 0.7rem !important;
+    font-weight: 500 !important;
+    color: rgba(32, 23, 22, 0.72) !important;
+    letter-spacing: 0.02em !important;
+    text-align: center !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+  }
+
+  /* ── Active / selected category ── */
+  .m2-cat-item.is-selected .m2-cat-thumb {
+    border-color: var(--m-rose, #a85f72) !important;
+    box-shadow:
+      0 4px 16px rgba(168, 95, 114, 0.2),
+      0 0 0 3px rgba(168, 95, 114, 0.12) !important;
+  }
+
+  .m2-cat-item.is-selected .m2-cat-name {
+    color: var(--m-rose, #a85f72) !important;
+    font-weight: 600 !important;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   2.4  TRUST STRIP — Subtle confidence row
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* ── Phase 2 injected trust strip ── */
+  .m2-trust-strip {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0 !important;
+    padding: 18px 20px !important;
+    background: #fff !important;
+    border-top: 1px solid rgba(185, 150, 99, 0.10) !important;
+    border-bottom: 1px solid rgba(185, 150, 99, 0.10) !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    margin: 0 0 0 !important;
+  }
+
+  .m2-trust-strip::-webkit-scrollbar { display: none !important; }
+
+  /* ── Individual trust item ── */
+  .m2-trust-item {
+    display: flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    padding: 0 16px !important;
+  }
+
+  .m2-trust-item:first-child {
+    padding-left: 0 !important;
+  }
+
+  .m2-trust-item:last-child {
+    padding-right: 0 !important;
+  }
+
+  /* Separator dots between items */
+  .m2-trust-item + .m2-trust-item::before {
+    content: "·" !important;
+    color: rgba(185, 150, 99, 0.35) !important;
+    font-size: 1rem !important;
+    margin-right: 16px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .m2-trust-icon {
+    font-size: 0.85rem !important;
+    line-height: 1 !important;
+    flex-shrink: 0 !important;
+  }
+
+  .m2-trust-text {
+    font-family: "Jost", system-ui, sans-serif !important;
+    font-size: 0.68rem !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.06em !important;
+    color: rgba(32, 23, 22, 0.56) !important;
+    text-transform: uppercase !important;
+  }
+
+  /* ── Desktop .trust-strip and .trust-banner override ── */
+  .trust-strip,
+  .trust-banner {
+    display: none !important;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   2.5  HOMEPAGE SECTION RHYTHM — Editorial spacing
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* ── Consistent section padding ── */
+  .section {
+    padding: 48px 0 !important;
+  }
+
+  /* ── Container breathing room ── */
+  .container {
+    padding: 0 20px !important;
+  }
+
+  /* ── Section eyebrow ── */
+  .section-eyebrow {
+    font-size: 0.58rem !important;
+    letter-spacing: 0.24em !important;
+    margin-bottom: 12px !important;
+    color: var(--m-rose, #a85f72) !important;
+    opacity: 0.85 !important;
+    justify-content: flex-start !important;
+  }
+
+  /* ── Section title ── */
+  .section-title {
+    font-size: clamp(1.6rem, 7vw, 2.1rem) !important;
+    line-height: 1.15 !important;
+    letter-spacing: -0.02em !important;
+    margin-bottom: 24px !important;
+    color: #201716 !important;
+  }
+
+  /* ── Section header row ── */
+  .section-header-row {
+    flex-direction: row !important;
+    align-items: baseline !important;
+    justify-content: space-between !important;
+    margin-bottom: 24px !important;
+  }
+
+  .section-header-row .section-title {
+    margin-bottom: 0 !important;
+    font-size: 1.4rem !important;
+  }
+
+  .section-view-all {
+    font-size: 0.7rem !important;
+    letter-spacing: 0.08em !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    color: var(--m-rose, #a85f72) !important;
+    border-bottom: 1px solid rgba(168, 95, 114, 0.3) !important;
+    padding-bottom: 1px !important;
+  }
+
+  /* ── Categories grid ── */
+  .categories {
+    display: block !important; /* restore if hidden */
+  }
+
+  .cat-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  .cat-card {
+    border-radius: 16px !important;
+    overflow: hidden !important;
+  }
+
+  .cat-img-wrap {
+    height: 130px !important;
+  }
+
+  .cat-info {
+    padding: 12px 14px 14px !important;
+  }
+
+  .cat-info h3 {
+    font-size: 0.9rem !important;
+    letter-spacing: -0.01em !important;
+  }
+
+  .cat-info p {
+    font-size: 0.7rem !important;
+    line-height: 1.5 !important;
+  }
+
+  /* ── Why-us / features ── */
+  .why-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1px !important;
+  }
+
+  .why-card {
+    padding: 28px 20px !important;
+  }
+
+  /* ── Testimonials ── */
+  .testi-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  .testi-card {
+    padding: 24px 20px !important;
+  }
+
+  /* ── Collections / brand story ── */
+  .brand-story-inner {
+    grid-template-columns: 1fr !important;
+    gap: 36px !important;
+  }
+
+  /* ── Gallery ── */
+  .gallery-grid {
+    grid-template-columns: 1fr 1fr !important;
+    height: auto !important;
+    grid-template-rows: auto !important;
+  }
+
+  .gallery-item {
+    height: 180px !important;
+  }
+
+  .gallery-item--tall { grid-row: span 1 !important; }
+  .gallery-item--wide { grid-column: span 1 !important; }
+
+  /* ── Bestsellers section spacing ── */
+  #bestsellers.section {
+    padding-top: 40px !important;
+    padding-bottom: 60px !important; /* extra bottom for nav clearance */
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   2.6  SCROLL EXPERIENCE — Touch polish
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* ── Global scroll feel ── */
+  html {
+    scroll-behavior: smooth !important;
+  }
+
+  body {
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior-y: none !important;
+  }
+
+  /* ── No layout shifts ── */
+  img, video {
+    max-width: 100% !important;
+    display: block !important;
+  }
+
+  /* ── Prevent horizontal overflow from any element ── */
+  .hero,
+  .section,
+  .categories,
+  .bestsellers,
+  #bestsellers,
+  #shopControls,
+  .why-us,
+  #why-us,
+  .testimonials {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+  }
+
+  /* ── Smooth navbar transition ── */
+  .navbar,
+  #navbar {
+    transition: transform 280ms var(--m-ease, cubic-bezier(0.16, 1, 0.3, 1)),
+                box-shadow 240ms ease !important;
+    will-change: transform !important;
+  }
+
+  /* ── Cart toast positioning ── */
+  #cartToast {
+    bottom: calc(var(--m-bottom-nav-h, 64px) + env(safe-area-inset-bottom, 0px) + 12px) !important;
+    left: 16px !important;
+    right: 16px !important;
+    width: auto !important;
+    border-radius: 14px !important;
+    font-size: 0.82rem !important;
+    letter-spacing: 0.01em !important;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   2.7  PRODUCT GRID — Mobile card refinements
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* ── Grid layout ── */
+  .product-grid,
+  #products-container {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 14px !important;
+    padding: 0 !important; /* container handles padding */
+  }
+
+  /* ── Card ── */
+  .product-card-lux {
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    background: #fff !important;
+    box-shadow: 0 2px 12px rgba(64, 39, 34, 0.07) !important;
+    transition: box-shadow 200ms ease, transform 200ms var(--m-ease, cubic-bezier(0.16, 1, 0.3, 1)) !important;
+  }
+
+  .product-card-lux:active {
+    transform: scale(0.98) !important;
+    box-shadow: 0 1px 6px rgba(64, 39, 34, 0.06) !important;
+  }
+
+  /* ── Image container ── */
+  .lux-img-container {
+    aspect-ratio: 3 / 4 !important;
+    border-radius: 0 !important;
+  }
+
+  /* ── Product info ── */
+  .lux-product-info {
+    padding: 12px 12px 14px !important;
+  }
+
+  .lux-product-category {
+    font-size: 0.58rem !important;
+    letter-spacing: 0.16em !important;
+    margin-bottom: 4px !important;
+    color: var(--m-muted, rgba(32,23,22,0.54)) !important;
+  }
+
+  .lux-product-name {
+    font-size: 0.82rem !important;
+    line-height: 1.35 !important;
+    letter-spacing: -0.005em !important;
+    margin-bottom: 4px !important;
+  }
+
+  /* ── Rating ── */
+  .mobile-product-rating {
+    font-size: 0.68rem !important;
+    margin-bottom: 6px !important;
+    color: var(--m-gold, #b99663) !important;
+  }
+
+  /* ── Price row ── */
+  .lux-product-bottom {
+    margin-bottom: 10px !important;
+    gap: 4px !important;
+  }
+
+  .lux-price {
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+  }
+
+  .mobile-old-price {
+    font-size: 0.7rem !important;
+    opacity: 0.5 !important;
+  }
+
+  .mobile-discount {
+    font-size: 0.64rem !important;
+    font-weight: 600 !important;
+    color: #1a7a4a !important;
+  }
+
+  /* ── Cart button ── */
+  .lux-cart-btn {
+    width: 100% !important;
+    padding: 11px 14px !important;
+    font-size: 0.72rem !important;
+    letter-spacing: 0.06em !important;
+    border-radius: 100px !important;
+    min-height: 40px !important;
+  }
+
+  /* ── Skeleton cards ── */
+  .lux-skeleton-card {
+    border-radius: 16px !important;
+    overflow: hidden !important;
+  }
+
+  /* ── Shop controls ── */
+  #shopControls {
+    padding: 0 !important;
+    gap: 10px !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding-bottom: 2px !important;
+  }
+
+  #shopControls::-webkit-scrollbar { display: none !important; }
+
+  #shopControls select,
+  #shopControls input {
+    min-width: 0 !important;
+    flex-shrink: 1 !important;
+    font-size: 0.78rem !important;
+    padding: 10px 14px !important;
+    border-radius: 100px !important;
+    height: 42px !important;
+  }
+
+  /* ── Editorial quote strip ── */
+  .editorial-quote-strip {
+    grid-column: 1 / -1 !important;
+    margin: 8px 0 !important;
+    padding: 28px 24px !important;
+    background: linear-gradient(135deg, rgba(237, 230, 221, 0.4) 0%, rgba(255, 250, 245, 0.8) 100%) !important;
+    border-radius: 20px !important;
+    border: 1px solid rgba(185, 150, 99, 0.12) !important;
+    text-align: center !important;
+  }
+
+  .editorial-quote-text {
+    font-family: "Playfair Display", Georgia, serif !important;
+    font-style: italic !important;
+    font-size: 0.9rem !important;
+    line-height: 1.7 !important;
+    color: rgba(32, 23, 22, 0.7) !important;
+    margin-bottom: 10px !important;
+  }
+
+  .editorial-quote-attr {
+    font-size: 0.6rem !important;
+    letter-spacing: 0.2em !important;
+    text-transform: uppercase !important;
+    color: var(--m-rose, #a85f72) !important;
+    opacity: 0.7 !important;
+  }
+
+  /* ── Result count ── */
+  #resultCount {
+    font-size: 0.78rem !important;
+    padding: 8px 0 !important;
+  }
+
+  /* ── Empty state ── */
+  .lux-empty-state {
+    padding: 48px 20px !important;
+  }
+
+  /* ── Badge refinements ── */
+  .mobile-product-badge {
+    font-size: 0.58rem !important;
+    letter-spacing: 0.08em !important;
+    padding: 4px 10px !important;
+    border-radius: 100px !important;
+    top: 10px !important;
+    left: 10px !important;
+  }
+
+  .lux-badge {
+    font-size: 0.56rem !important;
+    padding: 4px 9px !important;
+    border-radius: 100px !important;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   2.8  FOOTER — Mobile adaptation
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  footer,
+  .footer {
+    padding: 40px 20px calc(var(--m-bottom-nav-h, 64px) + env(safe-area-inset-bottom, 0px) + 24px) !important;
+  }
+
+  .footer-grid,
+  .footer-columns {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 32px !important;
+  }
+
+  .footer-brand-col {
+    grid-column: 1 / -1 !important;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   2.9  ANNOUNCEMENT / PROMO BANNERS (if existing)
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* Keep any existing announcement bar readable */
+  .announcement-bar,
+  [class*="announce"],
+  [class*="promo-bar"] {
+    font-size: 0.68rem !important;
+    letter-spacing: 0.06em !important;
+    padding: 8px 16px !important;
+    text-align: center !important;
+  }
+}

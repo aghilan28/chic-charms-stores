@@ -951,6 +951,9 @@
     }
   </style>
   <link rel="stylesheet" href="final-mobile-stabilization.css" media="(max-width: 768px)" />
+  <link rel="stylesheet" href="phase6-polish.css" media="(max-width: 767px)" />
+  <!-- Phase 4: Luxury PDP mobile layer -->
+  <link rel="stylesheet" href="mobile.css" />
 </head>
 <body>
 
@@ -1859,5 +1862,21 @@
 
   <script type="module" src="auth-nav.js"></script>
   <script src="final-mobile-stabilization.js" defer></script>
+  <!-- Phase 4: Mobile navigation + cart badge layer -->
+  <script src="mobile-app.js" defer></script>
+  <script>
+    /* ── Sticky buy bar: quantity +/- wiring ── */
+    (function () {
+      var _qty = 1;
+      document.addEventListener('click', function (e) {
+        var btn = e.target.closest('[data-pdp-qty]');
+        if (!btn) return;
+        var delta = parseInt(btn.dataset.pdpQty, 10);
+        _qty = Math.max(1, Math.min(99, _qty + delta));
+        var qtyEl = document.getElementById('pdpStickyQty');
+        if (qtyEl) qtyEl.textContent = _qty;
+      });
+    })();
+  </script>
 </body>
 </html>

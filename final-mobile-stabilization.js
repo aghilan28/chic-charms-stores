@@ -220,6 +220,8 @@
   }
 
   function buildAnnouncement() {
+    /* PHASE 1 DISABLED — announcement bar injection is out of Phase 1 scope */
+    return;
     if ($("#" + ANNOUNCEMENT_ID)) return;
     var items = ["COD available", "Ships in 24 hours", "Skin-friendly finish", "Free shipping above Rs.399", "New drops weekly"];
     var bar = document.createElement("div");
@@ -234,6 +236,8 @@
   }
 
   function buildHome() {
+    /* PHASE 1 DISABLED — homepage feed injection is out of Phase 1 scope */
+    return;
     if (!isMobile() || $("#" + HOME_ID) || !$("#bestsellers")) return;
     document.body.classList.add("cc-mobile-home-ready");
     buildAnnouncement();
@@ -329,6 +333,8 @@
   }
 
   function createMobileChrome() {
+    /* PHASE 1 DISABLED — mobile.css + mobile-app.js handle the header */
+    return;
     if (!isMobile()) return;
     var navbar = $("#navbar");
     if (navbar && !navbar.dataset.ccAppHeader) {
@@ -400,6 +406,8 @@
   }
 
   function createSearchExperience() {
+    /* PHASE 1 DISABLED — search overlay is out of Phase 1 scope */
+    return;
     if (!isMobile() || $(".cc-app-search-overlay")) return;
     var overlay = document.createElement("section");
     overlay.className = "cc-app-search-overlay";
@@ -441,6 +449,8 @@
   }
 
   function createPremiumDrawer() {
+    /* PHASE 1 DISABLED — mobile.css drawer uses .nav-links.open; mobile-app.js wires it */
+    return;
     if (!isMobile() || $(".cc-app-drawer")) return;
     var backdrop = document.createElement("button");
     backdrop.type = "button";
@@ -507,6 +517,8 @@
      - No z-index conflicts with bottom nav
   ─────────────────────────────────────────────── */
   function createCartDrawer() {
+    /* PHASE 1 DISABLED — cart drawer is out of Phase 1 scope */
+    return;
     if (!isMobile() || $(".cc-app-cart-drawer")) return;
     var backdrop = document.createElement("button");
     backdrop.type = "button";

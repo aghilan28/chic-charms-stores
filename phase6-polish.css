@@ -1,0 +1,1423 @@
+/*
+ * phase6-polish.css — CHIC CHARMS Phase 6
+ * Final Luxury Polish + Performance + Stabilization
+ *
+ * SCOPE: @media (max-width: 767px) ONLY — desktop is never touched.
+ *
+ * What this file does:
+ *   6.1  Global spacing consistency
+ *   6.2  Typography rhythm refinement
+ *   6.3  Motion + interaction polish
+ *   6.4  Performance optimization
+ *   6.5  Safe-area + viewport stabilization
+ *   6.6  Scroll + touch refinement
+ *   6.7  Badge + overlay stabilization
+ *   6.8  Mobile visual consistency pass
+ *   6.9  Responsive QA hardening (360–412px)
+ *   6.10 Production cleanup
+ *
+ * Load order: AFTER final-mobile-stabilization.css
+ * This file only overrides — never introduces new systems.
+ */
+
+/* ══════════════════════════════════════════════════════════════
+   6.1  GLOBAL SPACING CONSISTENCY
+   Single source of truth for vertical rhythm on mobile.
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* ── Unified spacing tokens (supplement existing --m-* and --cc-* sets) ── */
+  :root {
+    /* Vertical section rhythm */
+    --p6-section-gap:    28px;
+    --p6-card-pad:       12px;
+    --p6-rail-pad-x:     16px;
+    --p6-page-pad-x:     16px;
+    --p6-page-pad-bot:   calc(88px + env(safe-area-inset-bottom, 0px));
+
+    /* Interaction timing */
+    --p6-ease:           cubic-bezier(0.16, 1, 0.3, 1);
+    --p6-ease-out:       cubic-bezier(0.0, 0, 0.2, 1);
+    --p6-dur-fast:       160ms;
+    --p6-dur-med:        280ms;
+    --p6-dur-slow:       380ms;
+
+    /* Overlay z-index authority ladder */
+    --p6-z-bottom-nav:   190;
+    --p6-z-backdrop:     200;
+    --p6-z-cart:         210;
+    --p6-z-drawer:       225;
+    --p6-z-search:       235;
+    --p6-z-sticky-cta:   110;
+    --p6-z-filter-btn:   115;
+  }
+
+  /* ── Body: single consistent bottom padding so NO content is ever hidden ── */
+  body {
+    padding-bottom: var(--p6-page-pad-bot) !important;
+    /* Smooth momentum scrolling */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: auto;
+  }
+
+  /* ── Page wrappers: consistent horizontal padding ── */
+  .cart-page,
+  .checkout-page,
+  .auth-page,
+  .cc-app-account-page,
+  .product-page {
+    padding-left:  var(--p6-page-pad-x) !important;
+    padding-right: var(--p6-page-pad-x) !important;
+    padding-bottom: calc(108px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* Product page: full-bleed image, so keep 0 left/right */
+  .product-page {
+    padding-left:  0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* ── Section spacing: calm, intentional breathing room ── */
+  .cc-final-section {
+    margin-top: var(--p6-section-gap) !important;
+    padding-inline: var(--p6-rail-pad-x) !important;
+  }
+
+  .cc-final-section + .cc-final-section {
+    margin-top: calc(var(--p6-section-gap) + 4px) !important;
+  }
+
+  /* ── Section head: consistent bottom gap ── */
+  .cc-final-head {
+    margin-bottom: 16px !important;
+    align-items: flex-end;
+  }
+
+  /* ── Rails: consistent padding ── */
+  .cc-final-category-rail,
+  .cc-final-promo-rail,
+  .cc-final-rail,
+  .cc-final-gallery-rail,
+  .product-gallery-thumbs,
+  .related-grid,
+  .pdp-review-rail {
+    padding-inline: var(--p6-rail-pad-x) !important;
+    padding-bottom: 6px !important;
+  }
+
+  .cc-final-category-rail {
+    padding-top:    12px !important;
+    padding-bottom: 14px !important;
+  }
+
+  /* ── Product grid: consistent gap ── */
+  .cc-app-product-grid {
+    gap: 16px 12px !important;
+  }
+
+  .product-grid-lux {
+    gap: 16px 10px !important;
+  }
+
+  /* ── Card padding ── */
+  .cc-final-product-info {
+    gap: 9px !important;
+    padding: 11px 11px 12px !important;
+  }
+
+  .lux-product-info {
+    padding: 10px !important;
+    gap: 6px !important;
+  }
+
+  /* ── Cart / checkout / account cards ── */
+  .cart-item,
+  .checkout-form-card,
+  .acc-card,
+  .auth-card {
+    padding: 14px !important;
+  }
+
+  /* ── Cart header ── */
+  .cart-header,
+  .checkout-header {
+    margin: 18px 0 20px !important;
+  }
+
+  /* ── Cart layout gap ── */
+  .cart-layout,
+  .checkout-layout,
+  .acc-container {
+    gap: 14px !important;
+  }
+
+  /* ── Stat grid gap ── */
+  .stat-grid {
+    gap: 9px !important;
+  }
+
+  /* ── Trust strip ── */
+  .cc-app-trust,
+  .cc-final-trust {
+    gap: 10px !important;
+    padding: 12px var(--p6-rail-pad-x) 6px !important;
+  }
+
+  /* ── Mood / story / collection grids ── */
+  .cc-app-mood-grid,
+  .cc-app-story-grid,
+  .cc-final-collection-grid {
+    gap: 13px !important;
+  }
+
+  /* ── Search pill spacing ── */
+  .cc-app-search-pill.cc-final-search-button {
+    margin: 16px var(--p6-rail-pad-x) 10px !important;
+    min-height: 52px !important;
+  }
+
+  /* ── Footer spacing ── */
+  .cc-final-footer {
+    margin: 28px var(--p6-rail-pad-x) 0 !important;
+    padding: 20px 16px calc(20px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* ── Account hero ── */
+  .cc-app-account-hero {
+    margin: 16px 0 20px !important;
+  }
+
+  /* ── Promo rail ── */
+  .cc-final-promo-rail {
+    gap: 13px !important;
+    padding-top: 12px !important;
+    padding-bottom: 10px !important;
+  }
+
+  /* ── Hero ── */
+  .cc-app-hero {
+    padding: 14px var(--p6-rail-pad-x) 8px !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   6.2  TYPOGRAPHY RHYTHM REFINEMENT
+   Calm, editorial, feminine hierarchy.
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* ── Display / hero headings ── */
+  .cc-app-hero-copy h1,
+  .cc-final-hero-content h1 {
+    font-size: clamp(1.95rem, 8.5vw, 2.75rem) !important;
+    line-height: 0.96 !important;
+    letter-spacing: -0.01em !important;
+  }
+
+  /* ── Section titles ── */
+  .cc-final-title {
+    font-size: 1.48rem !important;
+    line-height: 1.1 !important;
+    letter-spacing: -0.01em !important;
+  }
+
+  /* ── Kicker / eyebrow ── */
+  .cc-final-kicker,
+  .cc-app-overline {
+    font-size: 0.62rem !important;
+    letter-spacing: 0.17em !important;
+    line-height: 1 !important;
+  }
+
+  /* ── Body copy ── */
+  .cc-app-hero-copy p,
+  .cc-final-copy {
+    font-size: 0.88rem !important;
+    line-height: 1.55 !important;
+  }
+
+  /* ── Product names ── */
+  .cc-final-product-name,
+  .lux-product-name {
+    font-size: 0.82rem !important;
+    line-height: 1.2 !important;
+  }
+
+  /* ── Price ── */
+  .cc-final-price-row strong,
+  .lux-price {
+    font-size: 0.88rem !important;
+  }
+
+  /* ── CTA labels ── */
+  .cc-final-card-cta,
+  .lux-cart-btn {
+    font-size: 0.64rem !important;
+    letter-spacing: 0.1em !important;
+  }
+
+  /* ── Badge text ── */
+  .cc-final-badge,
+  .lux-badge,
+  .mobile-product-badge {
+    font-size: 0.55rem !important;
+    letter-spacing: 0.09em !important;
+    line-height: 1 !important;
+  }
+
+  /* ── Page headings ── */
+  .cart-header h1,
+  .checkout-header h1,
+  .panel-title {
+    font-size: 1.9rem !important;
+    line-height: 1.06 !important;
+    letter-spacing: -0.01em !important;
+  }
+
+  /* ── Drawer / cart head ── */
+  .cc-app-drawer-head strong,
+  .cc-app-cart-head strong {
+    font-size: 1.28rem !important;
+    line-height: 1.06 !important;
+  }
+
+  .cc-app-drawer-head span,
+  .cc-app-cart-head span {
+    font-size: 0.62rem !important;
+    letter-spacing: 0.16em !important;
+  }
+
+  /* ── Bottom nav labels ── */
+  .mobile-bottom-tab span,
+  .ma-nav-tab span {
+    font-size: 0.56rem !important;
+    letter-spacing: 0.01em !important;
+  }
+
+  /* ── Auth page ── */
+  .auth-card h1,
+  .auth-logo {
+    font-size: 1.75rem !important;
+    line-height: 1.08 !important;
+  }
+
+  /* ── Account hero ── */
+  .cc-app-account-hero h1 {
+    font-size: 1.5rem !important;
+    line-height: 1.06 !important;
+    letter-spacing: -0.01em !important;
+  }
+
+  /* ── Mood / story ── */
+  .cc-app-mood strong,
+  .cc-app-story strong,
+  .cc-final-collection strong {
+    font-size: 1.32rem !important;
+    line-height: 1.06 !important;
+  }
+
+  /* ── Promo cards ── */
+  .cc-final-promo-card strong {
+    font-size: 1.35rem !important;
+    line-height: 1.04 !important;
+  }
+
+  /* ── Cart items ── */
+  .cc-app-cart-items strong {
+    font-size: 0.82rem !important;
+    line-height: 1.18 !important;
+  }
+
+  .cc-app-cart-items span {
+    font-size: 0.72rem !important;
+  }
+
+  /* ── Product title (PDP) ── */
+  .product-title {
+    font-size: 1.5rem !important;
+    line-height: 1.12 !important;
+    letter-spacing: -0.01em !important;
+  }
+
+  /* ── Logo ── */
+  .cc-app-logo,
+  .logo {
+    font-size: 1.12rem !important;
+    letter-spacing: 0 !important;
+    line-height: 1 !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   6.3  MOTION + INTERACTION POLISH
+   Subtle, expensive, emotionally calm.
+   NO flashy, NO bouncy, NO excessive.
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* ── Global interaction baseline ── */
+  *,
+  *::before,
+  *::after {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ── Button press: all interactive elements ── */
+  .cc-app-icon-btn:active,
+  .cc-final-product:active,
+  .cc-final-promo-card:active,
+  .cc-final-category:active,
+  .cc-final-collection:active,
+  .cc-app-mood:active,
+  .cc-app-story:active,
+  .mobile-bottom-tab:active,
+  .ma-nav-tab:active,
+  .acc-nav-btn:active,
+  .cc-app-menu-list a:active,
+  .product-card-lux:active,
+  .related-card:active {
+    transform: scale(0.97) !important;
+    transition: transform var(--p6-dur-fast) var(--p6-ease) !important;
+  }
+
+  /* ── Heart / quick-add: slightly different micro-interaction ── */
+  .cc-final-heart:active,
+  .cc-final-quick:active,
+  .lux-quick-add-btn:active {
+    transform: scale(0.92) !important;
+    transition: transform var(--p6-dur-fast) var(--p6-ease) !important;
+  }
+
+  /* ── Cart / checkout CTA: slight lift on release ── */
+  .cc-app-checkout:active,
+  .btn-checkout:active,
+  .btn-place-order:active,
+  .cc-app-empty-cart a:active {
+    opacity: 0.88 !important;
+    transform: scale(0.98) !important;
+    transition: opacity var(--p6-dur-fast) ease,
+                transform var(--p6-dur-fast) var(--p6-ease) !important;
+  }
+
+  /* ── Icon buttons: refined hover/press ── */
+  .cc-app-icon-btn {
+    transition: transform var(--p6-dur-fast) var(--p6-ease),
+                background  var(--p6-dur-fast) ease,
+                box-shadow  var(--p6-dur-fast) ease !important;
+    will-change: transform;
+  }
+
+  /* ── Bottom nav tabs: smooth active state ── */
+  .mobile-bottom-tab {
+    transition: transform  var(--p6-dur-fast) var(--p6-ease),
+                background var(--p6-dur-fast) ease,
+                color      var(--p6-dur-fast) ease !important;
+    will-change: transform;
+  }
+
+  /* ── Drawer: luxury slide-in ── */
+  .cc-app-drawer {
+    transition: transform var(--p6-dur-slow) var(--p6-ease) !important;
+    will-change: transform;
+  }
+
+  /* ── Cart drawer: fluid slide-up ── */
+  .cc-app-cart-drawer {
+    transition: transform var(--p6-dur-slow) var(--p6-ease) !important;
+    will-change: transform;
+  }
+
+  /* ── Search overlay: elegant fade-rise ── */
+  .cc-app-search-overlay {
+    transition: opacity  var(--p6-dur-med) ease,
+                transform var(--p6-dur-slow) var(--p6-ease) !important;
+  }
+
+  /* ── Backdrops: fade-only, no transform ── */
+  .cc-app-backdrop,
+  .cc-app-cart-backdrop,
+  .ma-drawer-backdrop {
+    transition: opacity var(--p6-dur-med) ease,
+                visibility 0s var(--p6-dur-med) !important;
+  }
+
+  .cc-app-backdrop.is-open,
+  .cc-app-cart-backdrop.is-open,
+  .ma-drawer-backdrop.is-open {
+    transition: opacity var(--p6-dur-med) ease,
+                visibility 0s 0s !important;
+  }
+
+  /* ── Sticky buy bar: smooth reveal ── */
+  .pdp-sticky-buy,
+  .product-sticky-cta,
+  .pdp-sticky-bar {
+    transition: transform var(--p6-dur-med) var(--p6-ease) !important;
+    will-change: transform;
+  }
+
+  /* ── Product cards: subtle elevation on grid load ── */
+  .cc-app-product-grid .cc-final-product {
+    animation-timing-function: var(--p6-ease) !important;
+    animation-duration: 480ms !important;
+  }
+
+  /* ── Float animation: calmer, slower ── */
+  @keyframes ccAppFloat {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-5px); }
+  }
+
+  .cc-app-offer {
+    animation: ccAppFloat 4.2s ease-in-out infinite !important;
+  }
+
+  /* Remove offer animation on very small screens for perf */
+  @media (max-width: 375px) {
+    .cc-app-offer {
+      animation: none !important;
+    }
+  }
+
+  /* ── Navbar hide/show: smooth ── */
+  .navbar {
+    transition: transform 220ms var(--p6-ease),
+                box-shadow 180ms ease !important;
+    will-change: transform;
+  }
+
+  /* ── Filter / sort sheet transition ── */
+  .cc-filter-sheet,
+  .cc-bottom-sheet,
+  .cc-newsletter-modal {
+    transition: transform var(--p6-dur-slow) var(--p6-ease) !important;
+    will-change: transform;
+  }
+
+  /* ── Cart CTA area ── */
+  .lux-cart-btn,
+  .cc-final-card-cta {
+    transition: opacity var(--p6-dur-fast) ease,
+                transform var(--p6-dur-fast) var(--p6-ease) !important;
+  }
+
+  /* ── Remove heavy hero image transform (prevents compositing) ── */
+  .cc-app-hero-card img {
+    transform: none !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   6.4  PERFORMANCE OPTIMIZATION
+   GPU compositing, paint reduction, stable FPS.
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* ── Only GPU-accelerate elements that truly need it ── */
+  .cc-app-drawer,
+  .cc-app-cart-drawer,
+  .cc-app-search-overlay,
+  .cc-filter-sheet,
+  .cc-bottom-sheet,
+  .cc-newsletter-modal,
+  .pdp-sticky-buy,
+  .product-sticky-cta,
+  .pdp-sticky-bar,
+  .mobile-bottom-nav,
+  .cc-app-bottom-nav,
+  .ma-bottom-nav {
+    transform: translateZ(0);
+    /* Contained painting: no layout thrashing */
+    backface-visibility: hidden;
+  }
+
+  /* ── Remove backdrop-filter from performance-critical paths ── */
+  /* backdrop-filter causes paint layers on EVERY scroll — remove where not visible */
+  .cc-app-backdrop,
+  .cc-app-cart-backdrop,
+  .ma-drawer-backdrop,
+  .cc-filter-sheet-backdrop,
+  .cc-bottom-sheet-backdrop,
+  .cc-newsletter-backdrop,
+  .lux-mobile-drawer-backdrop {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* ── Limit backdrop-filter to elements the user explicitly sees ── */
+  /* Navbar blur: only while user can see it */
+  .navbar:not(.is-hidden) {
+    /* Keep subtle blur but reduce saturate to cut GPU cost */
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+  }
+
+  /* Bottom nav blur: lighter ── */
+  .mobile-bottom-nav,
+  .cc-app-bottom-nav,
+  .ma-bottom-nav {
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+  }
+
+  /* ── Images: always optimized rendering ── */
+  img {
+    transform: none !important;
+    filter: none !important;
+    will-change: auto !important;
+    content-visibility: auto;
+  }
+
+  /* Hero image exception: allow it to overflow for object-fit */
+  .cc-app-hero-card img,
+  .product-img-frame img,
+  .cc-final-collection img,
+  .cc-app-mood img,
+  .cc-app-story img {
+    will-change: auto !important;
+  }
+
+  /* ── Product grid cards: no unnecessary will-change ── */
+  .product-card-lux,
+  .cc-final-product {
+    will-change: auto !important;
+    transform: none;
+  }
+
+  /* ── Prevent overflow repaints on rails ── */
+  .cc-final-rail,
+  .cc-final-promo-rail,
+  .cc-final-category-rail,
+  .cc-final-gallery-rail,
+  .product-gallery-thumbs,
+  .related-grid {
+    contain: layout style !important;
+  }
+
+  /* ── Momentum scrolling on ALL scrollable containers ── */
+  .cc-app-cart-items,
+  .cc-app-search-body,
+  .cc-app-drawer,
+  .cc-filter-sheet,
+  .cc-bottom-sheet,
+  .cc-newsletter-modal {
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+  }
+
+  /* ── Shadows: consolidated, cheaper versions ── */
+  /* Remove stacked box-shadows where single ones work */
+  .cc-final-product,
+  .cc-app-product-grid .cc-final-product {
+    box-shadow: 0 10px 24px rgba(67, 40, 35, 0.09) !important;
+  }
+
+  .product-card-lux {
+    box-shadow: 0 8px 20px rgba(67, 40, 35, 0.08) !important;
+  }
+
+  .cc-app-icon-btn {
+    box-shadow: 0 4px 12px rgba(67, 40, 35, 0.08) !important;
+  }
+
+  .mobile-bottom-nav,
+  .cc-app-bottom-nav,
+  .ma-bottom-nav {
+    box-shadow: 0 8px 22px rgba(67, 40, 35, 0.12),
+                inset 0 1px 0 rgba(255, 255, 255, 0.62) !important;
+  }
+
+  /* ── Reduce motion: full compliance ── */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration:       0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration:      0.001ms !important;
+      scroll-behavior:          auto !important;
+    }
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   6.5  SAFE-AREA + VIEWPORT STABILIZATION
+   No clipped buttons, no hidden CTAs, no browser UI overlap.
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* ── HTML / body: single consistent overflow authority ── */
+  html {
+    overflow-x: hidden !important;
+    /* Let body handle y-scroll; html stays fixed */
+    overflow-y: hidden !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    -webkit-text-size-adjust: 100% !important;
+  }
+
+  body {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+    touch-action: pan-y !important;
+  }
+
+  /* ── Bottom nav: crisp safe-area placement ── */
+  .mobile-bottom-nav,
+  .cc-app-bottom-nav,
+  .ma-bottom-nav {
+    left:   12px !important;
+    right:  12px !important;
+    bottom: calc(10px + env(safe-area-inset-bottom, 0px)) !important;
+    z-index: var(--p6-z-bottom-nav) !important;
+  }
+
+  /* ── Sticky buy bar: clear of bottom nav ── */
+  .pdp-sticky-buy,
+  .product-sticky-cta,
+  .pdp-sticky-bar {
+    bottom: 0 !important;
+    padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px)) !important;
+    z-index: var(--p6-z-sticky-cta) !important;
+  }
+
+  /* ── Sticky cart CTA (cart page) ── */
+  .d11-sticky-cart-cta {
+    left:   14px !important;
+    right:  14px !important;
+    bottom: calc(80px + env(safe-area-inset-bottom, 0px)) !important;
+    z-index: var(--p6-z-sticky-cta) !important;
+  }
+
+  /* ── Filter / sort floating buttons ── */
+  .cc-mobile-filter-trigger,
+  .cc-mobile-sort-trigger {
+    bottom: calc(78px + env(safe-area-inset-bottom, 0px)) !important;
+    z-index: var(--p6-z-filter-btn) !important;
+  }
+
+  /* ── Cart drawer: full-bottom safe position ── */
+  .cc-app-cart-drawer {
+    bottom: 0 !important;
+    z-index: var(--p6-z-cart) !important;
+  }
+
+  /* Cart checkout CTA: respects safe area ── */
+  .cc-app-checkout {
+    padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px)) !important;
+    min-height: calc(52px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* ── Drawer: respects top + bottom safe area ── */
+  .cc-app-drawer {
+    padding-top:    calc(16px + env(safe-area-inset-top, 0px)) !important;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px)) !important;
+    z-index: var(--p6-z-drawer) !important;
+  }
+
+  /* ── Search overlay: respects top safe area ── */
+  .cc-app-search-overlay {
+    padding-top:    calc(14px + env(safe-area-inset-top, 0px)) !important;
+    padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)) !important;
+    z-index: var(--p6-z-search) !important;
+  }
+
+  /* ── Navbar: respects admin banner + safe area ── */
+  .navbar,
+  .cc-app-header.navbar {
+    top: var(--admin-return-banner-height, 0px) !important;
+    z-index: 180 !important;
+  }
+
+  /* ── Bottom sheets: clear of nav ── */
+  .cc-bottom-sheet,
+  .cc-newsletter-modal {
+    bottom: calc(80px + env(safe-area-inset-bottom, 0px)) !important;
+    padding-bottom: calc(108px + env(safe-area-inset-bottom, 0px)) !important;
+    z-index: 220 !important;
+  }
+
+  .cc-filter-sheet {
+    bottom: 0 !important;
+    padding-bottom: calc(108px + env(safe-area-inset-bottom, 0px)) !important;
+    z-index: 220 !important;
+  }
+
+  /* ── Product info column: never overflow ── */
+  .product-info-col {
+    padding-inline: var(--p6-page-pad-x) !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    box-sizing: border-box !important;
+  }
+
+  /* ── Cart toast: clear of bottom nav ── */
+  .cart-toast {
+    bottom: calc(88px + env(safe-area-inset-bottom, 0px)) !important;
+    left: 16px !important;
+    right: 16px !important;
+    z-index: 240 !important;
+  }
+
+  /* ── Keyboard: when input focused, don't body-lock ── */
+  body:focus-within {
+    overflow-y: auto !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   6.6  SCROLL + TOUCH REFINEMENT
+   Momentum, drawer, overscroll, no scroll-lock bugs.
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* ── Horizontal rails: unified scroll behaviour ── */
+  .cc-final-category-rail,
+  .cc-final-promo-rail,
+  .cc-final-rail,
+  .cc-final-gallery-rail,
+  .product-gallery-thumbs,
+  .related-grid,
+  .pdp-review-rail,
+  .acc-nav {
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior-inline: contain !important;
+    scroll-snap-type: x mandatory !important;
+    scroll-padding-inline: var(--p6-rail-pad-x) !important;
+    scrollbar-width: none !important;
+    touch-action: pan-x pan-y !important;
+  }
+
+  .cc-final-category-rail::-webkit-scrollbar,
+  .cc-final-promo-rail::-webkit-scrollbar,
+  .cc-final-rail::-webkit-scrollbar,
+  .cc-final-gallery-rail::-webkit-scrollbar,
+  .product-gallery-thumbs::-webkit-scrollbar,
+  .related-grid::-webkit-scrollbar,
+  .pdp-review-rail::-webkit-scrollbar,
+  .acc-nav::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  /* ── Drawer scroll: vertical only, contained ── */
+  .cc-app-drawer {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    overscroll-behavior-y: contain !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* ── Cart items scroll ── */
+  .cc-app-cart-items {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    overscroll-behavior-y: contain !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* ── Search body scroll ── */
+  .cc-app-search-body {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    overscroll-behavior-y: contain !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* ── Body: no accidental x-overflow from content ── */
+  body > * {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  img, video, canvas, svg {
+    max-width: 100% !important;
+  }
+
+  /* ── Drawer open: body scroll locked cleanly ── */
+  body.lux-drawer-open,
+  body.lux-search-open,
+  body.cc-modal-open {
+    overflow: hidden !important;
+    touch-action: none !important;
+  }
+
+  /* ── After close: always restore ── */
+  body:not(.lux-drawer-open):not(.lux-search-open):not(.cc-modal-open) {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    touch-action: pan-y !important;
+  }
+
+  /* ── Add trailing space to snap rails so last card isn't flush ── */
+  .cc-final-category-rail::after,
+  .cc-final-promo-rail::after,
+  .cc-final-rail::after,
+  .cc-final-gallery-rail::after,
+  .related-grid::after {
+    content: '' !important;
+    flex: 0 0 4px !important;
+    pointer-events: none !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   6.7  BADGE + OVERLAY STABILIZATION
+   No floating text, no z-index conflicts, no visual buzzing.
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* ── Product badges: absolutely locked in place ── */
+  .cc-final-badge,
+  .lux-badge,
+  .mobile-product-badge {
+    position: absolute !important;
+    top: 9px !important;
+    left: 9px !important;
+    z-index: 5 !important;
+    /* Geometry: never clip text, never overflow card */
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    max-width: calc(100% - 52px) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    /* Pill shape */
+    padding: 5px 9px !important;
+    border-radius: 999px !important;
+    /* No transform — prevents float/detach */
+    transform: none !important;
+    /* Stable pointer */
+    pointer-events: none !important;
+    /* Hardware-accellerate via its own stacking context */
+    isolation: isolate;
+  }
+
+  /* ── Badge container ── */
+  .lux-badges {
+    position: absolute !important;
+    top: 9px !important;
+    left: 9px !important;
+    z-index: 5 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 5px !important;
+    overflow: visible !important;
+    pointer-events: none !important;
+    transform: none !important;
+  }
+
+  /* ── Heart / quick-add overlays: stable ── */
+  .cc-final-heart {
+    position: absolute !important;
+    top: 9px !important;
+    right: 9px !important;
+    z-index: 4 !important;
+    transform: none !important;
+  }
+
+  .cc-final-quick {
+    position: absolute !important;
+    right: 9px !important;
+    bottom: 9px !important;
+    z-index: 4 !important;
+    transform: none !important;
+  }
+
+  /* Slight active state — not during idle */
+  .cc-final-heart.is-active {
+    transform: scale(1.08) !important;
+    transition: transform 180ms var(--p6-ease) !important;
+  }
+
+  .cc-final-quick.is-active {
+    transform: scale(1.1) !important;
+    transition: transform 180ms var(--p6-ease) !important;
+  }
+
+  /* ── Product media: correct stacking context for overlays ── */
+  .cc-final-product-media,
+  .lux-img-container {
+    position: relative !important;
+    isolation: isolate !important;
+  }
+
+  /* ── Product cards: correct stacking context ── */
+  .cc-final-product,
+  .product-card-lux {
+    position: relative !important;
+    isolation: isolate !important;
+  }
+
+  /* ── Offer badge on hero: stable ── */
+  .cc-app-offer {
+    position: absolute !important;
+    top: 16px !important;
+    right: 16px !important;
+    z-index: 2 !important;
+    transform: none !important; /* animation handles movement */
+    /* Prevent text from detaching */
+    white-space: nowrap !important;
+  }
+
+  /* ── Hero glass chip ── */
+  .cc-app-hero-glass {
+    position: absolute !important;
+    top: 16px !important;
+    left: 16px !important;
+    z-index: 2 !important;
+    transform: none !important;
+    /* No animation — keeps it stable */
+    white-space: nowrap !important;
+  }
+
+  /* ── Bottom nav badge ── */
+  .ma-nav-badge,
+  .ma-cart-badge {
+    position: absolute !important;
+    top: -4px !important;
+    right: -4px !important;
+    z-index: 3 !important;
+    transform: none !important;
+    pointer-events: none !important;
+  }
+
+  /* ── Backdrop z-index authority ── */
+  .cc-app-backdrop {
+    z-index: var(--p6-z-backdrop) !important;
+  }
+  .cc-app-cart-backdrop {
+    z-index: var(--p6-z-backdrop) !important;
+  }
+  .ma-drawer-backdrop {
+    z-index: 198 !important; /* just below main backdrop */
+  }
+
+  /* ── Ensure overlays are COMPLETELY invisible when closed ── */
+  .cc-app-cart-drawer:not(.is-open),
+  .cc-app-drawer:not(.is-open),
+  .cc-app-search-overlay:not(.is-open) {
+    pointer-events: none !important;
+    visibility: hidden;
+    transition: transform var(--p6-dur-slow) var(--p6-ease),
+                visibility 0s var(--p6-dur-slow) !important;
+  }
+
+  .cc-app-cart-drawer.is-open,
+  .cc-app-drawer.is-open,
+  .cc-app-search-overlay.is-open {
+    visibility: visible !important;
+    transition: transform var(--p6-dur-slow) var(--p6-ease),
+                visibility 0s 0s !important;
+  }
+
+  .cc-app-cart-backdrop:not(.is-open),
+  .cc-app-backdrop:not(.is-open) {
+    visibility: hidden !important;
+    transition: opacity var(--p6-dur-med) ease,
+                visibility 0s var(--p6-dur-med) !important;
+  }
+
+  .cc-app-cart-backdrop.is-open,
+  .cc-app-backdrop.is-open {
+    visibility: visible !important;
+    transition: opacity var(--p6-dur-med) ease,
+                visibility 0s 0s !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   6.8  MOBILE VISUAL CONSISTENCY PASS
+   Unified radius, shadow, border, colour language.
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* ── Unified radius system ── */
+  /* Large cards / hero / drawer */
+  .cc-app-hero-card,
+  .cc-app-drawer {
+    border-radius: 28px !important;
+  }
+
+  /* Product cards */
+  .cc-final-product,
+  .cc-app-product-grid .cc-final-product,
+  .product-card-lux {
+    border-radius: 22px !important;
+  }
+
+  /* Product media (image top) */
+  .cc-final-product-media,
+  .lux-img-container {
+    border-radius: 20px 20px 12px 12px !important;
+  }
+
+  /* Promo / collection cards */
+  .cc-final-promo-card,
+  .cc-final-collection,
+  .cc-app-mood,
+  .cc-app-story {
+    border-radius: 24px !important;
+  }
+
+  /* Form cards / auth / checkout */
+  .cart-item,
+  .cart-summary,
+  .cart-empty,
+  .checkout-form-card,
+  .checkout-summary,
+  .auth-card,
+  .acc-profile-card,
+  .acc-card,
+  .stat-box,
+  .order-card,
+  .address-card {
+    border-radius: 22px !important;
+  }
+
+  /* Bottom nav */
+  .mobile-bottom-nav,
+  .cc-app-bottom-nav,
+  .ma-bottom-nav {
+    border-radius: 22px !important;
+  }
+
+  /* Pills */
+  .btn-checkout,
+  .btn-place-order,
+  .btn-auth,
+  .btn-prime,
+  .cc-final-card-cta,
+  .cc-app-checkout,
+  .lux-cart-btn,
+  .acc-nav-btn {
+    border-radius: 999px !important;
+  }
+
+  /* Input fields */
+  .checkout-form-card input,
+  .checkout-form-card textarea,
+  .auth-form-group input,
+  .acc-card input,
+  .cc-newsletter-modal input {
+    border-radius: 16px !important;
+  }
+
+  /* Cart drawer */
+  .cc-app-cart-drawer {
+    border-radius: 28px 28px 0 0 !important;
+  }
+
+  /* ── Unified border language ── */
+  /* Warm gold-tinted borders on cards */
+  .cc-final-product,
+  .cc-app-product-grid .cc-final-product {
+    border: 1px solid rgba(185, 150, 99, 0.16) !important;
+  }
+
+  .product-card-lux {
+    border: 1px solid rgba(185, 150, 99, 0.14) !important;
+  }
+
+  /* ── Unified background tones ── */
+  .cc-final-product,
+  .cc-app-product-grid .cc-final-product {
+    background: rgba(255, 255, 255, 0.92) !important;
+  }
+
+  .product-card-lux {
+    background: #fff !important;
+  }
+
+  /* ── Icon button consistency ── */
+  .cc-app-icon-btn {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 14px !important;
+  }
+
+  /* ── Bottom nav tab sizing ── */
+  .mobile-bottom-tab,
+  .ma-nav-tab {
+    min-height: 44px !important;
+    border-radius: 16px !important;
+  }
+
+  .mobile-bottom-tab svg,
+  .ma-nav-tab svg {
+    width: 18px !important;
+    height: 18px !important;
+    stroke-width: 1.7 !important;
+  }
+
+  /* ── Trust strip pills ── */
+  .cc-app-trust span,
+  .cc-final-trust span {
+    border-radius: 18px !important;
+    min-height: 44px !important;
+  }
+
+  /* ── Cart items ── */
+  .cc-app-cart-items article {
+    border-radius: 20px !important;
+    border: 1px solid rgba(185, 150, 99, 0.12) !important;
+  }
+
+  /* ── Drawer menu items ── */
+  .cc-app-menu-list a {
+    border-radius: 20px !important;
+  }
+
+  /* ── Search chips ── */
+  .cc-app-chip-row button,
+  .cc-app-search-cats a {
+    border-radius: 999px !important;
+  }
+
+  /* ── Search product results ── */
+  .cc-app-search-products a {
+    border-radius: 20px !important;
+  }
+
+  /* ── Shipping progress ── */
+  .cc-app-ship {
+    border-radius: 18px !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   6.9  RESPONSIVE QA HARDENING (360–412px)
+   All sizes pass. No overlap, no clipping.
+══════════════════════════════════════════════════════════════ */
+
+/* 390px – 412px: standard (iPhone 14/15, Pixel) */
+@media (min-width: 390px) and (max-width: 412px) {
+  .cc-final-product,
+  .cc-app-product-grid .cc-final-product {
+    /* Allow slight width growth on larger phones */
+    min-width: 148px !important;
+  }
+
+  .cc-app-icon-btn {
+    width: 42px !important;
+    height: 42px !important;
+  }
+}
+
+/* 375px – 389px: iPhone SE / standard */
+@media (max-width: 389px) {
+  .cc-app-logo,
+  .logo {
+    font-size: 1.06rem !important;
+  }
+
+  .cc-app-icon-btn {
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 13px !important;
+  }
+
+  .cc-app-hero-copy h1 {
+    font-size: clamp(1.75rem, 8vw, 2.2rem) !important;
+  }
+
+  .cc-final-title {
+    font-size: 1.38rem !important;
+  }
+
+  .cc-app-product-grid {
+    gap: 14px 10px !important;
+  }
+}
+
+/* 360px: narrowest Android */
+@media (max-width: 360px) {
+  .cc-app-header-inner {
+    grid-template-columns: 38px minmax(0, 1fr) auto !important;
+    padding-inline: 10px !important;
+  }
+
+  .cc-app-icon-btn {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 12px !important;
+  }
+
+  .cc-app-logo,
+  .logo {
+    font-size: 1rem !important;
+  }
+
+  .cc-app-hero-copy h1 {
+    font-size: 1.7rem !important;
+  }
+
+  .cc-final-title {
+    font-size: 1.3rem !important;
+  }
+
+  .cc-app-product-grid {
+    gap: 12px 8px !important;
+  }
+
+  .cc-final-product-info {
+    padding: 9px 9px 10px !important;
+  }
+
+  .cc-final-card-cta {
+    min-height: 32px !important;
+    font-size: 0.6rem !important;
+  }
+
+  .mobile-bottom-nav,
+  .cc-app-bottom-nav,
+  .ma-bottom-nav {
+    left: 8px !important;
+    right: 8px !important;
+    min-height: 56px !important;
+    border-radius: 18px !important;
+  }
+
+  .mobile-bottom-tab,
+  .ma-nav-tab {
+    min-height: 40px !important;
+  }
+
+  .mobile-bottom-tab svg,
+  .ma-nav-tab svg {
+    width: 17px !important;
+    height: 17px !important;
+  }
+
+  .mobile-bottom-tab span,
+  .ma-nav-tab span {
+    font-size: 0.52rem !important;
+  }
+
+  .cc-final-promo-card {
+    flex: 0 0 min(82vw, 290px) !important;
+  }
+
+  .cc-final-hero-content h1 {
+    font-size: 1.82rem !important;
+  }
+
+  body {
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   6.10 PRODUCTION CLEANUP
+   Dead systems neutralized. No conflicts. Clean runtime.
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* ── Neutralise all legacy mobile systems (belt + suspenders) ── */
+  .cc-app-header,
+  .lux-mobile-header,
+  .mobile-header,
+  .d7-mobile-header,
+  .cc-mobile-brand,
+  .mobile-promo-slider,
+  .cc-loading-screen,
+  .cc-onboarding-toast,
+  .cc-recent-purchase,
+  .cc-mini-cart,
+  .mobile-commerce-rails,
+  .cc-mobile-footer,
+  /* Legacy drawers */
+  .lux-mobile-drawer,
+  .lux-mobile-drawer-backdrop,
+  .d7-drawer,
+  .d7-drawer-backdrop,
+  /* Legacy bottom navs (only .ma-bottom-nav and .cc-app-bottom-nav survive) */
+  .cc-global-bottom-nav:not(.cc-app-bottom-nav):not(.ma-bottom-nav),
+  .mobile-bottom-nav:not(.cc-app-bottom-nav):not(.ma-bottom-nav),
+  /* Legacy announcement bars */
+  .cc-final-announcement:not([data-cc-injected]),
+  /* Legacy overlays */
+  .cc-app-search-overlay:not([data-cc-injected]) {
+    display: none !important;
+    pointer-events: none !important;
+  }
+
+  /* ── Prevent stale body classes from legacy systems ── */
+  body.d7-menu-open,
+  body.lux-search-open:not(.cc-modal-open) {
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    touch-action: pan-y !important;
+  }
+
+  /* ── Deduplicate: if multiple backdrops injected, hide extras ── */
+  .ma-drawer-backdrop ~ .ma-drawer-backdrop,
+  .cc-app-backdrop ~ .cc-app-backdrop,
+  .cc-app-cart-backdrop ~ .cc-app-cart-backdrop {
+    display: none !important;
+  }
+
+  /* ── Desktop hero / marquee: confirmed hidden on mobile ── */
+  .hero,
+  .marquee-wrap,
+  .d6-brand-story,
+  .d6-marquee,
+  .d6-campaign {
+    display: none !important;
+  }
+
+  /* ── Product page: legacy zoom / float buttons cleanup ── */
+  .pdp-zoom-trigger,
+  .pdp-float-btn {
+    /* Keep these — they may be valid — but ensure safe z-index */
+    z-index: var(--p6-z-sticky-cta) !important;
+  }
+
+  /* ── Remove text-transform inconsistencies on nav ── */
+  .nav-links,
+  .nav-actions {
+    display: none !important;
+  }
+
+  /* ── Prevent desktop sidebar from showing ── */
+  .acc-sidebar {
+    position: static !important;
+    width: 100% !important;
+  }
+
+  /* ── Cart summary: always static on mobile ── */
+  .cart-summary,
+  .checkout-summary {
+    position: static !important;
+  }
+
+  /* ── Prevent desktop product layout from bleeding in ── */
+  .product-layout {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 22px !important;
+  }
+
+  /* ── Confirm categories section is visible (was hidden by old system) ── */
+  .categories.section {
+    display: block !important;
+  }
+
+  /* ── No outline on tap for interactive elements ── */
+  button:focus-visible,
+  a:focus-visible {
+    outline: 2px solid rgba(168, 95, 114, 0.6);
+    outline-offset: 2px;
+  }
+
+  button:focus:not(:focus-visible),
+  a:focus:not(:focus-visible) {
+    outline: none;
+  }
+}
