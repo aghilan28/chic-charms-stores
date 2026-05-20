@@ -1,13 +1,13 @@
 (function () {
   "use strict";
 
-  /* ── DESKTOP SAFETY LOCK ── */
-  if (window.innerWidth > 767) {
+  /* DESKTOP SAFETY LOCK */
+  if (window.innerWidth > 768) {
     document.documentElement.classList.remove('mobile-home', 'cc-mobile', 'app-shell-active');
     return;
   }
 
-  var mobileQuery = window.matchMedia("(max-width: 767px)");
+  var mobileQuery = window.matchMedia("(max-width: 768px)");
   var HOME_ID = "ccFinalHome";
   var ANNOUNCEMENT_ID = "ccFinalAnnouncement";
   var RECENT_SEARCHES_KEY = "ccRecentSearches";
@@ -295,18 +295,45 @@
 
   function removeDuplicateGeneratedShells() {
     if (!isMobile()) return;
-    $all(".cc-mobile-brand, .mobile-commerce-rails, .cc-mobile-footer, .cc-loading-screen, .cc-onboarding-toast, .cc-recent-purchase, .cc-mini-cart").forEach(function (node) {
+    $all([
+      ".cc-mobile-brand",
+      ".mobile-commerce-rails",
+      ".cc-mobile-footer",
+      ".cc-loading-screen",
+      ".cc-onboarding-toast",
+      ".cc-recent-purchase",
+      ".cc-mini-cart",
+      ".ma-drawer",
+      ".ma-drawer-backdrop",
+      ".ma-search-overlay",
+      ".ma-cart-sheet",
+      ".ma-cart-backdrop",
+      ".lux-mobile-drawer",
+      ".lux-mobile-drawer-backdrop",
+      ".lux-search-overlay",
+      ".pdp-zoom-overlay",
+      ".lux-pdp-sticky-cta"
+    ].join(", ")).forEach(function (node) {
       node.remove();
     });
     $all(".mobile-bottom-nav").forEach(function (nav) {
       if (!nav.classList.contains("cc-app-bottom-nav")) nav.remove();
     });
+    var headers = $all(".cc-app-header");
+    headers.slice(1).forEach(function (header) { header.remove(); });
+    var heroes = $all("#ccFinalHome, .cc-final-home");
+    heroes.slice(1).forEach(function (hero) { hero.remove(); });
+    $all(".cc-app-search-overlay").slice(1).forEach(function (overlay) { overlay.remove(); });
+    $all(".cc-app-drawer").slice(1).forEach(function (drawer) { drawer.remove(); });
+    $all(".cc-app-cart-drawer").slice(1).forEach(function (drawer) { drawer.remove(); });
   }
 
   function createMobileChrome() {
     if (!isMobile()) return;
     var navbar = $("#navbar");
     if (navbar && !navbar.dataset.ccAppHeader) {
+      navbar.__ccOriginalClassName = navbar.className;
+      navbar.__ccOriginalHTML = navbar.innerHTML;
       navbar.dataset.ccAppHeader = "1";
       navbar.className = "navbar cc-app-header";
       navbar.innerHTML = [
@@ -878,11 +905,19 @@
   });
   function cleanupForDesktop() {
     if (isMobile()) return;
+    var navbar = $("#navbar");
+    if (navbar && navbar.dataset.ccAppHeader) {
+      navbar.className = navbar.__ccOriginalClassName || "navbar";
+      if (typeof navbar.__ccOriginalHTML === "string") {
+        navbar.innerHTML = navbar.__ccOriginalHTML;
+      }
+      delete navbar.dataset.ccAppHeader;
+    }
     // Remove all injected mobile DOM elements when viewport expands to desktop
     var mobileNodes = [
       "#ccFinalHome", ".cc-app-bottom-nav", ".cc-app-drawer",
       ".cc-app-backdrop", ".cc-app-cart-drawer", ".cc-app-cart-backdrop",
-      ".cc-app-search-overlay", ".cc-app-header"
+      ".cc-app-search-overlay"
     ];
     mobileNodes.forEach(function(sel) {
       var el = document.querySelector(sel);

@@ -9,8 +9,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="d5-mobile-luxury.css" />
-  <link rel="stylesheet" href="d11-luxury-cart-checkout.css" />
   <link rel="stylesheet" href="payment-system.css" />
   <style>
     /* ── Cart Page Styles ── */
@@ -360,7 +358,7 @@
       .cart-item-name { font-size: 0.95rem; }
     }
   </style>
-  <link rel="stylesheet" href="mobile-app.css" />
+  <link rel="stylesheet" href="final-mobile-stabilization.css" media="(max-width: 768px)" />
 </head>
 <body>
 
@@ -731,9 +729,7 @@
     renderCart();
     refreshCartStock().then(renderCart);
   </script>
-
-  <script src="d11-luxury-cart-checkout.js"></script>
   <script type="module" src="auth-nav.js"></script>
-  <script src="mobile-app.js" defer></script>
+  <script src="final-mobile-stabilization.js" defer></script>
 </body>
 </html>

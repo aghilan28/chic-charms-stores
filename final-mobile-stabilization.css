@@ -1,7 +1,7 @@
 /* ChicCharms final mobile architecture and stabilization layer */
 
 /* Rebuilt mobile luxury app experience */
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   /* Hide desktop hero/home elements that are replaced by the mobile app shell */
   .cc-final-announcement,
   .cc-final-home {
@@ -1122,7 +1122,7 @@
 }
 
 /* Final app-authority overrides: keep the rebuilt mobile experience above older layers. */
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   .cc-app-header {
     min-height: 62px !important;
     background: rgba(255, 250, 245, 0.78) !important;
@@ -1235,7 +1235,7 @@
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   :root {
     --cc-ink: #241316;
     --cc-soft-ink: rgba(36, 19, 22, 0.72);
@@ -1796,7 +1796,7 @@
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   :root {
     --cc-ink: #211816;
     --cc-soft-ink: rgba(33, 24, 22, 0.68);
@@ -3069,7 +3069,7 @@
 }
 
 /* Mobile commerce hotfix: sheet, rail, safe-area and overflow stability. */
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   html,
   body {
     max-width: 100% !important;
@@ -3336,7 +3336,7 @@
 }
 
 /* Final app-authority overrides: keep the rebuilt mobile experience above older layers. */
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   .cc-app-header {
     min-height: 62px !important;
     background: rgba(255, 250, 245, 0.78) !important;
@@ -3391,7 +3391,7 @@
 }
 
 /* D16 mobile-first luxury app authority layer */
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   :root {
     --cc-app-ink: #211816;
     --cc-app-muted: rgba(33, 24, 22, 0.62);
@@ -5122,7 +5122,7 @@
    5. Full mobile spacing luxury pass
    ============================================================ */
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
 
   /* ──────────────────────────────────────────────
      CART / BOTTOM-SHEET — COMPLETE FIX
