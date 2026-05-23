@@ -62,7 +62,7 @@
       }
 
       .shop-announcement {
-        position: sticky;
+        position: relative;
         top: 0;
         z-index: 80;
         overflow: hidden;
@@ -94,7 +94,7 @@
 
       .shop-header {
         position: sticky;
-        top: 32px;
+        top: 0;
         z-index: 70;
         display: grid;
         grid-template-columns: 40px minmax(0, 1fr) auto;
@@ -138,6 +138,7 @@
       .shop-shell {
         width: min(100%, 760px);
         margin: 0 auto;
+        touch-action: pan-y;
       }
 
       .shop-search {
@@ -307,7 +308,7 @@
 
       .shop-bar {
         position: sticky;
-        top: 86px;
+        top: 58px;
         z-index: 60;
         display: grid;
         gap: 10px;
@@ -348,6 +349,7 @@
         align-items: stretch;
         gap: 14px 10px;
         padding: 14px;
+        touch-action: pan-y;
       }
 
       .shop-card {
@@ -406,6 +408,8 @@
         color: var(--shop-hot);
         box-shadow: 0 8px 18px rgba(36, 19, 22, 0.14);
         font: 900 1rem/1 Jost, system-ui, sans-serif;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
       }
 
       .shop-card-heart {
@@ -460,7 +464,7 @@
 
       .shop-card button {
         width: 100%;
-        min-height: 38px;
+        min-height: 36px;
         border: 0;
         border-radius: 999px;
         background: linear-gradient(90deg, #241316, #e0487a);
@@ -468,6 +472,9 @@
         font: 800 0.68rem/1 Jost, system-ui, sans-serif;
         letter-spacing: 0.1em;
         text-transform: uppercase;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        cursor: pointer;
       }
 
       .shop-story,

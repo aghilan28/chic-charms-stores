@@ -739,19 +739,92 @@
       @media (max-width: 768px) {
         .acc-container {
           grid-template-columns: 1fr;
+          padding: 0;
+          gap: 0;
         }
         .acc-sidebar {
           position: static;
         }
+        .acc-profile-card {
+          border-radius: 0;
+          border-left: none;
+          border-right: none;
+          border-top: none;
+          box-shadow: none;
+          border-bottom: 1px solid var(--border);
+          padding: 16px 20px;
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          text-align: left;
+          margin-bottom: 0;
+        }
+        .acc-avatar {
+          width: 52px;
+          height: 52px;
+          font-size: 1.3rem;
+          margin: 0;
+          flex-shrink: 0;
+        }
+        .acc-displayname {
+          font-size: 0.95rem;
+          margin-bottom: 2px;
+        }
+        .acc-email-small {
+          font-size: 0.7rem;
+        }
+        .acc-since {
+          font-size: 0.64rem;
+          margin-top: 3px;
+          padding-top: 0;
+          border-top: none;
+        }
         .acc-nav {
           display: flex;
+          flex-direction: row;
           overflow-x: auto;
+          scrollbar-width: none;
+          -webkit-overflow-scrolling: touch;
+          border-radius: 0;
+          border-left: none;
+          border-right: none;
+          border-top: none;
+          box-shadow: none;
+          border-bottom: 1px solid var(--border);
+          padding: 0 8px;
+          gap: 0;
+          background: #fff;
         }
+        .acc-nav::-webkit-scrollbar { display: none; }
         .acc-nav-btn {
+          flex: 0 0 auto;
+          width: auto;
           white-space: nowrap;
-          border-bottom: none;
-          border-right: 1px solid var(--border);
-          flex-shrink: 0;
+          border-bottom: 2.5px solid transparent;
+          border-right: none;
+          border-radius: 0;
+          padding: 12px 14px;
+          font-size: 0.8rem;
+          min-height: 0;
+          background: transparent;
+          color: var(--muted);
+        }
+        .acc-nav-btn.active {
+          background: transparent;
+          color: var(--rose-dark);
+          border-bottom-color: var(--rose-dark);
+          font-weight: 700;
+        }
+        .acc-nav-btn.logout-btn {
+          margin-left: auto;
+        }
+        .acc-admin-section {
+          margin: 0 16px 8px;
+        }
+        .acc-main {
+          padding: 16px;
+          min-height: auto;
+          animation: none;
         }
         .stat-grid {
           grid-template-columns: 1fr 1fr;
@@ -765,13 +838,28 @@
         .fg-full {
           grid-column: 1;
         }
+        .panel-title {
+          font-size: 1.5rem;
+        }
+        .acc-page {
+          padding: calc(58px + 12px) 0 calc(64px + env(safe-area-inset-bottom, 0px) + 16px);
+        }
+        .btn-ghost,
+        .btn-prime {
+          width: 100%;
+          justify-content: center;
+          text-align: center;
+        }
       }
       @media (max-width: 480px) {
-        .acc-page {
-          padding-top: 80px;
-        }
         .stat-grid {
-          grid-template-columns: 1fr;
+          grid-template-columns: 1fr 1fr;
+        }
+        .stat-num {
+          font-size: 1.5rem;
+        }
+        .acc-card {
+          padding: 18px 16px;
         }
       }
     </style>
