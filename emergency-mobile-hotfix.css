@@ -1,0 +1,1305 @@
+/*
+ * emergency-mobile-hotfix.css
+ * Chic Charms — Emergency Mobile Recovery Pass
+ * Fixes: blank home screen, top gap, scroll freeze, card design,
+ *        overlays, discover nav, account page, cart footer bar,
+ *        bottom nav overlap, runtime instability, safe-area/viewport.
+ *
+ * ALL RULES ARE INSIDE @media (max-width: 767px) ONLY.
+ * Desktop is untouched.
+ */
+
+/* ============================================================
+   SECTION 0 — GLOBAL MOBILE FOUNDATION RESET
+   Fixes: blank screen, scroll freeze, body overflow bugs,
+          incorrect 100vh, stacking context corruption.
+   ============================================================ */
+@media (max-width: 767px) {
+
+  /* Ensure html is a proper scroll viewport */
+  html {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    overflow-x: hidden !important;
+    /* CRITICAL: html must NOT be overflow:hidden vertically —
+       it traps scroll and causes the "cannot scroll up" bug */
+    overflow-y: visible !important;
+    scroll-behavior: smooth;
+  }
+
+  /* Body is the scroll host */
+  body {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 100dvh !important;
+    height: auto !important; /* NOT 100dvh — lets body grow with content */
+    overflow-x: hidden !important;
+    overflow-y: auto !important;  /* Always scrollable */
+    overscroll-behavior-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-y !important;
+    /* Clear any transform/opacity/filter that creates stacking contexts
+       and can make content invisible */
+    filter: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    /* Safe bottom padding for bottom nav */
+    padding-bottom: calc(86px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* Modal open: lock scroll by restricting body, NOT html */
+  body.lux-drawer-open,
+  body.lux-search-open,
+  body.cc-modal-open,
+  body.d7-menu-open {
+    overflow: hidden !important;
+    touch-action: none !important;
+    /* Do NOT use position:fixed — causes jump on iOS */
+  }
+
+  /* Global box-sizing safety */
+  *, *::before, *::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Prevent any invisible overlay from blocking scroll */
+  body > * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Kill any accidental opacity or visibility hiding */
+  .cc-final-home,
+  #ccFinalHome,
+  main,
+  .main-content {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+    pointer-events: auto !important;
+  }
+
+  /* Remove any broken height/transform on containers that cause blank screens */
+  .hero,
+  .hero-inner,
+  .hero-visual,
+  .mobile-promo-slider,
+  .cc-loading-screen {
+    min-height: 0 !important;
+    height: auto !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  /* Ensure no invisible fixed overlay is blocking content */
+  .cc-loading-screen:not(.is-visible),
+  .cc-mobile-brand,
+  .mobile-commerce-rails,
+  .cc-mobile-footer,
+  .cc-onboarding-toast,
+  .cc-recent-purchase,
+  .cc-mini-cart {
+    display: none !important;
+    pointer-events: none !important;
+  }
+}
+
+
+/* ============================================================
+   SECTION 1 — BLANK HOME SCREEN FIX
+   Root cause: stacking context corruption, opacity:0 states,
+   body overflow:hidden on html element, z-index trapping.
+   ============================================================ */
+@media (max-width: 767px) {
+
+  /* Guarantee the home container is always visible */
+  .cc-final-home,
+  .cc-app-home,
+  #ccFinalHome {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    filter: none !important;
+    overflow-x: clip !important;
+    overflow-y: visible !important;
+    padding: 0 0 24px !important;
+    contain: layout style !important;
+    pointer-events: auto !important;
+  }
+
+  /* If app-shell classes were added, main content must still show */
+  body.cc-mobile-home-ready main {
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    opacity: 1 !important;
+  }
+
+  /* Prevent any intro animation from leaving content at opacity:0 */
+  .cc-page-enter {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* Ensure announcement bar doesn't trap content behind it */
+  .cc-final-announcement {
+    position: sticky !important;
+    top: var(--admin-return-banner-height, 0px) !important;
+    z-index: 90 !important;
+    height: 28px !important;
+    overflow: hidden !important;
+    pointer-events: none;
+  }
+
+  /* Navbar never covers content */
+  .navbar,
+  .cc-app-header {
+    position: sticky !important;
+    z-index: 100 !important;
+  }
+}
+
+
+/* ============================================================
+   SECTION 2 — SHOP PAGE TOP GAP FIX
+   Removes dead blank space above shop content.
+   ============================================================ */
+@media (max-width: 767px) {
+
+  /* Shop page: no excessive top padding */
+  .shop-page,
+  body.page-shop,
+  .shop-wrapper {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+  }
+
+  /* The shop header is sticky so no margin needed below it */
+  .shop-header + *,
+  .shop-header ~ .shop-controls,
+  .shop-header ~ .shop-body {
+    margin-top: 0 !important;
+  }
+
+  /* Kill hero spacer if shop page has an injected hero placeholder */
+  .shop-hero-spacer,
+  .shop-hero-placeholder {
+    display: none !important;
+    min-height: 0 !important;
+    height: 0 !important;
+  }
+
+  /* Product filter bar: sticky below header, no extra gap */
+  .lux-filter-bar,
+  .shop-filter-bar,
+  .shop-controls {
+    margin-top: 0 !important;
+  }
+
+  /* Bestsellers section: trim dead space above */
+  .bestsellers.section {
+    padding-top: 24px !important;
+  }
+
+  /* Search pill: reasonable margin, not excessive */
+  .cc-app-search-pill.cc-final-search-button,
+  .cc-final-search-button {
+    margin-top: 12px !important;
+    margin-bottom: 4px !important;
+  }
+
+  /* Category rail: compact spacing */
+  .cc-final-category-rail {
+    padding-top: 10px !important;
+    padding-bottom: 12px !important;
+  }
+}
+
+
+/* ============================================================
+   SECTION 3 — SCROLL FREEZE FIX
+   Fixes: cannot scroll upward, touch-action conflicts,
+          body locked by modals not unlocking properly.
+   ============================================================ */
+@media (max-width: 767px) {
+
+  /* Ensure scrollable horizontal rails do NOT block vertical body scroll */
+  .cc-final-category-rail,
+  .cc-final-rail,
+  .cc-final-promo-rail,
+  .cc-final-gallery-rail,
+  .product-gallery-thumbs,
+  .related-grid,
+  .pdp-review-rail,
+  .acc-nav {
+    touch-action: pan-x pan-y !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior-inline: contain !important;
+  }
+
+  /* Overlays / drawers that scroll internally must contain their scroll */
+  .cc-app-drawer,
+  .cc-app-search-overlay,
+  .cc-app-cart-drawer,
+  .cc-filter-sheet,
+  .cc-bottom-sheet,
+  .cc-newsletter-modal,
+  .lux-mobile-drawer,
+  .lux-search-overlay {
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+    touch-action: pan-y !important;
+  }
+
+  /* When modal closes, body must be scrollable again */
+  body:not(.lux-drawer-open):not(.lux-search-open):not(.cc-modal-open):not(.d7-menu-open) {
+    overflow-y: auto !important;
+    touch-action: pan-y !important;
+  }
+
+  /* Backdrop buttons: pointer-events none when closed, so they don't capture taps */
+  .cc-app-backdrop:not(.is-open),
+  .cc-app-cart-backdrop:not(.is-open),
+  .cc-filter-sheet-backdrop:not(.is-open),
+  .cc-bottom-sheet-backdrop:not(.is-open),
+  .cc-newsletter-backdrop:not(.is-open),
+  .lux-mobile-drawer-backdrop:not(.is-open) {
+    pointer-events: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+
+  /* Closed drawers/sheets must not intercept scroll */
+  .cc-app-drawer:not(.is-open),
+  .cc-app-search-overlay:not(.is-open),
+  .cc-app-cart-drawer:not(.is-open),
+  .cc-filter-sheet:not(.is-open),
+  .cc-bottom-sheet:not(.is-open),
+  .cc-newsletter-modal:not(.is-open),
+  .lux-mobile-drawer:not(.is-open),
+  .lux-search-overlay:not(.is-open) {
+    pointer-events: none !important;
+  }
+}
+
+
+/* ============================================================
+   SECTION 4 + 5 — PRODUCT CARD & OVERLAY FIXES
+   Premium card design, correct aspect ratio, clean overlays.
+   ============================================================ */
+@media (max-width: 767px) {
+
+  /* ── Product grid ── */
+  .product-grid-lux {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 14px 10px !important;
+    align-items: stretch !important;
+    overflow: visible !important;
+  }
+
+  /* ── Product card ── */
+  .product-card-lux {
+    display: grid !important;
+    grid-template-rows: auto 1fr;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    border: 1px solid rgba(33, 24, 22, 0.08) !important;
+    border-radius: 20px !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    box-shadow: 0 8px 20px rgba(64, 39, 34, 0.08) !important;
+    transform: none !important;
+    will-change: auto !important;
+    contain: paint !important; /* doesn't create containing block, badges work */
+    transition: transform 160ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  .product-card-lux:active {
+    transform: scale(0.982) !important;
+    box-shadow: 0 4px 12px rgba(64, 39, 34, 0.06) !important;
+  }
+
+  /* ── Image container ── */
+  .lux-img-container {
+    position: relative !important;
+    aspect-ratio: 4 / 5 !important;
+    overflow: hidden !important;
+    border-radius: 20px 20px 0 0 !important;
+    background: #fff0f3 !important;
+  }
+
+  .lux-img-container img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center top !important;
+    transform: none !important;
+    transition: opacity 160ms ease !important;
+    filter: none !important;
+  }
+
+  /* ── Hover layer: hide on mobile (causes visual clutter) ── */
+  .lux-hover-layer {
+    display: none !important;
+  }
+
+  /* ── Quick add overlay: compact + intentional ── */
+  .lux-quick-add {
+    position: absolute !important;
+    right: 9px !important;
+    bottom: 9px !important;
+    display: block !important;
+    pointer-events: auto !important;
+  }
+
+  .lux-quick-add-btn {
+    width: 32px !important;
+    height: 32px !important;
+    min-height: 32px !important;
+    overflow: hidden !important;
+    border-radius: 50% !important;
+    border: 0 !important;
+    padding: 0 !important;
+    background: #211816 !important;
+    color: transparent !important;
+    box-shadow: 0 6px 14px rgba(33, 24, 22, 0.18) !important;
+    cursor: pointer !important;
+    display: grid !important;
+    place-items: center !important;
+  }
+
+  .lux-quick-add-btn::after {
+    content: "+" !important;
+    color: #fff !important;
+    font: 900 1.1rem/1 Jost, system-ui, sans-serif !important;
+  }
+
+  .lux-quick-add-btn[disabled] {
+    background: rgba(33, 24, 22, 0.3) !important;
+  }
+
+  /* ── Badges: well-contained, no overflow ── */
+  .lux-badges {
+    position: absolute !important;
+    top: 8px !important;
+    left: 8px !important;
+    z-index: 5 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+    pointer-events: none !important;
+    max-width: calc(100% - 50px) !important;
+    overflow: visible !important;
+  }
+
+  .mobile-product-badge,
+  .lux-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 100% !important;
+    padding: 4px 9px !important;
+    border-radius: 999px !important;
+    background: rgba(255, 250, 245, 0.94) !important;
+    color: #a85f72 !important;
+    font: 900 0.57rem/1 Jost, system-ui, sans-serif !important;
+    letter-spacing: 0.09em !important;
+    text-transform: uppercase !important;
+    transform: none !important;
+    box-shadow: 0 4px 10px rgba(33, 24, 22, 0.1) !important;
+  }
+
+  /* ── Product info panel ── */
+  .lux-product-info {
+    display: grid !important;
+    grid-template-rows: auto auto auto 1fr auto auto !important;
+    gap: 5px !important;
+    padding: 9px 10px 10px !important;
+  }
+
+  .lux-product-name {
+    min-height: 36px !important;
+    display: -webkit-box !important;
+    overflow: hidden !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    color: #211816 !important;
+    font: 500 0.8rem/1.2 Jost, system-ui, sans-serif !important;
+    text-decoration: none !important;
+  }
+
+  /* Hide verbose info on mobile cards */
+  .lux-product-desc,
+  .lux-product-category {
+    display: none !important;
+  }
+
+  .mobile-product-rating {
+    display: block !important;
+    color: rgba(33, 24, 22, 0.55) !important;
+    font-size: 0.67rem !important;
+  }
+
+  .lux-price {
+    color: #a85f72 !important;
+    font: 700 0.88rem/1 Jost, system-ui, sans-serif !important;
+  }
+
+  .mobile-old-price {
+    color: rgba(33, 24, 22, 0.38) !important;
+    font-size: 0.68rem !important;
+  }
+
+  .mobile-discount {
+    padding: 2px 5px !important;
+    border-radius: 999px !important;
+    background: #f7ead8 !important;
+    color: #7f6137 !important;
+    font: 800 0.56rem/1 Jost, system-ui, sans-serif !important;
+  }
+
+  /* ── Cart button ── */
+  .lux-cart-btn {
+    width: 100% !important;
+    min-height: 36px !important;
+    margin-top: 5px !important;
+    border-radius: 999px !important;
+    border: 0 !important;
+    background: linear-gradient(135deg, #211816, #a85f72) !important;
+    color: #fffaf5 !important;
+    font: 700 0.68rem/1 Jost, system-ui, sans-serif !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+    box-shadow: none !important;
+    cursor: pointer !important;
+  }
+
+  .lux-cart-btn[disabled] {
+    opacity: 0.5 !important;
+    background: rgba(33, 24, 22, 0.3) !important;
+    cursor: default !important;
+  }
+
+  /* ── cc-final-product cards (homepage rail) ── */
+  .cc-final-product {
+    border: 1px solid rgba(185, 150, 99, 0.15) !important;
+    border-radius: 22px !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    box-shadow: 0 10px 24px rgba(64, 39, 34, 0.09) !important;
+    overflow: hidden !important;
+  }
+
+  .cc-final-product-media {
+    position: relative !important;
+    display: block !important;
+    overflow: hidden !important;
+    border-radius: 22px 22px 12px 12px !important;
+    background: #fff0f3 !important;
+  }
+
+  .cc-final-product-media img {
+    width: 100% !important;
+    aspect-ratio: 4 / 5.25 !important;
+    display: block !important;
+    object-fit: cover !important;
+    object-position: center top !important;
+  }
+
+  /* ── cc-final overlay elements: subtle, non-dominating ── */
+  .cc-final-badge {
+    position: absolute !important;
+    left: 8px !important;
+    top: 8px !important;
+    z-index: 5 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    padding: 4px 9px !important;
+    border-radius: 999px !important;
+    background: rgba(255, 250, 245, 0.92) !important;
+    color: #a85f72 !important;
+    font: 900 0.55rem/1 Jost, system-ui, sans-serif !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+    font-style: normal !important;
+    transform: none !important;
+    max-width: calc(100% - 52px) !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+    box-shadow: 0 3px 8px rgba(33, 24, 22, 0.1) !important;
+  }
+
+  .cc-final-heart {
+    position: absolute !important;
+    top: 8px !important;
+    right: 8px !important;
+    width: 32px !important;
+    height: 32px !important;
+    display: grid !important;
+    place-items: center !important;
+    border: 0 !important;
+    border-radius: 50% !important;
+    background: rgba(255, 250, 245, 0.92) !important;
+    color: #a85f72 !important;
+    box-shadow: 0 4px 10px rgba(33, 24, 22, 0.12) !important;
+    font-size: 0.9rem !important;
+    cursor: pointer !important;
+    transition: transform 160ms ease, background 160ms ease !important;
+  }
+
+  .cc-final-heart:active {
+    transform: scale(0.9) !important;
+  }
+
+  .cc-final-quick {
+    position: absolute !important;
+    right: 8px !important;
+    bottom: 8px !important;
+    width: 34px !important;
+    height: 34px !important;
+    display: grid !important;
+    place-items: center !important;
+    border: 0 !important;
+    border-radius: 50% !important;
+    background: #211816 !important;
+    color: #fff !important;
+    box-shadow: 0 6px 14px rgba(33, 24, 22, 0.18) !important;
+    font: 900 1rem/1 Jost, system-ui, sans-serif !important;
+    cursor: pointer !important;
+  }
+}
+
+
+/* ============================================================
+   SECTION 6 — DISCOVER NAVIGATION FIX
+   The Discover tab in the bottom nav does nothing.
+   We wire it to navigate to shop.html + ensure active states work.
+   ============================================================ */
+@media (max-width: 767px) {
+
+  /* The Discover tab should link to the shop page */
+  .mobile-bottom-tab[data-tab="discover"],
+  .mobile-bottom-tab[href*="shop"],
+  a.mobile-bottom-tab[data-page="shop"],
+  .cc-app-bottom-nav .mobile-bottom-tab:nth-child(3) {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    /* Ensure it's visible and not obscured */
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 1 !important;
+  }
+
+  /* Active state properly highlights the tab */
+  .mobile-bottom-tab.is-active {
+    background: rgba(255, 240, 243, 0.92) !important;
+    color: #a85f72 !important;
+  }
+
+  .mobile-bottom-tab.is-active svg {
+    stroke: #a85f72 !important;
+  }
+
+  /* Ensure cart count badge shows on bag tab */
+  .mobile-bottom-tab .mobile-cart-count,
+  .mobile-bottom-tab .d7-cart-count {
+    position: absolute !important;
+    top: -3px !important;
+    right: 6px !important;
+    min-width: 16px !important;
+    height: 16px !important;
+    display: grid !important;
+    place-items: center !important;
+    border-radius: 999px !important;
+    background: #a85f72 !important;
+    color: #fff !important;
+    font: 800 0.56rem/1 Jost, system-ui, sans-serif !important;
+    font-style: normal !important;
+  }
+}
+
+
+/* ============================================================
+   SECTION 7 — ACCOUNT PAGE POLISH
+   Elevates visual quality without changing architecture.
+   ============================================================ */
+@media (max-width: 767px) {
+
+  /* Page background */
+  .cc-app-account-page,
+  body.page-account .cart-page {
+    background:
+      radial-gradient(circle at 16% 0%, rgba(247, 234, 216, 0.9), transparent 34%),
+      linear-gradient(180deg, #fffaf5, #fff3f4 52%, #fffaf7) !important;
+    padding: 18px 16px calc(110px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* Account hero card */
+  .cc-app-account-hero {
+    display: grid !important;
+    grid-template-columns: 72px minmax(0, 1fr) !important;
+    gap: 16px !important;
+    align-items: center !important;
+    margin: 16px 0 !important;
+    padding: 18px !important;
+    border: 1px solid rgba(185, 150, 99, 0.18) !important;
+    border-radius: 28px !important;
+    background: linear-gradient(135deg, #fff, #fff0f3) !important;
+    box-shadow: 0 18px 42px rgba(64, 39, 34, 0.12) !important;
+  }
+
+  .cc-app-account-avatar {
+    width: 72px !important;
+    height: 72px !important;
+    display: grid !important;
+    place-items: center !important;
+    border-radius: 22px !important;
+    background: linear-gradient(135deg, #211816, #a85f72) !important;
+    color: #fffaf5 !important;
+    font: 700 1.1rem/1 "Playfair Display", Georgia, serif !important;
+    box-shadow: 0 10px 24px rgba(168, 95, 114, 0.22) !important;
+  }
+
+  .cc-app-account-hero span {
+    color: #a85f72 !important;
+    font: 900 0.62rem/1 Jost, system-ui, sans-serif !important;
+    letter-spacing: 0.14em !important;
+    text-transform: uppercase !important;
+  }
+
+  .cc-app-account-hero h1 {
+    margin: 5px 0 6px !important;
+    font: 500 1.55rem/1 "Playfair Display", Georgia, serif !important;
+    color: #211816 !important;
+  }
+
+  .cc-app-account-hero p {
+    margin: 0 !important;
+    color: rgba(33, 24, 22, 0.62) !important;
+    font: 500 0.82rem/1.4 Jost, system-ui, sans-serif !important;
+  }
+
+  /* Profile card, nav, stat boxes */
+  .acc-profile-card,
+  .acc-nav,
+  .acc-card,
+  .stat-box,
+  .order-card,
+  .address-card {
+    border: 1px solid rgba(185, 150, 99, 0.16) !important;
+    border-radius: 22px !important;
+    background: rgba(255, 255, 255, 0.92) !important;
+    box-shadow: 0 8px 20px rgba(64, 39, 34, 0.07) !important;
+  }
+
+  /* Sidebar removed from sticky */
+  .acc-sidebar {
+    position: static !important;
+  }
+
+  /* Nav strip */
+  .acc-nav {
+    display: flex !important;
+    gap: 8px !important;
+    overflow-x: auto !important;
+    padding: 8px !important;
+    scrollbar-width: none !important;
+  }
+
+  .acc-nav::-webkit-scrollbar { display: none !important; }
+
+  .acc-nav-btn {
+    flex: 0 0 auto !important;
+    min-height: 40px !important;
+    border: 0 !important;
+    border-radius: 999px !important;
+    background: #fff0f3 !important;
+    color: #211816 !important;
+    white-space: nowrap !important;
+    font: 700 0.78rem/1 Jost, system-ui, sans-serif !important;
+    padding: 0 14px !important;
+    cursor: pointer !important;
+  }
+
+  .acc-nav-btn.active,
+  .acc-nav-btn:focus {
+    background: #211816 !important;
+    color: #fffaf5 !important;
+  }
+
+  /* Statistics grid */
+  .stat-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  .stat-box {
+    padding: 14px 10px !important;
+    text-align: center !important;
+    border-radius: 18px !important;
+  }
+
+  .stat-num {
+    font: 700 1.35rem/1 "Playfair Display", Georgia, serif !important;
+    color: #211816 !important;
+  }
+
+  .stat-label {
+    font: 600 0.66rem/1.2 Jost, system-ui, sans-serif !important;
+    color: rgba(33, 24, 22, 0.56) !important;
+    letter-spacing: 0.06em !important;
+    text-transform: uppercase !important;
+    margin-top: 5px !important;
+  }
+
+  /* Order cards */
+  .order-card {
+    overflow: hidden !important;
+    border-radius: 20px !important;
+  }
+
+  .order-head {
+    padding: 14px 16px !important;
+    background: rgba(255, 240, 243, 0.5) !important;
+  }
+
+  /* Profile form fields */
+  .acc-card input,
+  .acc-card textarea,
+  .acc-card select {
+    min-height: 48px !important;
+    border: 1px solid rgba(185, 150, 99, 0.18) !important;
+    border-radius: 16px !important;
+    background: #fff !important;
+    font: 500 0.9rem/1 Jost, system-ui, sans-serif !important;
+    padding: 0 14px !important;
+  }
+
+  /* Action buttons */
+  #toggleEditProfileBtn,
+  #saveProfileBtn,
+  #cancelEditProfileBtn {
+    min-height: 46px !important;
+    border-radius: 999px !important;
+    font: 700 0.78rem/1 Jost, system-ui, sans-serif !important;
+    letter-spacing: 0.06em !important;
+  }
+}
+
+
+/* ============================================================
+   SECTION 8 — CART FOOTER BAR FIX
+   The sticky checkout total bar is positioned incorrectly,
+   overlaps bottom nav, and has floating CTA issues.
+   ============================================================ */
+@media (max-width: 767px) {
+
+  /* The p5-sticky-checkout bar injected by cart.html JS */
+  .p5-sticky-checkout {
+    position: fixed !important;
+    left: 10px !important;
+    right: 10px !important;
+    /* Sits above the bottom nav (68px) + safe area + breathing room */
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
+    z-index: 150 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    padding: 12px 16px !important;
+    border: 1px solid rgba(185, 150, 99, 0.16) !important;
+    border-radius: 22px !important;
+    background: linear-gradient(135deg, rgba(255, 250, 245, 0.98), rgba(255, 241, 244, 0.96)) !important;
+    box-shadow: 0 -8px 28px rgba(33, 24, 22, 0.12), 0 8px 22px rgba(33, 24, 22, 0.08) !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+  }
+
+  .p5-sticky-total {
+    display: grid !important;
+    gap: 2px !important;
+  }
+
+  .p5-sticky-total-label {
+    color: rgba(33, 24, 22, 0.56) !important;
+    font: 700 0.66rem/1 Jost, system-ui, sans-serif !important;
+    letter-spacing: 0.12em !important;
+    text-transform: uppercase !important;
+  }
+
+  .p5-sticky-total-amount {
+    color: #211816 !important;
+    font: 700 1.18rem/1 "Playfair Display", Georgia, serif !important;
+  }
+
+  .p5-sticky-btn {
+    min-height: 46px !important;
+    padding: 0 20px !important;
+    border: 0 !important;
+    border-radius: 999px !important;
+    background: linear-gradient(135deg, #211816, #a85f72) !important;
+    color: #fffaf5 !important;
+    font: 700 0.76rem/1 Jost, system-ui, sans-serif !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+    cursor: pointer !important;
+    box-shadow: 0 8px 20px rgba(168, 95, 114, 0.24) !important;
+    white-space: nowrap !important;
+  }
+
+  /* Also fix the d11-sticky-cart-cta variant */
+  .d11-sticky-cart-cta {
+    position: fixed !important;
+    left: 10px !important;
+    right: 10px !important;
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
+    z-index: 150 !important;
+    min-height: 58px !important;
+    padding: 10px 16px !important;
+    border-radius: 22px !important;
+    border: 1px solid rgba(185, 150, 99, 0.16) !important;
+    background: rgba(255, 250, 245, 0.97) !important;
+    box-shadow: 0 -8px 28px rgba(33, 24, 22, 0.12) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+  }
+
+  .d11-sticky-cart-cta.d11-hidden {
+    display: none !important;
+  }
+
+  /* Cart page layout */
+  .cart-page {
+    padding: 18px 16px calc(160px + env(safe-area-inset-bottom, 0px)) !important;
+    background:
+      radial-gradient(circle at 16% 0%, rgba(247, 234, 216, 0.9), transparent 34%),
+      linear-gradient(180deg, #fffaf5, #fff3f4 52%, #fffaf7) !important;
+  }
+
+  .cart-layout {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  .cart-item,
+  .cart-summary,
+  .cart-empty {
+    border: 1px solid rgba(185, 150, 99, 0.16) !important;
+    border-radius: 22px !important;
+    background: rgba(255, 255, 255, 0.92) !important;
+    box-shadow: 0 8px 20px rgba(64, 39, 34, 0.07) !important;
+  }
+
+  .cart-summary {
+    position: static !important;
+  }
+
+  /* Checkout button */
+  .btn-checkout {
+    min-height: 50px !important;
+    border-radius: 999px !important;
+    border: 0 !important;
+    background: linear-gradient(135deg, #211816, #a85f72) !important;
+    color: #fffaf5 !important;
+    font: 700 0.78rem/1 Jost, system-ui, sans-serif !important;
+    letter-spacing: 0.1em !important;
+  }
+}
+
+
+/* ============================================================
+   SECTION 9 — BOTTOM NAVIGATION FINAL FIX
+   Correct positioning, no overlapping, proper safe-area.
+   ============================================================ */
+@media (max-width: 767px) {
+
+  .mobile-bottom-nav,
+  .cc-global-bottom-nav,
+  .cc-app-bottom-nav {
+    position: fixed !important;
+    left: 10px !important;
+    right: 10px !important;
+    bottom: calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+    z-index: 190 !important;
+    min-height: 62px !important;
+    max-height: 62px !important;
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    align-items: center !important;
+    gap: 0 !important;
+    padding: 0 6px !important;
+    border: 1px solid rgba(255, 255, 255, 0.72) !important;
+    border-radius: 22px !important;
+    background: rgba(255, 250, 245, 0.9) !important;
+    box-shadow:
+      0 8px 24px rgba(64, 39, 34, 0.12),
+      0 2px 8px rgba(64, 39, 34, 0.06),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+    backdrop-filter: blur(18px) saturate(1.2) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(1.2) !important;
+    /* GPU-composited so it never triggers reflow */
+    transform: translateZ(0) !important;
+    will-change: transform !important;
+  }
+
+  .mobile-bottom-tab {
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 2px !important;
+    height: 46px !important;
+    border: 0 !important;
+    border-radius: 16px !important;
+    background: transparent !important;
+    color: rgba(33, 24, 22, 0.46) !important;
+    font: 700 0.57rem/1 Jost, system-ui, sans-serif !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    transition:
+      transform 160ms cubic-bezier(0.16, 1, 0.3, 1),
+      background 160ms ease,
+      color 160ms ease !important;
+    padding: 0 !important;
+    position: relative !important;
+  }
+
+  .mobile-bottom-tab svg {
+    width: 18px !important;
+    height: 18px !important;
+    fill: none !important;
+    stroke: currentColor !important;
+    stroke-width: 1.7 !important;
+    stroke-linecap: round !important;
+    stroke-linejoin: round !important;
+  }
+
+  .mobile-bottom-tab span {
+    font-size: 0.57rem !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .mobile-bottom-tab.is-active {
+    background: rgba(255, 240, 243, 0.9) !important;
+    color: #a85f72 !important;
+  }
+
+  .mobile-bottom-tab:active {
+    transform: scale(0.9) translateY(-1px) !important;
+  }
+
+  /* Smaller screens */
+  @media (max-width: 390px) {
+    .mobile-bottom-nav,
+    .cc-global-bottom-nav,
+    .cc-app-bottom-nav {
+      left: 8px !important;
+      right: 8px !important;
+      min-height: 58px !important;
+      max-height: 58px !important;
+      border-radius: 20px !important;
+    }
+
+    .mobile-bottom-tab {
+      height: 42px !important;
+    }
+
+    .mobile-bottom-tab svg {
+      width: 17px !important;
+      height: 17px !important;
+    }
+
+    .mobile-bottom-tab span {
+      font-size: 0.54rem !important;
+    }
+  }
+}
+
+
+/* ============================================================
+   SECTION 10 — REMOVE BROKEN RUNTIME OVERLAY STATES
+   Ensures stale open/close states don't persist visually.
+   ============================================================ */
+@media (max-width: 767px) {
+
+  /* Any drawer/overlay with transforms must have hardware compositing
+     to avoid layout thrashing */
+  .cc-app-drawer,
+  .cc-app-cart-drawer,
+  .cc-app-search-overlay,
+  .lux-mobile-drawer,
+  .lux-search-overlay,
+  .cc-filter-sheet,
+  .cc-bottom-sheet,
+  .cc-newsletter-modal {
+    will-change: transform !important;
+    backface-visibility: hidden !important;
+    -webkit-backface-visibility: hidden !important;
+  }
+
+  /* Drawers: correct stacking */
+  .cc-app-drawer { z-index: 225 !important; }
+  .cc-app-search-overlay { z-index: 235 !important; }
+  .cc-app-cart-drawer { z-index: 210 !important; }
+  .cc-app-backdrop { z-index: 215 !important; }
+  .cc-app-cart-backdrop { z-index: 200 !important; }
+
+  /* Ensure backdrop state is always correct */
+  .cc-app-backdrop,
+  .cc-app-cart-backdrop {
+    position: fixed !important;
+    inset: 0 !important;
+    border: 0 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(33, 24, 22, 0.44) !important;
+    transition: opacity 260ms ease, visibility 0s !important;
+  }
+
+  .cc-app-backdrop:not(.is-open),
+  .cc-app-cart-backdrop:not(.is-open) {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+    transition: opacity 260ms ease, visibility 0s 260ms !important;
+  }
+
+  .cc-app-backdrop.is-open,
+  .cc-app-cart-backdrop.is-open {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    visibility: visible !important;
+    transition: opacity 260ms ease, visibility 0s 0s !important;
+  }
+
+  /* Filter/sort floating buttons: above bottom nav */
+  .cc-mobile-filter-trigger,
+  .cc-mobile-sort-trigger {
+    z-index: 115 !important;
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  .cc-mobile-sort-trigger {
+    bottom: calc(126px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* Filter sheet: above backdrop */
+  .cc-filter-sheet {
+    z-index: 200 !important;
+    max-height: 82vh !important;
+    overflow-y: auto !important;
+    border-radius: 28px 28px 0 0 !important;
+  }
+
+  .cc-filter-sheet-backdrop {
+    z-index: 155 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
+
+/* ============================================================
+   SECTION 11 — SAFE AREA + VIEWPORT HARDENING
+   Android Chrome, Samsung Internet, iPhone Safari compatibility.
+   ============================================================ */
+@media (max-width: 767px) {
+
+  /* Sticky elements with safe-area */
+  .navbar,
+  .cc-app-header,
+  .shop-header {
+    /* Leave room for iOS dynamic island / notch */
+    padding-top: env(safe-area-inset-top, 0px) !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Full-page overlays must account for safe areas */
+  .cc-app-search-overlay,
+  .lux-search-overlay {
+    padding-top: calc(16px + env(safe-area-inset-top, 0px)) !important;
+    padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* Drawers must account for safe areas */
+  .cc-app-drawer {
+    padding-top: calc(18px + env(safe-area-inset-top, 0px)) !important;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* Images and media: prevent overflow */
+  img, video, canvas, svg, iframe {
+    max-width: 100% !important;
+    height: auto;
+  }
+
+  /* Prevent iOS Safari from resizing text */
+  * {
+    -webkit-text-size-adjust: 100% !important;
+    text-size-adjust: 100% !important;
+  }
+
+  /* Use dvh for true dynamic viewport units, fall back to svh/lvh */
+  body {
+    min-height: 100dvh !important;
+  }
+
+  /* Toast notification: above bottom nav */
+  .cart-toast,
+  #cartToast {
+    left: 16px !important;
+    right: 16px !important;
+    bottom: calc(80px + env(safe-area-inset-bottom, 0px)) !important;
+    z-index: 185 !important;
+    width: auto !important;
+    border-radius: 999px !important;
+    background: rgba(33, 24, 22, 0.94) !important;
+    color: #fffaf5 !important;
+    text-align: center !important;
+    font: 600 0.82rem/1 Jost, system-ui, sans-serif !important;
+    padding: 13px 18px !important;
+    transform: translateY(14px) !important;
+    opacity: 0 !important;
+    transition: transform 220ms ease, opacity 220ms ease !important;
+    pointer-events: none !important;
+  }
+
+  .cart-toast.show,
+  #cartToast.show {
+    transform: translateY(0) !important;
+    opacity: 1 !important;
+  }
+
+  /* Reduce motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      scroll-behavior: auto !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+
+/* ============================================================
+   SECTION 12 — PDP (Product Detail Page) MOBILE FIXES
+   ============================================================ */
+@media (max-width: 767px) {
+
+  .product-page {
+    min-height: 100dvh !important;
+    padding: 0 0 calc(100px + env(safe-area-inset-bottom, 0px)) !important;
+    overflow: visible !important;
+  }
+
+  .product-img-frame {
+    width: 100% !important;
+    max-width: 100vw !important;
+    border-radius: 0 !important;
+    aspect-ratio: 4 / 5 !important;
+    max-height: min(70dvh, 560px) !important;
+    overflow: hidden !important;
+  }
+
+  .product-img-frame img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center top !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  /* Sticky buy bar: corrected position above bottom nav */
+  .pdp-sticky-buy,
+  .product-sticky-cta,
+  .pdp-sticky-bar {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 930 !important;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px)) !important;
+    border-top: 1px solid rgba(33, 24, 22, 0.08) !important;
+    background: rgba(255, 250, 246, 0.98) !important;
+    box-shadow: 0 -8px 22px rgba(64, 39, 34, 0.08) !important;
+    transform: translateY(110%) !important;
+    transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  .pdp-sticky-buy.is-visible,
+  .product-sticky-cta.is-visible,
+  .pdp-sticky-bar.is-visible {
+    transform: translateY(0) !important;
+  }
+}
+
+
+/* ============================================================
+   SHOP PAGE — SPECIFIC FIXES
+   ============================================================ */
+@media (max-width: 767px) {
+
+  /* Shop page: ensure correct scroll and header stacking */
+  .shop-header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 70 !important;
+  }
+
+  /* Shop grid */
+  .shop-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+    padding: 0 14px 14px !important;
+  }
+
+  /* Shop cards */
+  .shop-card {
+    border-radius: 18px !important;
+    overflow: hidden !important;
+    background: rgba(255, 255, 255, 0.94) !important;
+    box-shadow: 0 8px 18px rgba(64, 39, 34, 0.08) !important;
+  }
+
+  /* Filter/sort bottom sheets for shop.html */
+  .p3-sheet-backdrop {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 150 !important;
+    background: rgba(33, 24, 22, 0.36) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .p3-sort-sheet,
+  .p3-filter-sheet {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: calc(70px + env(safe-area-inset-bottom, 0px)) !important;
+    z-index: 200 !important;
+    max-height: 72vh !important;
+    overflow-y: auto !important;
+    border-radius: 24px 24px 0 0 !important;
+    background: #fffaf5 !important;
+    box-shadow: 0 -12px 28px rgba(33, 24, 22, 0.14) !important;
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+  }
+}

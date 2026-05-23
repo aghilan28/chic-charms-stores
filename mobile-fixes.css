@@ -1,0 +1,666 @@
+/* ═══════════════════════════════════════════════════════════════════
+   CHIC CHARMS — mobile-fixes.css
+   Fixes for 6 bugs. STRICTLY scoped to max-width: 767px.
+   Desktop (≥ 768px) is NEVER touched.
+   Add ONE line to the bottom of <head> on each affected page:
+     <link rel="stylesheet" href="mobile-fixes.css" media="(max-width: 767px)" />
+   ═══════════════════════════════════════════════════════════════════ */
+
+
+/* ══════════════════════════════════════════════════════
+   FIX 1 — HOME PAGE: Content was invisible
+   Root cause: .hero element and child sections had their
+   visibility/display broken by cascading mobile overrides.
+   Some CSS layers set opacity:0 on d6-reveal elements and
+   they never got the .visible class because IntersectionObserver
+   script ran BEFORE the elements were in the DOM (script in <head>).
+   We force them visible and ensure hero content shows.
+══════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* Force all d6-reveal elements visible immediately on mobile */
+  .d6-reveal,
+  .d6-reveal-left,
+  .d6-reveal-right,
+  .d6-reveal-scale {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  /* Ensure the hero section itself is visible and renders */
+  .hero {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  /* Ensure hero text block renders */
+  .hero-text,
+  .hero-inner,
+  .hero-inner.container {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  /* Ensure hero headline, sub, ctas, trust row are all visible */
+  .hero-eyebrow,
+  .hero-headline,
+  .hero-sub,
+  .hero-ctas,
+  .hero-trust-row {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .hero-ctas {
+    display: flex !important;
+  }
+
+  .hero-trust-row {
+    display: flex !important;
+  }
+
+  /* Ensure main content area below hero isn't hidden */
+  main,
+  .section,
+  #bestsellers,
+  .bestsellers,
+  .categories,
+  .categories.section {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  /* The marquee announcement bar that sits between navbar and hero */
+  .marquee-wrap {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════
+   FIX 2 — SHOP PAGE: Dead space at top
+   Root cause: .shop-header has `top: 32px` (hardcoded to
+   match the announcement bar height), but announcement bar
+   height can vary. The gap between them creates empty space.
+   Fix: make shop-header stick directly below announcement bar
+   with top:0 and let the announcement bar be non-sticky,
+   OR collapse the top value to match exactly.
+══════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* Announcement bar: keep sticky at very top */
+  .shop-announcement {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 80 !important;
+  }
+
+  /* Shop header: stick directly below announcement (no gap).
+     Announcement bar is ~32px tall (10px pad × 2 + text ~12px).
+     Use a CSS custom property so it's easy to adjust. */
+  .shop-header {
+    position: sticky !important;
+    top: 32px !important; /* exactly matches announcement bar height */
+    z-index: 70 !important;
+    /* Remove any margin/padding that creates gap */
+    margin-top: 0 !important;
+  }
+
+  /* Ensure the shop-shell (main content) starts right after the header
+     with no phantom space. The sticky elements take care of themselves. */
+  .shop-shell {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════
+   FIX 3 — SHOP PAGE: Scroll freeze
+   Root cause: The product card overlay buttons (.shop-card-heart,
+   .shop-card-quick, .shop-card-badge) and the card media anchor
+   use pointer-events that intercept touch scroll gestures.
+   The body has touch-action: pan-y which is correct, but the
+   overlay elements block momentum scrolling on iOS.
+   Fix: ensure overlay elements don't absorb scroll events and
+   the grid container explicitly allows touch scrolling.
+══════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* Allow scroll to pass through overlay badges/buttons when not tapping them */
+  .shop-card-badge,
+  .shop-card-heart,
+  .shop-card-quick {
+    touch-action: manipulation !important;
+  }
+
+  /* The grid and shell must allow vertical pan */
+  .shop-grid,
+  #shopGrid,
+  .shop-shell {
+    touch-action: pan-y !important;
+    -webkit-overflow-scrolling: touch !important;
+    overflow-anchor: none !important;
+  }
+
+  /* Remove any accidental overflow:hidden on the card that traps scroll */
+  .shop-card {
+    overflow: visible !important;
+    touch-action: pan-y !important;
+  }
+
+  /* The card media (image link) should not trap scroll */
+  .shop-card-media {
+    touch-action: pan-y !important;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════
+   FIX 4 — SHOP PAGE: Product card layout broken
+   Root cause: The shop-card uses a mixed layout with absolute
+   overlays (.shop-card-heart, .shop-card-quick, .shop-card-badge)
+   on top of a relative-positioned image, but the card body
+   (.shop-card-body) has no explicit sizing, causing buttons to
+   overflow or overlap. The "Add to Cart" button also inherits
+   wrong min-height from mobile-app.css global button rule.
+══════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* Lock the image to a consistent portrait ratio */
+  .shop-card-media {
+    display: block !important;
+    position: relative !important;
+    width: 100% !important;
+    aspect-ratio: 3 / 4 !important;
+    overflow: hidden !important;
+    border-radius: 16px 16px 0 0 !important;
+    background: #fdf0f3 !important;
+    flex-shrink: 0 !important;
+  }
+
+  .shop-card-media img {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center top !important;
+    display: block !important;
+  }
+
+  /* Badge — top left, inside image */
+  .shop-card-badge {
+    position: absolute !important;
+    top: 8px !important;
+    left: 8px !important;
+    font-size: 0.58rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.06em !important;
+    text-transform: uppercase !important;
+    padding: 3px 8px !important;
+    border-radius: 99px !important;
+    background: rgba(255, 250, 247, 0.92) !important;
+    color: #c0687e !important;
+    backdrop-filter: blur(4px) !important;
+    z-index: 3 !important;
+    line-height: 1.4 !important;
+  }
+
+  /* Wishlist heart — top right */
+  .shop-card-heart {
+    position: absolute !important;
+    top: 8px !important;
+    right: 8px !important;
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 50% !important;
+    background: rgba(255, 250, 247, 0.9) !important;
+    border: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 0.85rem !important;
+    cursor: pointer !important;
+    z-index: 3 !important;
+    min-height: 0 !important; /* override mobile-app.css 44px rule */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    transition: transform 0.18s !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  .shop-card-heart.is-active {
+    color: #c0687e !important;
+    background: rgba(255, 240, 245, 0.95) !important;
+  }
+
+  /* Quick add button — bottom of image */
+  .shop-card-quick {
+    position: absolute !important;
+    bottom: 8px !important;
+    right: 8px !important;
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 50% !important;
+    background: linear-gradient(135deg, #c0687e, #a8526a) !important;
+    color: #fff !important;
+    border: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    z-index: 3 !important;
+    min-height: 0 !important;
+    box-shadow: 0 3px 12px rgba(192, 104, 126, 0.4) !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  /* The overall card */
+  .shop-card {
+    background: #fff !important;
+    border-radius: 18px !important;
+    overflow: hidden !important;
+    box-shadow: 0 3px 16px rgba(78, 45, 38, 0.09) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    position: relative !important;
+  }
+
+  /* Card body (text + price + button) */
+  .shop-card-body {
+    padding: 10px 12px 12px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 3px !important;
+    flex: 1 !important;
+  }
+
+  .shop-card-body small {
+    font-size: 0.6rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+    color: #c0687e !important;
+    display: block !important;
+  }
+
+  .shop-card-body h2 {
+    font-family: "Jost", system-ui, sans-serif !important;
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+    color: #1c1510 !important;
+    margin: 0 !important;
+    line-height: 1.3 !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+
+  .shop-card-body h2 a {
+    text-decoration: none !important;
+    color: inherit !important;
+  }
+
+  /* Price row */
+  .shop-card-price {
+    font-family: "Playfair Display", Georgia, serif !important;
+    font-size: 0.92rem !important;
+    font-weight: 600 !important;
+    color: #e0487a !important;
+    display: flex !important;
+    align-items: baseline !important;
+    gap: 5px !important;
+    margin-top: 2px !important;
+  }
+
+  .shop-card-price span {
+    font-size: 0.72rem !important;
+    color: #a09088 !important;
+    text-decoration: line-through !important;
+    font-weight: 400 !important;
+    font-family: "Jost", system-ui, sans-serif !important;
+  }
+
+  /* Add to Cart button — override the global 44px min-height */
+  .shop-card-body button[data-add] {
+    display: block !important;
+    width: 100% !important;
+    padding: 9px 12px !important;
+    margin-top: 6px !important;
+    background: linear-gradient(135deg, #c0687e, #a8526a) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 999px !important;
+    font-family: "Jost", system-ui, sans-serif !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.07em !important;
+    text-transform: uppercase !important;
+    cursor: pointer !important;
+    min-height: 36px !important; /* override global 44px */
+    box-shadow: 0 3px 12px rgba(192, 104, 126, 0.28) !important;
+    transition: transform 0.18s, opacity 0.18s !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  .shop-card-body button[data-add]:active {
+    transform: scale(0.97) !important;
+  }
+
+  .shop-card-body button[data-add]:disabled {
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
+  }
+
+  /* The grid itself — 2 columns */
+  .shop-grid,
+  #shopGrid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px !important;
+    padding: 16px 12px !important;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════
+   FIX 5 — CART PAGE: Sticky total bar overlapping bottom nav
+   Root cause: .p5-sticky-checkout is injected by JS but has
+   no CSS in any loaded file. It defaults to display:block with
+   no positioning, so it sits in the normal flow. The JS adds
+   it via document.body.appendChild so it lands at the very end.
+   Fix: give it proper fixed positioning ABOVE the bottom nav.
+   The bottom nav is 64px tall. We position the bar just above it.
+══════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  .p5-sticky-checkout {
+    position: fixed !important;
+    /* Sit above the bottom nav (64px) + safe area */
+    bottom: calc(64px + env(safe-area-inset-bottom, 0px)) !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 190 !important; /* below bottom nav (210) but above content */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 10px 16px 10px 20px !important;
+    background: rgba(255, 250, 247, 0.98) !important;
+    backdrop-filter: saturate(180%) blur(12px) !important;
+    -webkit-backdrop-filter: saturate(180%) blur(12px) !important;
+    border-top: 1px solid rgba(192, 104, 126, 0.18) !important;
+    box-shadow: 0 -4px 20px rgba(78, 45, 38, 0.12) !important;
+    gap: 12px !important;
+  }
+
+  /* When cart is empty, JS hides it — but just in case */
+  .p5-sticky-checkout[style*="display: none"] {
+    display: none !important;
+  }
+
+  /* Total label + amount */
+  .p5-sticky-total {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1px !important;
+  }
+
+  .p5-sticky-total-label {
+    font-size: 0.62rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+    color: #a09088 !important;
+    font-family: "Jost", system-ui, sans-serif !important;
+  }
+
+  .p5-sticky-total-amount {
+    font-family: "Playfair Display", Georgia, serif !important;
+    font-size: 1.2rem !important;
+    font-weight: 600 !important;
+    color: #c0687e !important;
+    line-height: 1.1 !important;
+  }
+
+  /* Checkout button */
+  .p5-sticky-btn {
+    flex-shrink: 0 !important;
+    padding: 12px 22px !important;
+    background: linear-gradient(135deg, #c0687e, #a8526a) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 999px !important;
+    font-family: "Jost", system-ui, sans-serif !important;
+    font-size: 0.82rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.04em !important;
+    cursor: pointer !important;
+    min-height: 44px !important;
+    box-shadow: 0 4px 18px rgba(192, 104, 126, 0.38) !important;
+    transition: transform 0.18s, box-shadow 0.18s !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+    white-space: nowrap !important;
+  }
+
+  .p5-sticky-btn:active {
+    transform: scale(0.96) !important;
+    box-shadow: 0 2px 10px rgba(192, 104, 126, 0.25) !important;
+  }
+
+  /* Add extra padding-bottom to cart page content so it clears both bars */
+  .cart-page {
+    padding-bottom: calc(64px + 66px + env(safe-area-inset-bottom, 0px) + 16px) !important;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════
+   FIX 6 — ACCOUNT PAGE: Mobile redesign
+   Root cause: The desktop 2-column sidebar+main layout
+   doesn't collapse properly on mobile. The sidebar occupies
+   full width and makes the page feel clunky.
+   Fix: Single-column layout, compact profile header,
+   horizontal scrolling nav tabs instead of sidebar.
+══════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* Page base */
+  .acc-page {
+    padding: calc(58px + 16px) 0 calc(64px + env(safe-area-inset-bottom, 0px) + 16px) !important;
+    background: #fdf0f3 !important;
+    min-height: 100dvh !important;
+  }
+
+  /* Collapse 2-col grid to single column */
+  .acc-container {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+
+  /* ── Profile header: compact banner at top ── */
+  .acc-sidebar {
+    position: static !important;
+    top: auto !important;
+    animation: none !important;
+  }
+
+  .acc-profile-card {
+    border-radius: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-top: none !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid rgba(192, 104, 126, 0.14) !important;
+    padding: 20px 20px 16px !important;
+    background: #fff !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 14px !important;
+    text-align: left !important;
+    margin-bottom: 0 !important;
+  }
+
+  .acc-avatar {
+    width: 52px !important;
+    height: 52px !important;
+    font-size: 1.3rem !important;
+    margin: 0 !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Text beside avatar */
+  .acc-profile-card > :not(.acc-avatar) {
+    flex: 1 !important;
+    min-width: 0 !important;
+  }
+
+  .acc-displayname {
+    font-size: 0.95rem !important;
+    margin-bottom: 2px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .acc-email-small {
+    font-size: 0.7rem !important;
+  }
+
+  .acc-since {
+    font-size: 0.64rem !important;
+    margin-top: 4px !important;
+    padding-top: 4px !important;
+    border-top: none !important;
+  }
+
+  /* ── Nav: horizontal scrolling tabs instead of sidebar ── */
+  .acc-nav {
+    border-radius: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-top: none !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid rgba(192, 104, 126, 0.14) !important;
+    background: #fff !important;
+    display: flex !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding: 0 8px !important;
+    gap: 0 !important;
+  }
+
+  .acc-nav::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .acc-nav-btn {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    padding: 13px 16px !important;
+    border-bottom: 2.5px solid transparent !important;
+    border-right: none !important;
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    white-space: nowrap !important;
+    color: #a09088 !important;
+    min-height: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    gap: 6px !important;
+    transition: color 0.2s, border-color 0.2s !important;
+  }
+
+  .acc-nav-btn:last-child {
+    border-bottom: 2.5px solid transparent !important;
+  }
+
+  .acc-nav-btn.active {
+    background: transparent !important;
+    color: #c0687e !important;
+    border-bottom-color: #c0687e !important;
+    font-weight: 700 !important;
+  }
+
+  .acc-nav-btn.logout-btn {
+    color: #c62828 !important;
+    margin-left: auto !important;
+  }
+
+  /* Hide emoji icons in the tab to save space */
+  .acc-nav-btn .acc-nav-icon {
+    display: none !important;
+  }
+
+  /* ── Main panel area ── */
+  .acc-main {
+    padding: 20px 16px !important;
+    min-height: auto !important;
+    animation: none !important;
+  }
+
+  .panel-title {
+    font-size: 1.5rem !important;
+  }
+
+  /* Security panel — the "Send Password Reset" card */
+  .acc-panel .acc-section {
+    background: #fff !important;
+    border-radius: 14px !important;
+    padding: 18px !important;
+    box-shadow: 0 2px 14px rgba(78, 45, 38, 0.08) !important;
+    border: 1px solid rgba(192, 104, 126, 0.12) !important;
+    margin-bottom: 14px !important;
+  }
+
+  /* Make the password reset button full width on mobile */
+  .btn-ghost,
+  .btn-send-reset,
+  button[onclick*="sendPasswordReset"],
+  button[onclick*="password"] {
+    width: 100% !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+
+  /* Orders empty state */
+  .acc-orders-empty {
+    text-align: center !important;
+    padding: 40px 20px !important;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════
+   BONUS FIX — Discover tab: wire it to shop page
+   The Discover tab links to index.html#bestsellers which
+   is correct behaviour. But we also ensure it looks active
+   when on the shop page (since that's where discovery happens).
+   No JS needed — just visual correctness.
+══════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+  /* Ensure the bottom nav's Discover tab has a clear hit target */
+  .ma-nav-tab[href="index.html#bestsellers"],
+  .mobile-bottom-tab[href="index.html#bestsellers"] {
+    -webkit-tap-highlight-color: transparent !important;
+    touch-action: manipulation !important;
+  }
+}
