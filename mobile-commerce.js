@@ -60,7 +60,9 @@
     if (!active) {
       document.body.classList.remove("lux-drawer-open", "lux-search-open", "cc-modal-open", "d7-menu-open");
       document.body.style.overflow = "";
+      document.body.style.overflowY = "auto";
       document.body.style.touchAction = "";
+      document.documentElement.style.overflowY = "visible";
     }
   }
 
@@ -166,6 +168,7 @@
       sheet.classList.remove("is-open");
       backdrop.classList.remove("is-open");
       document.body.classList.remove("cc-modal-open");
+      cleanupOverlayState();
     }
     function applySheet() {
       if (categoryFilter && sheetCategory) {

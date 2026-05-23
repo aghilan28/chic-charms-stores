@@ -795,6 +795,18 @@ button:active:not(:disabled) {
   transition: var(--transition);
 }
 
+.mobile-commerce-menu,
+.mobile-commerce-actions,
+.mobile-commerce-search,
+.mobile-category-strip,
+.mobile-promo-slider,
+.mobile-bottom-nav,
+.ma-bottom-nav,
+.ma-drawer-backdrop,
+.ma-header-cart {
+  display: none;
+}
+
 /* ============================================================
    HERO - LUXURY CINEMATIC
    ============================================================ */

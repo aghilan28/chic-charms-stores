@@ -1364,12 +1364,33 @@
   }
 
   /* ── Desktop hero / marquee: confirmed hidden on mobile ── */
-  .hero,
+  .hero {
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
   .marquee-wrap,
   .d6-brand-story,
   .d6-marquee,
   .d6-campaign {
-    display: none !important;
+    display: block !important;
+  }
+
+  .hero-inner {
+    display: flex !important;
+  }
+
+  .hero-text,
+  .hero-visual,
+  .hero-eyebrow,
+  .hero-headline,
+  .hero-sub,
+  .hero-ctas,
+  .hero-trust-row,
+  .hero-img-wrap {
+    opacity: 1 !important;
+    visibility: visible !important;
   }
 
   /* ── Product page: legacy zoom / float buttons cleanup ── */

@@ -1172,3 +1172,126 @@
     font-size: 1.3rem !important;
   }
 }
+
+@media (max-width: 767px) {
+  html {
+    height: auto !important;
+    min-height: 100% !important;
+    overflow-x: hidden !important;
+    overflow-y: visible !important;
+  }
+
+  body {
+    height: auto !important;
+    min-height: 100dvh !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    overscroll-behavior-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-y !important;
+  }
+
+  body.cc-modal-open,
+  body.lux-drawer-open,
+  body.lux-search-open,
+  body.ma-menu-open,
+  body.p3-sheet-open {
+    touch-action: pan-y !important;
+  }
+
+  .cart-page,
+  .acc-page {
+    padding-bottom: calc(140px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  .cart-header {
+    margin: 16px 0 18px !important;
+  }
+
+  .cart-layout,
+  .acc-container {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  .cart-item,
+  .cart-summary,
+  .cart-empty,
+  .acc-profile-card,
+  .acc-nav,
+  .acc-card,
+  .stat-box {
+    border-radius: 20px !important;
+  }
+
+  .cart-summary {
+    position: static !important;
+  }
+
+  .p5-sticky-checkout {
+    left: 10px !important;
+    right: 10px !important;
+    bottom: calc(72px + env(safe-area-inset-bottom, 0px)) !important;
+    z-index: 170 !important;
+    min-height: 58px !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    align-items: center !important;
+    gap: 10px !important;
+    margin: 0 !important;
+    padding: 9px 10px 9px 14px !important;
+    border-radius: 22px !important;
+  }
+
+  .p5-sticky-total {
+    min-width: 0 !important;
+  }
+
+  .p5-sticky-btn {
+    min-height: 42px !important;
+    padding: 0 16px !important;
+    white-space: nowrap !important;
+  }
+
+  .acc-page {
+    padding-top: 72px !important;
+  }
+
+  .cc-app-account-hero {
+    grid-template-columns: 64px minmax(0, 1fr) !important;
+    margin: 0 0 14px !important;
+    padding: 16px !important;
+    border-radius: 20px !important;
+  }
+
+  .cc-app-account-avatar,
+  .acc-avatar {
+    width: 64px !important;
+    height: 64px !important;
+    border-radius: 20px !important;
+  }
+
+  .acc-profile-card {
+    padding: 18px 14px !important;
+  }
+
+  .acc-nav {
+    gap: 8px !important;
+    padding: 8px !important;
+  }
+
+  .acc-card {
+    padding: 16px !important;
+  }
+
+  .info-row {
+    gap: 12px !important;
+    align-items: flex-start !important;
+  }
+
+  .info-val {
+    min-width: 0 !important;
+    overflow-wrap: anywhere !important;
+  }
+}

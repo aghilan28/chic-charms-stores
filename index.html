@@ -21,15 +21,13 @@
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="d3-luxury.css" />
     <link rel="stylesheet" href="d6-brand-story.css" />
-        <link rel="stylesheet" href="d7-luxury-motion.css" />
-            <link rel="stylesheet" href="admin-nav.css" />
+    <link rel="stylesheet" href="d5-mobile-luxury.css" />
+    <link rel="stylesheet" href="d7-luxury-motion.css" />
+    <link rel="stylesheet" href="d8-mobile-typography-image.css" />
+    <link rel="stylesheet" href="d9-luxury-mobile-pdp.css" />
+    <link rel="stylesheet" href="admin-nav.css" />
     <link rel="stylesheet" href="d9-editorial-refinement.css" />
     <link rel="stylesheet" href="d10-restore.css" />
-    <!-- ░░ MOBILE AUTHORITY — Phase 1 ░░ -->
-    <link rel="stylesheet" href="mobile.css" />
-    <link rel="stylesheet" href="phase6-polish.css" media="(max-width: 767px)" />
-    <!-- ░░ MOBILE HOMEPAGE EXPERIENCE — Phase 2 ░░ -->
-    <link rel="stylesheet" href="mobile-phase2.css" />
     <script>
       (function () {
         if (window.__chicLocalImageFallbackReady) return;
@@ -163,33 +161,6 @@
         color: var(--rose-dark);
         transition: color 0.2s ease;
       }
-      /* ── Mobile: force hero and sections visible ── */
-      @media (max-width: 767px) {
-        .hero,
-        .hero-text,
-        .hero-inner,
-        .hero-eyebrow,
-        .hero-headline,
-        .hero-sub,
-        .hero-ctas,
-        .hero-trust-row,
-        .section,
-        #bestsellers,
-        .bestsellers,
-        .marquee-wrap {
-          opacity: 1 !important;
-          visibility: visible !important;
-          display: block !important;
-        }
-        .hero-ctas,
-        .hero-trust-row,
-        .hero-eyebrow {
-          display: flex !important;
-        }
-        .hero-inner {
-          display: block !important;
-        }
-      }
       /* ══════════════════════════════════════════════════
          LUX PRODUCT CARD — Image Containment Override
          Locks every card image to a 4:5 portrait frame,
@@ -222,45 +193,1374 @@
         transform: scale(1.05);
       }
     </style>
+    <!-- ░░ SEARCH · FILTER · SORT STYLES ░░ -->
+    <style>
+      /* Controls bar */
+      .shop-controls {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+
+      /* Search */
+      .shop-search-wrap {
+        position: relative;
+        flex: 1 1 240px;
+        min-width: 0;
+      }
+      .shop-search-icon {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 0.9rem;
+        pointer-events: none;
+      }
+      .shop-search {
+        width: 100%;
+        padding: 11px 38px 11px 40px;
+        border: 1.5px solid var(--border, #ece8e3);
+        border-radius: 999px;
+        font-family: var(--font-body, "DM Sans", sans-serif);
+        font-size: 0.9rem;
+        color: var(--text, #2d2d2d);
+        background: var(--white, #fff);
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      .shop-search:focus {
+        border-color: var(--rose, #f4a7b9);
+        box-shadow: 0 0 0 3px rgba(244, 167, 185, 0.18);
+      }
+      .shop-search::placeholder {
+        color: #bbb;
+      }
+
+      .shop-search-clear {
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 0.75rem;
+        color: var(--muted, #888);
+        line-height: 1;
+        padding: 2px;
+        transition: color 0.15s;
+      }
+      .shop-search-clear:hover {
+        color: var(--rose-dark, #e8809a);
+      }
+
+      /* Selects */
+      .shop-selects {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .shop-select {
+        padding: 11px 36px 11px 16px;
+        border: 1.5px solid var(--border, #ece8e3);
+        border-radius: 999px;
+        font-family: var(--font-body, "DM Sans", sans-serif);
+        font-size: 0.85rem;
+        color: var(--text, #2d2d2d);
+        background: var(--white, #fff);
+        cursor: pointer;
+        outline: none;
+        appearance: none;
+        -webkit-appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 14px center;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      .shop-select:focus {
+        border-color: var(--rose, #f4a7b9);
+        box-shadow: 0 0 0 3px rgba(244, 167, 185, 0.18);
+      }
+      .shop-select.active {
+        border-color: var(--rose-dark, #e8809a);
+        color: var(--rose-dark, #e8809a);
+        background-color: var(--blush, #fef0f4);
+      }
+
+      /* Result count */
+      .result-count {
+        font-size: 0.78rem;
+        color: var(--muted, #888);
+        margin-bottom: 20px;
+        margin-top: -4px;
+        padding-left: 4px;
+      }
+      .result-count strong {
+        color: var(--rose-dark, #e8809a);
+      }
+
+      /* Empty filtered state */
+      .no-results {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 60px 24px;
+        color: var(--muted, #888);
+      }
+      .no-results p {
+        font-size: 1rem;
+        margin-top: 8px;
+      }
+      .no-results button {
+        margin-top: 16px;
+        background: var(--rose, #f4a7b9);
+        color: #fff;
+        border: none;
+        border-radius: 999px;
+        padding: 10px 24px;
+        font-family: var(--font-body, "DM Sans", sans-serif);
+        font-size: 0.88rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .no-results button:hover {
+        background: var(--rose-dark, #e8809a);
+      }
+
+      /* Mobile */
+      @media (max-width: 560px) {
+        .shop-search-wrap {
+          flex: 1 1 100%;
+        }
+        .shop-selects {
+          width: 100%;
+        }
+        .shop-select {
+          flex: 1;
+        }
+      }
+
+      /* ── Global navbar search ── */
+      .nav-search {
+        position: relative;
+        flex: 0 1 200px;
+        max-width: 200px;
+        min-width: 0;
+      }
+      .nav-search-wrap {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+      .nav-search-icon {
+        position: absolute;
+        left: 13px;
+        color: var(--muted, #888);
+        display: flex;
+        align-items: center;
+        pointer-events: none;
+        z-index: 1;
+      }
+      .nav-search-input {
+        width: 100%;
+        padding: 9px 36px 9px 36px;
+        border: 1.5px solid var(--border, #ece8e3);
+        border-radius: 999px;
+        font-family: var(--font-body, "DM Sans", sans-serif);
+        font-size: 0.85rem;
+        color: var(--text, #2d2d2d);
+        background: var(--cream, #fdf8f5);
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s,
+          background 0.2s;
+      }
+      .nav-search-input:focus {
+        border-color: var(--rose, #f4a7b9);
+        box-shadow: 0 0 0 3px rgba(244, 167, 185, 0.18);
+        background: var(--white, #fff);
+      }
+      .nav-search-input::placeholder {
+        color: #bbb;
+      }
+      .nav-search-clear {
+        position: absolute;
+        right: 12px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--muted, #888);
+        display: flex;
+        align-items: center;
+        padding: 3px;
+        border-radius: 50%;
+        transition:
+          color 0.15s,
+          background 0.15s;
+      }
+      .nav-search-clear:hover {
+        color: var(--rose-dark, #e8809a);
+        background: var(--blush, #fef0f4);
+      }
+
+      /* Dropdown */
+      .nav-search-dropdown {
+        display: none;
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 0;
+        right: 0;
+        background: var(--white, #fff);
+        border: 1px solid var(--border, #ece8e3);
+        border-radius: 14px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+        max-height: 360px;
+        overflow-y: auto;
+        z-index: 999;
+        animation: dropIn 0.18s ease both;
+        scrollbar-width: thin;
+        scrollbar-color: var(--rose, #f4a7b9) transparent;
+      }
+      .nav-search-dropdown.open {
+        display: block;
+      }
+      @keyframes dropIn {
+        from {
+          opacity: 0;
+          transform: translateY(-6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Result item */
+      .search-result-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 14px;
+        cursor: pointer;
+        border-bottom: 1px solid var(--border, #ece8e3);
+        transition: background 0.15s;
+        text-decoration: none;
+        color: inherit;
+      }
+      .search-result-item:last-child {
+        border-bottom: none;
+      }
+      .search-result-item:hover,
+      .search-result-item:focus {
+        background: var(--blush, #fef0f4);
+        outline: none;
+      }
+      .search-result-item:first-child {
+        border-radius: 14px 14px 0 0;
+      }
+      .search-result-item:last-child {
+        border-radius: 0 0 14px 14px;
+      }
+      .search-result-item:only-child {
+        border-radius: 14px;
+      }
+
+      .search-result-img {
+        width: 44px;
+        height: 44px;
+        border-radius: 8px;
+        object-fit: cover;
+        flex-shrink: 0;
+        background: var(--cream, #fdf8f5);
+        border: 1px solid var(--border, #ece8e3);
+      }
+      .search-result-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .search-result-name {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text, #2d2d2d);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .search-result-name mark {
+        background: transparent;
+        color: var(--rose-dark, #e8809a);
+        font-weight: 700;
+      }
+      .search-result-price {
+        font-size: 0.78rem;
+        color: var(--rose-dark, #e8809a);
+        font-weight: 600;
+        margin-top: 2px;
+        font-family: var(--font-head, serif);
+      }
+      .search-no-results {
+        padding: 24px 16px;
+        text-align: center;
+        color: var(--muted, #888);
+        font-size: 0.85rem;
+      }
+      .search-no-results span {
+        font-size: 1.4rem;
+        display: block;
+        margin-bottom: 6px;
+      }
+
+      @media (max-width: 768px) {
+        .nav-search {
+          display: none;
+        }
+      }
+    </style>
+    <!-- ░░ ABOUT / BRAND-STORY VISIBILITY CONTROL ░░
+         Hidden from normal homepage scroll flow.
+         Revealed only when user clicks ABOUT in nav.
+    ══════════════════════════════════════════════════ -->
+    <style>
+      .d6-brand-story,
+      .d6-marquee {
+        display: none;
+      }
+      .d6-brand-story.about-revealed,
+      .d6-marquee.about-revealed {
+        display: block;
+      }
+    </style>
+    <link rel="stylesheet" href="mobile-app.css" />
+</head>
+  <body>
+    <!-- ░░ ADMIN RETURN BANNER — only visible when admin is logged in ░░ -->
+    <div id="adminReturnBanner" class="admin-return-banner" aria-hidden="true">
+      <span class="admin-return-copy">
+        You are browsing as <strong id="adminReturnEmail"></strong>
+      </span>
+      <a href="admin.html">Back to Admin Dashboard</a>
+    </div>
+
+    <!-- ░░ NAVBAR ░░ -->
+    <header class="navbar" id="navbar">
+      <div class="nav-inner container">
+        <button
+          type="button"
+          class="mobile-commerce-menu"
+          id="mobileCommerceMenu"
+          aria-expanded="false"
+          aria-label="Open menu"
+        >
+          <span></span><span></span>
+        </button>
+        <a href="index.html" class="logo" aria-label="Chic Charms home">
+          Chic<span>Charms</span>
+        </a>
+        <div class="mobile-commerce-actions" aria-label="Mobile shopping actions">
+          <a href="#bestsellers" class="mobile-commerce-icon" aria-label="Wishlist">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20.8 4.6c-1.8-1.7-4.6-1.6-6.3.2L12 7.3 9.5 4.8C7.8 3 5 2.9 3.2 4.6 1.3 6.4 1.3 9.4 3.1 11.2L12 20l8.9-8.8c1.8-1.8 1.8-4.8-.1-6.6Z" />
+            </svg>
+          </a>
+          <a href="cart.html" class="mobile-commerce-icon mobile-commerce-cart" aria-label="Cart">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4H6Z" />
+              <path d="M3 6h18M16 10a4 4 0 0 1-8 0" />
+            </svg>
+            <span class="mobile-cart-count" aria-hidden="true"></span>
+          </a>
+        </div>
+        <nav class="nav-links" id="navLinks" aria-label="Main navigation">
+          <a href="#categories">Shop</a>
+          <a href="#bestsellers">Best Sellers</a>
+          <a href="#why-us" id="navAboutLink">About</a>
+          <a href="#testimonials">Reviews</a>
+          <a href="cart.html">Cart 🛍️</a>
+        </nav>
+        <div class="nav-actions" id="navActions">
+          <!-- Auth state injected by auth-nav.js -->
+        </div>
+
+        <div class="mobile-commerce-search" role="search">
+          <label class="mobile-search-shell" for="mobileCommerceSearch">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" />
+              <path d="m20 20-3.8-3.8" />
+            </svg>
+            <input
+              type="search"
+              id="mobileCommerceSearch"
+              placeholder="Search earrings, pearls, rings..."
+              autocomplete="off"
+              aria-label="Search earrings, pearls, rings"
+            />
+          </label>
+        </div>
+
+        <div class="mobile-category-strip" aria-label="Shop quick categories">
+          <a href="#bestsellers" class="mobile-category-pill" data-mobile-category="all">
+            <span class="mobile-category-img"><img src="images/editorial-everyday-hoops.png" alt="" loading="lazy" /></span>
+            <span>All</span>
+          </a>
+          <a href="#bestsellers" class="mobile-category-pill" data-mobile-category="everyday-elegance">
+            <span class="mobile-category-img"><img src="images/style-everyday-elegance.png" alt="" loading="lazy" /></span>
+            <span>Earrings</span>
+          </a>
+          <a href="#bestsellers" class="mobile-category-pill" data-mobile-category="everyday-elegance">
+            <span class="mobile-category-img"><img src="images/editorial-minimal-soul-closeup.png" alt="" loading="lazy" /></span>
+            <span>Minimal</span>
+          </a>
+          <a href="#bestsellers" class="mobile-category-pill" data-mobile-category="modern-romance">
+            <span class="mobile-category-img"><img src="images/story-soft-pearl-drop.png" alt="" loading="lazy" /></span>
+            <span>Pearl</span>
+          </a>
+          <a href="#bestsellers" class="mobile-category-pill" data-mobile-category="modern-romance">
+            <span class="mobile-category-img"><img src="images/editorial-korean-morning-coffee.png" alt="" loading="lazy" /></span>
+            <span>Korean</span>
+          </a>
+          <a href="#bestsellers" class="mobile-category-pill" data-mobile-category="heritage-muse">
+            <span class="mobile-category-img"><img src="images/style-heritage-muse.png" alt="" loading="lazy" /></span>
+            <span>Bridal</span>
+          </a>
+          <a href="#bestsellers" class="mobile-category-pill" data-mobile-category="everyday-elegance">
+            <span class="mobile-category-img"><img src="images/editorial-light-meets-gold.png" alt="" loading="lazy" /></span>
+            <span>Gold</span>
+          </a>
+          <a href="#bestsellers" class="mobile-category-pill" data-mobile-category="after-dark">
+            <span class="mobile-category-img"><img src="images/style-after-dark.png" alt="" loading="lazy" /></span>
+            <span>Party</span>
+          </a>
+          <a href="#bestsellers" class="mobile-category-pill" data-mobile-category="all">
+            <span class="mobile-category-img mobile-category-price">₹299</span>
+            <span>Under ₹299</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="mobile-promo-slider" aria-label="Featured mobile offers">
+        <div class="mobile-promo-track" id="mobilePromoTrack">
+          <a href="#bestsellers" class="mobile-promo-card mobile-promo-card--new">
+            <img src="images/editorial-light-meets-gold.png" alt="Gold jewelry new arrivals" loading="eager" />
+            <span>New Arrivals</span>
+            <strong>Fresh drops under ₹299</strong>
+          </a>
+          <a href="#bestsellers" class="mobile-promo-card mobile-promo-card--deal">
+            <img src="images/editorial-everyday-hoops.png" alt="Everyday earrings under 299" loading="lazy" />
+            <span>Under ₹299</span>
+            <strong>Everyday shine, easy prices</strong>
+          </a>
+          <a href="#bestsellers" class="mobile-promo-card mobile-promo-card--bridal">
+            <img src="images/style-heritage-muse.png" alt="Bridal jewelry edit" loading="lazy" />
+            <span>Bridal Edit</span>
+            <strong>Soft statement pieces</strong>
+          </a>
+          <a href="#bestsellers" class="mobile-promo-card mobile-promo-card--minimal">
+            <img src="images/editorial-minimal-soul-closeup.png" alt="Minimal jewelry collection" loading="lazy" />
+            <span>Minimal Collection</span>
+            <strong>Quiet luxury for daily wear</strong>
+          </a>
+        </div>
+      </section>
+      <!-- ░░ HERO — LUXURY CINEMATIC ░░ -->
+      <section class="hero" aria-label="Hero banner">
+        <div class="hero-bg-layer" aria-hidden="true"></div>
+        <div class="hero-inner container">
+          <div class="hero-text lux-reveal">
+            <p class="hero-eyebrow">
+              <span class="eyebrow-line"></span>New Collection
+            </p>
+            <h1 class="hero-headline">
+              Adorned<br />in
+              <em
+                ><span class="q-cap">Q</span
+                ><span class="q-rest">uiet</span></em
+              ><br />Luxury
+            </h1>
+            <p class="hero-sub">
+              Curated earrings for the woman who chooses beauty with intention.
+              Every piece under ₹299.
+            </p>
+            <div class="hero-ctas">
+              <a href="#bestsellers" class="btn btn-primary"
+                >Discover the Edit</a
+              >
+              <a href="#categories" class="btn btn-ghost"
+                >Explore Collections</a
+              >
+            </div>
+            <div class="hero-trust-row">
+              <span class="hero-trust-item"
+                ><span class="trust-dot"></span>COD Available</span
+              >
+              <span class="hero-trust-sep">·</span>
+              <span class="hero-trust-item"
+                ><span class="trust-dot"></span>Free Ship ₹399+</span
+              >
+              <span class="hero-trust-sep">·</span>
+              <span class="hero-trust-item"
+                ><span class="trust-dot"></span>Skin-Friendly</span
+              >
+            </div>
+          </div>
+          <div class="hero-visual lux-reveal-delay" aria-hidden="true">
+            <div class="hero-img-wrap">
+              <div class="hero-img-frame"></div>
+              <img
+                src="images/hero-quiet-luxury-main.jpg"
+                alt="A woman wearing elegant gold earrings, warm editorial portrait"
+                class="hero-img"
+                width="560"
+                height="680"
+                loading="eager"
+              />
+              <div class="hero-float-card">
+                <p class="float-card-label">Always Under</p>
+                <p class="float-card-price">₹299</p>
+              </div>
+              <div class="hero-float-tag">✦ New This Week</div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-scroll-hint" aria-hidden="true">
+          <span class="scroll-line"></span>
+          <span class="scroll-text">Scroll</span>
+        </div>
+      </section>
+
+      <!-- ░░ MARQUEE STRIP ░░ -->
+      <div class="marquee-wrap" aria-hidden="true">
+        <div class="marquee-track">
+          <span>Free Shipping on ₹399+</span>
+          <span class="marquee-diamond">◆</span>
+          <span>Skin-Friendly Materials</span>
+          <span class="marquee-diamond">◆</span>
+          <span>New Drops Every Friday</span>
+          <span class="marquee-diamond">◆</span>
+          <span>COD Available</span>
+          <span class="marquee-diamond">◆</span>
+          <span>All Pieces Under ₹299</span>
+          <span class="marquee-diamond">◆</span>
+          <span>7-Day Returns</span>
+          <span class="marquee-diamond">◆</span>
+          <span>Free Shipping on ₹399+</span>
+          <span class="marquee-diamond">◆</span>
+          <span>Skin-Friendly Materials</span>
+          <span class="marquee-diamond">◆</span>
+          <span>New Drops Every Friday</span>
+          <span class="marquee-diamond">◆</span>
+          <span>COD Available</span>
+          <span class="marquee-diamond">◆</span>
+          <span>All Pieces Under ₹299</span>
+          <span class="marquee-diamond">◆</span>
+          <span>7-Day Returns</span>
+          <span class="marquee-diamond">◆</span>
+        </div>
+      </div>
+
+      <!-- ░░ D6 BRAND STORY — Cinematic Editorial ░░ -->
+      <section
+        class="d6-brand-story"
+        id="why-us"
+        aria-labelledby="story-heading"
+      >
+        <div class="d6-brand-story-inner">
+          <!-- Left: Narrative -->
+          <div class="d6-story-text d6-reveal d6-reveal-left">
+            <div class="d6-story-eyebrow">
+              <span class="d6-story-eyebrow-line"></span>
+              The Chic Charms Story
+            </div>
+            <h2 class="d6-story-headline" id="story-heading">
+              Born from the belief<br />that elegance<br /><em
+                >belongs to all</em
+              >
+            </h2>
+            <p class="d6-story-body">
+              Chic Charms began with a simple conviction: beauty shouldn't be a
+              luxury tax. Every piece we carry is chosen for how it looks, how
+              it feels, and how it holds up — not for the price tag attached.
+            </p>
+
+            <blockquote class="d6-story-pull">
+              "Every woman deserves to adorn herself beautifully — without the
+              price tag making her hesitate."
+            </blockquote>
+
+            <p class="d6-story-body">
+              Hypoallergenic, featherlight, and made to last. Because the best
+              jewellery should feel like an extension of you — not an occasion.
+            </p>
+
+            <a href="#bestsellers" class="d6-story-cta">
+              Discover the Edit
+              <span class="d6-story-cta-arrow">→</span>
+            </a>
+          </div>
+
+          <!-- Right: Visual Composition -->
+          <div
+            class="d6-story-visuals d6-reveal d6-reveal-right d6-delay-2"
+            aria-hidden="true"
+          >
+            <div class="d6-story-frame-accent"></div>
+            <div class="d6-story-img-main">
+              <img
+                src="images/story-soft-pearl-drop.jpg"
+                alt="A woman wearing elegant gold earrings, editorial portrait"
+                loading="lazy"
+              />
+            </div>
+            <div class="d6-story-img-accent">
+              <img
+                src="images/story-intimate-jewelry-detail.jpg"
+                alt="Close-up of delicate stud earrings on a woman's ear"
+                loading="lazy"
+              />
+            </div>
+            <div class="d6-story-stat-float">
+              <p class="d6-story-stat-num">Thoughtfully Selected</p>
+              <p class="d6-story-stat-label">Curated with intention</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ░░ D6 BRAND MARQUEE ░░ -->
+      <div class="d6-marquee" aria-hidden="true">
+        <div class="d6-marquee-track">
+          <span class="d6-marquee-item"
+            >Curated with intention<span class="d6-marquee-gem">✦</span></span
+          >
+          <span class="d6-marquee-item"
+            >Skin-Kind &amp; Hypoallergenic<span class="d6-marquee-gem"
+              >✦</span
+            ></span
+          >
+          <span class="d6-marquee-item"
+            >Free Shipping on ₹399+<span class="d6-marquee-gem">✦</span></span
+          >
+          <span class="d6-marquee-item"
+            >New Drops Every Friday<span class="d6-marquee-gem">✦</span></span
+          >
+          <span class="d6-marquee-item"
+            >All Pieces Under ₹299<span class="d6-marquee-gem">✦</span></span
+          >
+          <span class="d6-marquee-item"
+            >COD Available Pan-India<span class="d6-marquee-gem">✦</span></span
+          >
+          <span class="d6-marquee-item"
+            >Curated with intention<span class="d6-marquee-gem">✦</span></span
+          >
+          <span class="d6-marquee-item"
+            >Skin-Kind &amp; Hypoallergenic<span class="d6-marquee-gem"
+              >✦</span
+            ></span
+          >
+          <span class="d6-marquee-item"
+            >Free Shipping on ₹399+<span class="d6-marquee-gem">✦</span></span
+          >
+          <span class="d6-marquee-item"
+            >New Drops Every Friday<span class="d6-marquee-gem">✦</span></span
+          >
+          <span class="d6-marquee-item"
+            >All Pieces Under ₹299<span class="d6-marquee-gem">✦</span></span
+          >
+          <span class="d6-marquee-item"
+            >COD Available Pan-India<span class="d6-marquee-gem">✦</span></span
+          >
+        </div>
+      </div>
+
+      <!-- ░░ COLLECTIONS ░░ -->
+      <section
+        class="categories section"
+        id="categories"
+        aria-labelledby="cat-heading"
+      >
+        <div class="container">
+          <div class="section-header-row">
+            <div>
+              <p class="section-eyebrow">Browse the Edit</p>
+              <h2 class="section-title" id="cat-heading">Shop by Style</h2>
+            </div>
+            <a href="#bestsellers" class="section-view-all"
+              >View All <span>→</span></a
+            >
+          </div>
+          <div class="cat-grid">
+            <a
+              href="index.html?category=everyday-elegance#bestsellers"
+              class="cat-card"
+              aria-label="Shop Everyday Elegance"
+              data-category="everyday-elegance"
+            >
+              <div class="cat-img-wrap">
+                <img
+                  src="images/style-everyday-elegance.jpg"
+                  alt="Soft everyday luxury earrings styled with understated elegance"
+                  width="400"
+                  height="320"
+                  loading="lazy"
+                />
+              </div>
+              <div class="cat-info">
+                <h3>Everyday Elegance</h3>
+                <p>Soft luxury for daily wear</p>
+                <span class="cat-arrow">→</span>
+              </div>
+            </a>
+
+            <a
+              href="index.html?category=modern-romance#bestsellers"
+              class="cat-card"
+              aria-label="Shop Modern Romance"
+              data-category="modern-romance"
+            >
+              <div class="cat-img-wrap">
+                <img
+                  src="images/style-modern-romance.jpg"
+                  alt="Dreamy feminine earrings with romantic modern styling"
+                  width="400"
+                  height="320"
+                  loading="lazy"
+                />
+              </div>
+              <div class="cat-info">
+                <h3>Modern Romance</h3>
+                <p>Dreamy styles with feminine charm</p>
+                <span class="cat-arrow">→</span>
+              </div>
+            </a>
+
+            <a
+              href="index.html?category=after-dark#bestsellers"
+              class="cat-card"
+              aria-label="Shop After Dark"
+              data-category="after-dark"
+            >
+              <div class="cat-img-wrap">
+                <img
+                  src="images/style-after-dark.jpg"
+                  alt="Evening glamour earrings with a luminous after-dark mood"
+                  width="400"
+                  height="320"
+                  loading="lazy"
+                />
+              </div>
+              <div class="cat-info">
+                <h3>After Dark</h3>
+                <p>Glow beyond the ordinary</p>
+                <span class="cat-arrow">→</span>
+              </div>
+            </a>
+
+            <a
+              href="index.html?category=heritage-muse#bestsellers"
+              class="cat-card"
+              aria-label="Shop Heritage Muse"
+              data-category="heritage-muse"
+            >
+              <div class="cat-img-wrap">
+                <img
+                  src="images/style-heritage-muse.jpg"
+                  alt="Heritage-inspired earrings with timeless modern luxury"
+                  width="400"
+                  height="320"
+                  loading="lazy"
+                />
+              </div>
+              <div class="cat-info">
+                <h3>Heritage Muse</h3>
+                <p>Tradition with a modern soul</p>
+                <span class="cat-arrow">→</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ░░ BEST SELLERS — D3 Luxury Experience ░░ -->
+      <section
+        class="bestsellers bestsellers-d3 section"
+        id="bestsellers"
+        aria-labelledby="bs-heading"
+      >
+        <div class="container">
+          <!-- Collection Header -->
+          <div class="bestsellers-header-d3 lux-reveal">
+            <p class="section-eyebrow" style="justify-content: center">
+              The Curated Edit
+            </p>
+            <h2 class="section-title" id="bs-heading">
+              Worn with <em>intention</em>
+            </h2>
+            <p class="bestsellers-tagline">
+              Each piece chosen for its beauty, its feel, and the quiet
+              confidence it lends the woman who wears it.
+            </p>
+          </div>
+
+          <!-- Decorative Divider -->
+          <div class="collection-divider" style="margin: 28px auto 0">
+            <div class="collection-divider-line"></div>
+            <div class="collection-divider-gem"></div>
+            <div class="collection-divider-line"></div>
+          </div>
+
+          <!-- ░░ LUXURY FILTER BAR ░░ -->
+          <div
+            class="lux-filter-bar"
+            id="shopControls"
+            style="display: none"
+            role="search"
+            aria-label="Filter products"
+          >
+            <span class="lux-filter-label" aria-hidden="true">Refine</span>
+
+            <div class="lux-search-wrap">
+              <span class="lux-search-icon" aria-hidden="true">
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+              </span>
+              <input
+                type="text"
+                id="searchInput"
+                class="lux-search-input"
+                placeholder="Search the collection…"
+                autocomplete="off"
+                aria-label="Search products"
+              />
+              <button
+                class="lux-search-clear"
+                id="searchClear"
+                aria-label="Clear search"
+                style="display: none"
+              >
+                <svg
+                  width="9"
+                  height="9"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+
+            <div class="lux-selects">
+              <select
+                id="categoryFilter"
+                class="lux-select"
+                aria-label="Filter by category"
+              >
+                <option value="all">All Styles</option>
+                <option value="everyday-elegance">Everyday Elegance</option>
+                <option value="modern-romance">Modern Romance</option>
+                <option value="after-dark">After Dark</option>
+                <option value="heritage-muse">Heritage Muse</option>
+              </select>
+              <select
+                id="sortFilter"
+                class="lux-select"
+                aria-label="Sort products"
+              >
+                <option value="default">Sort</option>
+                <option value="low-high">Price ↑</option>
+                <option value="high-low">Price ↓</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Result count -->
+          <p
+            class="lux-result-count"
+            id="resultCount"
+            style="display: none"
+          ></p>
+
+          <!-- ░░ PRODUCT GRID ░░ -->
+          <div id="products-container" class="product-grid-lux">
+            <!-- Luxury skeleton loading state rendered by JS -->
+          </div>
+
+          <!-- Collection Footer Note -->
+          <div class="collection-footer-note">
+            <p>
+              All pieces under ₹299 &nbsp;·&nbsp; Ships in 24 hrs &nbsp;·&nbsp;
+              COD available across India
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ░░ D6 EDITORIAL CAMPAIGN — Fashion Mood Blocks ░░ -->
+      <section class="d6-campaign" aria-label="Editorial Campaign">
+        <!-- Campaign Block 1: Golden Hour -->
+        <div class="d6-campaign-block">
+          <div class="d6-campaign-img-panel">
+            <img
+              src="images/editorial-light-meets-gold.jpg"
+              alt="Woman wearing gold hoops, golden hour lighting"
+              loading="lazy"
+            />
+          </div>
+          <div class="d6-campaign-text-panel">
+            <span class="d6-campaign-collection-tag"
+              >The Modern Romance Edit</span
+            >
+            <h2 class="d6-campaign-headline d6-reveal">
+              For the moments<br /><em>that feel like yours</em>
+            </h2>
+            <p class="d6-campaign-desc d6-reveal d6-delay-1">
+              Soft textures, delicate sparkle, and the kind of elegance that
+              feels intimate rather than seen. Pieces designed for women who
+              carry warmth effortlessly.
+            </p>
+            <a
+              href="#bestsellers"
+              class="d6-campaign-cta d6-reveal d6-delay-2"
+              onclick="
+                event.preventDefault();
+                window.activateCollection('modern-romance');
+              "
+            >
+              Shop the Edit →
+            </a>
+            <span class="d6-campaign-mood-num" aria-hidden="true">01</span>
+          </div>
+        </div>
+
+        <!-- Campaign Block 2: Minimal Soul (reversed) -->
+        <div class="d6-campaign-block d6-campaign-block--reverse">
+          <div class="d6-campaign-img-panel">
+            <img
+              src="images/editorial-minimal-soul-closeup.jpg"
+              alt="Close-up of minimal pearl stud earrings on woman"
+              loading="lazy"
+            />
+          </div>
+          <div class="d6-campaign-text-panel">
+            <span class="d6-campaign-collection-tag"
+              >The Heritage Muse Edit</span
+            >
+            <h2 class="d6-campaign-headline d6-reveal">
+              Rooted in tradition.<br /><em>Worn like poetry.</em>
+            </h2>
+            <p class="d6-campaign-desc d6-reveal d6-delay-1">
+              Inspired by timeless craftsmanship & intimate beauty, each piece
+              is designed to feel deeply personal - elegant enough to remember,
+              effortless enough to live in.
+            </p>
+            <a
+              href="#bestsellers"
+              class="d6-campaign-cta d6-reveal d6-delay-2"
+              onclick="
+                event.preventDefault();
+                window.activateCollection('heritage-muse');
+              "
+            >
+              Discover the Collection →
+            </a>
+            <span class="d6-campaign-mood-num" aria-hidden="true">02</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ░░ D6 MOOD STRIP — Seasonal Collections ░░ -->
+      <section class="d6-mood-strip" aria-label="Seasonal Collections">
+        <div class="d6-mood-strip-inner">
+          <div class="d6-mood-card d6-reveal">
+            <img
+              src="images/editorial-korean-morning-coffee.jpg"
+              alt="Woman with delicate K-beauty inspired earrings, soft editorial"
+              loading="lazy"
+            />
+            <div class="d6-mood-card-overlay">
+              <span class="d6-mood-card-tag">K-Beauty Inspired</span>
+              <h3 class="d6-mood-card-title">
+                Morning Coffee<br /><em>Edit</em>
+              </h3>
+              <a href="#bestsellers" class="d6-mood-card-link">Explore →</a>
+            </div>
+          </div>
+          <div class="d6-mood-card d6-reveal d6-delay-2">
+            <img
+              src="images/editorial-soft-date-night.jpg"
+              alt="Woman dressed for an evening out wearing statement earrings"
+              loading="lazy"
+            />
+            <div class="d6-mood-card-overlay">
+              <span class="d6-mood-card-tag">Festive Edit</span>
+              <h3 class="d6-mood-card-title">Soft Date<br /><em>Night</em></h3>
+              <a href="#bestsellers" class="d6-mood-card-link">Explore →</a>
+            </div>
+          </div>
+          <div class="d6-mood-card d6-reveal d6-delay-4">
+            <img
+              src="images/editorial-everyday-hoops.jpg"
+              alt="Gold hoop earrings editorial lifestyle"
+              loading="lazy"
+            />
+            <div class="d6-mood-card-overlay">
+              <span class="d6-mood-card-tag">Everyday Luxury</span>
+              <h3 class="d6-mood-card-title">
+                Effortless<br /><em>Every Day</em>
+              </h3>
+              <a href="#bestsellers" class="d6-mood-card-link">Explore →</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ░░ D6 THE PROMISE — Social Proof Cards ░░ -->
+      <section
+        class="why-us section"
+        id="promise"
+        aria-labelledby="why-heading"
+      >
+        <div class="container">
+          <div class="why-header lux-reveal">
+            <p class="section-eyebrow">Our Commitment</p>
+            <h2 class="section-title" id="why-heading">
+              The Chic Charms<br /><em>Promise</em>
+            </h2>
+          </div>
+          <div class="why-grid">
+            <div class="why-card lux-reveal">
+              <div class="why-numeral">01</div>
+              <h3>Always Under ₹299</h3>
+              <p>
+                Luxury should be democratic. Every piece in our edit is priced
+                for real life, without sacrificing an ounce of beauty.
+              </p>
+            </div>
+            <div class="why-card lux-reveal">
+              <div class="why-numeral">02</div>
+              <h3>Skin-Kind Materials</h3>
+              <p>
+                Nickel-free, hypoallergenic, dermatologist-approved. Crafted for
+                sensitive ears and all-day wear.
+              </p>
+            </div>
+            <div class="why-card lux-reveal">
+              <div class="why-numeral">03</div>
+              <h3>Featherlight Feel</h3>
+              <p>
+                From morning to midnight — our pieces move with you. Zero
+                discomfort, full elegance, always.
+              </p>
+            </div>
+            <div class="why-card lux-reveal">
+              <div class="why-numeral">04</div>
+              <h3>Swift Delivery</h3>
+              <p>
+                Pan-India delivery in 3–5 days. Cash on delivery available
+                everywhere, always.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ░░ D6 TESTIMONIALS — Premium Social Proof ░░ -->
+      <section
+        class="d6-testimonials"
+        id="testimonials"
+        aria-labelledby="testi-heading"
+      >
+        <div class="d6-testimonials-inner">
+          <div class="d6-testimonials-header d6-reveal">
+            <div>
+              <p class="d6-testimonials-eyebrow">Words of Love</p>
+              <h2 class="d6-testimonials-headline" id="testi-heading">
+                They're <em>devoted</em>
+              </h2>
+            </div>
+            <div class="d6-testi-overall">
+              <div class="d6-testi-rating-num">4.9</div>
+              <div class="d6-testi-rating-stars">★ ★ ★ ★ ★</div>
+              <div class="d6-testi-rating-label">Thoughtfully Loved</div>
+            </div>
+          </div>
+
+          <div class="d6-testi-grid">
+            <article class="d6-testi-card d6-reveal">
+              <span class="d6-testi-quote-mark">"</span>
+              <p class="d6-testi-text">
+                Came to "just see" and left with 3 earrings✨. The collection is
+                TOOOO pretty. The quality is really good, the designs are super
+                pretty, and they look even better in person, definitely worth
+                coming back ...
+              </p>
+              <div class="d6-testi-divider"></div>
+              <div class="d6-testi-author">
+                <img
+                  src="images/avatar-sahana-cafe-edit.jpg"
+                  alt="Sahana R"
+                  class="d6-testi-avatar"
+                  width="44"
+                  height="44"
+                  loading="lazy"
+                />
+                <div>
+                  <p class="d6-testi-name">Sahana R.</p>
+                  <p class="d6-testi-handle">@sxhxnxx_sx</p>
+                  <p class="d6-testi-stars">★★★★★</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="d6-testi-card d6-reveal d6-delay-2">
+              <span class="d6-testi-quote-mark">"</span>
+              <p class="d6-testi-text">
+                The earrings were really good they are of good design and
+                quality, the price of these earrings are affordable and the
+                service is very prompt . I'm very pleased to buy earrings from
+                your website and will visit again to buy more earrings as well
+              </p>
+              <div class="d6-testi-divider"></div>
+              <div class="d6-testi-author">
+                <img
+                  src="images/avatar-subashree-event-edit.jpg"
+                  alt="Subashree"
+                  class="d6-testi-avatar"
+                  width="44"
+                  height="44"
+                  loading="lazy"
+                />
+                <div>
+                  <p class="d6-testi-name">Subashree.</p>
+                  <p class="d6-testi-handle">@jvs9253</p>
+                  <p class="d6-testi-stars">★★★★★</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="d6-testi-card d6-reveal d6-delay-4">
+              <span class="d6-testi-quote-mark">"</span>
+              <p class="d6-testi-text">
+                Ordered the butterfly dangles and the gold star studs together.
+                Both are so lightweight I forget I'm wearing them. Worth every
+                rupee.
+              </p>
+              <div class="d6-testi-divider"></div>
+              <div class="d6-testi-author">
+                <img
+                  src="images/avatar-ritu-weekend-edit.jpg"
+                  alt="Ritu S."
+                  class="d6-testi-avatar"
+                  width="44"
+                  height="44"
+                  loading="lazy"
+                />
+                <div>
+                  <p class="d6-testi-name">Ritu S.</p>
+                  <p class="d6-testi-handle">@ritufashiondiaries</p>
+                  <p class="d6-testi-stars">★★★★★</p>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ░░ D6 NEWSLETTER — Exclusive Club Invitation ░░ -->
+      <section class="d6-newsletter" aria-labelledby="nl-heading">
+        <div class="d6-newsletter-inner">
+          <div class="d6-newsletter-img-panel">
+            <img
+              src="images/newsletter-inner-circle-portrait.jpg"
+              alt="Woman in warm editorial light, pearl jewellery portrait"
+              loading="lazy"
+            />
+          </div>
+          <div class="d6-newsletter-content">
+            <span class="d6-newsletter-ornament" aria-hidden="true"></span>
+            <p class="d6-newsletter-label">Join the Inner Circle</p>
+            <h2 class="d6-newsletter-headline" id="nl-heading">
+              First to know.<br /><em>Always adorned.</em>
+            </h2>
+            <p class="d6-newsletter-desc">
+              A quiet space for women who love beautiful things — new drops,
+              styling stories, and member-only moments, delivered to your inbox.
+            </p>
+            <ul class="d6-newsletter-perks">
+              <li>
+                <span class="d6-newsletter-perk-dot"></span>Early access to new
+                collections
+              </li>
+              <li>
+                <span class="d6-newsletter-perk-dot"></span>Exclusive
+                member-only offers
+              </li>
+              <li>
+                <span class="d6-newsletter-perk-dot"></span>Styling inspiration
+                &amp; editorial stories
+              </li>
+            </ul>
+            <div class="d6-newsletter-form">
+              <input
+                type="email"
+                class="d6-newsletter-input"
+                placeholder="Your email address"
+                aria-label="Email address for newsletter"
+              />
+              <button class="d6-newsletter-btn" type="button">
+                Join the Circle
+              </button>
+            </div>
+            <p class="d6-newsletter-note">
+              No clutter. Curated with the same care as our jewellery.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ░░ D6 FOOTER — Refined Brand Footer ░░ -->
+    <footer class="d6-footer" aria-label="Site footer">
+      <div class="d6-footer-inner">
+        <div class="d6-footer-brand-col">
+          <a href="index.html" class="d6-footer-logo"
+            >Chic<span>Charms</span></a
+          >
+          <p class="d6-footer-tagline">
+            Curated for the woman who chooses beauty with intention. Every piece
+            under ₹299.
+          </p>
+          <div class="d6-footer-social-row">
+            <a href="#" class="d6-footer-social-link" aria-label="Instagram"
+              >IG</a
+            >
+            <a href="#" class="d6-footer-social-link" aria-label="Pinterest"
+              >PT</a
+            >
+            <a href="#" class="d6-footer-social-link" aria-label="YouTube"
+              >YT</a
+            >
+          </div>
+        </div>
+        <div>
+          <p class="d6-footer-col-title">Shop</p>
+          <ul class="d6-footer-links">
+            <li><a href="#categories">All Collections</a></li>
+            <li><a href="#bestsellers">Best Sellers</a></li>
+            <li><a href="#bestsellers">New Arrivals</a></li>
+            <li><a href="#bestsellers">Under ₹199</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="d6-footer-col-title">Help</p>
+          <ul class="d6-footer-links">
+            <li><a href="#">Shipping &amp; Delivery</a></li>
+            <li><a href="#">Returns &amp; Exchanges</a></li>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Contact Us</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="d6-footer-col-title">About</p>
+          <ul class="d6-footer-links">
+            <li><a href="#why-us">Our Story</a></li>
+            <li><a href="#">Sustainability</a></li>
+            <li><a href="#">Press</a></li>
+            <li><a href="#">Careers</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="d6-footer-bottom">
+        <p class="d6-footer-copy">
+          © 2025 Chic Charms. Made with love in India.
+        </p>
+        <div class="d6-footer-legal">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ░░ CART TOAST ░░ -->
+    <div
+      class="cart-toast"
+      id="cartToast"
+      role="status"
+      aria-live="polite"
+    ></div>
+
+    <nav class="mobile-bottom-nav" aria-label="Mobile bottom navigation">
+      <a href="index.html" class="mobile-bottom-tab is-active">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3V10.5Z" /></svg>
+        <span>Home</span>
+      </a>
+      <a href="#bestsellers" class="mobile-bottom-tab">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4H6Z" /><path d="M3 6h18M16 10a4 4 0 0 1-8 0" /></svg>
+        <span>Shop</span>
+      </a>
+      <a href="#bestsellers" class="mobile-bottom-tab">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6c-1.8-1.7-4.6-1.6-6.3.2L12 7.3 9.5 4.8C7.8 3 5 2.9 3.2 4.6 1.3 6.4 1.3 9.4 3.1 11.2L12 20l8.9-8.8c1.8-1.8 1.8-4.8-.1-6.6Z" /></svg>
+        <span>Wishlist</span>
+      </a>
+      <a href="cart.html" class="mobile-bottom-tab">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L22 6H6" /></svg>
+        <span>Cart</span>
+      </a>
+      <a href="account.html" class="mobile-bottom-tab">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21a8 8 0 0 0-16 0" /><circle cx="12" cy="7" r="4" /></svg>
+        <span>Account</span>
+      </a>
+    </nav>
 
     <!-- ░░ D6 SCROLL REVEAL ░░ -->
     <script>
       (function () {
         "use strict";
-        function initD6Reveals() {
-          var d6Els = document.querySelectorAll(
-            ".d6-reveal, .d6-reveal-left, .d6-reveal-right, .d6-reveal-scale",
-          );
-          // On mobile, just make them all visible immediately — no animation delay
-          if (window.innerWidth <= 767) {
-            d6Els.forEach(function (el) { el.classList.add("visible"); });
-            return;
-          }
-          if (!("IntersectionObserver" in window) || !d6Els.length) {
-            d6Els.forEach(function (el) { el.classList.add("visible"); });
-            return;
-          }
-          var d6Observer = new IntersectionObserver(
-            function (entries) {
-              entries.forEach(function (entry) {
-                if (entry.isIntersecting) {
-                  entry.target.classList.add("visible");
-                  d6Observer.unobserve(entry.target);
-                }
-              });
-            },
-            { threshold: 0.07, rootMargin: "0px 0px -48px 0px" },
-          );
-          d6Els.forEach(function (el) { d6Observer.observe(el); });
+        var d6Els = document.querySelectorAll(
+          ".d6-reveal, .d6-reveal-left, .d6-reveal-right, .d6-reveal-scale",
+        );
+        if (!("IntersectionObserver" in window) || !d6Els.length) {
+          d6Els.forEach(function (el) {
+            el.classList.add("visible");
+          });
+          return;
         }
-        // Run after DOM is ready so elements actually exist
-        if (document.readyState === "loading") {
-          document.addEventListener("DOMContentLoaded", initD6Reveals);
-        } else {
-          initD6Reveals();
-        }
-        // Safety fallback: also run after full load
-        window.addEventListener("load", initD6Reveals);
+        var d6Observer = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+                d6Observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.07, rootMargin: "0px 0px -48px 0px" },
+        );
+        d6Els.forEach(function (el) {
+          d6Observer.observe(el);
+        });
       })();
     </script>
     <script src="script.js"></script>
@@ -1249,10 +2549,7 @@
         });
       })();
     </script>
-    <!--  MOBILE RUNTIME — Phase 1  -->
+    <script src="d9-luxury-mobile-pdp.js" defer></script>
     <script src="mobile-app.js" defer></script>
-    <script src="final-mobile-stabilization.js" defer></script>
-    <!--  MOBILE HOMEPAGE EXPERIENCE — Phase 2  -->
-    <script src="mobile-phase2.js" defer></script>
 </body>
 </html>

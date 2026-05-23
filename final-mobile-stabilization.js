@@ -2,12 +2,12 @@
   "use strict";
 
   /* DESKTOP SAFETY LOCK */
-  if (window.innerWidth > 768) {
+  if (window.innerWidth > 767) {
     document.documentElement.classList.remove('mobile-home', 'cc-mobile', 'app-shell-active');
     return;
   }
 
-  var mobileQuery = window.matchMedia("(max-width: 768px)");
+  var mobileQuery = window.matchMedia("(max-width: 767px)");
   var HOME_ID = "ccFinalHome";
   var ANNOUNCEMENT_ID = "ccFinalAnnouncement";
   var RECENT_SEARCHES_KEY = "ccRecentSearches";
@@ -321,7 +321,9 @@
       node.remove();
     });
     $all(".mobile-bottom-nav").forEach(function (nav) {
-      if (!nav.classList.contains("cc-app-bottom-nav")) nav.remove();
+      if (nav.classList.contains("cc-app-bottom-nav") || nav.classList.contains("cc-global-bottom-nav") || nav.hasAttribute("data-cc-injected")) {
+        nav.remove();
+      }
     });
     var headers = $all(".cc-app-header");
     headers.slice(1).forEach(function (header) { header.remove(); });
@@ -653,6 +655,7 @@
   function tuneMobileCommercePages() {
     if (!isMobile()) return;
     if ($(".cart-page")) document.body.classList.add("cc-mobile-cart-page");
+    if ($(".shop-shell")) document.body.classList.add("cc-mobile-shop-page");
     if ($(".checkout-page")) document.body.classList.add("cc-mobile-checkout-page");
     if ($(".auth-page")) document.body.classList.add("cc-mobile-auth-page");
     var sticky = $(".d11-sticky-cart-cta");
@@ -691,7 +694,7 @@
       /* Restore body scroll — clear inline overrides */
       document.body.style.overflow = "";
       document.body.style.overflowX = "hidden";
-      document.body.style.overflowY = "";
+      document.body.style.overflowY = "auto";
       document.body.style.position = "";
       document.body.style.top = "";
       document.body.style.width = "";
@@ -700,7 +703,7 @@
       /* Restore html */
       document.documentElement.style.overflow = "";
       document.documentElement.style.overflowX = "hidden";
-      document.documentElement.style.overflowY = "";
+      document.documentElement.style.overflowY = "visible";
 
       /* Restore scroll position if we saved it */
       if (window.__ccScrollY !== undefined) {
@@ -806,8 +809,11 @@
 
       var category = event.target.closest("[data-final-category]");
       if (category) {
-        event.preventDefault();
-        activateCategory(category.getAttribute("data-final-category") || "all");
+        var page = location.pathname.split("/").pop() || "index.html";
+        if (page === "index.html" || page === "") {
+          event.preventDefault();
+          activateCategory(category.getAttribute("data-final-category") || "all");
+        }
       }
     }, true); /* Use capture phase so backdrop clicks are caught even inside modals */
 

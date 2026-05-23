@@ -1751,3 +1751,75 @@
   }
 }
 
+@media (max-width: 767px) {
+  html {
+    height: auto !important;
+    min-height: 100% !important;
+    overflow-x: hidden !important;
+    overflow-y: visible !important;
+  }
+
+  body {
+    height: auto !important;
+    min-height: 100dvh !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    overscroll-behavior-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-y !important;
+  }
+
+  body.ma-menu-open {
+    touch-action: pan-y !important;
+  }
+
+  .d6-reveal,
+  .d6-reveal-left,
+  .d6-reveal-right,
+  .d6-reveal-scale {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  .navbar,
+  #navbar {
+    min-height: calc(58px + env(safe-area-inset-top, 0px)) !important;
+  }
+
+  .navbar .nav-inner,
+  #navbar .nav-inner {
+    min-height: 58px !important;
+    align-items: center !important;
+  }
+
+  .ma-bottom-nav {
+    height: calc(62px + env(safe-area-inset-bottom, 0px)) !important;
+    min-height: calc(62px + env(safe-area-inset-bottom, 0px)) !important;
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    align-items: center !important;
+    padding: 4px 4px env(safe-area-inset-bottom, 0px) !important;
+  }
+
+  .ma-nav-tab {
+    min-width: 0 !important;
+    height: 52px !important;
+    gap: 3px !important;
+    overflow: hidden !important;
+  }
+
+  .ma-nav-tab svg {
+    width: 20px !important;
+    height: 20px !important;
+    flex: 0 0 20px !important;
+  }
+
+  .ma-nav-tab span {
+    max-width: 100% !important;
+    overflow: hidden !important;
+    font-size: 0.56rem !important;
+    line-height: 1 !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+}

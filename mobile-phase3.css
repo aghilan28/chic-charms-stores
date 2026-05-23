@@ -1121,3 +1121,108 @@
     }
   }
 }
+
+@media (max-width: 767px) {
+  html {
+    height: auto !important;
+    min-height: 100% !important;
+    overflow-x: hidden !important;
+    overflow-y: visible !important;
+  }
+
+  body {
+    height: auto !important;
+    min-height: 100dvh !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    overscroll-behavior-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-y !important;
+    padding-top: 0 !important;
+  }
+
+  .shop-shell {
+    padding-top: 12px !important;
+    padding-bottom: calc(104px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  .shop-bar {
+    top: calc(58px + env(safe-area-inset-top, 0px)) !important;
+  }
+
+  .shop-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    align-items: stretch !important;
+  }
+
+  .shop-card {
+    min-width: 0 !important;
+    height: 100% !important;
+    display: grid !important;
+    grid-template-rows: auto 1fr !important;
+  }
+
+  .shop-card-media {
+    aspect-ratio: 4 / 5 !important;
+  }
+
+  .shop-card-media img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center top !important;
+  }
+
+  .shop-card-badge {
+    max-width: calc(100% - 54px) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .shop-card-body {
+    min-width: 0 !important;
+    gap: 7px !important;
+    padding: 10px !important;
+  }
+
+  .shop-card h2 {
+    min-height: 36px !important;
+  }
+
+  .shop-card button[data-add] {
+    min-height: 38px !important;
+    padding: 0 10px !important;
+    font-size: 0.64rem !important;
+    letter-spacing: 0.08em !important;
+  }
+
+  .mobile-bottom-nav {
+    height: calc(62px + env(safe-area-inset-bottom, 0px)) !important;
+    min-height: calc(62px + env(safe-area-inset-bottom, 0px)) !important;
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    align-items: center !important;
+    padding: 4px 4px env(safe-area-inset-bottom, 0px) !important;
+  }
+
+  .mobile-bottom-tab {
+    min-width: 0 !important;
+    height: 52px !important;
+    gap: 3px !important;
+  }
+
+  .mobile-bottom-tab svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  .mobile-bottom-tab span {
+    max-width: 100% !important;
+    overflow: hidden !important;
+    font-size: 0.56rem !important;
+    line-height: 1 !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+}

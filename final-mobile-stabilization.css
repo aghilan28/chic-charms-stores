@@ -5620,3 +5620,332 @@
     font-size: 0.54rem !important;
   }
 }
+
+/* Production mobile rescue: stabilize the active mobile layer without touching desktop. */
+@media (max-width: 767px) {
+  html {
+    height: auto;
+    min-height: 100%;
+    overflow-x: hidden;
+    overflow-y: visible;
+  }
+
+  body {
+    min-height: 100dvh;
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-y: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+  }
+
+  body.lux-search-open,
+  body.lux-drawer-open,
+  body.cc-modal-open,
+  body.d7-menu-open,
+  body.ma-menu-open,
+  body.p3-sheet-open {
+    touch-action: pan-y;
+  }
+
+  body.cc-mobile-home-ready main > :not(#ccFinalHome),
+  body.cc-mobile-home-ready > footer:not(.cc-final-footer) {
+    display: revert !important;
+  }
+
+  body.cc-mobile-home-ready #ccFinalHome:empty {
+    display: none !important;
+  }
+
+  .d6-reveal,
+  .d6-reveal-left,
+  .d6-reveal-right,
+  .d6-reveal-scale {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .navbar,
+  #navbar,
+  .shop-header {
+    min-height: calc(58px + env(safe-area-inset-top, 0px));
+    display: flex;
+    align-items: center;
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  .navbar .nav-inner,
+  #navbar .nav-inner,
+  .shop-header {
+    min-height: 58px;
+    align-items: center;
+  }
+
+  .navbar .logo,
+  #navbar .logo,
+  .shop-logo {
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .shop-announcement {
+    height: 30px;
+    min-height: 30px;
+  }
+
+  .shop-header {
+    top: 0;
+    z-index: 130;
+  }
+
+  .shop-shell {
+    margin-top: 0;
+    padding-top: 12px;
+    padding-bottom: calc(104px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .shop-search {
+    margin-top: 0;
+  }
+
+  .shop-hero {
+    margin-top: 8px;
+  }
+
+  .shop-bar {
+    top: calc(58px + env(safe-area-inset-top, 0px));
+  }
+
+  .shop-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 14px 10px;
+    padding: 12px 14px 18px;
+    touch-action: pan-y;
+  }
+
+  .shop-card {
+    min-width: 0;
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    contain: layout paint;
+  }
+
+  .shop-card-media {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+  }
+
+  .shop-card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  .shop-card-badge {
+    max-width: calc(100% - 54px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .shop-card-body {
+    min-width: 0;
+    display: grid;
+    grid-template-rows: auto auto auto auto;
+    align-content: start;
+    gap: 7px;
+    padding: 10px;
+  }
+
+  .shop-card h2 {
+    min-height: 36px;
+    margin: 0;
+  }
+
+  .shop-card button[data-add] {
+    min-height: 38px;
+    padding: 0 10px;
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+  }
+
+  .product-grid-lux {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 10px;
+  }
+
+  .product-card-lux {
+    min-width: 0;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    contain: layout paint;
+  }
+
+  .lux-img-container {
+    aspect-ratio: 4 / 5;
+  }
+
+  .lux-img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  .lux-badges {
+    top: 8px;
+    left: 8px;
+    right: 42px;
+    align-items: flex-start;
+  }
+
+  .mobile-product-badge,
+  .lux-badge {
+    max-width: 100%;
+    min-height: 22px;
+    padding: 6px 8px;
+    font-size: 0.55rem;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .lux-product-info {
+    min-width: 0;
+    gap: 7px;
+    padding: 10px;
+  }
+
+  .lux-product-name {
+    min-height: 36px;
+    overflow: hidden;
+  }
+
+  .lux-cart-btn {
+    min-height: 38px;
+    padding: 0 10px;
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+  }
+
+  .ma-bottom-nav,
+  .mobile-bottom-nav {
+    height: calc(62px + env(safe-area-inset-bottom, 0px));
+    min-height: calc(62px + env(safe-area-inset-bottom, 0px));
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    align-items: center;
+    padding: 4px 4px env(safe-area-inset-bottom, 0px);
+  }
+
+  .ma-nav-tab,
+  .mobile-bottom-tab {
+    min-width: 0;
+    height: 52px;
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    overflow: hidden;
+  }
+
+  .ma-nav-tab svg,
+  .mobile-bottom-tab svg {
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
+  }
+
+  .ma-nav-tab span,
+  .mobile-bottom-tab span {
+    max-width: 100%;
+    overflow: hidden;
+    font-size: 0.56rem;
+    line-height: 1;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .p5-sticky-checkout {
+    left: 10px;
+    right: 10px;
+    bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+    z-index: 170;
+    min-height: 58px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    padding: 9px 10px 9px 14px;
+    border-radius: 22px;
+  }
+
+  .p5-sticky-total {
+    min-width: 0;
+  }
+
+  .p5-sticky-btn {
+    min-height: 42px;
+    padding: 0 16px;
+    white-space: nowrap;
+  }
+
+  .cart-page {
+    padding-bottom: calc(154px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .acc-page.cc-app-account-page,
+  .acc-page {
+    padding-top: 72px;
+    padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .cc-app-account-hero,
+  .acc-profile-card,
+  .acc-nav,
+  .acc-card,
+  .stat-box {
+    border-radius: 20px;
+  }
+
+  .cc-app-account-hero {
+    grid-template-columns: 64px minmax(0, 1fr);
+    margin: 0 0 14px;
+    padding: 16px;
+  }
+
+  .cc-app-account-avatar,
+  .acc-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+  }
+
+  .acc-profile-card {
+    padding: 18px 14px;
+  }
+
+  .acc-nav {
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .acc-card {
+    padding: 16px;
+  }
+
+  .info-row {
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .info-val {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+}
