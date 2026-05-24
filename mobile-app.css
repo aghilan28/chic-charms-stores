@@ -2063,6 +2063,130 @@
     z-index: var(--ma-z-toast) !important;
     bottom: calc(var(--ma-bottom-h) + env(safe-area-inset-bottom, 0px) + 12px) !important;
   }
+
+  html.ma-mobile-active body.cc-mobile-account-page .ma-mobile-home,
+  html.ma-mobile-active body.cc-mobile-account-page .mobile-promo-slider,
+  html.ma-mobile-active body.cc-mobile-account-page .mobile-category-strip,
+  html.ma-mobile-active body.cc-mobile-account-page .ma-header-cart,
+  html.ma-mobile-active body.cc-mobile-account-page .ma-drawer-backdrop,
+  html.ma-mobile-active body.cc-mobile-account-page .ma-bottom-nav,
+  html.ma-mobile-active body.cc-mobile-account-page .mobile-bottom-nav {
+    display: none !important;
+  }
+
+  html.ma-mobile-active body.cc-mobile-account-page .acc-page {
+    padding: 70px 0 24px !important;
+    min-height: auto !important;
+  }
+
+  html.ma-mobile-active body.cc-mobile-account-page .acc-container {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+    padding: 16px var(--ma-page-x) 28px !important;
+  }
+
+  html.ma-mobile-active body.cc-mobile-account-page .acc-sidebar {
+    position: static !important;
+  }
+
+  html.ma-mobile-active body.cc-mobile-account-page .acc-profile-card,
+  html.ma-mobile-active body.cc-mobile-account-page .acc-nav,
+  html.ma-mobile-active body.cc-mobile-account-page .acc-panel,
+  html.ma-mobile-active body.cc-mobile-account-page .acc-section-card {
+    border-radius: 8px !important;
+  }
+
+  html.ma-mobile-active body.cc-mobile-account-page .acc-profile-card {
+    padding: 20px 16px !important;
+  }
+
+  html.ma-mobile-active body.cc-mobile-account-page .acc-displayname {
+    font-size: 1rem !important;
+  }
+
+  html.ma-mobile-active body.cc-mobile-account-page .auth-overlay {
+    inset: var(--ma-header-h) 0 0 0 !important;
+  }
+
+  html.ma-mobile-active body.cc-mobile-cart-page .ma-mobile-home,
+  html.ma-mobile-active body.cc-mobile-cart-page .mobile-promo-slider,
+  html.ma-mobile-active body.cc-mobile-cart-page .mobile-category-strip,
+  html.ma-mobile-active body.cc-mobile-cart-page .ma-header-cart,
+  html.ma-mobile-active body.cc-mobile-cart-page .ma-drawer-backdrop,
+  html.ma-mobile-active body.cc-mobile-cart-page .mobile-bottom-nav,
+  html.ma-mobile-active body.cc-mobile-cart-page .ma-bottom-nav {
+    display: none !important;
+  }
+
+  html.ma-mobile-active body.cc-mobile-cart-page .cart-page {
+    padding-top: 74px !important;
+    padding-bottom: 24px !important;
+  }
+
+  html.ma-mobile-active body.cc-mobile-cart-page .cart-header {
+    margin-bottom: 18px !important;
+  }
+
+  html.ma-mobile-active body.cc-mobile-cart-page .cart-layout {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  html.ma-mobile-active body.cc-mobile-cart-page .cart-item {
+    padding: 14px !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+    flex-wrap: wrap !important;
+  }
+
+  html.ma-mobile-active body.cc-mobile-cart-page .cart-item-icon {
+    width: 44px !important;
+    height: 44px !important;
+    font-size: 1.35rem !important;
+  }
+
+  html.ma-mobile-active body.cc-mobile-cart-page .cart-item-right {
+    width: 100% !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+  }
+
+  html.ma-mobile-active body.cc-mobile-cart-page .cart-summary {
+    position: static !important;
+  }
+
+  html.ma-mobile-active body.cc-mobile-cart-page .cart-count-badge {
+    width: 100% !important;
+    text-align: center !important;
+  }
+
+  html.ma-mobile-active body.cc-mobile-auth-page .ma-mobile-home,
+  html.ma-mobile-active body.cc-mobile-auth-page .mobile-promo-slider,
+  html.ma-mobile-active body.cc-mobile-auth-page .mobile-category-strip,
+  html.ma-mobile-active body.cc-mobile-auth-page .ma-header-cart,
+  html.ma-mobile-active body.cc-mobile-auth-page .ma-drawer-backdrop,
+  html.ma-mobile-active body.cc-mobile-auth-page .ma-bottom-nav,
+  html.ma-mobile-active body.cc-mobile-auth-page .mobile-bottom-nav {
+    display: none !important;
+  }
+
+  html.ma-mobile-active body.cc-mobile-auth-page .auth-page {
+    min-height: auto !important;
+    padding: 88px 16px 28px !important;
+    align-items: flex-start !important;
+  }
+
+  html.ma-mobile-active body.cc-mobile-auth-page .auth-card {
+    width: 100% !important;
+    padding: 26px 18px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 8px 24px rgba(78, 45, 38, 0.08) !important;
+  }
+
+  html.ma-mobile-active body.cc-mobile-auth-page .auth-logo a {
+    font-size: 1.55rem !important;
+  }
 }
 
 @media (min-width: 768px) {

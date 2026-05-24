@@ -181,6 +181,11 @@
   function buildMobileSections() {
     var main = document.querySelector("main");
     if (!main) return;
+    var page = pageName();
+
+    if (page !== "index.html" && page !== "") {
+      return;
+    }
 
     var legacyPromo = document.querySelector(".mobile-promo-slider");
     if (legacyPromo) legacyPromo.classList.add("ma-legacy-mobile");
@@ -244,8 +249,9 @@
   }
 
   function buildBottomNav() {
-    if (document.querySelector(".ma-bottom-nav")) return;
     var page = pageName();
+    if (page === "auth.html") return;
+    if (document.querySelector(".ma-bottom-nav")) return;
     var tabs = [
       ["index.html", "Home", "home", page === "index.html" || page === ""],
       ["index.html#categories", "Categories", "shop", false],
@@ -298,6 +304,12 @@
   function boot() {
     if (!onMobile()) return;
     document.documentElement.classList.add("ma-mobile-active");
+    var currentPage = pageName();
+    document.body.classList.remove("cc-mobile-home-page", "cc-mobile-account-page", "cc-mobile-cart-page", "cc-mobile-auth-page");
+    if (currentPage === "account.html") document.body.classList.add("cc-mobile-account-page");
+    else if (currentPage === "cart.html") document.body.classList.add("cc-mobile-cart-page");
+    else if (currentPage === "auth.html") document.body.classList.add("cc-mobile-auth-page");
+    else document.body.classList.add("cc-mobile-home-page");
     buildHeader();
     buildDrawer();
     buildMobileSections();

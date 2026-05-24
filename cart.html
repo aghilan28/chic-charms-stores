@@ -678,18 +678,22 @@
       const subtotalEl = document.getElementById('summarySubtotal');
       const shippingEl = document.getElementById('summaryShipping');
       const totalEl    = document.getElementById('summaryTotal');
+      const stickyBar  = document.getElementById('p5StickyCheckout');
 
       const units = totalUnits(cart);
       badge.textContent = '🛍️ ' + units + (units === 1 ? ' item' : ' items');
+      document.body.classList.toggle('cart-is-empty', cart.length === 0);
 
       if (cart.length === 0) {
         cartEmpty.style.display  = 'block';
         cartLayout.style.display = 'none';
+        if (stickyBar) stickyBar.style.display = 'none';
         return;
       }
 
       cartEmpty.style.display  = 'none';
       cartLayout.style.display = 'grid';
+      if (stickyBar) stickyBar.style.display = 'flex';
 
       itemsList.innerHTML = '';
       cart.forEach(function (item, index) {

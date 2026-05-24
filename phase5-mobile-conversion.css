@@ -307,6 +307,49 @@
   }
 }
 
+/* Final page-specific mobile cleanup for account/auth/cart footers. */
+@media (max-width: 767px) {
+  body.cc-mobile-account-page,
+  body.cc-mobile-auth-page {
+    padding-bottom: 0 !important;
+  }
+
+  body.cc-mobile-account-page .acc-page,
+  body.cc-mobile-auth-page .auth-page {
+    padding-bottom: 40px !important;
+  }
+
+  body.cc-mobile-account-page footer.footer,
+  body.cc-mobile-auth-page footer.footer {
+    padding: 42px 0 26px !important;
+    margin-bottom: 0 !important;
+  }
+
+  body.cc-mobile-account-page .footer-inner,
+  body.cc-mobile-auth-page .footer-inner,
+  body.cc-mobile-cart-page .footer-inner {
+    align-items: flex-start !important;
+    gap: 20px !important;
+    margin-bottom: 26px !important;
+  }
+
+  body.cc-mobile-account-page .footer-links,
+  body.cc-mobile-auth-page .footer-links,
+  body.cc-mobile-cart-page .footer-links {
+    justify-content: flex-start !important;
+    gap: 12px 22px !important;
+  }
+
+  body.cc-mobile-cart-page footer.footer {
+    padding: 42px 0 calc(92px + env(safe-area-inset-bottom, 0px)) !important;
+    margin-top: 22px !important;
+  }
+
+  body.cc-mobile-cart-page.cart-is-empty .cart-page {
+    padding-bottom: 30px !important;
+  }
+}
+
 /* ═══════════════════════════════════════════════════════
    5.2 — STICKY CHECKOUT CTA
    Premium · safe-area-aware · conversion critical
@@ -332,6 +375,16 @@
     /* When bottom nav is present, it stacks above it via margin-bottom */
     margin-bottom: calc(72px + env(safe-area-inset-bottom, 0px)) !important;
     border-top: 1px solid rgba(0,0,0,0.06) !important;
+  }
+
+  body.cart-is-empty .cart-layout,
+  body.cart-is-empty .cart-summary,
+  body.cart-is-empty .p5-sticky-checkout {
+    display: none !important;
+  }
+
+  body.cart-is-empty .cart-empty {
+    display: block !important;
   }
 
   .p5-sticky-total {

@@ -4795,7 +4795,9 @@
   .cart-page,
   .checkout-page,
   .auth-page,
-  .cc-app-account-page {
+  .cc-app-account-page,
+  .cc-mobile-account-page,
+  .cc-mobile-cart-page {
     min-height: 100dvh !important;
     padding: 18px 16px calc(110px + env(safe-area-inset-bottom, 0px)) !important;
     background:
@@ -4977,7 +4979,8 @@
     box-shadow: var(--cc-app-soft-shadow) !important;
   }
 
-  .cc-app-account-hero {
+  .cc-app-account-hero,
+  .cc-mobile-account-page .cc-app-account-hero {
     display: grid;
     grid-template-columns: 72px minmax(0, 1fr);
     gap: 14px;
@@ -4990,7 +4993,8 @@
     box-shadow: var(--cc-app-shadow);
   }
 
-  .cc-app-account-avatar {
+  .cc-app-account-avatar,
+  .cc-mobile-account-page .cc-app-account-avatar {
     width: 72px;
     height: 72px;
     display: grid;
@@ -5001,30 +5005,35 @@
     font: 700 1.1rem/1 "Playfair Display", Georgia, serif;
   }
 
-  .cc-app-account-hero span {
+  .cc-app-account-hero span,
+  .cc-mobile-account-page .cc-app-account-hero span {
     color: var(--cc-app-rose);
     font: 900 0.62rem/1 Jost, system-ui, sans-serif;
     letter-spacing: 0.14em;
     text-transform: uppercase;
   }
 
-  .cc-app-account-hero h1 {
+  .cc-app-account-hero h1,
+  .cc-mobile-account-page .cc-app-account-hero h1 {
     margin: 5px 0 6px;
     color: var(--cc-app-ink);
     font: 500 1.55rem/1 "Playfair Display", Georgia, serif;
   }
 
-  .cc-app-account-hero p {
+  .cc-app-account-hero p,
+  .cc-mobile-account-page .cc-app-account-hero p {
     margin: 0;
     color: var(--cc-app-muted);
     font: 600 0.82rem/1.4 Jost, system-ui, sans-serif;
   }
 
-  .acc-sidebar {
+  .acc-sidebar,
+  .cc-mobile-account-page .acc-sidebar {
     position: static !important;
   }
 
-  .acc-nav {
+  .acc-nav,
+  .cc-mobile-account-page .acc-nav {
     display: flex !important;
     gap: 8px;
     overflow-x: auto;
@@ -5032,7 +5041,8 @@
     scrollbar-width: none;
   }
 
-  .acc-nav-btn {
+  .acc-nav-btn,
+  .cc-mobile-account-page .acc-nav-btn {
     flex: 0 0 auto;
     min-height: 42px !important;
     border: 0 !important;
@@ -5041,12 +5051,14 @@
     white-space: nowrap;
   }
 
-  .acc-nav-btn.active {
+  .acc-nav-btn.active,
+  .cc-mobile-account-page .acc-nav-btn.active {
     background: var(--cc-app-ink) !important;
     color: #fffaf5 !important;
   }
 
-  .stat-grid {
+  .stat-grid,
+  .cc-mobile-account-page .stat-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
     gap: 8px !important;
   }
