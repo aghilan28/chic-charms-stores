@@ -1348,3 +1348,276 @@
     overflow-wrap: anywhere !important;
   }
 }
+
+/* Account mobile final pass: compact, readable, and no sideways overflow. */
+@media (max-width: 767px) {
+  body.cc-mobile-account-page,
+  body:has(.acc-page) {
+    background: #fbf7f4 !important;
+  }
+
+  body.cc-mobile-account-page .ma-bottom-nav,
+  body:has(.acc-page) .ma-bottom-nav {
+    display: grid !important;
+  }
+
+  body.cc-mobile-account-page .acc-page,
+  body:has(.acc-page) .acc-page {
+    width: 100% !important;
+    min-height: 100svh !important;
+    padding: calc(70px + env(safe-area-inset-top, 0px)) 14px calc(104px + env(safe-area-inset-bottom, 0px)) !important;
+    background: #fbf7f4 !important;
+    overflow-x: hidden !important;
+  }
+
+  body.cc-mobile-account-page .cc-app-account-hero,
+  body:has(.acc-page) .cc-app-account-hero {
+    width: 100% !important;
+    grid-template-columns: 54px minmax(0, 1fr) !important;
+    gap: 12px !important;
+    margin: 0 0 12px !important;
+    padding: 14px !important;
+    border-radius: 18px !important;
+    box-shadow: 0 10px 28px rgba(61, 35, 38, 0.08) !important;
+  }
+
+  body.cc-mobile-account-page .cc-app-account-avatar,
+  body:has(.acc-page) .cc-app-account-avatar {
+    width: 54px !important;
+    height: 54px !important;
+    border-radius: 16px !important;
+  }
+
+  body.cc-mobile-account-page .cc-app-account-hero h1,
+  body:has(.acc-page) .cc-app-account-hero h1 {
+    margin: 4px 0 !important;
+    font-size: 1.28rem !important;
+    line-height: 1.08 !important;
+  }
+
+  body.cc-mobile-account-page .cc-app-account-hero p,
+  body:has(.acc-page) .cc-app-account-hero p {
+    font-size: 0.76rem !important;
+    line-height: 1.35 !important;
+  }
+
+  body.cc-mobile-account-page .acc-container,
+  body:has(.acc-page) .acc-container {
+    width: 100% !important;
+    max-width: none !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 12px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body.cc-mobile-account-page .acc-sidebar,
+  body:has(.acc-page) .acc-sidebar,
+  body.cc-mobile-account-page .acc-main,
+  body:has(.acc-page) .acc-main,
+  body.cc-mobile-account-page .acc-panel,
+  body:has(.acc-page) .acc-panel {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  body.cc-mobile-account-page .acc-profile-card,
+  body:has(.acc-page) .acc-profile-card {
+    display: grid !important;
+    grid-template-columns: 56px minmax(0, 1fr) !important;
+    align-items: center !important;
+    gap: 10px 12px !important;
+    padding: 14px !important;
+    text-align: left !important;
+    border-radius: 18px !important;
+    box-shadow: 0 8px 22px rgba(61, 35, 38, 0.06) !important;
+  }
+
+  body.cc-mobile-account-page .acc-avatar,
+  body:has(.acc-page) .acc-avatar {
+    grid-row: 1 / span 3 !important;
+    width: 56px !important;
+    height: 56px !important;
+    margin: 0 !important;
+    border-radius: 16px !important;
+    font-size: 1.2rem !important;
+  }
+
+  body.cc-mobile-account-page .acc-displayname,
+  body:has(.acc-page) .acc-displayname,
+  body.cc-mobile-account-page .acc-email-small,
+  body:has(.acc-page) .acc-email-small,
+  body.cc-mobile-account-page .acc-since,
+  body:has(.acc-page) .acc-since {
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  body.cc-mobile-account-page .acc-nav,
+  body:has(.acc-page) .acc-nav {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 7px !important;
+    padding: 8px !important;
+    border-radius: 18px !important;
+    overflow: visible !important;
+  }
+
+  body.cc-mobile-account-page .acc-nav-btn,
+  body:has(.acc-page) .acc-nav-btn {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 42px !important;
+    padding: 8px 6px !important;
+    justify-content: center !important;
+    border-radius: 999px !important;
+    font-size: 0.7rem !important;
+    line-height: 1.1 !important;
+    text-align: center !important;
+  }
+
+  body.cc-mobile-account-page .acc-nav-btn.logout-btn,
+  body:has(.acc-page) .acc-nav-btn.logout-btn {
+    grid-column: 1 / -1 !important;
+    min-height: 38px !important;
+    color: #9e2f3f !important;
+  }
+
+  body.cc-mobile-account-page .panel-head,
+  body:has(.acc-page) .panel-head {
+    margin: 4px 0 12px !important;
+  }
+
+  body.cc-mobile-account-page .panel-title,
+  body:has(.acc-page) .panel-title {
+    font-size: 1.55rem !important;
+    line-height: 1.08 !important;
+  }
+
+  body.cc-mobile-account-page .stat-grid,
+  body:has(.acc-page) .stat-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    margin-bottom: 12px !important;
+  }
+
+  body.cc-mobile-account-page .stat-box,
+  body:has(.acc-page) .stat-box {
+    min-width: 0 !important;
+    padding: 12px 6px !important;
+    border-radius: 16px !important;
+  }
+
+  body.cc-mobile-account-page .stat-num,
+  body:has(.acc-page) .stat-num {
+    font-size: 1.2rem !important;
+    line-height: 1 !important;
+  }
+
+  body.cc-mobile-account-page .stat-label,
+  body:has(.acc-page) .stat-label {
+    font-size: 0.58rem !important;
+    line-height: 1.15 !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  body.cc-mobile-account-page .acc-card,
+  body.cc-mobile-account-page .order-card,
+  body.cc-mobile-account-page .addr-card,
+  body:has(.acc-page) .acc-card,
+  body:has(.acc-page) .order-card,
+  body:has(.acc-page) .addr-card {
+    width: 100% !important;
+    min-width: 0 !important;
+    margin-bottom: 12px !important;
+    padding: 14px !important;
+    border-radius: 18px !important;
+    box-shadow: 0 8px 22px rgba(61, 35, 38, 0.06) !important;
+  }
+
+  body.cc-mobile-account-page .info-row,
+  body:has(.acc-page) .info-row {
+    display: grid !important;
+    grid-template-columns: minmax(72px, 0.42fr) minmax(0, 1fr) !important;
+    gap: 10px !important;
+    align-items: start !important;
+    padding: 10px 0 !important;
+  }
+
+  body.cc-mobile-account-page .info-label,
+  body:has(.acc-page) .info-label {
+    min-width: 0 !important;
+    font-size: 0.72rem !important;
+    line-height: 1.3 !important;
+  }
+
+  body.cc-mobile-account-page .info-val,
+  body.cc-mobile-account-page #accountAddress,
+  body:has(.acc-page) .info-val,
+  body:has(.acc-page) #accountAddress {
+    max-width: none !important;
+    min-width: 0 !important;
+    text-align: right !important;
+    font-size: 0.8rem !important;
+    line-height: 1.4 !important;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+  }
+
+  body.cc-mobile-account-page .fg2,
+  body:has(.acc-page) .fg2 {
+    grid-template-columns: 1fr !important;
+  }
+
+  body.cc-mobile-account-page .fg input,
+  body.cc-mobile-account-page .acc-card input,
+  body:has(.acc-page) .fg input,
+  body:has(.acc-page) .acc-card input {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 46px !important;
+    border-radius: 14px !important;
+    font-size: 16px !important;
+  }
+
+  body.cc-mobile-account-page .form-acts,
+  body:has(.acc-page) .form-acts {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  body.cc-mobile-account-page .btn-prime,
+  body.cc-mobile-account-page .btn-ghost,
+  body.cc-mobile-account-page .add-addr-toggle,
+  body:has(.acc-page) .btn-prime,
+  body:has(.acc-page) .btn-ghost,
+  body:has(.acc-page) .add-addr-toggle {
+    width: 100% !important;
+    min-height: 46px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: normal !important;
+    text-align: center !important;
+  }
+
+  body.cc-mobile-account-page .order-head,
+  body.cc-mobile-account-page .order-foot,
+  body:has(.acc-page) .order-head,
+  body:has(.acc-page) .order-foot {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    text-align: left !important;
+  }
+
+  body.cc-mobile-account-page .order-item,
+  body:has(.acc-page) .order-item {
+    gap: 10px !important;
+  }
+}

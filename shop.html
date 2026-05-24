@@ -345,8 +345,7 @@
       .shop-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        grid-auto-rows: 1fr;
-        align-items: stretch;
+        align-items: start;
         gap: 14px 10px;
         padding: 14px;
         touch-action: pan-y;
@@ -354,9 +353,8 @@
 
       .shop-card {
         min-width: 0;
-        height: 100%;
-        display: grid;
-        grid-template-rows: auto 1fr;
+        display: flex;
+        flex-direction: column;
         overflow: hidden;
         border: 0;
         border-radius: var(--shop-radius);
@@ -382,16 +380,25 @@
 
       .shop-card-badge {
         position: absolute;
-        left: 8px;
-        top: 8px;
-        padding: 5px 7px;
-        border-radius: var(--shop-radius);
-        background: rgba(255, 250, 246, 0.92);
+        left: 10px;
+        top: 10px;
+        padding: 5px 10px;
+        height: 24px;
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        background: rgba(255, 250, 246, 0.94);
         color: var(--shop-rose);
         font-size: 0.58rem;
         font-weight: 800;
         letter-spacing: 0.08em;
         text-transform: uppercase;
+        white-space: nowrap;
+        max-width: calc(100% - 20px);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        z-index: 2;
+        box-shadow: 0 2px 8px rgba(224,72,122,0.10);
       }
 
       .shop-card-heart,
@@ -410,6 +417,7 @@
         font: 900 1rem/1 Jost, system-ui, sans-serif;
         touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
+        pointer-events: none;
       }
 
       .shop-card-heart {
@@ -425,20 +433,22 @@
       }
 
       .shop-card-body {
-        display: grid;
-        grid-template-rows: auto auto 1fr auto;
-        gap: 6px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
         padding: 10px;
+        flex: 1;
       }
 
       .shop-card h2 {
-        min-height: 38px;
+        min-height: 34px;
         display: -webkit-box;
         overflow: hidden;
         color: var(--shop-ink);
-        font: 800 0.78rem/1.16 Jost, system-ui, sans-serif;
+        font: 800 0.78rem/1.22 Jost, system-ui, sans-serif;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
+        margin: 2px 0 0;
       }
 
       .shop-card small {
@@ -448,11 +458,14 @@
 
       .shop-card-price {
         display: flex;
-        flex-wrap: wrap;
         align-items: baseline;
         gap: 6px;
+        flex-wrap: nowrap;
         color: var(--shop-hot);
         font-weight: 900;
+        font-size: 0.9rem;
+        margin-top: auto;
+        padding-top: 4px;
       }
 
       .shop-card-price span {
@@ -460,11 +473,13 @@
         font-size: 0.68rem;
         font-weight: 600;
         text-decoration: line-through;
+        white-space: nowrap;
       }
 
       .shop-card button {
         width: 100%;
         min-height: 36px;
+        margin-top: 8px;
         border: 0;
         border-radius: 999px;
         background: linear-gradient(90deg, #241316, #e0487a);
@@ -475,6 +490,7 @@
         touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
         cursor: pointer;
+        flex-shrink: 0;
       }
 
       .shop-story,
@@ -775,7 +791,7 @@
 
         function renderCard(product) {
           return '<article class="shop-card">' +
-            '<a class="shop-card-media" href="' + productUrl(product) + '"><img src="' + product.img + '" alt="' + product.name + '" loading="lazy" decoding="async"><span class="shop-card-badge">' + product.tag + '</span><button class="shop-card-heart" type="button" aria-label="Wishlist">♡</button><button class="shop-card-quick" type="button" aria-label="Quick add">+</button></a>' +
+            '<a class="shop-card-media" href="' + productUrl(product) + '"><img src="' + product.img + '" alt="' + product.name + '" loading="lazy" decoding="async"><span class="shop-card-badge">' + product.tag + '</span><span class="shop-card-heart" aria-hidden="true">♡</span><span class="shop-card-quick" aria-hidden="true">+</span></a>' +
             '<div class="shop-card-body"><small>' + label(product.category) + ' · 4.8 stars</small><a href="' + productUrl(product) + '"><h2>' + product.name + '</h2></a><div class="shop-card-price">Rs.' + product.price + '<span>Rs.' + product.old + '</span></div><button type="button" data-add="' + product.id + '">Add to Cart</button></div>' +
             '</article>';
         }

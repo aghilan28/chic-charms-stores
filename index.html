@@ -192,6 +192,56 @@
       .product-card-lux:hover .lux-img-container img {
         transform: scale(1.05);
       }
+      /* ── Badge overlay: guaranteed pinned inside image ──
+         Inline page styles load after external CSS, so these
+         beats any external file that might reset position.    */
+      .product-card-lux .lux-img-container {
+        position: relative !important;
+        overflow: hidden !important;
+      }
+      .product-card-lux .lux-img-container .mobile-product-badge {
+        position: absolute !important;
+        top: 10px !important;
+        left: 10px !important;
+        z-index: 6 !important;
+        display: inline-flex !important;
+        align-items: center;
+        height: 24px;
+        padding: 0 10px;
+        border-radius: 3px;
+        font-family: var(--font-body, 'Jost', sans-serif);
+        font-size: 0.6rem;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        background: rgba(255, 255, 255, 0.85);
+        color: #B5657A;
+        border: 1px solid rgba(181, 101, 122, 0.38);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        pointer-events: none;
+        white-space: nowrap;
+        max-width: calc(100% - 20px);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+        float: none !important;
+        margin: 0 !important;
+        transform: none !important;
+      }
+      .product-card-lux .lux-img-container .lux-badges {
+        position: absolute !important;
+        top: 10px !important;
+        left: 10px !important;
+        z-index: 7 !important;
+        display: flex !important;
+        flex-direction: column;
+        gap: 4px;
+        pointer-events: none;
+        float: none !important;
+        margin: 0 !important;
+        transform: none !important;
+      }
     </style>
     <!-- ░░ SEARCH · FILTER · SORT STYLES ░░ -->
     <style>
