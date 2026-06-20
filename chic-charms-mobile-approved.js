@@ -1,42 +1,97 @@
 /* ==========================================================================
    CHIC CHARMS — APPROVED MOBILE COMMERCE UI
-   Visual Fidelity Enforcement Protocol v1.0
-   Backend integration only – visual output is byte-faithful to code.html
+   Injects the approved code.html mobile storefront into index.html on mobile.
+   Desktop is protected and untouched.
    ========================================================================== */
-(function(){
-  'use strict';
+(function () {
+  "use strict";
 
+  const MOBILE_QUERY = "(max-width: 767px)";
+  const mq = window.matchMedia(MOBILE_QUERY);
   let mounted = false;
-  function mountUI(){
-    if(mounted) return;
+
+  function onMobile() { return mq.matches; }
+
+  function ensureFonts() {
+    const h = document.head;
+    if (!document.querySelector('link[href*="Playfair+Display"]')) {
+      const l = document.createElement("link");
+      l.rel = "stylesheet";
+      l.href = "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@100..900&display=swap";
+      h.appendChild(l);
+    }
+    if (!document.querySelector('link[href*="Material+Symbols+Outlined"]')) {
+      const l2 = document.createElement("link");
+      l2.rel = "stylesheet";
+      l2.href = "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap";
+      h.appendChild(l2);
+    }
+  }
+
+  function getCart() {
+    try { return JSON.parse(localStorage.getItem("cart") || "[]"); } catch (e) { return []; }
+  }
+  function getWishlist() {
+    try { return JSON.parse(localStorage.getItem("wishlist") || "[]"); } catch (e) { return []; }
+  }
+  function saveWishlist(list) {
+    localStorage.setItem("wishlist", JSON.stringify(list));
+  }
+  function updateCartCount() {
+    const cart = getCart();
+    const count = cart.reduce((sum, item) => sum + (Number(item.quantity) || Number(item.qty) || 1), 0);
+    const badge = document.querySelector(".cc-cart-count");
+    if (badge) {
+      badge.textContent = count > 9 ? "9+" : String(count);
+      badge.classList.toggle("hidden", count === 0);
+    }
+  }
+
+  let toastT;
+  function showToast(msg) {
+    const t = document.querySelector(".cc-toast");
+    if (!t) return;
+    t.textContent = msg; t.classList.add("show");
+    clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), 2200);
+  }
+
+  function toggleDrawer(open) {
+    const drawer = document.getElementById("ccDrawer");
+    const overlay = document.getElementById("ccDrawerOverlay");
+    if (!drawer || !overlay) return;
+    drawer.classList.toggle("open", !!open);
+    overlay.classList.toggle("open", !!open);
+    document.body.style.overflow = open ? "hidden" : "";
+  }
+
+  function openModal(name) {
+    document.getElementById("cc" + name + "Modal")?.classList.add("open");
+    document.getElementById("cc" + name + "Overlay")?.classList.add("open");
+    document.body.style.overflow = "hidden";
+  }
+  function closeModal(name) {
+    document.getElementById("cc" + name + "Modal")?.classList.remove("open");
+    document.getElementById("cc" + name + "Overlay")?.classList.remove("open");
+    document.body.style.overflow = "";
+  }
+
+  function mountUI() {
+    if (mounted) return;
     mounted = true;
+    ensureFonts();
 
-    // inject Material Symbols + Playfair + Inter if not present (exact code.html)
-    (function ensureFonts(){
-      const h = document.head;
-      if(!document.querySelector('link[href*="Playfair+Display"]')){
-        const l = document.createElement('link');
-        l.rel='stylesheet';
-        l.href='https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@100..900&display=swap';
-        h.appendChild(l);
-      }
-      if(!document.querySelector('link[href*="Material+Symbols+Outlined"]')){
-        const l2 = document.createElement('link');
-        l2.rel='stylesheet';
-        l2.href='https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap';
-        h.appendChild(l2);
-      }
-    })();
-
-    const ui = document.createElement('div');
-    ui.className = 'cc-mobile-ui';
-    ui.setAttribute('aria-label','Chic Charms Mobile Storefront');
+    const ui = document.createElement("div");
+    ui.className = "cc-mobile-ui";
+    ui.setAttribute("aria-label", "Chic Charms Mobile Storefront");
     ui.innerHTML = `
 <div class="cc-announce">Free Shipping Across India</div>
 <header class="cc-header">
   <button class="cc-header-btn" id="ccMenuBtn" aria-label="Menu"><span class="material-symbols-outlined">menu</span></button>
   <a href="index.html" class="cc-logo">CHIC CHARMS</a>
-  <button class="cc-header-btn" id="ccSearchBtn" aria-label="Search"><span class="material-symbols-outlined">search</span></button>
+  <a href="cart.html" class="cc-header-btn cc-header-cart" aria-label="Cart">
+    <span class="material-symbols-outlined">shopping_bag</span>
+    <span class="cc-cart-count hidden"></span>
+  </a>
 </header>
 
 <div class="cc-drawer-overlay" id="ccDrawerOverlay"></div>
@@ -58,6 +113,8 @@
       <a href="#" data-cat="after-dark">Party Collection</a>
       <a href="#" data-cat="heritage-muse">Bridal Collection</a>
       <a href="#" data-price="under299" style="color:#B5657A">Under ₹299</a>
+      <a href="cart.html">Cart</a>
+      <a href="account.html">Account</a>
       <a href="about.html">About Chic Charms</a>
       <a href="contact.html">Contact</a>
     </nav>
@@ -75,7 +132,7 @@
   </div>
 
   <section class="cc-editorial" id="ccEditorial" style="display:none">
-    <div class="cc-editorial-bg" id="ccEditorialBg"></div>
+    <div class="cc-editorial-bg" id="ccEditorialBg" style="background-image: url('images/editorial-light-meets-gold.png'), linear-gradient(180deg,#e8c7cf,#d6a8b5)"></div>
     <div class="cc-editorial-scrim"></div>
     <div class="cc-editorial-inner">
       <h2>The Eternal Pearl Collection</h2>
@@ -157,302 +214,329 @@
 <div class="cc-toast" id="ccToast" role="status" aria-live="polite"></div>
 `;
     document.body.appendChild(ui);
-    initInteractions();
-    initBackend();
-  }
 
-  // --- Interactions – faithful to code.html ---
-  function initInteractions(){
-    const drawer = document.getElementById('ccDrawer');
-    const overlay = document.getElementById('ccDrawerOverlay');
-    function toggleDrawer(open){
-      drawer.classList.toggle('open', !!open);
-      overlay.classList.toggle('open', !!open);
-      document.body.style.overflow = open ? 'hidden' : '';
-    }
-    document.getElementById('ccMenuBtn')?.addEventListener('click', ()=>toggleDrawer(true));
-    document.getElementById('ccDrawerClose')?.addEventListener('click', ()=>toggleDrawer(false));
-    overlay?.addEventListener('click', ()=>toggleDrawer(false));
-
-    function openModal(name){
-      document.getElementById('cc'+name+'Modal')?.classList.add('open');
-      document.getElementById('cc'+name+'Overlay')?.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeModal(name){
-      document.getElementById('cc'+name+'Modal')?.classList.remove('open');
-      document.getElementById('cc'+name+'Overlay')?.classList.remove('open');
-      document.body.style.overflow = '';
-    }
-    document.getElementById('ccFilterBtn')?.addEventListener('click', ()=>openModal('Filter'));
-    document.getElementById('ccSortBtn')?.addEventListener('click', ()=>openModal('Sort'));
-    document.querySelectorAll('[data-close]').forEach(b=>{
-      b.addEventListener('click', ()=> closeModal(b.dataset.close.charAt(0).toUpperCase()+b.dataset.close.slice(1)));
+    // Interactions
+    document.getElementById("ccMenuBtn")?.addEventListener("click", () => toggleDrawer(true));
+    document.getElementById("ccDrawerClose")?.addEventListener("click", () => toggleDrawer(false));
+    document.getElementById("ccDrawerOverlay")?.addEventListener("click", () => toggleDrawer(false));
+    document.getElementById("ccFilterBtn")?.addEventListener("click", () => openModal("Filter"));
+    document.getElementById("ccSortBtn")?.addEventListener("click", () => openModal("Sort"));
+    document.querySelectorAll("[data-close]").forEach(b => {
+      b.addEventListener("click", () => closeModal(b.dataset.close.charAt(0).toUpperCase() + b.dataset.close.slice(1)));
     });
-    document.getElementById('ccFilterOverlay')?.addEventListener('click', ()=>closeModal('Filter'));
-    document.getElementById('ccSortOverlay')?.addEventListener('click', ()=>closeModal('Sort'));
-
-    // Search button – scroll to top / focus – matches approved UI (no search overlay in code.html, header search is decorative)
-    document.getElementById('ccSearchBtn')?.addEventListener('click', ()=>{
-      window.scrollTo({top:0, behavior:'smooth'});
-      showToast('Search coming soon');
-    });
-
-    document.getElementById('ccEditorialBtn')?.addEventListener('click', (e)=>{
+    document.getElementById("ccFilterOverlay")?.addEventListener("click", () => closeModal("Filter"));
+    document.getElementById("ccSortOverlay")?.addEventListener("click", () => closeModal("Sort"));
+    document.getElementById("ccEditorialBtn")?.addEventListener("click", (e) => {
       e.preventDefault();
-      // Activate Pearl / Heritage collection
-      activeFilters.collections = ['heritage-muse'];
-      document.querySelectorAll('#ccCollectionFilters input').forEach(cb=>{ cb.checked = cb.value==='heritage-muse'; });
-      renderAll();
-      window.scrollTo({top:140, behavior:'smooth'});
-      const crumb = document.getElementById('ccCrumbCat');
-      if(crumb) crumb.textContent = 'Pearl Collection';
+      filterByCategory("heritage-muse");
     });
+
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") { toggleDrawer(false); closeModal("Filter"); closeModal("Sort"); } });
   }
 
   // --- Backend ---
   let allProducts = [];
-  let currentSort = 'bestsellers';
-  let activeFilters = { types:[], collections:[], prices:[] };
+  let currentSort = "bestsellers";
+  let activeFilters = { types: [], collections: [], prices: [] };
+  let backendReady = false;
 
-  async function initBackend(){
+  const CATEGORY_LABELS = {
+    "everyday-elegance": "Everyday Elegance",
+    "modern-romance": "Modern Romance",
+    "after-dark": "After Dark",
+    "heritage-muse": "Heritage Muse"
+  };
+  const CATEGORY_ORDER = ["everyday-elegance", "modern-romance", "after-dark", "heritage-muse"];
+  const CATEGORY_ALIASES = {
+    all: "", jewellery: "", jewelry: "", collection: "", collections: "",
+    earring: "everyday-elegance", earrings: "everyday-elegance",
+    stud: "everyday-elegance", studs: "everyday-elegance",
+    simple: "everyday-elegance", daily: "everyday-elegance", everyday: "everyday-elegance",
+    hoop: "modern-romance", hoops: "modern-romance",
+    pearl: "heritage-muse",
+    purple: "modern-romance", dangling: "modern-romance",
+    romance: "modern-romance", romantic: "modern-romance",
+    korean: "after-dark", party: "after-dark", evening: "after-dark", statement: "after-dark",
+    heritage: "heritage-muse", traditional: "heritage-muse", classic: "heritage-muse",
+    bridal: "heritage-muse", minimal: "everyday-elegance", gold: "modern-romance"
+  };
+
+  function normalizeCategory(v) {
+    const k = String(v || "").trim().toLowerCase();
+    return CATEGORY_LABELS[k] ? k : CATEGORY_ALIASES[k] || "";
+  }
+  function inferCategory(product, docId) {
+    const c = normalizeCategory(product?.category);
+    if (c) return c;
+    const hay = [product?.name, product?.tag, product?.description, docId].join(" ").toLowerCase();
+    for (const a of Object.keys(CATEGORY_ALIASES)) { if (hay.includes(a)) return CATEGORY_ALIASES[a]; }
+    let h = 0; const s = String(product?.name || docId || "");
+    for (let i = 0; i < s.length; i += 1) h = (h + s.charCodeAt(i) * (i + 1)) % CATEGORY_ORDER.length;
+    return CATEGORY_ORDER[h];
+  }
+  function productImage(p) {
+    const img = p?.productImage || p?.image || p?.imageUrl || p?.imageURL || "";
+    if (img && (/^https?:\/\//.test(img) || img.startsWith("data:image") || /images\/.+\.(jpe?g|png|webp)$/i.test(img))) return img;
+    return "data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22400%22%3E%3Crect width=%22400%22 height=%22400%22 fill=%22%23FAF1F4%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2242%22%3E🌸%3C/text%3E%3C/svg%3E";
+  }
+  function formatPrice(price) {
+    return "₹" + Number(price || 0).toLocaleString("en-IN");
+  }
+  function escapeHtml(str) {
+    return String(str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+  function escapeAttr(str) { return escapeHtml(str).replace(/'/g, "&#39;"); }
+
+  function getFiltered() {
+    let list = allProducts.slice();
+    if (activeFilters.collections.length) {
+      list = list.filter(p => activeFilters.collections.includes(p.categorySlug));
+    }
+    if (activeFilters.prices.length) {
+      list = list.filter(p => activeFilters.prices.some(r => {
+        if (r === "under500") return p.price < 499;
+        if (r === "500-1499") return p.price >= 500 && p.price <= 1499;
+        if (r === "above1500") return p.price > 1500;
+        return true;
+      }));
+    }
+    if (activeFilters.types.length) {
+      list = list.filter(p => {
+        const hay = (p.name + " " + p.description + " " + p.tag).toLowerCase();
+        return activeFilters.types.some(t => hay.includes(t));
+      });
+    }
+    if (currentSort === "low-high") list.sort((a, b) => a.price - b.price);
+    else if (currentSort === "high-low") list.sort((a, b) => b.price - a.price);
+    else if (currentSort === "newest") list.reverse();
+    else if (currentSort === "popularity") list.sort((a, b) => (Number(b.rating) || 0) - (Number(a.rating) || 0));
+    else {
+      list.sort((a, b) => {
+        const aOrder = CATEGORY_ORDER.indexOf(a.categorySlug);
+        const bOrder = CATEGORY_ORDER.indexOf(b.categorySlug);
+        if (aOrder !== bOrder) return aOrder - bOrder;
+        return String(a.name || "").localeCompare(String(b.name || ""));
+      });
+    }
+    return list;
+  }
+
+  function productCard(p) {
+    const url = `product.html?id=${encodeURIComponent(p.id)}&category=${encodeURIComponent(p.categorySlug)}`;
+    const wl = getWishlist();
+    const saved = wl.includes(p.id);
+    const name = escapeHtml(p.name);
+    return `
+      <div class="cc-product">
+        <div class="cc-product-img">
+          <a href="${url}" aria-label="View ${name}">
+            <img src="${escapeAttr(p.image)}" alt="${name}" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22400%22%3E%3Crect width=%22400%22 height=%22400%22 fill=%22%23FAF1F4%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2242%22%3E🌸%3C/text%3E%3C/svg%3E'">
+          </a>
+          <button class="cc-wish${saved ? ' is-saved' : ''}" data-wish="${escapeAttr(p.id)}" aria-label="${saved ? 'Remove from wishlist' : 'Add to wishlist'}">
+            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' ${saved ? 1 : 0}">${saved ? 'favorite' : 'favorite_border'}</span>
+          </button>
+        </div>
+        <div class="cc-product-info">
+          <h3 class="cc-product-name"><a href="${url}">${name}</a></h3>
+          <p class="cc-product-price">${formatPrice(p.price)}</p>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderAll() {
+    const list = getFiltered();
+    const grid1 = document.getElementById("ccGrid");
+    const grid2 = document.getElementById("ccGrid2");
+    const countEl = document.getElementById("ccResultCount");
+    const editorial = document.getElementById("ccEditorial");
+
+    if (countEl) countEl.textContent = list.length ? `Showing ${list.length} of ${allProducts.length} products` : "No products match your filters";
+
+    if (!list.length) {
+      if (grid1) grid1.innerHTML = '<div class="cc-state">No products found. Try clearing filters.</div>';
+      if (grid2) grid2.innerHTML = "";
+      if (editorial) editorial.style.display = "none";
+      return;
+    }
+    const first = list.slice(0, 8);
+    const second = list.slice(8);
+    if (grid1) grid1.innerHTML = first.map(productCard).join("");
+    if (grid2) grid2.innerHTML = second.map(productCard).join("");
+    if (editorial) editorial.style.display = first.length >= 4 ? "block" : "none";
+
+    document.querySelectorAll("[data-wish]").forEach(btn => {
+      btn.addEventListener("click", e => {
+        e.preventDefault(); e.stopPropagation();
+        const id = btn.dataset.wish;
+        let wl = getWishlist();
+        const was = wl.includes(id);
+        if (was) wl = wl.filter(x => x !== id); else wl.push(id);
+        saveWishlist(wl);
+        btn.classList.toggle("is-saved", !was);
+        const icon = btn.querySelector("span");
+        if (icon) { icon.textContent = was ? "favorite_border" : "favorite"; icon.style.fontVariationSettings = `'FILL' ${was ? 0 : 1}`; }
+        btn.setAttribute("aria-label", was ? "Add to wishlist" : "Remove from wishlist");
+        showToast(was ? "Removed from wishlist" : "Saved to wishlist");
+      });
+    });
+  }
+
+  function updateFilterState() {
+    activeFilters.types = [...document.querySelectorAll("#ccTypeFilters input:checked")].map(i => i.value);
+    activeFilters.collections = [...document.querySelectorAll("#ccCollectionFilters input:checked")].map(i => i.value);
+    activeFilters.prices = [...document.querySelectorAll("#ccPriceFilters input:checked")].map(i => i.value);
+    renderAll();
+  }
+
+  function clearFilters() {
+    document.querySelectorAll("#ccTypeFilters input, #ccCollectionFilters input, #ccPriceFilters input").forEach(i => i.checked = false);
+    activeFilters = { types: [], collections: [], prices: [] };
+    currentSort = "bestsellers";
+    document.querySelectorAll("#ccSortList button").forEach(b => b.classList.toggle("is-active", b.dataset.sort === "bestsellers"));
+  }
+
+  function updateCrumb(label) {
+    const el = document.getElementById("ccCrumbCat");
+    if (el) el.textContent = label;
+  }
+
+  window.filterByCategory = function (slug) {
+    clearFilters();
+    if (slug !== "all") {
+      activeFilters.collections = [slug];
+      const cb = document.querySelector(`#ccCollectionFilters input[value="${slug}"]`);
+      if (cb) cb.checked = true;
+    }
+    updateCrumb(CATEGORY_LABELS[slug] || "Shop");
+    renderAll();
+    toggleDrawer(false);
+    window.scrollTo({ top: 120, behavior: "smooth" });
+  };
+
+  window.filterByTag = function (tag) {
+    clearFilters();
+    activeFilters.types = [tag];
+    updateCrumb(tag === "new" ? "New Arrivals" : "Best Sellers");
+    renderAll();
+    toggleDrawer(false);
+    window.scrollTo({ top: 120, behavior: "smooth" });
+  };
+
+  window.filterByPrice = function () {
+    clearFilters();
+    activeFilters.prices = ["under500"];
+    const cb = document.querySelector('#ccPriceFilters input[value="under500"]');
+    if (cb) cb.checked = true;
+    updateCrumb("Under ₹299");
+    renderAll();
+    toggleDrawer(false);
+    window.scrollTo({ top: 120, behavior: "smooth" });
+  };
+
+  async function initBackend() {
+    if (backendReady) return;
+    backendReady = true;
     try {
-      const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
-      const { getFirestore, collection, onSnapshot } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+      const { initializeApp, getApps } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
+      const { getFirestore, collection, onSnapshot } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
       const firebaseConfig = {
         apiKey: "AIzaSyA5Bh77_4HE3yQF0hi5ddvbFLZC7rEerxg",
         authDomain: "chic-charms-store.firebaseapp.com",
         projectId: "chic-charms-store",
         storageBucket: "chic-charms-store.firebasestorage.app",
         messagingSenderId: "342514318589",
-        appId: "1:342514318589:web:31c3490c10731e46d75294",
+        appId: "1:342514318589:web:31c3490c10731e46d75294"
       };
       const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
       const db = getFirestore(app);
 
-      const CATEGORY_LABELS = {
-        "everyday-elegance":"Everyday Elegance",
-        "modern-romance":"Modern Romance",
-        "after-dark":"After Dark",
-        "heritage-muse":"Heritage Muse"
-      };
-      const CATEGORY_ORDER = ["everyday-elegance","modern-romance","after-dark","heritage-muse"];
-      const CATEGORY_ALIASES = {
-        earring:"everyday-elegance", earrings:"everyday-elegance",
-        stud:"everyday-elegance", studs:"everyday-elegance",
-        pearl:"heritage-muse", korean:"after-dark", party:"after-dark",
-        bridal:"heritage-muse", minimal:"everyday-elegance", gold:"modern-romance"
-      };
-      function normalizeCategory(v){
-        const k = String(v||'').trim().toLowerCase();
-        return CATEGORY_LABELS[k] ? k : CATEGORY_ALIASES[k] || '';
-      }
-      function inferCat(product, docId){
-        const c = normalizeCategory(product?.category);
-        if(c) return c;
-        const hay = [product?.name, product?.tag, product?.description, docId].join(' ').toLowerCase();
-        for(const a in CATEGORY_ALIASES){ if(hay.includes(a)) return CATEGORY_ALIASES[a]; }
-        let h=0; const s = String(product?.name||docId||'');
-        for(let i=0;i<s.length;i++) h = (h + s.charCodeAt(i)*(i+1)) % CATEGORY_ORDER.length;
-        return CATEGORY_ORDER[h];
-      }
-      function productImage(p){
-        const img = p?.productImage || p?.image || p?.imageUrl || p?.imageURL || '';
-        if(img && (/^https?:\/\//.test(img) || img.startsWith('data:image') || /images\/.+\.(jpe?g|png|webp)$/i.test(img))) return img;
-        return 'images/product-placeholder-jewelry.jpg';
-      }
-
-      onSnapshot(collection(db, "products"), (snap)=>{
+      onSnapshot(collection(db, "products"), (snap) => {
         allProducts = [];
-        snap.forEach(doc=>{
+        snap.forEach(doc => {
           const raw = doc.data();
-          const cat = inferCat(raw, doc.id);
+          const categorySlug = inferCategory(raw, doc.id);
+          const rawStock = raw.stock ?? raw.Stock ?? null;
+          const parsed = Number(rawStock ?? 0);
+          const stock = isNaN(parsed) ? 0 : parsed;
           allProducts.push({
             id: doc.id,
-            name: raw.name || 'Chic Charms Piece',
+            name: raw.name || "Chic Charms Piece",
             price: Number(raw.price || 0),
-            description: raw.description || '',
-            tag: raw.tag || '',
-            categorySlug: cat,
-            image: productImage(raw),
-            raw
+            description: raw.description || "",
+            tag: raw.tag || "",
+            rating: raw.rating || 0,
+            stock,
+            categorySlug,
+            image: productImage(raw)
           });
         });
         renderAll();
-      }, (err)=>{
-        console.error('[CC] Firestore error', err);
-        const g = document.getElementById('ccGrid');
-        if(g) g.innerHTML = '<div class="cc-state error">Could not load products.</div>';
+        updateCartCount();
+      }, (err) => {
+        console.error("[CC] Firestore error", err);
+        const g = document.getElementById("ccGrid");
+        if (g) g.innerHTML = '<div class="cc-state error">Could not load products. Please try again later.</div>';
       });
-
-    } catch(e){
-      console.error('[CC] Firebase init failed', e);
-      return;
+    } catch (e) {
+      console.error("[CC] Firebase init failed", e);
     }
+  }
 
-    // Filter wiring
-    document.querySelectorAll('#ccTypeFilters input').forEach(cb=>{
-      cb.addEventListener('change', ()=>{
-        activeFilters.types = [...document.querySelectorAll('#ccTypeFilters input:checked')].map(i=>i.value);
-        renderAll();
-      });
-    });
-    document.querySelectorAll('#ccCollectionFilters input').forEach(cb=>{
-      cb.addEventListener('change', ()=>{
-        activeFilters.collections = [...document.querySelectorAll('#ccCollectionFilters input:checked')].map(i=>i.value);
-        renderAll();
-      });
-    });
-    document.querySelectorAll('#ccPriceFilters input').forEach(cb=>{
-      cb.addEventListener('change', ()=>{
-        activeFilters.prices = [...document.querySelectorAll('#ccPriceFilters input:checked')].map(i=>i.value);
-        renderAll();
-      });
-    });
-
-    document.querySelectorAll('#ccSortList button').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        document.querySelectorAll('#ccSortList button').forEach(b=>b.classList.remove('is-active'));
-        btn.classList.add('is-active');
-        currentSort = btn.dataset.sort;
-        renderAll();
-        document.getElementById('ccSortModal')?.classList.remove('open');
-        document.getElementById('ccSortOverlay')?.classList.remove('open');
-        document.body.style.overflow = '';
-      });
-    });
-
-    // Drawer nav
-    document.getElementById('ccDrawerNav')?.addEventListener('click', (e)=>{
-      const a = e.target.closest('a[data-cat],a[data-filter],a[data-price]');
-      if(!a) return;
-      if(a.href.includes('about.html') || a.href.includes('contact.html')) return; // allow real navigation
+  function wireDrawerNav() {
+    const nav = document.getElementById("ccDrawerNav");
+    if (!nav) return;
+    nav.addEventListener("click", (e) => {
+      const a = e.target.closest("a[data-cat], a[data-filter], a[data-price]");
+      if (!a) return;
+      if (a.getAttribute("href") && !a.getAttribute("href").startsWith("#")) return;
       e.preventDefault();
-      document.querySelectorAll('#ccDrawerNav a').forEach(x=>x.classList.remove('is-active'));
-      a.classList.add('is-active');
-      document.querySelectorAll('#ccCollectionFilters input, #ccTypeFilters input, #ccPriceFilters input').forEach(i=>i.checked=false);
-      activeFilters = {types:[], collections:[], prices:[]};
-      if(a.dataset.cat && a.dataset.cat !== 'all'){
-        activeFilters.collections = [a.dataset.cat];
-        const cb = document.querySelector('#ccCollectionFilters input[value="'+a.dataset.cat+'"]');
-        if(cb) cb.checked = true;
-      }
-      if(a.dataset.price === 'under299'){
-        activeFilters.prices = ['under500'];
-      }
-      const crumb = document.getElementById('ccCrumbCat');
-      if(crumb) crumb.textContent = a.textContent.replace(/Collection/g,'').trim() || 'Earrings';
-      renderAll();
-      toggleDrawer(false);
-      function toggleDrawer(open){
-        document.getElementById('ccDrawer')?.classList.toggle('open', !!open);
-        document.getElementById('ccDrawerOverlay')?.classList.toggle('open', !!open);
-        document.body.style.overflow = open ? 'hidden' : '';
-      }
-      toggleDrawer(false);
-      window.scrollTo({top:120, behavior:'smooth'});
+      nav.querySelectorAll("a").forEach(x => x.classList.remove("is-active"));
+      a.classList.add("is-active");
+      if (a.dataset.cat) filterByCategory(a.dataset.cat);
+      if (a.dataset.filter) filterByTag(a.dataset.filter);
+      if (a.dataset.price) filterByPrice();
     });
   }
 
-  function getFiltered(){
-    let list = allProducts.slice();
-    if(activeFilters.collections.length){
-      list = list.filter(p => activeFilters.collections.includes(p.categorySlug));
-    }
-    if(activeFilters.prices.length){
-      list = list.filter(p=> activeFilters.prices.some(r=>{
-        if(r==='under500') return p.price < 499;
-        if(r==='500-1499') return p.price >= 500 && p.price <= 1499;
-        if(r==='above1500') return p.price > 1500;
-        return true;
-      }));
-    }
-    if(activeFilters.types.length){
-      list = list.filter(p=>{
-        const hay = (p.name+' '+p.description+' '+p.tag).toLowerCase();
-        return activeFilters.types.some(t => hay.includes(t));
+  function wireFilters() {
+    document.querySelectorAll("#ccTypeFilters input, #ccCollectionFilters input, #ccPriceFilters input").forEach(cb => {
+      cb.addEventListener("change", updateFilterState);
+    });
+    document.querySelectorAll("#ccSortList button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        currentSort = btn.dataset.sort;
+        document.querySelectorAll("#ccSortList button").forEach(b => b.classList.remove("is-active"));
+        btn.classList.add("is-active");
+        renderAll();
       });
-    }
-    if(currentSort==='low-high') list.sort((a,b)=>a.price-b.price);
-    else if(currentSort==='high-low') list.sort((a,b)=>b.price-a.price);
-    else if(currentSort==='newest') list = list.slice().reverse();
-    return list;
-  }
-
-  // Wishlist – uses existing repo key "wishlist"
-  function getWish(){ try{ return JSON.parse(localStorage.getItem('wishlist')||'[]'); }catch(e){ return []; } }
-  function saveWish(l){ try{ localStorage.setItem('wishlist', JSON.stringify(l)); }catch(e){} }
-
-  function productCard(p){
-    const url = `product.html?id=${encodeURIComponent(p.id)}&category=${encodeURIComponent(p.categorySlug)}`;
-    const wl = getWish();
-    const saved = wl.includes(p.id);
-    // Exact visual structure from code.html – no stock labels, no add-to-cart, no ratings
-    return `<div class="cc-product">
-      <div class="cc-product-img">
-        <a href="${url}"><img src="${escAttr(p.image)}" alt="${escAttr(p.name)}" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22400%22%3E%3Crect width=%22400%22 height=%22400%22 fill=%22%23FAF1F4%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2242%22%3E🌸%3C/text%3E%3C/svg%3E'"></a>
-        <button class="cc-wish${saved?' is-saved':''}" data-wish="${escAttr(p.id)}" aria-label="Wishlist"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' ${saved?1:0};font-size:20px">${saved?'favorite':'favorite_border'}</span></button>
-      </div>
-      <div class="cc-product-info">
-        <h3 class="cc-product-name"><a href="${url}">${escHtml(p.name)}</a></h3>
-        <p class="cc-product-price">₹${Number(p.price).toLocaleString('en-IN')}</p>
-      </div>
-    </div>`;
-  }
-
-  function renderAll(){
-    const list = getFiltered();
-    const grid = document.getElementById('ccGrid');
-    const grid2 = document.getElementById('ccGrid2');
-    const countEl = document.getElementById('ccResultCount');
-    if(countEl) countEl.textContent = list.length ? `Showing ${list.length} of ${allProducts.length} products` : 'No products match your filters';
-
-    if(!list.length){
-      if(grid) grid.innerHTML = '<div class="cc-state">No products found. Try clearing filters.</div>';
-      if(grid2) grid2.innerHTML = '';
-      const ed = document.getElementById('ccEditorial'); if(ed) ed.style.display='none';
-      return;
-    }
-    const first = list.slice(0,8);
-    const second = list.slice(8);
-    if(grid) grid.innerHTML = first.map(productCard).join('');
-
-    const editorial = document.getElementById('ccEditorial');
-    const editorialBg = document.getElementById('ccEditorialBg');
-    if(editorial && first.length >= 4){
-      editorial.style.display = 'block';
-      editorialBg.style.backgroundImage = "url('images/editorial-light-meets-gold.jpg'), linear-gradient(180deg,#e8c7cf,#d6a8b5)";
-    } else if(editorial){ editorial.style.display='none'; }
-
-    if(grid2) grid2.innerHTML = second.map(productCard).join('');
-
-    // wire wishlist – matches repo d15-luxury-stage4-final.js behaviour
-    document.querySelectorAll('[data-wish]').forEach(btn=>{
-      btn.onclick = (e)=>{
-        e.preventDefault(); e.stopPropagation();
-        const id = btn.dataset.wish;
-        let wl = getWish();
-        const was = wl.includes(id);
-        if(was) wl = wl.filter(x=>x!==id); else wl.push(id);
-        saveWish(wl);
-        btn.classList.toggle('is-saved', !was);
-        const icon = btn.querySelector('.material-symbols-outlined');
-        if(icon){ icon.textContent = !was ? 'favorite' : 'favorite_border'; icon.style.fontVariationSettings = `'FILL' ${!was?1:0}`; }
-        showToast(!was ? 'Saved to wishlist' : 'Removed from wishlist');
-      };
     });
   }
 
-  let toastT;
-  function showToast(msg){
-    const t = document.getElementById('ccToast'); if(!t) return;
-    t.textContent = msg; t.classList.add('show');
-    clearTimeout(toastT); toastT = setTimeout(()=> t.classList.remove('show'), 2200);
+  function boot() {
+    if (!onMobile()) return;
+    mountUI();
+    wireDrawerNav();
+    wireFilters();
+    initBackend();
+    updateCartCount();
+    window.addEventListener("storage", updateCartCount);
   }
-  function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-  function escAttr(s){ return escHtml(s).replace(/"/g,'&quot;'); }
 
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mountUI);
-  else mountUI();
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
+  }
 
+  function handleViewportChange() {
+    if (onMobile() && !mounted) {
+      boot();
+    } else if (!onMobile() && mounted) {
+      toggleDrawer(false);
+      closeModal("Filter"); closeModal("Sort");
+    }
+  }
+  if (mq.addEventListener) mq.addEventListener("change", handleViewportChange);
+  else mq.addListener(handleViewportChange);
 })();

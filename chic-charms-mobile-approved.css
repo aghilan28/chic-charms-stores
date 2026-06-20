@@ -1,16 +1,15 @@
 /* ==========================================================================
    CHIC CHARMS — APPROVED MOBILE COMMERCE UI
-   Visual Fidelity Enforcement Protocol v1.0
-   Source truth: code.html + DESIGN.md
-   Backend: Firebase Firestore chic-charms-store
-   DESKTOP PROTECTION: @media (max-width: 1024px) only
+   Replaces the mobile homepage view with the approved code.html design.
+   Desktop is fully protected and untouched.
+   Mobile breakpoint: max-width 767px
    ========================================================================== */
 
 .cc-mobile-ui { display: none; }
 
-@media (max-width: 1024px) {
+@media (max-width: 767px) {
 
-/* Hide legacy storefront chrome on mobile – desktop remains untouched */
+/* Hide legacy desktop & old mobile storefront chrome on mobile only */
 body > header.navbar,
 body > main,
 body > footer.footer,
@@ -20,11 +19,12 @@ nav.mobile-bottom-nav,
 .p3-sheet, .p3-sheet-backdrop,
 .mobile-promo-slider, .mobile-commerce-search,
 .mobile-category-strip, .mobile-commerce-actions, .mobile-commerce-menu,
-#shopControls, #products-container, .collection-footer-note {
+#shopControls, #products-container, .collection-footer-note,
+#adminReturnBanner {
   display: none !important;
 }
 
-/* --- Approved Design Tokens – from code.html tailwind.config --- */
+/* --- Approved Design Tokens (from code.html tailwind.config) --- */
 .cc-mobile-ui {
   --cc-bg: #FFF9F7;
   --cc-primary: #B5657A;
@@ -60,7 +60,7 @@ nav.mobile-bottom-nav,
 .cc-mobile-ui button { font-family: inherit; cursor: pointer; border: 0; background: none; color: inherit; }
 .cc-mobile-ui a { color: inherit; text-decoration: none; }
 
-/* Material Symbols – exact as code.html */
+/* Material Symbols — exact as code.html */
 .cc-mobile-ui .material-symbols-outlined {
   font-family: 'Material Symbols Outlined';
   font-weight: normal; font-style: normal;
@@ -69,10 +69,10 @@ nav.mobile-bottom-nav,
   display: inline-block; white-space: nowrap; word-wrap: normal;
   direction: ltr;
   -webkit-font-smoothing: antialiased;
-  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
 }
 
-/* --- Announcement Bar – h-[40px] bg-primary --- */
+/* --- Announcement Bar --- */
 .cc-announce {
   position: sticky; top: 0; z-index: 60;
   background: var(--cc-primary); color: var(--cc-white);
@@ -82,7 +82,7 @@ nav.mobile-bottom-nav,
   letter-spacing: 0.12em; text-transform: uppercase;
 }
 
-/* --- Header – h-[80px] border-header-border --- */
+/* --- Header --- */
 .cc-header {
   position: sticky; top: 40px; z-index: 50;
   background: var(--cc-bg);
@@ -105,6 +105,15 @@ nav.mobile-bottom-nav,
   white-space: nowrap;
 }
 @media (max-width: 380px){ .cc-logo { font-size: 30px; } }
+.cc-header-cart { position: relative; display: inline-flex; }
+.cc-cart-count {
+  position: absolute; top: -4px; right: -4px;
+  min-width: 18px; height: 18px; padding: 0 4px;
+  background: var(--cc-deep-rose); color: #fff;
+  border-radius: 999px; font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+.cc-cart-count:empty, .cc-cart-count.hidden { display: none; }
 
 /* --- Drawer --- */
 .cc-drawer-overlay {
@@ -162,7 +171,7 @@ nav.mobile-bottom-nav,
   color: var(--cc-menu-text); opacity: .6;
 }
 
-/* --- Product Grid – grid-cols-2 gap-x-[28px] gap-y-[48px] --- */
+/* --- Product Grid --- */
 .cc-grid {
   margin-top: var(--cc-stack-lg);
   display: grid; grid-template-columns: 1fr 1fr;
@@ -181,7 +190,7 @@ nav.mobile-bottom-nav,
 }
 .cc-product:hover .cc-product-img img { transform: scale(1.03); }
 
-/* Wishlist – absolute top-4 right-4 w-10 h-10 bg-white/95 rounded-full luxury-shadow border-outline-variant */
+/* Wishlist */
 .cc-wish {
   position: absolute; top: 16px; right: 16px;
   width: 40px; height: 40px;
@@ -195,9 +204,10 @@ nav.mobile-bottom-nav,
   transition: transform .15s;
 }
 .cc-wish:active { transform: scale(.92); }
-.cc-wish .material-symbols-outlined { font-size: 20px; }
+.cc-wish .material-symbols-outlined { font-size: 20px; transition: all .2s ease; }
+.cc-wish.is-saved .material-symbols-outlined { font-variation-settings: 'FILL' 1; }
 
-/* Product info – mt-stack-md text-center */
+/* Product info */
 .cc-product-info { margin-top: var(--cc-stack-md); text-align: center; padding: 0 8px; }
 .cc-product-name {
   font-family: 'Inter', sans-serif;
@@ -215,7 +225,7 @@ nav.mobile-bottom-nav,
   margin-top: 4px;
 }
 
-/* --- Editorial Insertion – mt-grid-gap-y -mx-margin-horizontal h-[450px] --- */
+/* --- Editorial Insertion --- */
 .cc-editorial {
   margin-top: var(--cc-gap-y);
   margin-left: calc(var(--cc-mx) * -1);
@@ -246,7 +256,7 @@ nav.mobile-bottom-nav,
 }
 .cc-editorial-btn:hover { opacity: .9; }
 
-/* --- Bottom Action Bar – fixed bottom-0 h-[60px] border-t --- */
+/* --- Bottom Action Bar --- */
 .cc-bottom-bar {
   position: fixed; bottom: 0; left: 0; right: 0;
   height: 60px; background: var(--cc-bg);
@@ -348,7 +358,7 @@ nav.mobile-bottom-nav,
 }
 .cc-state.error { color: #c0392b; background: #fff5f5; }
 
-/* Toast – not in approved code.html, but needed for cart/wishlist feedback – uses approved tokens only, hidden by default */
+/* Toast */
 .cc-toast {
   position: fixed; bottom: 78px; left: 50%;
   transform: translateX(-50%) translateY(12px);
