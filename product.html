@@ -1303,15 +1303,25 @@
         transform: translateY(0);
     }
 
-    @media (max-width: 767px) {
+    /* Screen width separation to completely show mobile layout for mobile/tablets and desktop for wide screens */
+    @media (max-width: 1024px) {
       .desktop-only {
         display: none !important;
       }
       .mobile-only {
         display: block !important;
       }
+      /* Ensure that legacy programmatically injected elements are hidden */
+      .cc-app-header,
+      .cc-global-bottom-nav,
+      .cc-app-bottom-nav,
+      .mobile-bottom-nav,
+      #ccFinalAnnouncement,
+      #ccFinalHome {
+        display: none !important;
+      }
     }
-    @media (min-width: 768px) {
+    @media (min-width: 1025px) {
       .desktop-only {
         display: block !important;
       }
@@ -1483,6 +1493,32 @@
 
   <!-- ░░ MOBILE-ONLY VIEWPORT ░░ -->
   <div class="mobile-only">
+     <!-- Sticky Announcement Bar -->
+     <div class="fixed top-0 left-0 w-full z-[60] h-[40px] bg-[#B5657A] flex items-center justify-center">
+       <span class="text-white font-label-caps text-[10px] tracking-[0.2em] uppercase text-center px-4">Complimentary Express Shipping on Orders Above ₹5,000</span>
+     </div>
+     
+     <!-- Sticky Header -->
+     <header class="fixed top-[40px] left-0 w-full z-[50] h-[80px] bg-[#FFF9F7]/95 backdrop-blur-md flex items-center px-margin_mobile">
+       <button class="absolute left-margin_mobile active:scale-95 transition-transform" data-cc-app-menu aria-label="Open menu">
+         <span class="material-symbols-outlined text-on-surface">menu</span>
+       </button>
+       <div class="w-full text-center">
+         <a href="index.html">
+           <h1 class="font-display-lg text-[22px] tracking-[0.15em] text-primary uppercase">CHIC CHARMS</h1>
+         </a>
+       </div>
+       <div class="absolute right-margin_mobile flex gap-4 items-center">
+         <a href="index.html#bestsellers" class="text-on-surface hover:text-primary transition-colors flex items-center">
+           <span class="material-symbols-outlined">search</span>
+         </a>
+         <a href="cart.html" class="text-on-surface hover:text-primary transition-colors flex items-center relative">
+           <span class="material-symbols-outlined">shopping_bag</span>
+           <span class="absolute -top-1.5 -right-1.5 bg-[#B5657A] text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center mobile-cart-count d7-cart-count">0</span>
+         </a>
+       </div>
+     </header>
+
      <!-- Mobile main content -->
      <main class="pt-[120px] pb-[80px]">
        
@@ -1723,7 +1759,26 @@
          </button>
        </div>
      </div>
-   </div>
+
+     <!-- Bottom Navigation Bar (Shell Requirement) -->
+     <nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-surface/95 backdrop-blur-lg border-t border-outline-variant">
+       <a href="index.html" class="flex flex-col items-center justify-center text-primary">
+         <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+       </a>
+       <a href="index.html#bestsellers" class="flex flex-col items-center justify-center text-on-surface-variant opacity-60">
+         <span class="material-symbols-outlined">search</span>
+       </a>
+       <a href="cart.html" class="flex flex-col items-center justify-center text-on-surface-variant opacity-60">
+         <span class="material-symbols-outlined">shopping_bag</span>
+       </a>
+       <a href="index.html" class="flex flex-col items-center justify-center text-on-surface-variant opacity-60">
+         <span class="material-symbols-outlined">favorite</span>
+       </a>
+       <a href="account.html" class="flex flex-col items-center justify-center text-on-surface-variant opacity-60">
+         <span class="material-symbols-outlined">person</span>
+       </a>
+     </nav>
+  </div>
 
 
   <!-- ░░ SCRIPTS ░░ -->
@@ -2309,13 +2364,13 @@
       const mobGalleryDots = document.getElementById("mobileGalleryDots");
       if (mobGalleryContainer && mobGalleryDots) {
         if (galleryItems.length > 0) {
-          mobGalleryContainer.innerHTML = galleryItems.map((item, idx) => `
+          mobGalleryContainer.innerHTML = galleryItems.map((item, index) => `
             <div class="snap-center shrink-0 w-full h-full relative">
               <img class="w-full h-full object-cover" src="${item[2]}" alt="${product.name} ${item[1]}" />
             </div>
           `).join("");
-          mobGalleryDots.innerHTML = galleryItems.map((item, idx) => `
-            <div class="w-1.5 h-1.5 rounded-full ${idx === 0 ? 'bg-primary' : 'bg-primary/20'} transition-colors duration-300" data-mobile-dot="${idx}"></div>
+          mobGalleryDots.innerHTML = galleryItems.map((item, index) => `
+            <div class="w-1.5 h-1.5 rounded-full ${index === 0 ? 'bg-[#B5657A]' : 'bg-[#B5657A]/20'} transition-colors duration-300" data-mobile-dot="${index}"></div>
           `).join("");
         } else {
           const mainImg = productLocalImage(product);
@@ -2325,7 +2380,7 @@
             </div>
           `;
           mobGalleryDots.innerHTML = `
-            <div class="w-1.5 h-1.5 rounded-full bg-primary"></div>
+            <div class="w-1.5 h-1.5 rounded-full bg-[#B5657A]"></div>
           `;
         }
 
@@ -2338,11 +2393,11 @@
             const dots = mobGalleryDots.querySelectorAll('[data-mobile-dot]');
             dots.forEach((dot, idx) => {
               if (idx === activeIndex) {
-                dot.classList.remove('bg-primary/20');
-                dot.classList.add('bg-primary');
+                dot.classList.remove('bg-[#B5657A]/20');
+                dot.classList.add('bg-[#B5657A]');
               } else {
-                dot.classList.remove('bg-primary');
-                dot.classList.add('bg-primary/20');
+                dot.classList.remove('bg-[#B5657A]');
+                dot.classList.add('bg-[#B5657A]/20');
               }
             });
           });
@@ -2555,7 +2610,6 @@
           `;
         }).join('');
 
-        // Populate mobile-only scrollable related products carousel
         const mobRelatedGrid = document.getElementById("mobileRelatedGrid");
         if (mobRelatedGrid) {
           if (products.length === 0) {
