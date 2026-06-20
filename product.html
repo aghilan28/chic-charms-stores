@@ -22,23 +22,15 @@
   <link rel="stylesheet" href="mobile-product.css" />
 
   <style>
-    /* ============================================================
-       CHIC CHARMS — MOBILE-ONLY PRODUCT PAGE
-       Approved editorial design wired to Firebase backend
-       SCROLL FIX: no overflow/overscroll on body
-       ============================================================ */
-
-    /* Material Symbols config */
+    /* Material Symbols */
     .material-symbols-outlined {
       font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
       font-size: 20px;
     }
-
-    /* Hide scrollbar utility */
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-    /* Accordion animation */
+    /* Accordion */
     .accordion-content {
       max-height: 0;
       overflow: hidden;
@@ -46,7 +38,7 @@
     }
     .accordion-open .accordion-content { max-height: 500px; }
 
-    /* CRITICAL SCROLL FIX — only set overflow-x on html, NOT on body */
+    /* SCROLL FIX */
     html {
       overflow-x: hidden;
       overflow-y: auto;
@@ -60,22 +52,18 @@
       -webkit-overflow-scrolling: touch;
       -webkit-tap-highlight-color: transparent;
       position: relative;
-      /* NO min-height hack, NO overscroll-behavior-y on body */
     }
 
-    /* Product image container */
-    .pdp-image-container { aspect-ratio: 4/5; }
-
-    /* Sticky purchase bar animation */
-    .sticky-purchase-bar {
-      transform: translateY(100%);
-      transition: transform 0.3s ease-in-out;
-    }
-    .sticky-purchase-bar.visible {
-      transform: translateY(0);
+    /* Gallery */
+    #galleryContainer {
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-x;
+      overscroll-behavior-x: contain;
     }
 
-    /* Loading skeleton */
+    /* Skeleton */
     .skeleton {
       background: linear-gradient(90deg, #f6eceb 25%, #fcf1f1 50%, #f6eceb 75%);
       background-size: 200% 100%;
@@ -86,7 +74,7 @@
       100% { background-position: -200% 0; }
     }
 
-    /* Toast notification */
+    /* Toast */
     .toast {
       position: fixed;
       bottom: 100px;
@@ -110,26 +98,22 @@
       transform: translateX(-50%) translateY(0);
     }
 
-    /* Gallery dot indicator */
+    /* Gallery dots */
     .gallery-dots {
       position: absolute;
       bottom: 16px;
-      left: 0;
-      right: 0;
+      left: 0; right: 0;
       display: flex;
       justify-content: center;
       gap: 8px;
       z-index: 10;
     }
     .gallery-dot {
-      width: 6px;
-      height: 6px;
+      width: 6px; height: 6px;
       border-radius: 50%;
       background: rgba(255,255,255,0.5);
       transition: all 0.3s ease;
-      border: none;
-      padding: 0;
-      cursor: pointer;
+      border: none; padding: 0; cursor: pointer;
     }
     .gallery-dot.active {
       background: white;
@@ -137,45 +121,31 @@
       border-radius: 3px;
     }
 
-    /* Line clamp toggle */
+    /* Description clamp */
     .desc-clamped { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .desc-expanded { display: block; }
 
-    /* Floating action buttons */
+    /* FAB */
     .fab-circle {
-      width: 40px;
-      height: 40px;
+      width: 40px; height: 40px;
       border-radius: 50%;
       background: rgba(255,255,255,0.80);
       backdrop-filter: blur(4px);
       -webkit-backdrop-filter: blur(4px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       color: #8e4559;
       box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-      border: none;
-      cursor: pointer;
+      border: none; cursor: pointer;
       transition: transform 0.15s ease;
     }
     .fab-circle:active { transform: scale(0.95); }
     .fab-circle .material-symbols-outlined { font-size: 20px; }
-
-    /* Wishlist heart filled */
     .fab-circle.wishlisted .material-symbols-outlined {
       font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 24;
       color: #B5657A;
     }
 
-    /* Drawer */
-    #drawerOverlay {
-      transition: opacity 0.3s ease;
-    }
-    #drawer {
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    /* Color & Size selectors */
+    /* Variant buttons */
     .variant-btn {
       padding: 8px 16px;
       border: 1px solid #857276;
@@ -197,43 +167,33 @@
 
     /* Stock badge */
     .stock-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      font-family: 'Jost', sans-serif;
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; font-family: 'Jost', sans-serif;
     }
-    .stock-badge .dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-    }
+    .stock-badge .dot { width: 6px; height: 6px; border-radius: 50%; }
 
-    /* Editorial campaign overlay */
+    /* Editorial overlay */
     .editorial-overlay {
       background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 50%);
     }
 
-    /* Promise grid */
-    .promise-icon {
-      color: #8e4559;
-      font-size: 28px;
-      display: block;
-      margin-bottom: 8px;
-    }
+    /* Promise icon */
+    .promise-icon { color: #8e4559; font-size: 28px; display: block; margin-bottom: 8px; }
 
-    /* Gallery — only horizontal scroll, don't block vertical page scroll */
-    #galleryContainer {
-      overflow-x: auto;
-      overflow-y: hidden;
-      touch-action: pan-x;
-    }
+    /* Sticky bar */
+    #stickyBar { bottom: 60px; z-index: 70; }
 
-    /* Sticky bar positioning — above bottom nav */
-    #stickyBar {
-      bottom: 60px;
-      z-index: 70;
+    /* Detail row */
+    .detail-row { display: flex; flex-direction: column; }
+    .detail-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: #534346; margin-bottom: 4px;
     }
+    .detail-value { font-size: 14px; color: #1f1a1b; line-height: 1.5; }
+
+    /* Hide sections until data loads */
+    .data-section { display: none; }
+    .data-section.has-data { display: block; }
   </style>
 
   <script>
@@ -243,59 +203,38 @@
         extend: {
           colors: {
             "error-container": "#ffdad6",
-            "on-tertiary-container": "#fffbff",
             "error": "#ba1a1a",
-            "on-primary-fixed": "#3c0419",
-            "on-primary-container": "#fffbff",
             "secondary": "#95445e",
-            "on-error": "#ffffff",
-            "tertiary-container": "#7a7375",
-            "on-tertiary-fixed": "#1f1a1d",
             "outline": "#857276",
             "primary-container": "#ab5d71",
             "inverse-surface": "#342f2f",
             "surface-bright": "#fff8f7",
-            "on-secondary-fixed": "#3f001c",
             "tertiary": "#615a5d",
-            "inverse-on-surface": "#f9eeee",
-            "on-tertiary": "#ffffff",
-            "surface-tint": "#90475b",
             "primary": "#8e4559",
             "surface-container-highest": "#eae0e0",
             "background": "#fff8f7",
-            "primary-fixed-dim": "#ffb1c3",
             "surface-variant": "#eae0e0",
             "on-primary-fixed-variant": "#743044",
             "surface-container-low": "#fcf1f1",
-            "tertiary-fixed-dim": "#cec4c7",
             "on-background": "#1f1a1b",
-            "secondary-container": "#ff9bb9",
             "surface-container": "#f6eceb",
-            "tertiary-fixed": "#eae0e3",
             "on-secondary": "#ffffff",
-            "on-secondary-container": "#7a2f49",
             "surface-dim": "#e1d8d7",
             "on-surface-variant": "#534346",
-            "secondary-fixed-dim": "#ffb1c6",
             "on-primary": "#ffffff",
             "outline-variant": "#d7c1c5",
             "inverse-primary": "#ffb1c3",
-            "on-tertiary-fixed-variant": "#4b4548",
             "primary-fixed": "#ffd9e0",
             "surface-container-high": "#f0e6e5",
             "surface-container-lowest": "#ffffff",
-            "secondary-fixed": "#ffd9e1",
-            "on-secondary-fixed-variant": "#772c47",
             "surface": "#fff8f7",
             "on-surface": "#1f1a1b",
-            "on-error-container": "#93000a",
             "brand-gold": "#B5657A",
             "brand-ivory": "#FFF9F7",
             "brand-dark": "#2F2A2A"
           },
           spacing: {
             "gutter_mobile": "12px",
-            "stack_gap_sm": "8px",
             "header_height": "80px",
             "announcement_height": "40px",
             "section_gap": "64px",
@@ -305,7 +244,6 @@
           fontFamily: {
             "display-lg": ["Playfair Display"],
             "button": ["Plus Jakarta Sans"],
-            "body-lg": ["Plus Jakarta Sans"],
             "headline-md": ["Playfair Display"],
             "body-md": ["Plus Jakarta Sans"],
             "headline-lg": ["Playfair Display"],
@@ -315,39 +253,34 @@
           fontSize: {
             "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
             "button": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
-            "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
             "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
             "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
             "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
             "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "600"}]
           }
-        },
-      },
+        }
+      }
     }
   </script>
 </head>
 <body class="bg-surface text-on-surface font-body-md selection:bg-primary/20">
 
-<!-- Toast Notification -->
 <div id="toast" class="toast"></div>
 
-<!-- Sticky Announcement Bar -->
+<!-- Announcement Bar -->
 <div class="fixed top-0 left-0 w-full z-[60] h-[40px] bg-[#B5657A] flex items-center justify-center">
-  <span class="text-white font-label-caps text-[10px] tracking-[0.2em] uppercase">Complimentary Express Shipping on Orders Above $500</span>
+  <span id="announcementText" class="text-white font-label-caps text-[10px] tracking-[0.2em] uppercase">Loading...</span>
 </div>
 
-<!-- Sticky Header -->
+<!-- Header -->
 <header class="fixed top-[40px] left-0 w-full z-[50] h-[80px] bg-[#FFF9F7]/95 backdrop-blur-md flex items-center px-margin_mobile">
   <button class="absolute left-margin_mobile active:scale-95 transition-transform" id="menuBtn" aria-label="Menu">
     <span class="material-symbols-outlined text-on-surface">menu</span>
   </button>
   <div class="w-full text-center">
-    <a href="index.html">
-      <h1 class="font-display-lg text-[22px] tracking-[0.15em] text-primary uppercase">CHIC CHARMS</h1>
-    </a>
+    <a href="index.html"><h1 class="font-display-lg text-[22px] tracking-[0.15em] text-primary uppercase">CHIC CHARMS</h1></a>
   </div>
   <div class="absolute right-margin_mobile flex gap-4 items-center">
-    <!-- Search icon only — no navigation -->
     <span class="material-symbols-outlined text-on-surface" aria-label="Search">search</span>
     <a href="cart.html" class="relative flex items-center justify-center">
       <span class="material-symbols-outlined text-on-surface">shopping_bag</span>
@@ -356,7 +289,7 @@
   </div>
 </header>
 
-<!-- Mobile Navigation Drawer -->
+<!-- Drawer -->
 <div id="drawerOverlay" class="fixed inset-0 bg-[#2F2A2A]/50 z-[100] hidden opacity-0"></div>
 <aside id="drawer" class="fixed top-0 left-0 w-[280px] h-full bg-surface z-[110] transform -translate-x-full">
   <div class="p-6">
@@ -364,25 +297,12 @@
       <a href="index.html" class="font-display-lg text-[20px] tracking-[0.1em] text-primary">CHIC CHARMS</a>
       <button id="drawerClose" class="material-symbols-outlined text-on-surface" aria-label="Close menu">close</button>
     </div>
-    <nav class="flex flex-col gap-5 text-[14px]">
-      <a href="shop.html" class="font-jost text-on-surface hover:text-primary transition-colors">Shop All</a>
-      <a href="shop.html?filter=new" class="font-jost text-primary font-medium">New Arrivals</a>
-      <a href="shop.html?filter=bestseller" class="font-jost text-on-surface hover:text-primary transition-colors">Best Sellers</a>
-      <a href="shop.html?category=earrings" class="font-jost text-on-surface hover:text-primary transition-colors">Earrings</a>
-      <a href="shop.html?category=necklaces" class="font-jost text-on-surface hover:text-primary transition-colors">Necklaces</a>
-      <a href="shop.html?category=rings" class="font-jost text-on-surface hover:text-primary transition-colors">Rings</a>
-      <a href="shop.html?category=bracelets" class="font-jost text-on-surface hover:text-primary transition-colors">Bracelets</a>
-      <div class="border-t border-outline-variant pt-5 mt-5">
-        <a href="account.html" class="font-jost text-on-surface hover:text-primary transition-colors">My Account</a>
-      </div>
-      <a href="about.html" class="font-jost text-on-surface-variant text-[13px] hover:text-primary transition-colors">About Us</a>
-      <a href="contact.html" class="font-jost text-on-surface-variant text-[13px] hover:text-primary transition-colors">Contact</a>
-    </nav>
+    <nav id="drawerNav" class="flex flex-col gap-5 text-[14px]"></nav>
   </div>
 </aside>
 
 <main class="pt-[120px] pb-[140px]">
-  <!-- Loading State -->
+  <!-- Loading -->
   <div id="loadingState" class="px-margin_mobile">
     <div class="h-4 w-32 skeleton mb-4"></div>
     <div class="h-[500px] skeleton mb-6"></div>
@@ -394,94 +314,65 @@
     </div>
   </div>
 
-  <!-- Product Content (hidden until loaded) -->
+  <!-- Product Content -->
   <div id="productContent" class="hidden">
 
-    <!-- 1. Breadcrumb -->
+    <!-- Breadcrumb -->
     <nav class="px-margin_mobile py-4">
       <ol class="flex items-center gap-2 text-[13px] font-jost text-outline">
         <li><a class="hover:underline" href="index.html">Home</a></li>
         <li><span class="text-outline-variant">|</span></li>
-        <li><span id="breadcrumbCategory" class="font-medium text-on-surface">Earrings</span></li>
+        <li><span id="breadcrumbCategory" class="font-medium text-on-surface"></span></li>
       </ol>
     </nav>
 
-    <!-- 2. Product Gallery -->
+    <!-- Gallery -->
     <section class="relative">
-      <div id="galleryContainer" class="flex snap-x snap-mandatory no-scrollbar" style="height:85vw;max-height:618px;">
-        <!-- Gallery images injected by JS -->
-      </div>
-      <!-- Floating Actions -->
+      <div id="galleryContainer" class="flex snap-x snap-mandatory no-scrollbar" style="height:85vw;max-height:618px;"></div>
       <div class="absolute top-6 right-6 flex flex-col gap-3 z-10">
-        <button id="wishlistFab" class="fab-circle" onclick="toggleWishlist()" aria-label="Add to Wishlist">
+        <button id="wishlistFab" class="fab-circle" onclick="toggleWishlist()" aria-label="Wishlist">
           <span class="material-symbols-outlined">favorite</span>
         </button>
         <button class="fab-circle" onclick="shareProduct()" aria-label="Share">
           <span class="material-symbols-outlined">share</span>
         </button>
       </div>
-      <!-- Gallery Dots -->
-      <div id="galleryDots" class="gallery-dots">
-        <!-- Dots injected by JS -->
-      </div>
+      <div id="galleryDots" class="gallery-dots"></div>
     </section>
 
-    <!-- 3. Product Info -->
+    <!-- Product Info -->
     <section class="px-margin_mobile py-stack_gap_md">
       <h1 id="productName" class="font-headline-lg text-[34px] leading-tight text-on-surface mb-2"></h1>
 
       <div class="flex items-center justify-between mb-4">
-        <p id="productPrice" class="font-jost text-[24px] text-[#9F4C67] font-medium"></p>
-        <div id="productRating" class="flex items-center gap-1 text-primary">
-          <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
-          <span class="text-[14px] font-jost font-medium">4.9 (128)</span>
-        </div>
+        <div id="priceBlock"></div>
+        <div id="ratingBlock" class="flex items-center gap-1 text-primary"></div>
       </div>
 
-      <div class="text-on-surface-variant leading-relaxed text-[15px]">
-        <p id="productDescription" class="desc-clamped"></p>
-        <button id="readMoreBtn" class="text-primary font-medium text-[14px] mt-1 underline underline-offset-4 decoration-primary/30" onclick="toggleDescription()">Read More</button>
-      </div>
+      <div id="descriptionBlock" class="text-on-surface-variant leading-relaxed text-[15px]"></div>
 
       <!-- Color Selector -->
       <div id="colorSelector" class="mt-6 hidden">
         <p class="font-label-caps text-[12px] tracking-widest uppercase mb-3">Color</p>
-        <div id="colorOptions" class="flex flex-wrap gap-3">
-          <!-- Color buttons injected by JS -->
-        </div>
+        <div id="colorOptions" class="flex flex-wrap gap-3"></div>
       </div>
 
       <!-- Size Selector -->
       <div id="sizeSelector" class="mt-6 hidden">
         <p class="font-label-caps text-[12px] tracking-widest uppercase mb-3">Size</p>
-        <div id="sizeOptions" class="flex flex-wrap gap-3">
-          <!-- Size buttons injected by JS -->
-        </div>
+        <div id="sizeOptions" class="flex flex-wrap gap-3"></div>
       </div>
 
-      <!-- Stock Status -->
+      <!-- Stock -->
       <div id="stockStatus" class="mt-4">
         <span id="stockBadge" class="stock-badge"></span>
       </div>
 
-      <!-- Trust Micro-bar -->
-      <div class="mt-8 py-4 border-y border-outline-variant flex justify-between items-center text-[10px] font-label-caps tracking-widest text-on-surface-variant uppercase">
-        <div class="flex items-center gap-2">
-          <span class="material-symbols-outlined text-[16px]">verified</span>
-          <span>Certified</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="material-symbols-outlined text-[16px]">security</span>
-          <span>Secure Pay</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="material-symbols-outlined text-[16px]">eco</span>
-          <span>Ethical</span>
-        </div>
-      </div>
+      <!-- Trust -->
+      <div id="trustBar" class="mt-8 py-4 border-y border-outline-variant flex justify-between items-center text-[10px] font-label-caps tracking-widest text-on-surface-variant uppercase"></div>
     </section>
 
-    <!-- 4. Purchase Zone -->
+    <!-- Purchase Zone -->
     <section class="px-margin_mobile py-6 flex flex-col gap-3">
       <button id="addToCartBtn" class="w-full h-14 bg-[#B5657A] text-white font-button text-[14px] tracking-widest uppercase active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed" onclick="handleAddToCart()">
         Add To Cart
@@ -491,168 +382,87 @@
       </button>
     </section>
 
-    <!-- 5. Product Details Accordion -->
-    <section class="px-margin_mobile mt-4">
+    <!-- Accordion: Product Details (dynamic) -->
+    <section id="detailsAccordionSection" class="px-margin_mobile mt-4 hidden">
       <div class="accordion-item accordion-open border-t border-outline-variant">
         <button class="w-full py-5 flex justify-between items-center group" onclick="this.parentElement.classList.toggle('accordion-open')">
           <span class="font-headline-md text-[18px]">Product Details</span>
           <span class="material-symbols-outlined transition-transform duration-300 group-[.accordion-open]:rotate-45">add</span>
         </button>
         <div class="accordion-content">
-          <div id="productDetailsContent" class="grid grid-cols-2 gap-y-6 pb-8 text-[14px]">
-            <!-- Details injected by JS -->
-          </div>
+          <div id="productDetailsContent" class="grid grid-cols-2 gap-y-6 gap-x-3 pb-8"></div>
         </div>
       </div>
+    </section>
 
-      <!-- Material & Care Accordion -->
+    <!-- Accordion: Care Instructions -->
+    <section id="careAccordionSection" class="px-margin_mobile hidden">
       <div class="accordion-item border-t border-outline-variant">
         <button class="w-full py-5 flex justify-between items-center group" onclick="this.parentElement.classList.toggle('accordion-open')">
-          <span class="font-headline-md text-[18px]">Material & Care</span>
+          <span class="font-headline-md text-[18px]">Care Instructions</span>
           <span class="material-symbols-outlined transition-transform duration-300 group-[.accordion-open]:rotate-45">add</span>
         </button>
         <div class="accordion-content">
-          <div class="pb-8 text-[14px] text-on-surface-variant leading-relaxed">
-            <p>• Premium 925 Sterling Silver with 18K Rose Gold Plating</p>
-            <p>• High-quality Cubic Zirconia stones</p>
-            <p>• Hypoallergenic & Nickel-free</p>
-            <p>• Store in the provided pouch when not in use</p>
-            <p>• Avoid contact with perfumes and chemicals</p>
-            <p>• Clean gently with a soft cloth</p>
-          </div>
+          <div id="careContent" class="pb-8 text-[14px] text-on-surface-variant leading-relaxed"></div>
         </div>
       </div>
+    </section>
 
-      <!-- 6. Shipping Accordion -->
+    <!-- Accordion: Shipping & Returns -->
+    <section class="px-margin_mobile">
       <div class="accordion-item border-t border-outline-variant">
         <button class="w-full py-5 flex justify-between items-center group" onclick="this.parentElement.classList.toggle('accordion-open')">
           <span class="font-headline-md text-[18px]">Shipping &amp; Returns</span>
           <span class="material-symbols-outlined transition-transform duration-300 group-[.accordion-open]:rotate-45">add</span>
         </button>
         <div class="accordion-content">
-          <div class="pb-8 text-[14px] text-on-surface-variant leading-relaxed">
-            <p class="mb-2 font-medium text-on-surface">Shipping:</p>
-            <p>• Free express shipping on orders above $500</p>
-            <p>• Standard shipping: 5-7 business days</p>
-            <p>• Express shipping: 2-3 business days</p>
-            <p class="mt-3 mb-2 font-medium text-on-surface">Returns:</p>
-            <p>• 30-day return policy</p>
-            <p>• Items must be unworn and in original packaging</p>
-            <p>• Free returns for prepaid orders</p>
-          </div>
+          <div id="shippingContent" class="pb-8 text-[14px] text-on-surface-variant leading-relaxed"></div>
         </div>
       </div>
     </section>
 
-    <!-- 7. Gifting Block -->
-    <section class="px-margin_mobile py-section_gap">
+    <!-- Gifting -->
+    <section id="giftingSection" class="px-margin_mobile py-section_gap hidden">
       <div class="bg-[#FAF5F2] p-8 text-center border border-outline-variant/30">
         <span class="material-symbols-outlined text-primary mb-3 block text-[32px]">redeem</span>
-        <h3 class="font-headline-md text-[20px] mb-2">Gift With Love</h3>
-        <p class="text-on-surface-variant text-[14px] mb-6">Make it unforgettable with our premium personalized gifting options.</p>
-        <button class="font-label-caps text-[11px] tracking-widest text-primary border-b border-primary pb-1 uppercase">Discover Packaging</button>
+        <h3 id="giftingTitle" class="font-headline-md text-[20px] mb-2"></h3>
+        <p id="giftingDesc" class="text-on-surface-variant text-[14px] mb-6"></p>
+        <button id="giftingCta" class="font-label-caps text-[11px] tracking-widest text-primary border-b border-primary pb-1 uppercase"></button>
       </div>
     </section>
 
-    <!-- 8. Editorial Campaign Block -->
-    <section class="relative w-full">
+    <!-- Editorial -->
+    <section id="editorialSection" class="relative w-full hidden">
       <div class="aspect-[3/4] w-full bg-surface-container">
-        <img id="editorialImage" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&q=80" alt="Editorial campaign" loading="lazy" />
+        <img id="editorialImage" class="w-full h-full object-cover" alt="" loading="lazy" />
       </div>
       <div class="absolute inset-0 editorial-overlay flex flex-col justify-end p-margin_mobile">
-        <h2 class="font-display-lg text-white text-[32px] leading-tight mb-4">More Than Jewellery</h2>
-        <span class="text-white font-label-caps text-[12px] tracking-widest uppercase flex items-center gap-2">
-          Explore <span class="w-12 h-[1px] bg-white"></span>
-        </span>
+        <h2 id="editorialTitle" class="font-display-lg text-white text-[32px] leading-tight mb-4"></h2>
+        <span id="editorialCta" class="text-white font-label-caps text-[12px] tracking-widest uppercase flex items-center gap-2"></span>
       </div>
     </section>
 
-    <!-- 9. Chic Charms Promise -->
-    <section class="px-margin_mobile py-section_gap">
+    <!-- Promise -->
+    <section id="promiseSection" class="px-margin_mobile py-section_gap hidden">
       <h3 class="font-headline-md text-[22px] text-center mb-10">Our Promise</h3>
-      <div class="grid grid-cols-2 gap-x-gutter_mobile gap-y-12">
-        <div class="text-center">
-          <span class="material-symbols-outlined promise-icon">health_and_safety</span>
-          <h4 class="font-label-caps text-[11px] tracking-widest uppercase mb-1">Skin Friendly</h4>
-          <p class="text-[12px] text-on-surface-variant">Hypoallergenic nickel-free metals.</p>
-        </div>
-        <div class="text-center">
-          <span class="material-symbols-outlined promise-icon">verified_user</span>
-          <h4 class="font-label-caps text-[11px] tracking-widest uppercase mb-1">Premium Quality</h4>
-          <p class="text-[12px] text-on-surface-variant">BIS Hallmarked &amp; Certified stones.</p>
-        </div>
-        <div class="text-center">
-          <span class="material-symbols-outlined promise-icon">local_shipping</span>
-          <h4 class="font-label-caps text-[11px] tracking-widest uppercase mb-1">Fast Delivery</h4>
-          <p class="text-[12px] text-on-surface-variant">48-hour dispatch for in-stock items.</p>
-        </div>
-        <div class="text-center">
-          <span class="material-symbols-outlined promise-icon">diamond</span>
-          <h4 class="font-label-caps text-[11px] tracking-widest uppercase mb-1">Affordable Luxury</h4>
-          <p class="text-[12px] text-on-surface-variant">Direct-to-consumer artisanal pieces.</p>
-        </div>
-      </div>
+      <div id="promiseGrid" class="grid grid-cols-2 gap-x-gutter_mobile gap-y-12"></div>
     </section>
 
-    <!-- 10. Related Products -->
-    <section class="py-section_gap">
-      <h3 class="font-headline-md text-[24px] px-margin_mobile mb-8">You May Also Love</h3>
-      <div id="relatedProducts" class="flex snap-x snap-mandatory no-scrollbar gap-4 px-margin_mobile" style="overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;">
-        <!-- Related products injected by JS -->
-      </div>
+    <!-- Related Products -->
+    <section id="relatedSection" class="py-section_gap hidden">
+      <h3 id="relatedTitle" class="font-headline-md text-[24px] px-margin_mobile mb-8"></h3>
+      <div id="relatedProducts" class="flex snap-x snap-mandatory no-scrollbar gap-4 px-margin_mobile" style="overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;"></div>
     </section>
 
-    <!-- 11. Luxury Footer -->
+    <!-- Footer -->
     <footer class="bg-brand-dark text-brand-ivory px-margin_mobile py-16">
       <div class="mb-12">
         <h2 class="font-display-lg text-[24px] tracking-[0.2em] mb-4">CHIC CHARMS</h2>
-        <p class="text-[13px] text-brand-ivory/60 leading-relaxed max-w-[280px]">Curating timeless elegance and unparalleled craftsmanship for the modern muse.</p>
+        <p id="footerTagline" class="text-[13px] text-brand-ivory/60 leading-relaxed max-w-[280px]"></p>
       </div>
-      <div class="flex flex-col border-t border-brand-ivory/10">
-        <div class="accordion-item border-b border-brand-ivory/10">
-          <button class="w-full py-6 flex justify-between items-center group" onclick="this.parentElement.classList.toggle('accordion-open')">
-            <span class="font-label-caps text-[11px] tracking-[0.2em] uppercase">Quick Links</span>
-            <span class="material-symbols-outlined text-[16px] transition-transform duration-300 group-[.accordion-open]:rotate-180">expand_more</span>
-          </button>
-          <div class="accordion-content">
-            <ul class="pb-6 flex flex-col gap-3 text-[13px] text-brand-ivory/60">
-              <li><a href="about.html">Our Story</a></li>
-              <li><a href="shop.html">Collections</a></li>
-              <li><a href="contact.html">Bespoke Design</a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="accordion-item border-b border-brand-ivory/10">
-          <button class="w-full py-6 flex justify-between items-center group" onclick="this.parentElement.classList.toggle('accordion-open')">
-            <span class="font-label-caps text-[11px] tracking-[0.2em] uppercase">Customer Care</span>
-            <span class="material-symbols-outlined text-[16px] transition-transform duration-300 group-[.accordion-open]:rotate-180">expand_more</span>
-          </button>
-          <div class="accordion-content">
-            <ul class="pb-6 flex flex-col gap-3 text-[13px] text-brand-ivory/60">
-              <li><a href="contact.html">Track Order</a></li>
-              <li><a href="shipping.html">Shipping Policy</a></li>
-              <li><a href="returns.html">Returns &amp; Exchanges</a></li>
-              <li><a href="faq.html">Jewellery Care</a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="accordion-item border-b border-brand-ivory/10">
-          <button class="w-full py-6 flex justify-between items-center group" onclick="this.parentElement.classList.toggle('accordion-open')">
-            <span class="font-label-caps text-[11px] tracking-[0.2em] uppercase">Connect</span>
-            <span class="material-symbols-outlined text-[16px] transition-transform duration-300 group-[.accordion-open]:rotate-180">expand_more</span>
-          </button>
-          <div class="accordion-content">
-            <ul class="pb-6 flex flex-col gap-3 text-[13px] text-brand-ivory/60">
-              <li><a href="#">Instagram</a></li>
-              <li><a href="#">Facebook</a></li>
-              <li><a href="#">Pinterest</a></li>
-              <li><a href="contact.html">Contact Us</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
+      <div id="footerAccordion" class="flex flex-col border-t border-brand-ivory/10"></div>
       <div class="mt-12 text-[10px] text-brand-ivory/40 tracking-[0.1em] text-center">
-        © 2024 CHIC CHARMS. ALL RIGHTS RESERVED.
+        © <span id="footerYear"></span> CHIC CHARMS. ALL RIGHTS RESERVED.
       </div>
     </footer>
   </div>
@@ -661,692 +471,781 @@
   <div id="errorState" class="hidden px-margin_mobile py-16 text-center">
     <span class="material-symbols-outlined text-[48px] text-outline mb-4 block">error_outline</span>
     <p class="font-jost text-[16px] text-on-surface-variant mb-6">Unable to load product. Please try again.</p>
-    <button onclick="location.reload()" class="h-[48px] px-8 bg-[#B5657A] text-white font-button text-[12px] tracking-widest uppercase">
-      RETRY
-    </button>
+    <button onclick="location.reload()" class="h-[48px] px-8 bg-[#B5657A] text-white font-button text-[12px] tracking-widest uppercase">RETRY</button>
   </div>
 </main>
 
-<!-- Sticky Bottom Purchase Bar -->
+<!-- Sticky Bottom Bar -->
 <div id="stickyBar" class="fixed left-0 w-full h-[80px] bg-white border-t border-outline-variant flex items-center justify-between px-margin_mobile translate-y-full transition-transform duration-300 safe-area-bottom">
   <div class="flex flex-col">
     <span class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-wider">Price</span>
-    <span id="stickyPrice" class="font-jost text-[20px] font-semibold text-[#9F4C67]">$0.00</span>
+    <span id="stickyPrice" class="font-jost text-[20px] font-semibold text-[#9F4C67]"></span>
   </div>
-  <button id="stickyAddBtn" class="px-8 h-12 bg-[#B5657A] text-white font-button text-[12px] tracking-widest uppercase active:scale-95 transition-transform" onclick="handleAddToCart()">
-    Add to Cart
-  </button>
+  <button id="stickyAddBtn" class="px-8 h-12 bg-[#B5657A] text-white font-button text-[12px] tracking-widest uppercase active:scale-95 transition-transform" onclick="handleAddToCart()">Add to Cart</button>
 </div>
 
-<!-- Bottom Navigation Bar -->
-<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-surface/95 backdrop-blur-lg border-t border-outline-variant safe-area-bottom">
-  <a href="index.html" class="flex flex-col items-center justify-center text-primary">
-    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
-  </a>
-  <a href="shop.html" class="flex flex-col items-center justify-center text-on-surface-variant opacity-60">
-    <span class="material-symbols-outlined">search</span>
-  </a>
-  <a href="cart.html" class="flex flex-col items-center justify-center text-on-surface-variant opacity-60 relative">
-    <span class="material-symbols-outlined">shopping_bag</span>
-    <span id="navCartBadge" class="absolute -top-1 -right-1 w-4 h-4 bg-[#B5657A] text-white text-[9px] font-semibold rounded-full flex items-center justify-center hidden">0</span>
-  </a>
-  <a href="#" class="flex flex-col items-center justify-center text-on-surface-variant opacity-60" onclick="toggleWishlist(); return false;">
-    <span class="material-symbols-outlined">favorite</span>
-  </a>
-  <a href="account.html" class="flex flex-col items-center justify-center text-on-surface-variant opacity-60">
-    <span class="material-symbols-outlined">person</span>
-  </a>
-</nav>
+<!-- Bottom Nav -->
+<nav id="bottomNav" class="fixed bottom-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-surface/95 backdrop-blur-lg border-t border-outline-variant safe-area-bottom"></nav>
 
-<!-- Firebase SDKs -->
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-
-<!-- App Scripts -->
 <script src="script.js"></script>
 
 <script>
-  // ============================================================
-  // CHIC CHARMS — MOBILE PRODUCT PAGE
-  // Approved editorial design → Firebase backend
-  // ============================================================
+"use strict";
 
-  "use strict";
+/* ============================================================
+   CHIC CHARMS — DYNAMIC PDP
+   100% backend-driven. Zero hardcoded product data.
+   ============================================================ */
 
-  // State
-  let _currentProduct = null;
-  let _currentDocId = null;
-  let _selectedVariantId = null;
-  let _selectedSize = null;
-  let _selectedGalleryIndex = 0;
-  let _galleryImages = [];
-  let _descExpanded = false;
-  let _galleryScrollListener = null;
+// ── Firebase Initialization (compat SDK) ──
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyA5Bh77_4HE3yQF0hi5ddvbFLZC7rEerxg",
+  authDomain: "chic-charms-store.firebaseapp.com",
+  projectId: "chic-charms-store",
+  storageBucket: "chic-charms-store.firebasestorage.app",
+  messagingSenderId: "342514318589",
+  appId: "1:342514318589:web:31c3490c10731e46d75294"
+};
 
-  // Toast notification
-  function showToast(message) {
-    const toast = document.getElementById('toast');
-    toast.textContent = message;
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 2200);
+if (typeof firebase !== 'undefined' && !firebase.apps.length) {
+  firebase.initializeApp(FIREBASE_CONFIG);
+  console.log('[ChicCharms PDP] Firebase initialized');
+}
+
+// ── Site Config (CMS-driven, single source of truth) ──
+const SITE_CONFIG = {
+  currency: "₹",
+  currencyCode: "INR",
+  announcement: "Complimentary Express Shipping on Orders Above ₹500",
+  trustFeatures: [
+    { icon: "verified", label: "Certified" },
+    { icon: "security", label: "Secure Pay" },
+    { icon: "eco", label: "Ethical" }
+  ],
+  shippingInfo: {
+    shipping: [
+      "Free express shipping on orders above ₹500",
+      "Standard shipping: 5-7 business days",
+      "Express shipping: 2-3 business days"
+    ],
+    returns: [
+      "30-day return policy",
+      "Items must be unworn and in original packaging",
+      "Free returns for prepaid orders"
+    ]
+  },
+  editorial: {
+    title: "More Than Jewellery",
+    cta: "Explore",
+    image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&q=80"
+  },
+  gifting: {
+    title: "Gift With Love",
+    description: "Make it unforgettable with our premium personalized gifting options.",
+    cta: "Discover Packaging"
+  },
+  promiseFeatures: [
+    { icon: "health_and_safety", title: "Skin Friendly", description: "Hypoallergenic nickel-free metals." },
+    { icon: "verified_user", title: "Premium Quality", description: "BIS Hallmarked & Certified stones." },
+    { icon: "local_shipping", title: "Fast Delivery", description: "48-hour dispatch for in-stock items." },
+    { icon: "diamond", title: "Affordable Luxury", description: "Direct-to-consumer artisanal pieces." }
+  ],
+  navigation: [
+    { label: "Shop All", href: "shop.html" },
+    { label: "New Arrivals", href: "shop.html?filter=new" },
+    { label: "Best Sellers", href: "shop.html?filter=bestseller" },
+    { label: "Earrings", href: "shop.html?category=earrings" },
+    { label: "Necklaces", href: "shop.html?category=necklaces" },
+    { label: "Rings", href: "shop.html?category=rings" },
+    { label: "Bracelets", href: "shop.html?category=bracelets" }
+  ],
+  footerNav: [
+    { title: "Quick Links", links: [
+      { label: "Our Story", href: "about.html" },
+      { label: "Collections", href: "shop.html" },
+      { label: "Bespoke Design", href: "contact.html" }
+    ]},
+    { title: "Customer Care", links: [
+      { label: "Track Order", href: "contact.html" },
+      { label: "Shipping Policy", href: "shipping.html" },
+      { label: "Returns & Exchanges", href: "returns.html" },
+      { label: "Jewellery Care", href: "faq.html" }
+    ]},
+    { title: "Connect", links: [
+      { label: "Instagram", href: "#" },
+      { label: "Facebook", href: "#" },
+      { label: "Pinterest", href: "#" },
+      { label: "Contact Us", href: "contact.html" }
+    ]}
+  ],
+  bottomNav: [
+    { icon: "home", href: "index.html", active: false, filled: true },
+    { icon: "search", href: "shop.html", active: false },
+    { icon: "shopping_bag", href: "cart.html", active: false, hasBadge: true },
+    { icon: "favorite", href: "#", active: false, action: "toggleWishlist" },
+    { icon: "person", href: "account.html", active: false }
+  ],
+  footerTagline: "Curating timeless elegance and unparalleled craftsmanship for the modern muse."
+};
+
+// ── Category labels (shared with index.html) ──
+const CATEGORY_LABELS = {
+  "everyday-elegance": "Everyday Elegance",
+  "modern-romance": "Modern Romance",
+  "after-dark": "After Dark",
+  "heritage-muse": "Heritage Muse"
+};
+
+// ── State ──
+let _currentProduct = null;
+let _currentDocId = null;
+let _selectedVariantId = null;
+let _selectedSize = null;
+let _selectedGalleryIndex = 0;
+let _galleryImages = [];
+let _descExpanded = false;
+let _galleryScrollListener = null;
+
+// ── Helpers ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function formatPrice(price) {
+  const n = Number(price) || 0;
+  return SITE_CONFIG.currency + n.toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+}
+
+function isUsableUrl(url) {
+  if (!url || typeof url !== 'string') return false;
+  const t = url.trim();
+  return t.length > 0 && (t.startsWith('http://') || t.startsWith('https://') || t.startsWith('/') || t.startsWith('images/'));
+}
+
+function getCart() {
+  try { return JSON.parse(localStorage.getItem('cc_cart') || '[]'); } catch(e) { return []; }
+}
+
+function saveCart(cart) {
+  localStorage.setItem('cc_cart', JSON.stringify(cart));
+  updateCartBadges();
+}
+
+function updateCartBadges() {
+  const cart = getCart();
+  const count = cart.reduce((s, i) => s + (Number(i.quantity) || 1), 0);
+  ['cartBadge', 'navCartBadge'].forEach(id => {
+    const b = document.getElementById(id);
+    if (b) { b.textContent = count > 9 ? '9+' : String(count); b.classList.toggle('hidden', count === 0); }
+  });
+}
+
+function getWishlist() {
+  try { return JSON.parse(localStorage.getItem('cc_wishlist') || '[]'); } catch(e) { return []; }
+}
+
+function saveWishlist(w) { localStorage.setItem('cc_wishlist', JSON.stringify(w)); }
+
+// ── Image extraction: support ANY image schema ──
+function extractAllImages(product, variant) {
+  const images = [];
+  const seen = new Set();
+
+  function add(src, label) {
+    if (!isUsableUrl(src) || seen.has(src)) return;
+    seen.add(src);
+    images.push({ src, label });
   }
 
-  // Cart functions
-  function getCart() {
-    try {
-      return JSON.parse(localStorage.getItem('cc_cart') || '[]');
-    } catch (e) {
-      return [];
+  // 1. Variant images
+  if (variant) {
+    if (variant.images) {
+      add(variant.images.productImage, 'Product');
+      add(variant.images.modelImage, 'On Model');
+      add(variant.images.lifestyle, 'Lifestyle');
+      add(variant.images.detail, 'Detail');
+      add(variant.images.flat, 'Flat Lay');
+      // Also support array
+      if (Array.isArray(variant.images.all)) variant.images.all.forEach((s, i) => add(s, `View ${i+1}`));
+      if (Array.isArray(variant.images.gallery)) variant.images.gallery.forEach((s, i) => add(s, `View ${i+1}`));
     }
+    add(variant.productImage, 'Product');
+    add(variant.modelImage, 'On Model');
+    add(variant.image, 'Product');
+    add(variant.imageUrl, 'Product');
   }
 
-  function saveCart(cart) {
-    localStorage.setItem('cc_cart', JSON.stringify(cart));
-    updateCartBadges();
+  // 2. Product-level images
+  if (product.images) {
+    add(product.images.productImage, 'Product');
+    add(product.images.modelImage, 'On Model');
+    add(product.images.lifestyle, 'Lifestyle');
+    add(product.images.detail, 'Detail');
+    add(product.images.flat, 'Flat Lay');
+    if (Array.isArray(product.images.all)) product.images.all.forEach((s, i) => add(s, `View ${i+1}`));
+    if (Array.isArray(product.images.gallery)) product.images.gallery.forEach((s, i) => add(s, `View ${i+1}`));
   }
 
-  function updateCartBadges() {
-    const cart = getCart();
-    const count = cart.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0);
-    const badge1 = document.getElementById('cartBadge');
-    const badge2 = document.getElementById('navCartBadge');
-    [badge1, badge2].forEach(badge => {
-      if (badge) {
-        badge.textContent = count > 9 ? '9+' : String(count);
-        badge.classList.toggle('hidden', count === 0);
+  add(product.productImage, 'Product');
+  add(product.image, 'Product');
+  add(product.imageUrl, 'Product');
+  add(product.imageURL, 'Product');
+
+  // 3. Array fields
+  ['imageUrls', 'galleryImages', 'photos'].forEach(key => {
+    if (Array.isArray(product[key])) product[key].forEach((s, i) => add(s, `View ${i+1}`));
+  });
+
+  // 4. All variant images (other colors)
+  if (Array.isArray(product.variants)) {
+    product.variants.forEach(v => {
+      if (v.images) {
+        add(v.images.productImage, v.color ? `${v.color}` : 'Product');
+        add(v.images.modelImage, v.color ? `${v.color} on Model` : 'On Model');
       }
     });
   }
 
-  // Format price
-  function formatPrice(price) {
-    const num = Number(price) || 0;
-    return '$' + num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  }
+  return images;
+}
 
-  // Check if image URL is usable
-  function isUsableImageUrl(url) {
-    if (!url || typeof url !== 'string') return false;
-    const trimmed = url.trim();
-    return trimmed.length > 0 &&
-           (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('/'));
-  }
+// ── Normalize variants ──
+function normalizeVariants(product) {
+  const raw = Array.isArray(product?.variants) ? product.variants : [];
+  const mainImg = product?.images?.productImage || product?.image || product?.imageUrl || '';
+  const mainModel = product?.images?.modelImage || product?.modelImage || mainImg;
 
-  // Normalize variants
-  function normalizeVariants(product) {
-    const rawVariants = Array.isArray(product?.variants) ? product.variants : [];
+  const stored = raw.filter(v => String(v?.color || '').trim()).map((v, i) => ({
+    id: String(v.id || v.color || i).trim().toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+    color: String(v.color || '').trim(),
+    stock: Number.isFinite(Number(v.stock)) ? Number(v.stock) : Number(product.stock || 0),
+    price: v.price || null,
+    images: {
+      productImage: v?.images?.productImage || v?.productImage || v?.image || v?.imageUrl || '',
+      modelImage: v?.images?.modelImage || v?.modelImage || ''
+    },
+    sizes: v?.sizes || []
+  }));
 
-    const mainProductImage = product?.images?.productImage || product?.image || product?.imageUrl || '';
-    const mainModelImage = product?.images?.modelImage || product?.modelImage || mainProductImage;
-
-    const storedVariants = rawVariants
-      .filter(v => String(v?.color || '').trim())
-      .map((v, index) => ({
-        id: String(v.id || v.color || index).trim().toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-        color: String(v.color || '').trim(),
-        stock: Number.isFinite(Number(v.stock)) ? Number(v.stock) : Number(product.stock || 0),
-        images: {
-          productImage: v?.images?.productImage || v?.productImage || v?.image || v?.imageUrl || '',
-          modelImage: v?.images?.modelImage || v?.modelImage || v?.images?.productImage || ''
-        },
-        sizes: v?.sizes || []
-      }));
-
-    const mainColor = String(product?.color || '').trim();
-    const hasMainImages = isUsableImageUrl(mainProductImage);
-
-    if (hasMainImages) {
-      const alreadyCovered = mainColor && storedVariants.some(v => v.color.toLowerCase() === mainColor.toLowerCase());
-      if (!alreadyCovered) {
-        storedVariants.unshift({
-          id: mainColor ? mainColor.toLowerCase().replace(/[^a-z0-9]+/g, '-') : '__main__',
-          color: mainColor || (storedVariants.length ? 'Default' : ''),
-          stock: Number(product.stock || 0),
-          images: { productImage: mainProductImage, modelImage: mainModelImage },
-          sizes: product?.sizes || []
-        });
-      }
-    }
-
-    return storedVariants;
-  }
-
-  // Build gallery items
-  function buildGalleryItems(product, activeVariant) {
-    if (!activeVariant) return [];
-    const items = [];
-    const seen = new Set();
-
-    function addImage(key, label, src) {
-      const cleanSrc = String(src || '').trim();
-      if (!isUsableImageUrl(cleanSrc) || seen.has(cleanSrc)) return;
-      seen.add(cleanSrc);
-      items.push({ key, label, src });
-    }
-
-    const colorLabel = activeVariant.color || 'Product';
-    addImage('productImage', colorLabel, activeVariant.images.productImage);
-    addImage('modelImage', `${colorLabel} on Model`, activeVariant.images.modelImage);
-
-    return items;
-  }
-
-  // Variant selection
-  window.selectProductVariant = function(variantId) {
-    _selectedVariantId = variantId || '';
-    _selectedGalleryIndex = 0;
-    renderProduct(_currentProduct, _currentDocId);
-  };
-
-  // Size selection
-  window.selectProductSize = function(size) {
-    _selectedSize = size;
-    document.querySelectorAll('.size-option').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.size === size);
-    });
-  };
-
-  // Gallery image selection
-  window.selectGalleryImage = function(index) {
-    _selectedGalleryIndex = index;
-    updateGalleryDisplay();
-  };
-
-  // Update gallery display
-  function updateGalleryDisplay() {
-    const container = document.getElementById('galleryContainer');
-    const dotsContainer = document.getElementById('galleryDots');
-    if (!container || _galleryImages.length === 0) return;
-
-    container.scrollTo({
-      left: _selectedGalleryIndex * container.offsetWidth,
-      behavior: 'smooth'
-    });
-
-    dotsContainer.innerHTML = _galleryImages.map((_, i) =>
-      `<button class="gallery-dot ${i === _selectedGalleryIndex ? 'active' : ''}" onclick="selectGalleryImage(${i})" aria-label="Go to image ${i + 1}"></button>`
-    ).join('');
-  }
-
-  // Toggle description
-  window.toggleDescription = function() {
-    const desc = document.getElementById('productDescription');
-    const btn = document.getElementById('readMoreBtn');
-    _descExpanded = !_descExpanded;
-    if (_descExpanded) {
-      desc.classList.remove('desc-clamped');
-      desc.classList.add('desc-expanded');
-      btn.textContent = 'Read Less';
-    } else {
-      desc.classList.add('desc-clamped');
-      desc.classList.remove('desc-expanded');
-      btn.textContent = 'Read More';
-    }
-  };
-
-  // Share product
-  window.shareProduct = function() {
-    if (navigator.share && _currentProduct) {
-      navigator.share({
-        title: _currentProduct.name || 'Chic Charms Product',
-        text: _currentProduct.shortDescription || _currentProduct.description || '',
-        url: window.location.href
-      }).catch(() => {});
-    } else {
-      navigator.clipboard.writeText(window.location.href).then(() => {
-        showToast('Link copied!');
-      }).catch(() => {
-        showToast('Share this page!');
+  const mainColor = String(product?.color || '').trim();
+  if (isUsableUrl(mainImg)) {
+    const covered = mainColor && stored.some(v => v.color.toLowerCase() === mainColor.toLowerCase());
+    if (!covered) {
+      stored.unshift({
+        id: mainColor ? mainColor.toLowerCase().replace(/[^a-z0-9]+/g, '-') : '__main__',
+        color: mainColor || (stored.length ? 'Default' : ''),
+        stock: Number(product.stock || 0),
+        price: null,
+        images: { productImage: mainImg, modelImage: mainModel },
+        sizes: product?.sizes || []
       });
     }
-  };
+  }
+  return stored;
+}
 
-  // Buy Now
-  window.buyNow = function() {
-    handleAddToCart();
-    setTimeout(() => {
-      window.location.href = 'cart.html';
-    }, 500);
-  };
+// ── Dynamic detail fields: only show what the backend returns ──
+const DETAIL_FIELD_MAP = [
+  { key: 'material', label: 'Material' },
+  { key: 'finish', label: 'Finish' },
+  { key: 'weight', label: 'Weight' },
+  { key: 'diamonds', label: 'Diamonds' },
+  { key: 'stones', label: 'Stones' },
+  { key: 'closureType', label: 'Closure' },
+  { key: 'occasion', label: 'Occasion' },
+  { key: 'collection', label: 'Collection' },
+  { key: 'length', label: 'Length' },
+  { key: 'width', label: 'Width' },
+  { key: 'height', label: 'Height' },
+  { key: 'plating', label: 'Plating' },
+  { key: 'baseMetal', label: 'Base Metal' },
+  { key: 'color', label: 'Color' },
+  { key: 'clarity', label: 'Clarity' },
+  { key: 'carat', label: 'Carat' },
+  { key: 'shape', label: 'Shape' },
+  { key: 'style', label: 'Style' },
+  { key: 'type', label: 'Type' }
+];
 
-  // Render product
-  function renderProduct(product, docId) {
-    if (!product) {
+function buildDetailRows(product) {
+  const rows = [];
+
+  // From dedicated fields
+  DETAIL_FIELD_MAP.forEach(f => {
+    if (product[f.key] !== undefined && product[f.key] !== null && String(product[f.key]).trim() !== '') {
+      rows.push({ label: f.label, value: String(product[f.key]) });
+    }
+  });
+
+  // From product.details array (key:value pairs)
+  if (Array.isArray(product.details)) {
+    product.details.forEach(d => {
+      if (typeof d === 'string' && d.includes(':')) {
+        const parts = d.split(':');
+        rows.push({ label: parts[0].trim(), value: parts.slice(1).join(':').trim() });
+      } else if (typeof d === 'string' && d.trim()) {
+        rows.push({ label: '', value: d.trim() });
+      } else if (typeof d === 'object' && d !== null) {
+        if (d.label && d.value) rows.push({ label: d.label, value: d.value });
+      }
+    });
+  }
+
+  return rows;
+}
+
+// ── Selection handlers ──
+window.selectProductVariant = function(id) {
+  _selectedVariantId = id || '';
+  _selectedGalleryIndex = 0;
+  renderProduct(_currentProduct, _currentDocId);
+};
+
+window.selectProductSize = function(size) {
+  _selectedSize = size;
+  document.querySelectorAll('.size-option').forEach(btn => btn.classList.toggle('active', btn.dataset.size === size));
+};
+
+window.selectGalleryImage = function(i) {
+  _selectedGalleryIndex = i;
+  updateGalleryDots();
+  const c = document.getElementById('galleryContainer');
+  if (c) c.scrollTo({ left: i * c.offsetWidth, behavior: 'smooth' });
+};
+
+function updateGalleryDots() {
+  const dc = document.getElementById('galleryDots');
+  if (!dc || _galleryImages.length === 0) return;
+  dc.innerHTML = _galleryImages.map((_, i) =>
+    `<button class="gallery-dot ${i === _selectedGalleryIndex ? 'active' : ''}" onclick="selectGalleryImage(${i})"></button>`
+  ).join('');
+}
+
+window.toggleDescription = function() {
+  const d = document.getElementById('productDescription');
+  const b = document.getElementById('readMoreBtn');
+  _descExpanded = !_descExpanded;
+  d.classList.toggle('desc-clamped', !_descExpanded);
+  d.classList.toggle('desc-expanded', _descExpanded);
+  b.textContent = _descExpanded ? 'Read Less' : 'Read More';
+};
+
+window.shareProduct = function() {
+  if (navigator.share && _currentProduct) {
+    navigator.share({ title: _currentProduct.name || 'Chic Charms', url: window.location.href }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(window.location.href).then(() => showToast('Link copied!')).catch(() => {});
+  }
+};
+
+window.buyNow = function() {
+  handleAddToCart();
+  setTimeout(() => { window.location.href = 'cart.html'; }, 500);
+};
+
+// ── Main render: 100% data-driven ──
+function renderProduct(product, docId) {
+  if (!product) {
+    document.getElementById('loadingState').classList.add('hidden');
+    document.getElementById('errorState').classList.remove('hidden');
+    return;
+  }
+
+  _currentProduct = product;
+  _currentDocId = docId;
+
+  const variants = normalizeVariants(product);
+  if (variants.length && (!_selectedVariantId || !variants.some(v => v.id === _selectedVariantId))) {
+    _selectedVariantId = variants[0].id;
+  }
+  const activeVariant = variants.find(v => v.id === _selectedVariantId) || variants[0] || null;
+
+  const stock = activeVariant ? Number(activeVariant.stock) : Number(product.stock ?? 0);
+  const inStock = stock > 0;
+  const price = Number(activeVariant?.price || product.price || 0);
+  const oldPrice = Number(product.oldPrice || product.compareAtPrice || product.mrp || 0);
+  const discount = oldPrice > price ? Math.round(((oldPrice - price) / oldPrice) * 100) : 0;
+
+  // Title
+  document.title = (product.name || 'Product') + ' – Chic Charms';
+  document.getElementById('breadcrumbCategory').textContent = product.category || CATEGORY_LABELS[product.categorySlug] || 'Product';
+  document.getElementById('productName').textContent = product.name || '';
+
+  // Price block (dynamic)
+  let priceHtml = `<p class="font-jost text-[24px] text-[#9F4C67] font-medium">${formatPrice(price)}</p>`;
+  if (oldPrice > price) {
+    priceHtml += `<span class="font-jost text-[14px] text-outline line-through ml-2">${formatPrice(oldPrice)}</span>`;
+    if (discount > 0) priceHtml += `<span class="font-jost text-[12px] text-green-600 ml-2">${discount}% off</span>`;
+  }
+  document.getElementById('priceBlock').innerHTML = priceHtml;
+  document.getElementById('stickyPrice').textContent = formatPrice(price);
+
+  // Rating (from data or hide)
+  const rating = product.rating || null;
+  const ratingBlock = document.getElementById('ratingBlock');
+  if (rating) {
+    ratingBlock.innerHTML = `<span class="material-symbols-outlined text-[16px]" style="font-variation-settings:'FILL'1;">star</span><span class="text-[14px] font-jost font-medium">${rating}</span>`;
+    ratingBlock.style.display = '';
+  } else {
+    ratingBlock.style.display = 'none';
+  }
+
+  // Description (from data only)
+  const desc = product.shortDescription || product.description || '';
+  const descBlock = document.getElementById('descriptionBlock');
+  if (desc) {
+    descBlock.innerHTML = `<p id="productDescription" class="desc-clamped">${desc}</p>` +
+      (desc.length > 120 ? `<button id="readMoreBtn" class="text-primary font-medium text-[14px] mt-1 underline underline-offset-4 decoration-primary/30" onclick="toggleDescription()">Read More</button>` : '');
+    _descExpanded = false;
+  } else {
+    descBlock.innerHTML = '';
+  }
+
+  // Gallery (dynamic — any count)
+  _galleryImages = extractAllImages(product, activeVariant);
+  const gc = document.getElementById('galleryContainer');
+  if (_galleryScrollListener) gc.removeEventListener('scroll', _galleryScrollListener);
+
+  if (_galleryImages.length > 0) {
+    gc.innerHTML = _galleryImages.map((img, i) =>
+      `<div class="snap-center shrink-0 w-full h-full relative">
+        <img class="w-full h-full object-cover" src="${img.src}" alt="${product.name} - ${img.label}" loading="${i === 0 ? 'eager' : 'lazy'}" />
+      </div>`
+    ).join('');
+    let scrollTimeout;
+    _galleryScrollListener = function() {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        const w = gc.offsetWidth;
+        if (w > 0) {
+          _selectedGalleryIndex = Math.round(gc.scrollLeft / w);
+          updateGalleryDots();
+        }
+      }, 80);
+    };
+    gc.addEventListener('scroll', _galleryScrollListener, { passive: true });
+  } else {
+    gc.innerHTML = `<div class="snap-center shrink-0 w-full h-full relative bg-surface-container flex items-center justify-center">
+      <span class="material-symbols-outlined text-[64px] text-outline-variant">diamond</span>
+    </div>`;
+  }
+  _selectedGalleryIndex = 0;
+  updateGalleryDots();
+
+  // Color selector
+  const namedVariants = variants.filter(v => v.color && v.color !== 'Default' && v.id !== '__main__');
+  const cs = document.getElementById('colorSelector');
+  if (namedVariants.length > 1) {
+    cs.classList.remove('hidden');
+    document.getElementById('colorOptions').innerHTML = namedVariants.map(v =>
+      `<button class="variant-btn ${v.id === activeVariant?.id ? 'active' : ''}" onclick="selectProductVariant('${v.id}')">${v.color}</button>`
+    ).join('');
+  } else { cs.classList.add('hidden'); }
+
+  // Size selector
+  const sizes = activeVariant?.sizes || product.sizes || [];
+  const ss = document.getElementById('sizeSelector');
+  if (sizes.length > 0) {
+    ss.classList.remove('hidden');
+    document.getElementById('sizeOptions').innerHTML = sizes.map(s =>
+      `<button class="variant-btn size-option ${_selectedSize === s ? 'active' : ''}" data-size="${s}" onclick="selectProductSize('${s}')">${s}</button>`
+    ).join('');
+  } else { ss.classList.add('hidden'); }
+
+  // Stock
+  const sb = document.getElementById('stockBadge');
+  if (inStock) {
+    sb.innerHTML = '<span class="dot" style="background:#22c55e;"></span> In Stock';
+    sb.className = 'stock-badge text-green-600';
+    document.getElementById('addToCartBtn').disabled = false;
+    document.getElementById('stickyAddBtn').disabled = false;
+  } else {
+    sb.innerHTML = '<span class="dot" style="background:#ef4444;"></span> Out of Stock';
+    sb.className = 'stock-badge text-red-600';
+    document.getElementById('addToCartBtn').disabled = true;
+    document.getElementById('stickyAddBtn').disabled = true;
+  }
+
+  // Product details accordion (only fields that exist)
+  const detailRows = buildDetailRows(product);
+  const das = document.getElementById('detailsAccordionSection');
+  if (detailRows.length > 0) {
+    das.classList.remove('hidden');
+    document.getElementById('productDetailsContent').innerHTML = detailRows.map(r =>
+      `<div class="detail-row"><p class="detail-label">${r.label}</p><p class="detail-value">${r.value}</p></div>`
+    ).join('');
+  } else { das.classList.add('hidden'); }
+
+  // Care instructions
+  const care = product.careInstructions || product.care || [];
+  const cas = document.getElementById('careAccordionSection');
+  if (Array.isArray(care) && care.length > 0) {
+    cas.classList.remove('hidden');
+    document.getElementById('careContent').innerHTML = care.map(c => `<p>• ${c}</p>`).join('');
+  } else if (typeof care === 'string' && care.trim()) {
+    cas.classList.remove('hidden');
+    document.getElementById('careContent').innerHTML = `<p>${care}</p>`;
+  } else { cas.classList.add('hidden'); }
+
+  // Wishlist
+  checkWishlist();
+
+  // Show content
+  document.getElementById('loadingState').classList.add('hidden');
+  document.getElementById('productContent').classList.remove('hidden');
+}
+
+// ── Cart ──
+window.handleAddToCart = function() {
+  if (!_currentProduct) return;
+  const cart = getCart();
+  const price = Number(_currentProduct.price) || 0;
+  const image = _currentProduct.images?.productImage || _currentProduct.image || '';
+  const item = { id: _currentDocId, name: _currentProduct.name, price, image, variant: _selectedVariantId, size: _selectedSize, quantity: 1 };
+  const idx = cart.findIndex(i => i.id === item.id && i.variant === item.variant && i.size === item.size);
+  if (idx > -1) cart[idx].quantity = (cart[idx].quantity || 1) + 1;
+  else cart.push(item);
+  saveCart(cart);
+  showToast('Added to cart!');
+  if (_currentDocId && _currentDocId !== 'demo-product' && window.addToCartWithId) {
+    window.addToCartWithId(_currentProduct.name, price, _currentDocId);
+  }
+};
+
+// ── Wishlist ──
+function checkWishlist() {
+  const w = getWishlist();
+  const inW = w.some(i => i.id === _currentDocId);
+  const fab = document.getElementById('wishlistFab');
+  if (fab) fab.classList.toggle('wishlisted', inW);
+}
+
+window.toggleWishlist = function() {
+  if (!_currentDocId) return;
+  const w = getWishlist();
+  const idx = w.findIndex(i => i.id === _currentDocId);
+  if (idx > -1) { w.splice(idx, 1); showToast('Removed from wishlist'); }
+  else { w.push({ id: _currentDocId, name: _currentProduct?.name || '', price: _currentProduct?.price || 0, image: _currentProduct?.images?.productImage || '' }); showToast('Added to wishlist!'); }
+  saveWishlist(w);
+  checkWishlist();
+};
+
+// ── Drawer ──
+const drawer = document.getElementById('drawer');
+const drawerOverlay = document.getElementById('drawerOverlay');
+document.getElementById('menuBtn').addEventListener('click', () => {
+  drawer.classList.remove('-translate-x-full');
+  drawerOverlay.classList.remove('hidden');
+  setTimeout(() => drawerOverlay.classList.remove('opacity-0'), 10);
+  document.body.style.overflow = 'hidden';
+});
+function closeDrawerFn() {
+  drawer.classList.add('-translate-x-full');
+  drawerOverlay.classList.add('opacity-0');
+  setTimeout(() => { drawerOverlay.classList.add('hidden'); document.body.style.overflow = ''; document.body.style.position = ''; }, 300);
+}
+document.getElementById('drawerClose').addEventListener('click', closeDrawerFn);
+drawerOverlay.addEventListener('click', closeDrawerFn);
+
+// ── Sticky bar ──
+const stickyBar = document.getElementById('stickyBar');
+window.addEventListener('scroll', () => {
+  const st = window.pageYOffset || document.documentElement.scrollTop;
+  stickyBar.classList.toggle('translate-y-full', st <= 800);
+  stickyBar.classList.toggle('translate-y-0', st > 800);
+}, { passive: true });
+
+// ── Firebase load ──
+async function loadProduct() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const productId = urlParams.get('id');
+
+  if (!productId) {
+    document.getElementById('loadingState').classList.add('hidden');
+    document.getElementById('errorState').classList.remove('hidden');
+    document.querySelector('#errorState p').textContent = 'No product specified. Please navigate from the shop page.';
+    return;
+  }
+
+  // Firebase is initialized above — use it directly
+  try {
+    const db = firebase.firestore();
+    const docSnap = await db.collection('products').doc(productId).get();
+    if (docSnap.exists) {
+      renderProduct(docSnap.data(), docSnap.id);
+    } else {
       document.getElementById('loadingState').classList.add('hidden');
       document.getElementById('errorState').classList.remove('hidden');
-      return;
+      document.querySelector('#errorState p').textContent = 'Product not found.';
     }
-
-    _currentProduct = product;
-    _currentDocId = docId;
-
-    const variants = normalizeVariants(product);
-
-    if (variants.length && (!_selectedVariantId || !variants.some(v => v.id === _selectedVariantId))) {
-      _selectedVariantId = variants[0].id;
-    }
-
-    const selectedVariant = variants.find(v => v.id === _selectedVariantId) || variants[0] || null;
-    const galleryItems = buildGalleryItems(product, selectedVariant);
-
-    const stock = selectedVariant ? Number(selectedVariant.stock) : Number(product.stock ?? 0);
-    const inStock = stock > 0;
-
-    // Update breadcrumb
-    document.getElementById('breadcrumbCategory').textContent = product.category || 'Product';
-
-    // Update product name
-    document.getElementById('productName').textContent = product.name || 'Product';
-
-    // Update price
-    const price = selectedVariant?.price || product.price || 0;
-    document.getElementById('productPrice').textContent = formatPrice(price);
-    document.getElementById('stickyPrice').textContent = formatPrice(price);
-
-    // Update description
-    const desc = product.shortDescription || product.description || '';
-    document.getElementById('productDescription').textContent = desc;
-    _descExpanded = false;
-    document.getElementById('productDescription').classList.add('desc-clamped');
-    document.getElementById('productDescription').classList.remove('desc-expanded');
-    document.getElementById('readMoreBtn').textContent = 'Read More';
-    document.getElementById('readMoreBtn').style.display = desc.length > 120 ? '' : 'none';
-
-    // Update gallery
-    _galleryImages = galleryItems;
-    const galleryContainer = document.getElementById('galleryContainer');
-
-    // Remove old scroll listener to avoid stacking
-    if (_galleryScrollListener) {
-      galleryContainer.removeEventListener('scroll', _galleryScrollListener);
-    }
-
-    if (galleryItems.length > 0) {
-      galleryContainer.innerHTML = galleryItems.map((item, index) =>
-        `<div class="snap-center shrink-0 w-full h-full relative">
-          <img class="w-full h-full object-cover" src="${item.src}" alt="${product.name} - ${item.label}" loading="${index === 0 ? 'eager' : 'lazy'}" />
-        </div>`
-      ).join('');
-
-      const dotsContainer = document.getElementById('galleryDots');
-      dotsContainer.innerHTML = galleryItems.map((_, i) =>
-        `<button class="gallery-dot ${i === 0 ? 'active' : ''}" onclick="selectGalleryImage(${i})" aria-label="Go to image ${i + 1}"></button>`
-      ).join('');
-
-      // Debounced scroll listener for dot updates
-      let scrollTimeout;
-      _galleryScrollListener = function() {
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(() => {
-          const scrollLeft = galleryContainer.scrollLeft;
-          const w = galleryContainer.offsetWidth;
-          if (w > 0) {
-            const index = Math.round(scrollLeft / w);
-            _selectedGalleryIndex = index;
-            document.querySelectorAll('.gallery-dot').forEach((dot, i) => {
-              dot.classList.toggle('active', i === index);
-            });
-          }
-        }, 80);
-      };
-      galleryContainer.addEventListener('scroll', _galleryScrollListener, { passive: true });
-    } else {
-      galleryContainer.innerHTML = `
-        <div class="snap-center shrink-0 w-full h-full relative bg-surface-container flex items-center justify-center">
-          <span class="material-symbols-outlined text-[64px] text-outline-variant">diamond</span>
-        </div>`;
-      document.getElementById('galleryDots').innerHTML = '';
-    }
-
-    // Render color selector
-    const colorSelector = document.getElementById('colorSelector');
-    const namedVariants = variants.filter(v => v.color && v.color !== 'Default' && v.id !== '__main__');
-
-    if (namedVariants.length > 1) {
-      colorSelector.classList.remove('hidden');
-      document.getElementById('colorOptions').innerHTML = namedVariants.map(v =>
-        `<button class="variant-btn ${v.id === selectedVariant?.id ? 'active' : ''}" onclick="selectProductVariant('${v.id}')">${v.color}</button>`
-      ).join('');
-    } else {
-      colorSelector.classList.add('hidden');
-    }
-
-    // Render size selector
-    const sizeSelector = document.getElementById('sizeSelector');
-    const sizes = selectedVariant?.sizes || product.sizes || [];
-
-    if (sizes.length > 0) {
-      sizeSelector.classList.remove('hidden');
-      document.getElementById('sizeOptions').innerHTML = sizes.map(size =>
-        `<button class="variant-btn size-option ${_selectedSize === size ? 'active' : ''}" data-size="${size}" onclick="selectProductSize('${size}')">${size}</button>`
-      ).join('');
-    } else {
-      sizeSelector.classList.add('hidden');
-    }
-
-    // Update stock status
-    const stockBadge = document.getElementById('stockBadge');
-    if (inStock) {
-      stockBadge.innerHTML = '<span class="dot" style="background:#22c55e;"></span> In Stock';
-      stockBadge.className = 'stock-badge text-green-600';
-      document.getElementById('addToCartBtn').disabled = false;
-      document.getElementById('stickyAddBtn').disabled = false;
-    } else {
-      stockBadge.innerHTML = '<span class="dot" style="background:#ef4444;"></span> Out of Stock';
-      stockBadge.className = 'stock-badge text-red-600';
-      document.getElementById('addToCartBtn').disabled = true;
-      document.getElementById('stickyAddBtn').disabled = true;
-    }
-
-    // Update product details accordion
-    const detailsContent = document.getElementById('productDetailsContent');
-    const details = product.details || [];
-    if (details.length > 0) {
-      let html = '';
-      for (let i = 0; i < details.length; i += 2) {
-        const value1 = details[i]?.includes(':') ? details[i].split(':').slice(1).join(':').trim() : details[i];
-        const label1 = details[i]?.includes(':') ? details[i].split(':')[0].trim() : '';
-        html += `<div>
-          <p class="font-label-caps text-[10px] text-on-surface-variant mb-1 uppercase tracking-wider">${label1 || 'Detail'}</p>
-          <p class="font-body-md">${value1 || details[i]}</p>
-        </div>`;
-        if (details[i + 1]) {
-          const value2 = details[i + 1]?.includes(':') ? details[i + 1].split(':').slice(1).join(':').trim() : details[i + 1];
-          const label2 = details[i + 1]?.includes(':') ? details[i + 1].split(':')[0].trim() : '';
-          html += `<div>
-            <p class="font-label-caps text-[10px] text-on-surface-variant mb-1 uppercase tracking-wider">${label2 || 'Detail'}</p>
-            <p class="font-body-md">${value2 || details[i+1]}</p>
-          </div>`;
-        }
-      }
-      detailsContent.innerHTML = html;
-    } else {
-      detailsContent.innerHTML = `
-        <div>
-          <p class="font-label-caps text-[10px] text-on-surface-variant mb-1 uppercase tracking-wider">Material</p>
-          <p class="font-body-md">18K Rose Gold</p>
-        </div>
-        <div>
-          <p class="font-label-caps text-[10px] text-on-surface-variant mb-1 uppercase tracking-wider">Finish</p>
-          <p class="font-body-md">High Polish</p>
-        </div>
-        <div>
-          <p class="font-label-caps text-[10px] text-on-surface-variant mb-1 uppercase tracking-wider">Weight</p>
-          <p class="font-body-md">4.52 Grams</p>
-        </div>
-        <div>
-          <p class="font-label-caps text-[10px] text-on-surface-variant mb-1 uppercase tracking-wider">Diamonds</p>
-          <p class="font-body-md">0.45 CT (VVS/EF)</p>
-        </div>`;
-    }
-
-    // Check wishlist status
-    checkWishlistStatus();
-
-    // Show content
+  } catch (error) {
+    console.error('[ChicCharms PDP] Firebase error:', error);
     document.getElementById('loadingState').classList.add('hidden');
-    document.getElementById('productContent').classList.remove('hidden');
+    document.getElementById('errorState').classList.remove('hidden');
   }
 
-  // Add to cart
-  window.handleAddToCart = function() {
-    if (!_currentProduct) return;
+  loadRelatedProducts(productId);
+}
 
-    const cart = getCart();
-    const price = Number(_currentProduct.price) || 0;
-    const image = _currentProduct.images?.productImage || _currentProduct.image || '';
+// ── Related products from Firestore ──
+async function loadRelatedProducts(currentProductId) {
+  const section = document.getElementById('relatedSection');
+  const container = document.getElementById('relatedProducts');
+  const title = document.getElementById('relatedTitle');
 
-    const item = {
-      id: _currentDocId,
-      name: _currentProduct.name,
-      price: price,
-      image: image,
-      variant: _selectedVariantId,
-      size: _selectedSize,
-      quantity: 1
-    };
+  try {
+    const db = firebase.firestore();
+    let related = [];
 
-    const existingIndex = cart.findIndex(i => i.id === item.id && i.variant === item.variant && i.size === item.size);
-
-    if (existingIndex > -1) {
-      cart[existingIndex].quantity = (cart[existingIndex].quantity || 1) + 1;
-    } else {
-      cart.push(item);
+    // 1. Try product.relatedProducts array of IDs
+    if (_currentProduct?.relatedProducts && Array.isArray(_currentProduct.relatedProducts)) {
+      for (const rid of _currentProduct.relatedProducts.slice(0, 8)) {
+        try {
+          const doc = await db.collection('products').doc(String(rid)).get();
+          if (doc.exists && doc.id !== currentProductId) related.push({ ...doc.data(), _id: doc.id });
+        } catch(e) {}
+      }
     }
 
-    saveCart(cart);
-    showToast('Added to cart!');
-
-    if (_currentDocId && _currentDocId !== 'demo-product' && window.addToCartWithId) {
-      window.addToCartWithId(_currentProduct.name, price, _currentDocId);
-    }
-  };
-
-  // Wishlist functions
-  function getWishlist() {
-    try {
-      return JSON.parse(localStorage.getItem('cc_wishlist') || '[]');
-    } catch (e) {
-      return [];
-    }
-  }
-
-  function saveWishlist(wishlist) {
-    localStorage.setItem('cc_wishlist', JSON.stringify(wishlist));
-  }
-
-  function checkWishlistStatus() {
-    const wishlist = getWishlist();
-    const isInWishlist = wishlist.some(item => item.id === _currentDocId);
-    const fab = document.getElementById('wishlistFab');
-    if (fab) {
-      fab.classList.toggle('wishlisted', isInWishlist);
-    }
-  }
-
-  window.toggleWishlist = function() {
-    if (!_currentDocId) return;
-
-    const wishlist = getWishlist();
-    const index = wishlist.findIndex(item => item.id === _currentDocId);
-
-    if (index > -1) {
-      wishlist.splice(index, 1);
-      showToast('Removed from wishlist');
-    } else {
-      wishlist.push({
-        id: _currentDocId,
-        name: _currentProduct?.name || '',
-        price: _currentProduct?.price || 0,
-        image: _currentProduct?.images?.productImage || ''
+    // 2. Fallback: same category products
+    if (related.length < 4 && _currentProduct?.categorySlug) {
+      const snap = await db.collection('products').where('categorySlug', '==', _currentProduct.categorySlug).limit(6).get();
+      snap.forEach(doc => {
+        if (doc.id !== currentProductId && !related.some(r => r._id === doc.id)) {
+          related.push({ ...doc.data(), _id: doc.id });
+        }
       });
-      showToast('Added to wishlist!');
     }
 
-    saveWishlist(wishlist);
-    checkWishlistStatus();
-  };
-
-  // Drawer functions
-  const drawer = document.getElementById('drawer');
-  const drawerOverlay = document.getElementById('drawerOverlay');
-  const menuBtn = document.getElementById('menuBtn');
-  const drawerClose = document.getElementById('drawerClose');
-
-  function openDrawer() {
-    drawer.classList.remove('-translate-x-full');
-    drawerOverlay.classList.remove('hidden');
-    setTimeout(() => drawerOverlay.classList.remove('opacity-0'), 10);
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeDrawer() {
-    drawer.classList.add('-translate-x-full');
-    drawerOverlay.classList.add('opacity-0');
-    setTimeout(() => {
-      drawerOverlay.classList.add('hidden');
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-    }, 300);
-  }
-
-  menuBtn.addEventListener('click', openDrawer);
-  drawerClose.addEventListener('click', closeDrawer);
-  drawerOverlay.addEventListener('click', closeDrawer);
-
-  // Sticky bar scroll logic
-  const stickyBar = document.getElementById('stickyBar');
-
-  window.addEventListener('scroll', () => {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-    if (scrollTop > 800) {
-      stickyBar.classList.remove('translate-y-full');
-      stickyBar.classList.add('translate-y-0');
-    } else {
-      stickyBar.classList.add('translate-y-full');
-      stickyBar.classList.remove('translate-y-0');
-    }
-  }, { passive: true });
-
-  // Load product from URL parameter or default
-  async function loadProduct() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const productId = urlParams.get('id') || 'elysian-bloom-earrings';
-
-    if (typeof firebase !== 'undefined' && firebase.apps.length > 0) {
-      try {
-        const db = firebase.firestore();
-        const docRef = db.collection('products').doc(productId);
-        const docSnap = await docRef.get();
-
-        if (docSnap.exists) {
-          renderProduct({ ...docSnap.data(), id: docSnap.id }, productId);
-        } else {
-          const snapshot = await db.collection('products').limit(1).get();
-          if (!snapshot.empty) {
-            const firstDoc = snapshot.docs[0];
-            renderProduct({ ...firstDoc.data(), id: firstDoc.id }, firstDoc.id);
-          } else {
-            loadDemoProduct();
-          }
+    // 3. Fallback: random products
+    if (related.length < 3) {
+      const snap = await db.collection('products').limit(8).get();
+      snap.forEach(doc => {
+        if (doc.id !== currentProductId && !related.some(r => r._id === doc.id)) {
+          related.push({ ...doc.data(), _id: doc.id });
         }
-      } catch (error) {
-        console.error('Firebase error:', error);
-        loadDemoProduct();
-      }
+      });
+    }
+
+    if (related.length > 0) {
+      title.textContent = 'You May Also Love';
+      container.innerHTML = related.slice(0, 6).map(p => {
+        const img = p.images?.productImage || p.image || p.imageUrl || '';
+        const pUrl = `product.html?id=${p._id}`;
+        return `<a href="${pUrl}" class="snap-start shrink-0 w-[240px] block">
+          <div class="aspect-[4/5] bg-surface-container mb-3 overflow-hidden">
+            ${isUsableUrl(img) ? `<img class="w-full h-full object-cover active:scale-105 transition-transform duration-500" src="${img}" alt="${p.name || ''}" loading="lazy" />` : `<div class="w-full h-full bg-surface-container flex items-center justify-center"><span class="material-symbols-outlined text-outline-variant">diamond</span></div>`}
+          </div>
+          <p class="font-jost text-[14px] uppercase tracking-wide mb-1">${p.name || 'Product'}</p>
+          <p class="font-jost text-[#9F4C67]">${formatPrice(p.price)}</p>
+        </a>`;
+      }).join('');
+      section.classList.remove('hidden');
     } else {
-      loadDemoProduct();
+      section.classList.add('hidden');
     }
-
-    loadRelatedProducts();
+  } catch (e) {
+    section.classList.add('hidden');
   }
+}
 
-  // Demo product data
-  function loadDemoProduct() {
-    const demoProduct = {
-      name: 'Elysian Bloom Studs',
-      price: 1250.00,
-      category: 'Earrings',
-      shortDescription: 'Handcrafted in 18K rose gold, the Elysian Bloom Studs feature a central brilliant-cut diamond surrounded by delicate petals of hand-polished ceramic and smaller accent stones. A testament to timeless elegance and modern craftsmanship.',
-      description: 'Handcrafted in 18K rose gold, the Elysian Bloom Studs feature a central brilliant-cut diamond surrounded by delicate petals of hand-polished ceramic and smaller accent stones. A testament to timeless elegance and modern craftsmanship.',
-      details: [
-        'Material: 18K Rose Gold',
-        'Finish: High Polish',
-        'Weight: 4.52 Grams',
-        'Diamonds: 0.45 CT (VVS/EF)'
-      ],
-      images: {
-        productImage: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800&q=80',
-        modelImage: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&q=80'
-      },
-      variants: [
-        {
-          id: 'rose-gold',
-          color: 'Rose Gold',
-          stock: 15,
-          images: {
-            productImage: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800&q=80',
-            modelImage: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&q=80'
-          }
-        },
-        {
-          id: 'silver',
-          color: 'Silver',
-          stock: 8,
-          images: {
-            productImage: 'https://images.unsplash.com/photo-1617038260897-41a606d3cbf8?w=800&q=80',
-            modelImage: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=800&q=80'
-          }
-        }
-      ],
-      sizes: ['S', 'M', 'L'],
-      stock: 23
-    };
+// ── Render site config (CMS-driven) ──
+function renderSiteConfig() {
+  // Announcement
+  document.getElementById('announcementText').textContent = SITE_CONFIG.announcement;
 
-    renderProduct(demoProduct, 'demo-product');
-  }
+  // Trust bar
+  document.getElementById('trustBar').innerHTML = SITE_CONFIG.trustFeatures.map(f =>
+    `<div class="flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">${f.icon}</span><span>${f.label}</span></div>`
+  ).join('');
 
-  // Load related products
-  function loadRelatedProducts() {
-    const relatedContainer = document.getElementById('relatedProducts');
+  // Shipping & Returns
+  const sc = document.getElementById('shippingContent');
+  let shipHtml = '<p class="mb-2 font-medium text-on-surface">Shipping:</p>';
+  SITE_CONFIG.shippingInfo.shipping.forEach(s => shipHtml += `<p>• ${s}</p>`);
+  shipHtml += '<p class="mt-3 mb-2 font-medium text-on-surface">Returns:</p>';
+  SITE_CONFIG.shippingInfo.returns.forEach(s => shipHtml += `<p>• ${s}</p>`);
+  sc.innerHTML = shipHtml;
 
-    const relatedProducts = [
-      {
-        id: 'bloom-pendant',
-        name: 'Bloom Pendant',
-        price: 850,
-        image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&q=80'
-      },
-      {
-        id: 'elysian-bangle',
-        name: 'Elysian Bangle',
-        price: 2400,
-        image: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&q=80'
-      },
-      {
-        id: 'petal-ring',
-        name: 'Petal Ring',
-        price: 1100,
-        image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=400&q=80'
-      }
-    ];
+  // Editorial
+  const es = document.getElementById('editorialSection');
+  es.classList.remove('hidden');
+  document.getElementById('editorialImage').src = SITE_CONFIG.editorial.image;
+  document.getElementById('editorialImage').alt = SITE_CONFIG.editorial.title;
+  document.getElementById('editorialTitle').textContent = SITE_CONFIG.editorial.title;
+  document.getElementById('editorialCta').innerHTML = `${SITE_CONFIG.editorial.cta} <span class="w-12 h-[1px] bg-white"></span>`;
 
-    relatedContainer.innerHTML = relatedProducts.map(product =>
-      `<a href="product.html?id=${product.id}" class="snap-start shrink-0 w-[240px] block">
-        <div class="aspect-[4/5] bg-surface-container mb-3 overflow-hidden">
-          <img class="w-full h-full object-cover active:scale-105 transition-transform duration-500" src="${product.image}" alt="${product.name}" loading="lazy" />
-        </div>
-        <p class="font-jost text-[14px] uppercase tracking-wide mb-1">${product.name}</p>
-        <p class="font-jost text-[#9F4C67]">${formatPrice(product.price)}</p>
-      </a>`
-    ).join('');
-  }
+  // Gifting
+  const gs = document.getElementById('giftingSection');
+  gs.classList.remove('hidden');
+  document.getElementById('giftingTitle').textContent = SITE_CONFIG.gifting.title;
+  document.getElementById('giftingDesc').textContent = SITE_CONFIG.gifting.description;
+  document.getElementById('giftingCta').textContent = SITE_CONFIG.gifting.cta;
 
-  // Initialize
-  document.addEventListener('DOMContentLoaded', () => {
-    updateCartBadges();
-    loadProduct();
-  });
+  // Promise
+  const ps = document.getElementById('promiseSection');
+  ps.classList.remove('hidden');
+  document.getElementById('promiseGrid').innerHTML = SITE_CONFIG.promiseFeatures.map(f =>
+    `<div class="text-center"><span class="material-symbols-outlined promise-icon">${f.icon}</span><h4 class="font-label-caps text-[11px] tracking-widest uppercase mb-1">${f.title}</h4><p class="text-[12px] text-on-surface-variant">${f.description}</p></div>`
+  ).join('');
 
-  // Re-check cart on visibility change
-  document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) {
-      updateCartBadges();
-    }
-  });
+  // Footer
+  document.getElementById('footerTagline').textContent = SITE_CONFIG.footerTagline;
+  document.getElementById('footerYear').textContent = new Date().getFullYear();
+  document.getElementById('footerAccordion').innerHTML = SITE_CONFIG.footerNav.map(group =>
+    `<div class="accordion-item border-b border-brand-ivory/10">
+      <button class="w-full py-6 flex justify-between items-center group" onclick="this.parentElement.classList.toggle('accordion-open')">
+        <span class="font-label-caps text-[11px] tracking-[0.2em] uppercase">${group.title}</span>
+        <span class="material-symbols-outlined text-[16px] transition-transform duration-300 group-[.accordion-open]:rotate-180">expand_more</span>
+      </button>
+      <div class="accordion-content">
+        <ul class="pb-6 flex flex-col gap-3 text-[13px] text-brand-ivory/60">
+          ${group.links.map(l => `<li><a href="${l.href}">${l.label}</a></li>`).join('')}
+        </ul>
+      </div>
+    </div>`
+  ).join('');
+
+  // Bottom nav
+  document.getElementById('bottomNav').innerHTML = SITE_CONFIG.bottomNav.map(item => {
+    const filled = item.filled ? `style="font-variation-settings:'FILL'1"` : '';
+    const cls = item.active ? 'text-primary' : 'text-on-surface-variant opacity-60';
+    const badge = item.hasBadge ? `<span id="navCartBadge" class="absolute -top-1 -right-1 w-4 h-4 bg-[#B5657A] text-white text-[9px] font-semibold rounded-full flex items-center justify-center hidden">0</span>` : '';
+    const onclick = item.action ? `onclick="${item.action}(); return false;"` : '';
+    return `<a href="${item.href}" class="flex flex-col items-center justify-center ${cls} relative" ${onclick}>
+      <span class="material-symbols-outlined" ${filled}>${item.icon}</span>${badge}
+    </a>`;
+  }).join('');
+
+  // Drawer nav
+  const navItems = SITE_CONFIG.navigation.map(n => `<a href="${n.href}" class="font-jost text-on-surface hover:text-primary transition-colors">${n.label}</a>`);
+  navItems.push('<div class="border-t border-outline-variant pt-5 mt-5"><a href="account.html" class="font-jost text-on-surface hover:text-primary transition-colors">My Account</a></div>');
+  navItems.push('<a href="about.html" class="font-jost text-on-surface-variant text-[13px] hover:text-primary transition-colors">About Us</a>');
+  navItems.push('<a href="contact.html" class="font-jost text-on-surface-variant text-[13px] hover:text-primary transition-colors">Contact</a>');
+  document.getElementById('drawerNav').innerHTML = navItems.join('');
+}
+
+// ── Init ──
+document.addEventListener('DOMContentLoaded', () => {
+  renderSiteConfig();
+  updateCartBadges();
+  loadProduct();
+});
+
+document.addEventListener('visibilitychange', () => { if (!document.hidden) updateCartBadges(); });
 </script>
 
-<!-- Safe area handling for iOS -->
 <style>
-  .safe-area-bottom {
-    padding-bottom: env(safe-area-inset-bottom, 0);
-  }
+  .safe-area-bottom { padding-bottom: env(safe-area-inset-bottom, 0); }
   @supports (padding-bottom: env(safe-area-inset-bottom)) {
-    .safe-area-bottom {
-      padding-bottom: max(12px, env(safe-area-inset-bottom));
-    }
+    .safe-area-bottom { padding-bottom: max(12px, env(safe-area-inset-bottom)); }
   }
 </style>
 </body>
