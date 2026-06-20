@@ -21,13 +21,11 @@
   <!-- Mobile Product Styles -->
   <link rel="stylesheet" href="mobile-product.css" />
 
-  <!-- Design System (shared utilities) -->
-  <link rel="stylesheet" href="styles.css" />
-
   <style>
     /* ============================================================
        CHIC CHARMS — MOBILE-ONLY PRODUCT PAGE
        Approved editorial design wired to Firebase backend
+       SCROLL FIX: no overflow/overscroll on body
        ============================================================ */
 
     /* Material Symbols config */
@@ -48,11 +46,21 @@
     }
     .accordion-open .accordion-content { max-height: 500px; }
 
-    /* Mobile safe area handling */
+    /* CRITICAL SCROLL FIX — only set overflow-x on html, NOT on body */
+    html {
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
     body {
-      min-height: max(884px, 100dvh);
-      overscroll-behavior-y: contain;
+      overflow-x: hidden;
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch;
       -webkit-tap-highlight-color: transparent;
+      position: relative;
+      /* NO min-height hack, NO overscroll-behavior-y on body */
     }
 
     /* Product image container */
@@ -213,6 +221,19 @@
       display: block;
       margin-bottom: 8px;
     }
+
+    /* Gallery — only horizontal scroll, don't block vertical page scroll */
+    #galleryContainer {
+      overflow-x: auto;
+      overflow-y: hidden;
+      touch-action: pan-x;
+    }
+
+    /* Sticky bar positioning — above bottom nav */
+    #stickyBar {
+      bottom: 60px;
+      z-index: 70;
+    }
   </style>
 
   <script>
@@ -325,10 +346,9 @@
       <h1 class="font-display-lg text-[22px] tracking-[0.15em] text-primary uppercase">CHIC CHARMS</h1>
     </a>
   </div>
-  <div class="absolute right-margin_mobile flex gap-4">
-    <a href="shop.html" class="flex items-center justify-center">
-      <span class="material-symbols-outlined text-on-surface cursor-pointer" role="button" aria-label="Search">search</span>
-    </a>
+  <div class="absolute right-margin_mobile flex gap-4 items-center">
+    <!-- Search icon only — no navigation -->
+    <span class="material-symbols-outlined text-on-surface" aria-label="Search">search</span>
     <a href="cart.html" class="relative flex items-center justify-center">
       <span class="material-symbols-outlined text-on-surface">shopping_bag</span>
       <span id="cartBadge" class="absolute -top-1 -right-1 w-4 h-4 bg-[#B5657A] text-white text-[9px] font-semibold rounded-full flex items-center justify-center hidden">0</span>
@@ -361,7 +381,7 @@
   </div>
 </aside>
 
-<main class="pt-[120px] pb-[80px]">
+<main class="pt-[120px] pb-[140px]">
   <!-- Loading State -->
   <div id="loadingState" class="px-margin_mobile">
     <div class="h-4 w-32 skeleton mb-4"></div>
@@ -382,15 +402,13 @@
       <ol class="flex items-center gap-2 text-[13px] font-jost text-outline">
         <li><a class="hover:underline" href="index.html">Home</a></li>
         <li><span class="text-outline-variant">|</span></li>
-        <li><a class="hover:underline" href="shop.html">Shop</a></li>
-        <li><span class="text-outline-variant">|</span></li>
         <li><span id="breadcrumbCategory" class="font-medium text-on-surface">Earrings</span></li>
       </ol>
     </nav>
 
     <!-- 2. Product Gallery -->
-    <section class="relative overflow-hidden">
-      <div id="galleryContainer" class="flex overflow-x-auto snap-x snap-mandatory no-scrollbar" style="height:618px;">
+    <section class="relative">
+      <div id="galleryContainer" class="flex snap-x snap-mandatory no-scrollbar" style="height:85vw;max-height:618px;">
         <!-- Gallery images injected by JS -->
       </div>
       <!-- Floating Actions -->
@@ -537,15 +555,15 @@
     </section>
 
     <!-- 8. Editorial Campaign Block -->
-    <section class="relative w-full overflow-hidden">
+    <section class="relative w-full">
       <div class="aspect-[3/4] w-full bg-surface-container">
         <img id="editorialImage" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&q=80" alt="Editorial campaign" loading="lazy" />
       </div>
       <div class="absolute inset-0 editorial-overlay flex flex-col justify-end p-margin_mobile">
         <h2 class="font-display-lg text-white text-[32px] leading-tight mb-4">More Than Jewellery</h2>
-        <a class="text-white font-label-caps text-[12px] tracking-widest uppercase flex items-center gap-2" href="shop.html">
+        <span class="text-white font-label-caps text-[12px] tracking-widest uppercase flex items-center gap-2">
           Explore <span class="w-12 h-[1px] bg-white"></span>
-        </a>
+        </span>
       </div>
     </section>
 
@@ -579,7 +597,7 @@
     <!-- 10. Related Products -->
     <section class="py-section_gap">
       <h3 class="font-headline-md text-[24px] px-margin_mobile mb-8">You May Also Love</h3>
-      <div id="relatedProducts" class="flex overflow-x-auto snap-x snap-mandatory no-scrollbar gap-4 px-margin_mobile">
+      <div id="relatedProducts" class="flex snap-x snap-mandatory no-scrollbar gap-4 px-margin_mobile" style="overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;">
         <!-- Related products injected by JS -->
       </div>
     </section>
@@ -599,7 +617,6 @@
           <div class="accordion-content">
             <ul class="pb-6 flex flex-col gap-3 text-[13px] text-brand-ivory/60">
               <li><a href="about.html">Our Story</a></li>
-              <li><a href="shop.html">Store Locator</a></li>
               <li><a href="shop.html">Collections</a></li>
               <li><a href="contact.html">Bespoke Design</a></li>
             </ul>
@@ -651,7 +668,7 @@
 </main>
 
 <!-- Sticky Bottom Purchase Bar -->
-<div id="stickyBar" class="fixed bottom-0 left-0 w-full z-[70] h-[80px] bg-white border-t border-outline-variant flex items-center justify-between px-margin_mobile translate-y-full transition-transform duration-300 safe-area-bottom">
+<div id="stickyBar" class="fixed left-0 w-full h-[80px] bg-white border-t border-outline-variant flex items-center justify-between px-margin_mobile translate-y-full transition-transform duration-300 safe-area-bottom">
   <div class="flex flex-col">
     <span class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-wider">Price</span>
     <span id="stickyPrice" class="font-jost text-[20px] font-semibold text-[#9F4C67]">$0.00</span>
@@ -705,6 +722,7 @@
   let _selectedGalleryIndex = 0;
   let _galleryImages = [];
   let _descExpanded = false;
+  let _galleryScrollListener = null;
 
   // Toast notification
   function showToast(message) {
@@ -826,9 +844,6 @@
     _selectedSize = size;
     document.querySelectorAll('.size-option').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.size === size);
-      btn.classList.toggle('bg-[#8e4559]', btn.dataset.size === size);
-      btn.classList.toggle('text-white', btn.dataset.size === size);
-      btn.classList.toggle('border-[#8e4559]', btn.dataset.size === size);
     });
   };
 
@@ -845,7 +860,7 @@
     if (!container || _galleryImages.length === 0) return;
 
     container.scrollTo({
-      left: _selectedGalleryIndex * window.innerWidth,
+      left: _selectedGalleryIndex * container.offsetWidth,
       behavior: 'smooth'
     });
 
@@ -879,7 +894,6 @@
         url: window.location.href
       }).catch(() => {});
     } else {
-      // Fallback: copy URL
       navigator.clipboard.writeText(window.location.href).then(() => {
         showToast('Link copied!');
       }).catch(() => {
@@ -937,12 +951,16 @@
     document.getElementById('productDescription').classList.add('desc-clamped');
     document.getElementById('productDescription').classList.remove('desc-expanded');
     document.getElementById('readMoreBtn').textContent = 'Read More';
-    // Hide read more if short text
     document.getElementById('readMoreBtn').style.display = desc.length > 120 ? '' : 'none';
 
     // Update gallery
     _galleryImages = galleryItems;
     const galleryContainer = document.getElementById('galleryContainer');
+
+    // Remove old scroll listener to avoid stacking
+    if (_galleryScrollListener) {
+      galleryContainer.removeEventListener('scroll', _galleryScrollListener);
+    }
 
     if (galleryItems.length > 0) {
       galleryContainer.innerHTML = galleryItems.map((item, index) =>
@@ -956,21 +974,24 @@
         `<button class="gallery-dot ${i === 0 ? 'active' : ''}" onclick="selectGalleryImage(${i})" aria-label="Go to image ${i + 1}"></button>`
       ).join('');
 
-      // Scroll listener for dot updates
+      // Debounced scroll listener for dot updates
       let scrollTimeout;
-      galleryContainer.addEventListener('scroll', () => {
+      _galleryScrollListener = function() {
         clearTimeout(scrollTimeout);
         scrollTimeout = setTimeout(() => {
           const scrollLeft = galleryContainer.scrollLeft;
-          const index = Math.round(scrollLeft / window.innerWidth);
-          _selectedGalleryIndex = index;
-          document.querySelectorAll('.gallery-dot').forEach((dot, i) => {
-            dot.classList.toggle('active', i === index);
-          });
-        }, 50);
-      }, { passive: true });
+          const w = galleryContainer.offsetWidth;
+          if (w > 0) {
+            const index = Math.round(scrollLeft / w);
+            _selectedGalleryIndex = index;
+            document.querySelectorAll('.gallery-dot').forEach((dot, i) => {
+              dot.classList.toggle('active', i === index);
+            });
+          }
+        }, 80);
+      };
+      galleryContainer.addEventListener('scroll', _galleryScrollListener, { passive: true });
     } else {
-      // Fallback: show placeholder
       galleryContainer.innerHTML = `
         <div class="snap-center shrink-0 w-full h-full relative bg-surface-container flex items-center justify-center">
           <span class="material-symbols-outlined text-[64px] text-outline-variant">diamond</span>
@@ -1022,20 +1043,19 @@
     const detailsContent = document.getElementById('productDetailsContent');
     const details = product.details || [];
     if (details.length > 0) {
-      // Pair details into 2-col grid
       let html = '';
       for (let i = 0; i < details.length; i += 2) {
-        const label1 = details[i]?.split(':')[0]?.trim() || `Detail ${i+1}`;
         const value1 = details[i]?.includes(':') ? details[i].split(':').slice(1).join(':').trim() : details[i];
+        const label1 = details[i]?.includes(':') ? details[i].split(':')[0].trim() : '';
         html += `<div>
-          <p class="font-label-caps text-[10px] text-on-surface-variant mb-1 uppercase tracking-wider">${i === 0 ? 'Material' : (i === 2 ? 'Weight' : 'Detail')}</p>
+          <p class="font-label-caps text-[10px] text-on-surface-variant mb-1 uppercase tracking-wider">${label1 || 'Detail'}</p>
           <p class="font-body-md">${value1 || details[i]}</p>
         </div>`;
         if (details[i + 1]) {
-          const label2 = details[i + 1]?.split(':')[0]?.trim() || `Detail ${i+2}`;
           const value2 = details[i + 1]?.includes(':') ? details[i + 1].split(':').slice(1).join(':').trim() : details[i + 1];
+          const label2 = details[i + 1]?.includes(':') ? details[i + 1].split(':')[0].trim() : '';
           html += `<div>
-            <p class="font-label-caps text-[10px] text-on-surface-variant mb-1 uppercase tracking-wider">${i === 0 ? 'Finish' : (i === 2 ? 'Stones' : 'Detail')}</p>
+            <p class="font-label-caps text-[10px] text-on-surface-variant mb-1 uppercase tracking-wider">${label2 || 'Detail'}</p>
             <p class="font-body-md">${value2 || details[i+1]}</p>
           </div>`;
         }
@@ -1098,8 +1118,7 @@
     saveCart(cart);
     showToast('Added to cart!');
 
-    // Also try the Firestore stock check if productId exists
-    if (_currentDocId && _currentDocId !== 'demo-product') {
+    if (_currentDocId && _currentDocId !== 'demo-product' && window.addToCartWithId) {
       window.addToCartWithId(_currentProduct.name, price, _currentDocId);
     }
   };
@@ -1120,7 +1139,6 @@
   function checkWishlistStatus() {
     const wishlist = getWishlist();
     const isInWishlist = wishlist.some(item => item.id === _currentDocId);
-
     const fab = document.getElementById('wishlistFab');
     if (fab) {
       fab.classList.toggle('wishlisted', isInWishlist);
@@ -1166,8 +1184,11 @@
   function closeDrawer() {
     drawer.classList.add('-translate-x-full');
     drawerOverlay.classList.add('opacity-0');
-    setTimeout(() => drawerOverlay.classList.add('hidden'), 300);
-    document.body.style.overflow = '';
+    setTimeout(() => {
+      drawerOverlay.classList.add('hidden');
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+    }, 300);
   }
 
   menuBtn.addEventListener('click', openDrawer);
@@ -1175,7 +1196,6 @@
   drawerOverlay.addEventListener('click', closeDrawer);
 
   // Sticky bar scroll logic
-  let lastScrollTop = 0;
   const stickyBar = document.getElementById('stickyBar');
 
   window.addEventListener('scroll', () => {
@@ -1188,8 +1208,6 @@
       stickyBar.classList.add('translate-y-full');
       stickyBar.classList.remove('translate-y-0');
     }
-
-    lastScrollTop = scrollTop;
   }, { passive: true });
 
   // Load product from URL parameter or default
@@ -1317,16 +1335,6 @@
     if (!document.hidden) {
       updateCartBadges();
     }
-  });
-
-  // Micro-interactions
-  document.querySelectorAll('button').forEach(btn => {
-    btn.addEventListener('touchstart', () => {
-      btn.style.transform = 'scale(0.98)';
-    }, { passive: true });
-    btn.addEventListener('touchend', () => {
-      btn.style.transform = 'scale(1)';
-    }, { passive: true });
   });
 </script>
 

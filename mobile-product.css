@@ -1,9 +1,10 @@
 /* ============================================================
    CHIC CHARMS — MOBILE-ONLY PRODUCT PAGE STYLES
    Approved editorial design – mobile-first luxury experience
+   SCROLL FIX: no overflow/overscroll on body
    ============================================================ */
 
-/* Mobile-only: hide entire page on desktop */
+/* Mobile constraint on desktop */
 @media (min-width: 768px) {
   body {
     max-width: 480px;
@@ -26,26 +27,27 @@
   --text: #1C1917;
   --muted: #4E4440;
   --white: #FFFFFF;
-
-  /* Typography */
   --font-head: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
   --font-body: 'Plus Jakarta Sans', 'Jost', -apple-system, sans-serif;
-
-  /* Spacing */
   --space-xs: 8px;
   --space-sm: 16px;
   --space-md: 28px;
   --space-lg: 64px;
-
-  /* Border */
   --border: #EDE6DD;
   --border-rose: rgba(180, 100, 120, 0.22);
-
-  /* Motion */
   --ease-luxury: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-/* Base Mobile Styles */
+/* ===== CRITICAL SCROLL FIX ===== */
+/* Only overflow-x:hidden on html, body gets overflow-y:auto */
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 body {
   font-family: var(--font-body);
   color: var(--text);
@@ -53,23 +55,17 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
-  overscroll-behavior-y: contain;
   -webkit-tap-highlight-color: transparent;
+  /* SCROLL FIX: DO NOT set overscroll-behavior, position:fixed, or overflow:hidden on body */
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
-/* Reset for mobile */
-* {
+/* Reset */
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-}
-
-html {
-  scroll-behavior: smooth;
-  font-size: 16px;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
 }
 
 /* Typography */
@@ -150,22 +146,6 @@ img {
   border-radius: 3px;
 }
 
-/* Sticky Bar Animation */
-.sticky-purchase-bar {
-  transform: translateY(100%);
-  transition: transform 0.3s ease-in-out;
-}
-.sticky-purchase-bar.visible {
-  transform: translateY(0);
-}
-
-/* Active State */
-button:active,
-a:active {
-  transform: scale(0.98);
-  transition: transform 0.1s ease;
-}
-
 /* Loading skeleton */
 .skeleton {
   background: linear-gradient(90deg, #f6eceb 25%, #fcf1f1 50%, #f6eceb 75%);
@@ -219,18 +199,12 @@ a:active {
   }
 }
 
-/* Ensure content doesn't get hidden behind fixed elements */
-main {
-  min-height: 100dvh;
-  overscroll-behavior-y: contain;
-}
-
-/* Image placeholder handling */
+/* Image placeholder */
 img[loading="lazy"] {
   background: var(--blush);
 }
 
-/* Focus states for accessibility */
+/* Focus states */
 button:focus-visible,
 a:focus-visible {
   outline: 2px solid var(--rose-dark);
@@ -243,7 +217,7 @@ button {
   user-select: none;
 }
 
-/* Description line clamp toggle */
+/* Description line clamp */
 .desc-clamped {
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -325,32 +299,34 @@ button {
   margin-bottom: 8px;
 }
 
-/* Small phone adjustments */
-@media (max-width: 380px) {
-  .editorial-overlay h2 {
-    font-size: 24px !important;
-  }
-}
-
-/* Prevent horizontal overflow on all children */
-main > * {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-/* Ensure gallery doesn't overflow */
+/* ===== GALLERY SCROLL FIX ===== */
+/* Gallery only scrolls horizontally, doesn't block page vertical scroll */
 #galleryContainer {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+  /* Prevent gallery from capturing vertical scroll */
+  overscroll-behavior-x: contain;
+}
+
+/* Related products horizontal scroll */
+#relatedProducts {
+  overflow-x: auto;
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-x: contain;
 }
 
-/* Bottom nav z-index must be below sticky bar */
-nav.fixed.bottom-0.z-50 {
-  z-index: 50 !important;
+/* Sticky bar above bottom nav */
+#stickyBar {
+  bottom: 60px;
+  z-index: 70;
 }
 
-/* Sticky bar sits above bottom nav */
-#stickyBar {
-  z-index: 70 !important;
-  bottom: 60px;
+/* Small phone */
+@media (max-width: 380px) {
+  .editorial-overlay h2 {
+    font-size: 24px !important;
+  }
 }
