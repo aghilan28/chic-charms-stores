@@ -8,38 +8,38 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="description" content="Product details – Chic Charms" />
   <title>Product – Chic Charms</title>
-  
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet" />
-  
+
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  
+
   <!-- Mobile Product Styles -->
   <link rel="stylesheet" href="mobile-product.css" />
-  
-  <!-- Design System (for shared utilities) -->
+
+  <!-- Design System (shared utilities) -->
   <link rel="stylesheet" href="styles.css" />
-  
+
   <style>
     /* ============================================================
        CHIC CHARMS — MOBILE-ONLY PRODUCT PAGE
-       Mobile-first luxury editorial experience
+       Approved editorial design wired to Firebase backend
        ============================================================ */
-    
-    /* Font definitions */
+
+    /* Material Symbols config */
     .material-symbols-outlined {
       font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
-      font-size: 24px;
+      font-size: 20px;
     }
-    
+
     /* Hide scrollbar utility */
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    
+
     /* Accordion animation */
     .accordion-content {
       max-height: 0;
@@ -47,24 +47,17 @@
       transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .accordion-open .accordion-content { max-height: 500px; }
-    
+
     /* Mobile safe area handling */
     body {
-      min-height: 100dvh;
+      min-height: max(884px, 100dvh);
       overscroll-behavior-y: contain;
       -webkit-tap-highlight-color: transparent;
     }
-    
-    /* Disable desktop elements on mobile */
-    @media (max-width: 767px) {
-      .desktop-only { display: none !important; }
-    }
-    
+
     /* Product image container */
-    .pdp-image-container {
-      aspect-ratio: 4/5;
-    }
-    
+    .pdp-image-container { aspect-ratio: 4/5; }
+
     /* Sticky purchase bar animation */
     .sticky-purchase-bar {
       transform: translateY(100%);
@@ -73,13 +66,7 @@
     .sticky-purchase-bar.visible {
       transform: translateY(0);
     }
-    
-    /* Active state feedback */
-    button:active, a:active {
-      transform: scale(0.98);
-      transition: transform 0.1s ease;
-    }
-    
+
     /* Loading skeleton */
     .skeleton {
       background: linear-gradient(90deg, #f6eceb 25%, #fcf1f1 50%, #f6eceb 75%);
@@ -90,7 +77,7 @@
       0% { background-position: 200% 0; }
       100% { background-position: -200% 0; }
     }
-    
+
     /* Toast notification */
     .toast {
       position: fixed;
@@ -114,7 +101,7 @@
       opacity: 1;
       transform: translateX(-50%) translateY(0);
     }
-    
+
     /* Gallery dot indicator */
     .gallery-dots {
       position: absolute;
@@ -132,892 +119,1227 @@
       border-radius: 50%;
       background: rgba(255,255,255,0.5);
       transition: all 0.3s ease;
+      border: none;
+      padding: 0;
+      cursor: pointer;
     }
     .gallery-dot.active {
       background: white;
       width: 20px;
       border-radius: 3px;
     }
+
+    /* Line clamp toggle */
+    .desc-clamped { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .desc-expanded { display: block; }
+
+    /* Floating action buttons */
+    .fab-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.80);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #8e4559;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      border: none;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+    .fab-circle:active { transform: scale(0.95); }
+    .fab-circle .material-symbols-outlined { font-size: 20px; }
+
+    /* Wishlist heart filled */
+    .fab-circle.wishlisted .material-symbols-outlined {
+      font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+      color: #B5657A;
+    }
+
+    /* Drawer */
+    #drawerOverlay {
+      transition: opacity 0.3s ease;
+    }
+    #drawer {
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Color & Size selectors */
+    .variant-btn {
+      padding: 8px 16px;
+      border: 1px solid #857276;
+      font-size: 13px;
+      font-family: 'Jost', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      background: transparent;
+      color: #1f1a1b;
+      transition: all 0.2s ease;
+    }
+    .variant-btn:hover { border-color: #8e4559; }
+    .variant-btn.active {
+      background: #8e4559;
+      color: white;
+      border-color: #8e4559;
+    }
+
+    /* Stock badge */
+    .stock-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-family: 'Jost', sans-serif;
+    }
+    .stock-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    /* Editorial campaign overlay */
+    .editorial-overlay {
+      background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 50%);
+    }
+
+    /* Promise grid */
+    .promise-icon {
+      color: #8e4559;
+      font-size: 28px;
+      display: block;
+      margin-bottom: 8px;
+    }
   </style>
-  
+
   <script>
     tailwind.config = {
       darkMode: "class",
       theme: {
         extend: {
           colors: {
-            "surface": "#fff8f7",
-            "surface-dim": "#e1d8d7",
-            "surface-container": "#f6eceb",
-            "surface-container-low": "#fcf1f1",
-            "surface-container-high": "#f0e6e5",
-            "surface-container-highest": "#eae0e0",
-            "on-surface": "#1f1a1b",
-            "on-surface-variant": "#534346",
-            "outline": "#857276",
-            "outline-variant": "#d7c1c5",
-            "primary": "#8e4559",
-            "primary-container": "#ab5d71",
-            "on-primary": "#ffffff",
+            "error-container": "#ffdad6",
+            "on-tertiary-container": "#fffbff",
+            "error": "#ba1a1a",
+            "on-primary-fixed": "#3c0419",
+            "on-primary-container": "#fffbff",
             "secondary": "#95445e",
+            "on-error": "#ffffff",
+            "tertiary-container": "#7a7375",
+            "on-tertiary-fixed": "#1f1a1d",
+            "outline": "#857276",
+            "primary-container": "#ab5d71",
+            "inverse-surface": "#342f2f",
+            "surface-bright": "#fff8f7",
+            "on-secondary-fixed": "#3f001c",
+            "tertiary": "#615a5d",
+            "inverse-on-surface": "#f9eeee",
+            "on-tertiary": "#ffffff",
+            "surface-tint": "#90475b",
+            "primary": "#8e4559",
+            "surface-container-highest": "#eae0e0",
+            "background": "#fff8f7",
+            "primary-fixed-dim": "#ffb1c3",
+            "surface-variant": "#eae0e0",
+            "on-primary-fixed-variant": "#743044",
+            "surface-container-low": "#fcf1f1",
+            "tertiary-fixed-dim": "#cec4c7",
+            "on-background": "#1f1a1b",
+            "secondary-container": "#ff9bb9",
+            "surface-container": "#f6eceb",
+            "tertiary-fixed": "#eae0e3",
+            "on-secondary": "#ffffff",
+            "on-secondary-container": "#7a2f49",
+            "surface-dim": "#e1d8d7",
+            "on-surface-variant": "#534346",
+            "secondary-fixed-dim": "#ffb1c6",
+            "on-primary": "#ffffff",
+            "outline-variant": "#d7c1c5",
+            "inverse-primary": "#ffb1c3",
+            "on-tertiary-fixed-variant": "#4b4548",
+            "primary-fixed": "#ffd9e0",
+            "surface-container-high": "#f0e6e5",
+            "surface-container-lowest": "#ffffff",
+            "secondary-fixed": "#ffd9e1",
+            "on-secondary-fixed-variant": "#772c47",
+            "surface": "#fff8f7",
+            "on-surface": "#1f1a1b",
+            "on-error-container": "#93000a",
             "brand-gold": "#B5657A",
             "brand-ivory": "#FFF9F7",
             "brand-dark": "#2F2A2A"
           },
           spacing: {
-            "gutter": "12px",
-            "margin-mobile": "20px",
-            "section-gap": "64px"
+            "gutter_mobile": "12px",
+            "stack_gap_sm": "8px",
+            "header_height": "80px",
+            "announcement_height": "40px",
+            "section_gap": "64px",
+            "stack_gap_md": "16px",
+            "margin_mobile": "20px"
           },
           fontFamily: {
-            "display": ["Playfair Display", "serif"],
-            "body": ["Plus Jakarta Sans", "sans-serif"],
+            "display-lg": ["Playfair Display"],
+            "button": ["Plus Jakarta Sans"],
+            "body-lg": ["Plus Jakarta Sans"],
+            "headline-md": ["Playfair Display"],
+            "body-md": ["Plus Jakarta Sans"],
+            "headline-lg": ["Playfair Display"],
+            "label-caps": ["Plus Jakarta Sans"],
             "jost": ["Jost", "sans-serif"]
           },
           fontSize: {
-            "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
-            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "500" }],
-            "body-md": ["16px", { "lineHeight": "24px" }],
-            "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "600" }]
+            "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+            "button": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+            "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+            "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+            "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+            "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+            "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "600"}]
           }
-        }
-      }
+        },
+      },
     }
   </script>
 </head>
-<body class="bg-[#fff8f7] text-[#1f1a1b] font-body selection:bg-[#8e4559]/20">
-  
-  <!-- Toast Notification -->
-  <div id="toast" class="toast"></div>
-  
-  <!-- Sticky Announcement Bar -->
-  <div class="fixed top-0 left-0 w-full z-[60] h-[40px] bg-[#B5657A] flex items-center justify-center">
-    <span class="text-white font-[family-name:url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600&display=swap')] text-[10px] tracking-[0.2em] uppercase">Complimentary Express Shipping on Orders Above $500</span>
+<body class="bg-surface text-on-surface font-body-md selection:bg-primary/20">
+
+<!-- Toast Notification -->
+<div id="toast" class="toast"></div>
+
+<!-- Sticky Announcement Bar -->
+<div class="fixed top-0 left-0 w-full z-[60] h-[40px] bg-[#B5657A] flex items-center justify-center">
+  <span class="text-white font-label-caps text-[10px] tracking-[0.2em] uppercase">Complimentary Express Shipping on Orders Above $500</span>
+</div>
+
+<!-- Sticky Header -->
+<header class="fixed top-[40px] left-0 w-full z-[50] h-[80px] bg-[#FFF9F7]/95 backdrop-blur-md flex items-center px-margin_mobile">
+  <button class="absolute left-margin_mobile active:scale-95 transition-transform" id="menuBtn" aria-label="Menu">
+    <span class="material-symbols-outlined text-on-surface">menu</span>
+  </button>
+  <div class="w-full text-center">
+    <a href="index.html">
+      <h1 class="font-display-lg text-[22px] tracking-[0.15em] text-primary uppercase">CHIC CHARMS</h1>
+    </a>
   </div>
-  
-  <!-- Sticky Header -->
-  <header class="fixed top-[40px] left-0 w-full z-[50] h-[80px] bg-[#FFF9F7]/95 backdrop-blur-md flex items-center px-[20px]">
-    <button class="absolute left-[20px] active:scale-95 transition-transform" id="menuBtn" aria-label="Menu">
-      <span class="material-symbols-outlined text-[#1f1a1b]">menu</span>
-    </button>
-    <div class="w-full text-center">
-      <h1 class="font-[family-name:url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap')] text-[22px] tracking-[0.15em] text-[#8e4559] uppercase">CHIC CHARMS</h1>
+  <div class="absolute right-margin_mobile flex gap-4">
+    <a href="shop.html" class="flex items-center justify-center">
+      <span class="material-symbols-outlined text-on-surface cursor-pointer" role="button" aria-label="Search">search</span>
+    </a>
+    <a href="cart.html" class="relative flex items-center justify-center">
+      <span class="material-symbols-outlined text-on-surface">shopping_bag</span>
+      <span id="cartBadge" class="absolute -top-1 -right-1 w-4 h-4 bg-[#B5657A] text-white text-[9px] font-semibold rounded-full flex items-center justify-center hidden">0</span>
+    </a>
+  </div>
+</header>
+
+<!-- Mobile Navigation Drawer -->
+<div id="drawerOverlay" class="fixed inset-0 bg-[#2F2A2A]/50 z-[100] hidden opacity-0"></div>
+<aside id="drawer" class="fixed top-0 left-0 w-[280px] h-full bg-surface z-[110] transform -translate-x-full">
+  <div class="p-6">
+    <div class="flex justify-between items-center mb-12">
+      <a href="index.html" class="font-display-lg text-[20px] tracking-[0.1em] text-primary">CHIC CHARMS</a>
+      <button id="drawerClose" class="material-symbols-outlined text-on-surface" aria-label="Close menu">close</button>
     </div>
-    <div class="absolute right-[20px] flex gap-4">
-      <span class="material-symbols-outlined text-[#1f1a1b] cursor-pointer" role="button">search</span>
-      <a href="cart.html" class="relative">
-        <span class="material-symbols-outlined text-[#1f1a1b]">shopping_bag</span>
-        <span id="cartBadge" class="absolute -top-1 -right-1 w-4 h-4 bg-[#B5657A] text-white text-[9px] font-semibold rounded-full flex items-center justify-center hidden">0</span>
-      </a>
-    </div>
-  </header>
-  
-  <!-- Mobile Navigation Drawer -->
-  <div id="drawerOverlay" class="fixed inset-0 bg-[#2F2A2A]/50 z-[100] hidden opacity-0 transition-opacity duration-300"></div>
-  <aside id="drawer" class="fixed top-0 left-0 w-[280px] h-full bg-[#fff8f7] z-[110] transform -translate-x-full transition-transform duration-300">
-    <div class="p-6">
-      <div class="flex justify-between items-center mb-12">
-        <span class="font-[family-name:url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap')] text-[20px] tracking-[0.1em] text-[#8e4559]">CHIC CHARMS</span>
-        <button id="drawerClose" class="material-symbols-outlined text-[#1f1a1b]">close</button>
+    <nav class="flex flex-col gap-5 text-[14px]">
+      <a href="shop.html" class="font-jost text-on-surface hover:text-primary transition-colors">Shop All</a>
+      <a href="shop.html?filter=new" class="font-jost text-primary font-medium">New Arrivals</a>
+      <a href="shop.html?filter=bestseller" class="font-jost text-on-surface hover:text-primary transition-colors">Best Sellers</a>
+      <a href="shop.html?category=earrings" class="font-jost text-on-surface hover:text-primary transition-colors">Earrings</a>
+      <a href="shop.html?category=necklaces" class="font-jost text-on-surface hover:text-primary transition-colors">Necklaces</a>
+      <a href="shop.html?category=rings" class="font-jost text-on-surface hover:text-primary transition-colors">Rings</a>
+      <a href="shop.html?category=bracelets" class="font-jost text-on-surface hover:text-primary transition-colors">Bracelets</a>
+      <div class="border-t border-outline-variant pt-5 mt-5">
+        <a href="account.html" class="font-jost text-on-surface hover:text-primary transition-colors">My Account</a>
       </div>
-      <nav class="flex flex-col gap-5 text-[14px]">
-        <a href="shop.html" class="font-jost text-[#1f1a1b] hover:text-[#8e4559] transition-colors">Shop All</a>
-        <a href="shop.html?filter=new" class="font-jost text-[#8e4559] font-medium">New Arrivals</a>
-        <a href="shop.html?filter=bestseller" class="font-jost text-[#1f1a1b] hover:text-[#8e4559] transition-colors">Best Sellers</a>
-        <a href="shop.html?category=earrings" class="font-jost text-[#1f1a1b] hover:text-[#8e4559] transition-colors">Earrings</a>
-        <a href="shop.html?category=necklaces" class="font-jost text-[#1f1a1b] hover:text-[#8e4559] transition-colors">Necklaces</a>
-        <a href="shop.html?category=rings" class="font-jost text-[#1f1a1b] hover:text-[#8e4559] transition-colors">Rings</a>
-        <a href="shop.html?category=bracelets" class="font-jost text-[#1f1a1b] hover:text-[#8e4559] transition-colors">Bracelets</a>
-        <div class="border-t border-[#d7c1c5] pt-5 mt-5">
-          <a href="account.html" class="font-jost text-[#1f1a1b] hover:text-[#8e4559] transition-colors">My Account</a>
-        </div>
-        <a href="about.html" class="font-jost text-[#534346] text-[13px] hover:text-[#8e4559] transition-colors">About Us</a>
-        <a href="contact.html" class="font-jost text-[#534346] text-[13px] hover:text-[#8e4559] transition-colors">Contact</a>
-      </nav>
+      <a href="about.html" class="font-jost text-on-surface-variant text-[13px] hover:text-primary transition-colors">About Us</a>
+      <a href="contact.html" class="font-jost text-on-surface-variant text-[13px] hover:text-primary transition-colors">Contact</a>
+    </nav>
+  </div>
+</aside>
+
+<main class="pt-[120px] pb-[80px]">
+  <!-- Loading State -->
+  <div id="loadingState" class="px-margin_mobile">
+    <div class="h-4 w-32 skeleton mb-4"></div>
+    <div class="h-[500px] skeleton mb-6"></div>
+    <div class="space-y-3">
+      <div class="h-8 skeleton w-3/4"></div>
+      <div class="h-6 skeleton w-1/3"></div>
+      <div class="h-20 skeleton"></div>
+      <div class="h-14 skeleton mt-6"></div>
     </div>
-  </aside>
-  
-  <main class="pt-[120px] pb-[100px]">
-    <!-- Loading State -->
-    <div id="loadingState" class="px-[20px]">
-      <div class="h-4 w-32 skeleton rounded mb-4"></div>
-      <div class="h-[500px] skeleton rounded-lg mb-6"></div>
-      <div class="space-y-3">
-        <div class="h-8 skeleton rounded w-3/4"></div>
-        <div class="h-6 skeleton rounded w-1/3"></div>
-        <div class="h-20 skeleton rounded"></div>
-        <div class="h-14 skeleton rounded mt-6"></div>
+  </div>
+
+  <!-- Product Content (hidden until loaded) -->
+  <div id="productContent" class="hidden">
+
+    <!-- 1. Breadcrumb -->
+    <nav class="px-margin_mobile py-4">
+      <ol class="flex items-center gap-2 text-[13px] font-jost text-outline">
+        <li><a class="hover:underline" href="index.html">Home</a></li>
+        <li><span class="text-outline-variant">|</span></li>
+        <li><a class="hover:underline" href="shop.html">Shop</a></li>
+        <li><span class="text-outline-variant">|</span></li>
+        <li><span id="breadcrumbCategory" class="font-medium text-on-surface">Earrings</span></li>
+      </ol>
+    </nav>
+
+    <!-- 2. Product Gallery -->
+    <section class="relative overflow-hidden">
+      <div id="galleryContainer" class="flex overflow-x-auto snap-x snap-mandatory no-scrollbar" style="height:618px;">
+        <!-- Gallery images injected by JS -->
       </div>
-    </div>
-    
-    <!-- Product Content (hidden until loaded) -->
-    <div id="productContent" class="hidden">
-      <!-- Breadcrumb -->
-      <nav class="px-[20px] py-4">
-        <ol class="flex items-center gap-2 text-[13px] font-jost text-[#857276]">
-          <li><a href="index.html" class="hover:underline">Home</a></li>
-          <li><span class="text-[#d7c1c5]">|</span></li>
-          <li><a href="shop.html" class="hover:underline">Shop</a></li>
-          <li><span class="text-[#d7c1c5]">|</span></li>
-          <li><span id="breadcrumbCategory" class="font-medium text-[#1f1a1b]">Earrings</span></li>
-        </ol>
-      </nav>
-      
-      <!-- Product Gallery -->
-      <section class="relative overflow-hidden">
-        <div id="galleryContainer" class="flex overflow-x-auto snap-x snap-mandatory no-scrollbar">
-          <!-- Gallery images will be injected here -->
-        </div>
-        <div id="galleryDots" class="gallery-dots">
-          <!-- Dots will be injected here -->
-        </div>
-      </section>
-      
-      <!-- Product Details -->
-      <section class="px-[20px] py-8">
-        <!-- Product Name -->
-        <h1 id="productName" class="font-[family-name:url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&display=swap')] text-[28px] leading-tight mb-2"></h1>
-        
-        <!-- Price -->
-        <div id="productPrice" class="font-jost text-[20px] text-[#8e4559] mb-4"></div>
-        
-        <!-- Short Description -->
-        <p id="productDescription" class="font-jost text-[15px] text-[#534346] leading-relaxed mb-6"></p>
-        
-        <!-- Color Selector -->
-        <div id="colorSelector" class="mb-6">
-          <p class="font-[family-name:url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600&display=swap')] text-[12px] tracking-widest uppercase mb-3">Color</p>
-          <div id="colorOptions" class="flex flex-wrap gap-3">
-            <!-- Color buttons will be injected here -->
-          </div>
-        </div>
-        
-        <!-- Size Selector -->
-        <div id="sizeSelector" class="mb-6">
-          <p class="font-[family-name:url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600&display=swap')] text-[12px] tracking-widest uppercase mb-3">Size</p>
-          <div id="sizeOptions" class="flex flex-wrap gap-3">
-            <!-- Size buttons will be injected here -->
-          </div>
-        </div>
-        
-        <!-- Stock Status -->
-        <div id="stockStatus" class="mb-6">
-          <span id="stockBadge" class="inline-flex items-center gap-2 text-[12px] font-jost"></span>
-        </div>
-        
-        <!-- Add to Cart Button -->
-        <button id="addToCartBtn" class="w-full h-[56px] bg-[#B5657A] text-white font-[family-name:url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600&display=swap')] text-[12px] tracking-widest uppercase active:scale-[0.98] transition-transform disabled:opacity-50 disabled:cursor-not-allowed" onclick="handleAddToCart()">
-          ADD TO CART
+      <!-- Floating Actions -->
+      <div class="absolute top-6 right-6 flex flex-col gap-3 z-10">
+        <button id="wishlistFab" class="fab-circle" onclick="toggleWishlist()" aria-label="Add to Wishlist">
+          <span class="material-symbols-outlined">favorite</span>
         </button>
-        
-        <!-- Wishlist Button -->
-        <button id="wishlistBtn" class="w-full h-[48px] mt-3 border border-[#857276] text-[#1f1a1b] font-[family-name:url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600&display=swap')] text-[12px] tracking-widest uppercase active:scale-[0.98] transition-transform flex items-center justify-center gap-2" onclick="toggleWishlist()">
-          <span id="wishlistIcon" class="material-symbols-outlined text-[20px]">favorite_border</span>
-          <span id="wishlistText">ADD TO WISHLIST</span>
+        <button class="fab-circle" onclick="shareProduct()" aria-label="Share">
+          <span class="material-symbols-outlined">share</span>
         </button>
-      </section>
-      
-      <!-- Product Details Accordion -->
-      <section class="px-[20px]">
-        <div class="border-t border-[#d7c1c5]">
-          <!-- Product Details Accordion -->
-          <div class="accordion-item border-b border-[#d7c1c5]">
-            <button class="w-full py-5 flex justify-between items-center group" onclick="this.parentElement.classList.toggle('accordion-open')">
-              <span class="font-[family-name:url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600&display=swap')] text-[12px] tracking-[0.15em] uppercase">Product Details</span>
-              <span class="material-symbols-outlined text-[20px] transition-transform duration-300 group-[.accordion-open]:rotate-180">expand_more</span>
-            </button>
-            <div class="accordion-content">
-              <div id="productDetailsContent" class="pb-5 text-[14px] font-jost text-[#534346] leading-relaxed space-y-2"></div>
-            </div>
-          </div>
-          
-          <!-- Material & Care Accordion -->
-          <div class="accordion-item border-b border-[#d7c1c5]">
-            <button class="w-full py-5 flex justify-between items-center group" onclick="this.parentElement.classList.toggle('accordion-open')">
-              <span class="font-[family-name:url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600&display=swap')] text-[12px] tracking-[0.15em] uppercase">Material & Care</span>
-              <span class="material-symbols-outlined text-[20px] transition-transform duration-300 group-[.accordion-open]:rotate-180">expand_more</span>
-            </button>
-            <div class="accordion-content">
-              <div class="pb-5 text-[14px] font-jost text-[#534346] leading-relaxed">
-                <p>• Premium 925 Sterling Silver with 18K Rose Gold Plating</p>
-                <p>• High-quality Cubic Zirconia stones</p>
-                <p>• Hypoallergenic & Nickel-free</p>
-                <p>• Store in the provided pouch when not in use</p>
-                <p>• Avoid contact with perfumes and chemicals</p>
-                <p>• Clean gently with a soft cloth</p>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Shipping & Returns Accordion -->
-          <div class="accordion-item border-b border-[#d7c1c5]">
-            <button class="w-full py-5 flex justify-between items-center group" onclick="this.parentElement.classList.toggle('accordion-open')">
-              <span class="font-[family-name:url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600&display=swap')] text-[12px] tracking-[0.15em] uppercase">Shipping & Returns</span>
-              <span class="material-symbols-outlined text-[20px] transition-transform duration-300 group-[.accordion-open]:rotate-180">expand_more</span>
-            </button>
-            <div class="accordion-content">
-              <div class="pb-5 text-[14px] font-jost text-[#534346] leading-relaxed">
-                <p class="mb-2"><strong>Shipping:</strong></p>
-                <p>• Free express shipping on orders above $500</p>
-                <p>• Standard shipping: 5-7 business days</p>
-                <p>• Express shipping: 2-3 business days</p>
-                <p class="mt-3 mb-2"><strong>Returns:</strong></p>
-                <p>• 30-day return policy</p>
-                <p>• Items must be unworn and in original packaging</p>
-                <p>• Free returns for prepaid orders</p>
-              </div>
-            </div>
-          </div>
+      </div>
+      <!-- Gallery Dots -->
+      <div id="galleryDots" class="gallery-dots">
+        <!-- Dots injected by JS -->
+      </div>
+    </section>
+
+    <!-- 3. Product Info -->
+    <section class="px-margin_mobile py-stack_gap_md">
+      <h1 id="productName" class="font-headline-lg text-[34px] leading-tight text-on-surface mb-2"></h1>
+
+      <div class="flex items-center justify-between mb-4">
+        <p id="productPrice" class="font-jost text-[24px] text-[#9F4C67] font-medium"></p>
+        <div id="productRating" class="flex items-center gap-1 text-primary">
+          <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+          <span class="text-[14px] font-jost font-medium">4.9 (128)</span>
         </div>
-      </section>
-      
-      <!-- Brand Promise -->
-      <section class="px-[20px] py-[64px]">
-        <h3 class="font-[family-name:url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&display=swap')] text-[22px] text-center mb-10">Our Promise</h3>
-        <div class="grid grid-cols-2 gap-x-[12px] gap-y-12">
-          <div class="text-center">
-            <span class="material-symbols-outlined text-[#8e4559] text-[28px] mb-2 block">health_and_safety</span>
-            <h4 class="font-[family-name:url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600&display=swap')] text-[11px] tracking-widest uppercase mb-1">Skin Friendly</h4>
-            <p class="text-[12px] text-[#534346]">Hypoallergenic nickel-free metals.</p>
-          </div>
-          <div class="text-center">
-            <span class="material-symbols-outlined text-[#8e4559] text-[28px] mb-2 block">verified_user</span>
-            <h4 class="font-[family-name:url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600&display=swap')] text-[11px] tracking-widest uppercase mb-1">Premium Quality</h4>
-            <p class="text-[12px] text-[#534346]">BIS Hallmarked & Certified stones.</p>
-          </div>
-          <div class="text-center">
-            <span class="material-symbols-outlined text-[#8e4559] text-[28px] mb-2 block">local_shipping</span>
-            <h4 class="font-[family-name:url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600&display=swap')] text-[11px] tracking-widest uppercase mb-1">Fast Delivery</h4>
-            <p class="text-[12px] text-[#534346]">48-hour dispatch for in-stock items.</p>
-          </div>
-          <div class="text-center">
-            <span class="material-symbols-outlined text-[#8e4559] text-[28px] mb-2 block">diamond</span>
-            <h4 class="font-[family-name:url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600&display=swap')] text-[11px] tracking-widest uppercase mb-1">Affordable Luxury</h4>
-            <p class="text-[12px] text-[#534346]">Direct-to-consumer artisanal pieces.</p>
-          </div>
+      </div>
+
+      <div class="text-on-surface-variant leading-relaxed text-[15px]">
+        <p id="productDescription" class="desc-clamped"></p>
+        <button id="readMoreBtn" class="text-primary font-medium text-[14px] mt-1 underline underline-offset-4 decoration-primary/30" onclick="toggleDescription()">Read More</button>
+      </div>
+
+      <!-- Color Selector -->
+      <div id="colorSelector" class="mt-6 hidden">
+        <p class="font-label-caps text-[12px] tracking-widest uppercase mb-3">Color</p>
+        <div id="colorOptions" class="flex flex-wrap gap-3">
+          <!-- Color buttons injected by JS -->
         </div>
-      </section>
-      
-      <!-- Related Products -->
-      <section class="py-[64px]">
-        <h3 class="font-[family-name:url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&display=swap')] text-[24px] px-[20px] mb-8">You May Also Love</h3>
-        <div id="relatedProducts" class="flex overflow-x-auto snap-x snap-mandatory no-scrollbar gap-4 px-[20px]">
-          <!-- Related products will be injected here -->
+      </div>
+
+      <!-- Size Selector -->
+      <div id="sizeSelector" class="mt-6 hidden">
+        <p class="font-label-caps text-[12px] tracking-widest uppercase mb-3">Size</p>
+        <div id="sizeOptions" class="flex flex-wrap gap-3">
+          <!-- Size buttons injected by JS -->
         </div>
-      </section>
-    </div>
-    
-    <!-- Error State -->
-    <div id="errorState" class="hidden px-[20px] py-16 text-center">
-      <span class="material-symbols-outlined text-[48px] text-[#857276] mb-4 block">error_outline</span>
-      <p class="font-jost text-[16px] text-[#534346] mb-6">Unable to load product. Please try again.</p>
-      <button onclick="location.reload()" class="h-[48px] px-8 bg-[#B5657A] text-white font-[family-name:url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600&display=swap')] text-[12px] tracking-widest uppercase">
-        RETRY
+      </div>
+
+      <!-- Stock Status -->
+      <div id="stockStatus" class="mt-4">
+        <span id="stockBadge" class="stock-badge"></span>
+      </div>
+
+      <!-- Trust Micro-bar -->
+      <div class="mt-8 py-4 border-y border-outline-variant flex justify-between items-center text-[10px] font-label-caps tracking-widest text-on-surface-variant uppercase">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[16px]">verified</span>
+          <span>Certified</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[16px]">security</span>
+          <span>Secure Pay</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[16px]">eco</span>
+          <span>Ethical</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Purchase Zone -->
+    <section class="px-margin_mobile py-6 flex flex-col gap-3">
+      <button id="addToCartBtn" class="w-full h-14 bg-[#B5657A] text-white font-button text-[14px] tracking-widest uppercase active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed" onclick="handleAddToCart()">
+        Add To Cart
       </button>
-    </div>
-  </main>
-  
-  <!-- Sticky Bottom Purchase Bar -->
-  <div id="stickyBar" class="fixed bottom-[70px] left-0 w-full z-[70] h-[80px] bg-white border-t border-[#d7c1c5] flex items-center justify-between px-[20px] translate-y-full transition-transform duration-300 safe-area-bottom">
-    <div class="flex flex-col">
-      <span class="font-[family-name:url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600&display=swap')] text-[10px] text-[#534346] uppercase tracking-wider">Price</span>
-      <span id="stickyPrice" class="font-jost text-[20px] font-semibold text-[#8e4559]">$0.00</span>
-    </div>
-    <button id="stickyAddBtn" class="px-8 h-12 bg-[#B5657A] text-white font-[family-name:url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600&display=swap')] text-[12px] tracking-widest uppercase active:scale-95 transition-transform" onclick="handleAddToCart()">
-      ADD TO CART
+      <button class="w-full h-14 border border-[#B5657A] text-[#B5657A] font-button text-[14px] tracking-widest uppercase active:scale-[0.98] transition-all duration-300" onclick="buyNow()">
+        Buy Now
+      </button>
+    </section>
+
+    <!-- 5. Product Details Accordion -->
+    <section class="px-margin_mobile mt-4">
+      <div class="accordion-item accordion-open border-t border-outline-variant">
+        <button class="w-full py-5 flex justify-between items-center group" onclick="this.parentElement.classList.toggle('accordion-open')">
+          <span class="font-headline-md text-[18px]">Product Details</span>
+          <span class="material-symbols-outlined transition-transform duration-300 group-[.accordion-open]:rotate-45">add</span>
+        </button>
+        <div class="accordion-content">
+          <div id="productDetailsContent" class="grid grid-cols-2 gap-y-6 pb-8 text-[14px]">
+            <!-- Details injected by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Material & Care Accordion -->
+      <div class="accordion-item border-t border-outline-variant">
+        <button class="w-full py-5 flex justify-between items-center group" onclick="this.parentElement.classList.toggle('accordion-open')">
+          <span class="font-headline-md text-[18px]">Material & Care</span>
+          <span class="material-symbols-outlined transition-transform duration-300 group-[.accordion-open]:rotate-45">add</span>
+        </button>
+        <div class="accordion-content">
+          <div class="pb-8 text-[14px] text-on-surface-variant leading-relaxed">
+            <p>• Premium 925 Sterling Silver with 18K Rose Gold Plating</p>
+            <p>• High-quality Cubic Zirconia stones</p>
+            <p>• Hypoallergenic & Nickel-free</p>
+            <p>• Store in the provided pouch when not in use</p>
+            <p>• Avoid contact with perfumes and chemicals</p>
+            <p>• Clean gently with a soft cloth</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Shipping Accordion -->
+      <div class="accordion-item border-t border-outline-variant">
+        <button class="w-full py-5 flex justify-between items-center group" onclick="this.parentElement.classList.toggle('accordion-open')">
+          <span class="font-headline-md text-[18px]">Shipping &amp; Returns</span>
+          <span class="material-symbols-outlined transition-transform duration-300 group-[.accordion-open]:rotate-45">add</span>
+        </button>
+        <div class="accordion-content">
+          <div class="pb-8 text-[14px] text-on-surface-variant leading-relaxed">
+            <p class="mb-2 font-medium text-on-surface">Shipping:</p>
+            <p>• Free express shipping on orders above $500</p>
+            <p>• Standard shipping: 5-7 business days</p>
+            <p>• Express shipping: 2-3 business days</p>
+            <p class="mt-3 mb-2 font-medium text-on-surface">Returns:</p>
+            <p>• 30-day return policy</p>
+            <p>• Items must be unworn and in original packaging</p>
+            <p>• Free returns for prepaid orders</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Gifting Block -->
+    <section class="px-margin_mobile py-section_gap">
+      <div class="bg-[#FAF5F2] p-8 text-center border border-outline-variant/30">
+        <span class="material-symbols-outlined text-primary mb-3 block text-[32px]">redeem</span>
+        <h3 class="font-headline-md text-[20px] mb-2">Gift With Love</h3>
+        <p class="text-on-surface-variant text-[14px] mb-6">Make it unforgettable with our premium personalized gifting options.</p>
+        <button class="font-label-caps text-[11px] tracking-widest text-primary border-b border-primary pb-1 uppercase">Discover Packaging</button>
+      </div>
+    </section>
+
+    <!-- 8. Editorial Campaign Block -->
+    <section class="relative w-full overflow-hidden">
+      <div class="aspect-[3/4] w-full bg-surface-container">
+        <img id="editorialImage" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&q=80" alt="Editorial campaign" loading="lazy" />
+      </div>
+      <div class="absolute inset-0 editorial-overlay flex flex-col justify-end p-margin_mobile">
+        <h2 class="font-display-lg text-white text-[32px] leading-tight mb-4">More Than Jewellery</h2>
+        <a class="text-white font-label-caps text-[12px] tracking-widest uppercase flex items-center gap-2" href="shop.html">
+          Explore <span class="w-12 h-[1px] bg-white"></span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 9. Chic Charms Promise -->
+    <section class="px-margin_mobile py-section_gap">
+      <h3 class="font-headline-md text-[22px] text-center mb-10">Our Promise</h3>
+      <div class="grid grid-cols-2 gap-x-gutter_mobile gap-y-12">
+        <div class="text-center">
+          <span class="material-symbols-outlined promise-icon">health_and_safety</span>
+          <h4 class="font-label-caps text-[11px] tracking-widest uppercase mb-1">Skin Friendly</h4>
+          <p class="text-[12px] text-on-surface-variant">Hypoallergenic nickel-free metals.</p>
+        </div>
+        <div class="text-center">
+          <span class="material-symbols-outlined promise-icon">verified_user</span>
+          <h4 class="font-label-caps text-[11px] tracking-widest uppercase mb-1">Premium Quality</h4>
+          <p class="text-[12px] text-on-surface-variant">BIS Hallmarked &amp; Certified stones.</p>
+        </div>
+        <div class="text-center">
+          <span class="material-symbols-outlined promise-icon">local_shipping</span>
+          <h4 class="font-label-caps text-[11px] tracking-widest uppercase mb-1">Fast Delivery</h4>
+          <p class="text-[12px] text-on-surface-variant">48-hour dispatch for in-stock items.</p>
+        </div>
+        <div class="text-center">
+          <span class="material-symbols-outlined promise-icon">diamond</span>
+          <h4 class="font-label-caps text-[11px] tracking-widest uppercase mb-1">Affordable Luxury</h4>
+          <p class="text-[12px] text-on-surface-variant">Direct-to-consumer artisanal pieces.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. Related Products -->
+    <section class="py-section_gap">
+      <h3 class="font-headline-md text-[24px] px-margin_mobile mb-8">You May Also Love</h3>
+      <div id="relatedProducts" class="flex overflow-x-auto snap-x snap-mandatory no-scrollbar gap-4 px-margin_mobile">
+        <!-- Related products injected by JS -->
+      </div>
+    </section>
+
+    <!-- 11. Luxury Footer -->
+    <footer class="bg-brand-dark text-brand-ivory px-margin_mobile py-16">
+      <div class="mb-12">
+        <h2 class="font-display-lg text-[24px] tracking-[0.2em] mb-4">CHIC CHARMS</h2>
+        <p class="text-[13px] text-brand-ivory/60 leading-relaxed max-w-[280px]">Curating timeless elegance and unparalleled craftsmanship for the modern muse.</p>
+      </div>
+      <div class="flex flex-col border-t border-brand-ivory/10">
+        <div class="accordion-item border-b border-brand-ivory/10">
+          <button class="w-full py-6 flex justify-between items-center group" onclick="this.parentElement.classList.toggle('accordion-open')">
+            <span class="font-label-caps text-[11px] tracking-[0.2em] uppercase">Quick Links</span>
+            <span class="material-symbols-outlined text-[16px] transition-transform duration-300 group-[.accordion-open]:rotate-180">expand_more</span>
+          </button>
+          <div class="accordion-content">
+            <ul class="pb-6 flex flex-col gap-3 text-[13px] text-brand-ivory/60">
+              <li><a href="about.html">Our Story</a></li>
+              <li><a href="shop.html">Store Locator</a></li>
+              <li><a href="shop.html">Collections</a></li>
+              <li><a href="contact.html">Bespoke Design</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="accordion-item border-b border-brand-ivory/10">
+          <button class="w-full py-6 flex justify-between items-center group" onclick="this.parentElement.classList.toggle('accordion-open')">
+            <span class="font-label-caps text-[11px] tracking-[0.2em] uppercase">Customer Care</span>
+            <span class="material-symbols-outlined text-[16px] transition-transform duration-300 group-[.accordion-open]:rotate-180">expand_more</span>
+          </button>
+          <div class="accordion-content">
+            <ul class="pb-6 flex flex-col gap-3 text-[13px] text-brand-ivory/60">
+              <li><a href="contact.html">Track Order</a></li>
+              <li><a href="shipping.html">Shipping Policy</a></li>
+              <li><a href="returns.html">Returns &amp; Exchanges</a></li>
+              <li><a href="faq.html">Jewellery Care</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="accordion-item border-b border-brand-ivory/10">
+          <button class="w-full py-6 flex justify-between items-center group" onclick="this.parentElement.classList.toggle('accordion-open')">
+            <span class="font-label-caps text-[11px] tracking-[0.2em] uppercase">Connect</span>
+            <span class="material-symbols-outlined text-[16px] transition-transform duration-300 group-[.accordion-open]:rotate-180">expand_more</span>
+          </button>
+          <div class="accordion-content">
+            <ul class="pb-6 flex flex-col gap-3 text-[13px] text-brand-ivory/60">
+              <li><a href="#">Instagram</a></li>
+              <li><a href="#">Facebook</a></li>
+              <li><a href="#">Pinterest</a></li>
+              <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="mt-12 text-[10px] text-brand-ivory/40 tracking-[0.1em] text-center">
+        © 2024 CHIC CHARMS. ALL RIGHTS RESERVED.
+      </div>
+    </footer>
+  </div>
+
+  <!-- Error State -->
+  <div id="errorState" class="hidden px-margin_mobile py-16 text-center">
+    <span class="material-symbols-outlined text-[48px] text-outline mb-4 block">error_outline</span>
+    <p class="font-jost text-[16px] text-on-surface-variant mb-6">Unable to load product. Please try again.</p>
+    <button onclick="location.reload()" class="h-[48px] px-8 bg-[#B5657A] text-white font-button text-[12px] tracking-widest uppercase">
+      RETRY
     </button>
   </div>
-  
-  <!-- Bottom Navigation Bar -->
-  <nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-[#fff8f7]/95 backdrop-blur-lg border-t border-[#d7c1c5] safe-area-bottom">
-    <a href="index.html" class="flex flex-col items-center justify-center text-[#8e4559]">
-      <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">home</span>
-    </a>
-    <a href="shop.html" class="flex flex-col items-center justify-center text-[#534346] opacity-60">
-      <span class="material-symbols-outlined">search</span>
-    </a>
-    <a href="cart.html" class="flex flex-col items-center justify-center text-[#534346] opacity-60 relative">
-      <span class="material-symbols-outlined">shopping_bag</span>
-      <span id="navCartBadge" class="absolute -top-1 -right-1 w-4 h-4 bg-[#B5657A] text-white text-[9px] font-semibold rounded-full flex items-center justify-center hidden">0</span>
-    </a>
-    <a href="#" class="flex flex-col items-center justify-center text-[#534346] opacity-60" onclick="toggleWishlist(); return false;">
-      <span class="material-symbols-outlined">favorite</span>
-    </a>
-    <a href="account.html" class="flex flex-col items-center justify-center text-[#534346] opacity-60">
-      <span class="material-symbols-outlined">person</span>
-    </a>
-  </nav>
-  
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-  
-  <!-- App Scripts -->
-  <script src="script.js"></script>
-  
-  <script>
-    // ============================================================
-    // CHIC CHARMS — MOBILE PRODUCT PAGE
-    // Backend integration with Firebase
-    // ============================================================
-    
-    "use strict";
-    
-    // State
-    let _currentProduct = null;
-    let _currentDocId = null;
-    let _selectedVariantId = null;
-    let _selectedSize = null;
-    let _selectedGalleryIndex = 0;
-    let _galleryImages = [];
-    
-    // Toast notification
-    function showToast(message) {
-      const toast = document.getElementById('toast');
-      toast.textContent = message;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2200);
+</main>
+
+<!-- Sticky Bottom Purchase Bar -->
+<div id="stickyBar" class="fixed bottom-0 left-0 w-full z-[70] h-[80px] bg-white border-t border-outline-variant flex items-center justify-between px-margin_mobile translate-y-full transition-transform duration-300 safe-area-bottom">
+  <div class="flex flex-col">
+    <span class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-wider">Price</span>
+    <span id="stickyPrice" class="font-jost text-[20px] font-semibold text-[#9F4C67]">$0.00</span>
+  </div>
+  <button id="stickyAddBtn" class="px-8 h-12 bg-[#B5657A] text-white font-button text-[12px] tracking-widest uppercase active:scale-95 transition-transform" onclick="handleAddToCart()">
+    Add to Cart
+  </button>
+</div>
+
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-surface/95 backdrop-blur-lg border-t border-outline-variant safe-area-bottom">
+  <a href="index.html" class="flex flex-col items-center justify-center text-primary">
+    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+  </a>
+  <a href="shop.html" class="flex flex-col items-center justify-center text-on-surface-variant opacity-60">
+    <span class="material-symbols-outlined">search</span>
+  </a>
+  <a href="cart.html" class="flex flex-col items-center justify-center text-on-surface-variant opacity-60 relative">
+    <span class="material-symbols-outlined">shopping_bag</span>
+    <span id="navCartBadge" class="absolute -top-1 -right-1 w-4 h-4 bg-[#B5657A] text-white text-[9px] font-semibold rounded-full flex items-center justify-center hidden">0</span>
+  </a>
+  <a href="#" class="flex flex-col items-center justify-center text-on-surface-variant opacity-60" onclick="toggleWishlist(); return false;">
+    <span class="material-symbols-outlined">favorite</span>
+  </a>
+  <a href="account.html" class="flex flex-col items-center justify-center text-on-surface-variant opacity-60">
+    <span class="material-symbols-outlined">person</span>
+  </a>
+</nav>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
+<!-- App Scripts -->
+<script src="script.js"></script>
+
+<script>
+  // ============================================================
+  // CHIC CHARMS — MOBILE PRODUCT PAGE
+  // Approved editorial design → Firebase backend
+  // ============================================================
+
+  "use strict";
+
+  // State
+  let _currentProduct = null;
+  let _currentDocId = null;
+  let _selectedVariantId = null;
+  let _selectedSize = null;
+  let _selectedGalleryIndex = 0;
+  let _galleryImages = [];
+  let _descExpanded = false;
+
+  // Toast notification
+  function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2200);
+  }
+
+  // Cart functions
+  function getCart() {
+    try {
+      return JSON.parse(localStorage.getItem('cc_cart') || '[]');
+    } catch (e) {
+      return [];
     }
-    
-    // Cart functions
-    function getCart() {
-      try {
-        return JSON.parse(localStorage.getItem('cc_cart') || '[]');
-      } catch (e) {
-        return [];
+  }
+
+  function saveCart(cart) {
+    localStorage.setItem('cc_cart', JSON.stringify(cart));
+    updateCartBadges();
+  }
+
+  function updateCartBadges() {
+    const cart = getCart();
+    const count = cart.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0);
+    const badge1 = document.getElementById('cartBadge');
+    const badge2 = document.getElementById('navCartBadge');
+    [badge1, badge2].forEach(badge => {
+      if (badge) {
+        badge.textContent = count > 9 ? '9+' : String(count);
+        badge.classList.toggle('hidden', count === 0);
+      }
+    });
+  }
+
+  // Format price
+  function formatPrice(price) {
+    const num = Number(price) || 0;
+    return '$' + num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
+  // Check if image URL is usable
+  function isUsableImageUrl(url) {
+    if (!url || typeof url !== 'string') return false;
+    const trimmed = url.trim();
+    return trimmed.length > 0 &&
+           (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('/'));
+  }
+
+  // Normalize variants
+  function normalizeVariants(product) {
+    const rawVariants = Array.isArray(product?.variants) ? product.variants : [];
+
+    const mainProductImage = product?.images?.productImage || product?.image || product?.imageUrl || '';
+    const mainModelImage = product?.images?.modelImage || product?.modelImage || mainProductImage;
+
+    const storedVariants = rawVariants
+      .filter(v => String(v?.color || '').trim())
+      .map((v, index) => ({
+        id: String(v.id || v.color || index).trim().toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+        color: String(v.color || '').trim(),
+        stock: Number.isFinite(Number(v.stock)) ? Number(v.stock) : Number(product.stock || 0),
+        images: {
+          productImage: v?.images?.productImage || v?.productImage || v?.image || v?.imageUrl || '',
+          modelImage: v?.images?.modelImage || v?.modelImage || v?.images?.productImage || ''
+        },
+        sizes: v?.sizes || []
+      }));
+
+    const mainColor = String(product?.color || '').trim();
+    const hasMainImages = isUsableImageUrl(mainProductImage);
+
+    if (hasMainImages) {
+      const alreadyCovered = mainColor && storedVariants.some(v => v.color.toLowerCase() === mainColor.toLowerCase());
+      if (!alreadyCovered) {
+        storedVariants.unshift({
+          id: mainColor ? mainColor.toLowerCase().replace(/[^a-z0-9]+/g, '-') : '__main__',
+          color: mainColor || (storedVariants.length ? 'Default' : ''),
+          stock: Number(product.stock || 0),
+          images: { productImage: mainProductImage, modelImage: mainModelImage },
+          sizes: product?.sizes || []
+        });
       }
     }
-    
-    function saveCart(cart) {
-      localStorage.setItem('cc_cart', JSON.stringify(cart));
-      updateCartBadges();
+
+    return storedVariants;
+  }
+
+  // Build gallery items
+  function buildGalleryItems(product, activeVariant) {
+    if (!activeVariant) return [];
+    const items = [];
+    const seen = new Set();
+
+    function addImage(key, label, src) {
+      const cleanSrc = String(src || '').trim();
+      if (!isUsableImageUrl(cleanSrc) || seen.has(cleanSrc)) return;
+      seen.add(cleanSrc);
+      items.push({ key, label, src });
     }
-    
-    function updateCartBadges() {
-      const cart = getCart();
-      const count = cart.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0);
-      
-      const badge1 = document.getElementById('cartBadge');
-      const badge2 = document.getElementById('navCartBadge');
-      
-      [badge1, badge2].forEach(badge => {
-        if (badge) {
-          badge.textContent = count > 9 ? '9+' : String(count);
-          badge.classList.toggle('hidden', count === 0);
-        }
+
+    const colorLabel = activeVariant.color || 'Product';
+    addImage('productImage', colorLabel, activeVariant.images.productImage);
+    addImage('modelImage', `${colorLabel} on Model`, activeVariant.images.modelImage);
+
+    return items;
+  }
+
+  // Variant selection
+  window.selectProductVariant = function(variantId) {
+    _selectedVariantId = variantId || '';
+    _selectedGalleryIndex = 0;
+    renderProduct(_currentProduct, _currentDocId);
+  };
+
+  // Size selection
+  window.selectProductSize = function(size) {
+    _selectedSize = size;
+    document.querySelectorAll('.size-option').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.size === size);
+      btn.classList.toggle('bg-[#8e4559]', btn.dataset.size === size);
+      btn.classList.toggle('text-white', btn.dataset.size === size);
+      btn.classList.toggle('border-[#8e4559]', btn.dataset.size === size);
+    });
+  };
+
+  // Gallery image selection
+  window.selectGalleryImage = function(index) {
+    _selectedGalleryIndex = index;
+    updateGalleryDisplay();
+  };
+
+  // Update gallery display
+  function updateGalleryDisplay() {
+    const container = document.getElementById('galleryContainer');
+    const dotsContainer = document.getElementById('galleryDots');
+    if (!container || _galleryImages.length === 0) return;
+
+    container.scrollTo({
+      left: _selectedGalleryIndex * window.innerWidth,
+      behavior: 'smooth'
+    });
+
+    dotsContainer.innerHTML = _galleryImages.map((_, i) =>
+      `<button class="gallery-dot ${i === _selectedGalleryIndex ? 'active' : ''}" onclick="selectGalleryImage(${i})" aria-label="Go to image ${i + 1}"></button>`
+    ).join('');
+  }
+
+  // Toggle description
+  window.toggleDescription = function() {
+    const desc = document.getElementById('productDescription');
+    const btn = document.getElementById('readMoreBtn');
+    _descExpanded = !_descExpanded;
+    if (_descExpanded) {
+      desc.classList.remove('desc-clamped');
+      desc.classList.add('desc-expanded');
+      btn.textContent = 'Read Less';
+    } else {
+      desc.classList.add('desc-clamped');
+      desc.classList.remove('desc-expanded');
+      btn.textContent = 'Read More';
+    }
+  };
+
+  // Share product
+  window.shareProduct = function() {
+    if (navigator.share && _currentProduct) {
+      navigator.share({
+        title: _currentProduct.name || 'Chic Charms Product',
+        text: _currentProduct.shortDescription || _currentProduct.description || '',
+        url: window.location.href
+      }).catch(() => {});
+    } else {
+      // Fallback: copy URL
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        showToast('Link copied!');
+      }).catch(() => {
+        showToast('Share this page!');
       });
     }
-    
-    // Format price
-    function formatPrice(price) {
-      const num = Number(price) || 0;
-      return '$' + num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
+
+  // Buy Now
+  window.buyNow = function() {
+    handleAddToCart();
+    setTimeout(() => {
+      window.location.href = 'cart.html';
+    }, 500);
+  };
+
+  // Render product
+  function renderProduct(product, docId) {
+    if (!product) {
+      document.getElementById('loadingState').classList.add('hidden');
+      document.getElementById('errorState').classList.remove('hidden');
+      return;
     }
-    
-    // Check if image URL is usable
-    function isUsableImageUrl(url) {
-      if (!url || typeof url !== 'string') return false;
-      const trimmed = url.trim();
-      return trimmed.length > 0 && 
-             (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('/'));
+
+    _currentProduct = product;
+    _currentDocId = docId;
+
+    const variants = normalizeVariants(product);
+
+    if (variants.length && (!_selectedVariantId || !variants.some(v => v.id === _selectedVariantId))) {
+      _selectedVariantId = variants[0].id;
     }
-    
-    // Normalize variants
-    function normalizeVariants(product) {
-      const rawVariants = Array.isArray(product?.variants) ? product.variants : [];
-      
-      const mainProductImage = product?.images?.productImage || product?.image || product?.imageUrl || '';
-      const mainModelImage = product?.images?.modelImage || product?.modelImage || mainProductImage;
-      
-      const storedVariants = rawVariants
-        .filter(v => String(v?.color || '').trim())
-        .map((v, index) => ({
-          id: String(v.id || v.color || index).trim().toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-          color: String(v.color || '').trim(),
-          stock: Number.isFinite(Number(v.stock)) ? Number(v.stock) : Number(product.stock || 0),
-          images: {
-            productImage: v?.images?.productImage || v?.productImage || v?.image || v?.imageUrl || '',
-            modelImage: v?.images?.modelImage || v?.modelImage || v?.images?.productImage || ''
-          },
-          sizes: v?.sizes || []
-        }));
-      
-      const mainColor = String(product?.color || '').trim();
-      const hasMainImages = isUsableImageUrl(mainProductImage);
-      
-      if (hasMainImages) {
-        const alreadyCovered = mainColor && storedVariants.some(v => v.color.toLowerCase() === mainColor.toLowerCase());
-        
-        if (!alreadyCovered) {
-          storedVariants.unshift({
-            id: mainColor ? mainColor.toLowerCase().replace(/[^a-z0-9]+/g, '-') : '__main__',
-            color: mainColor || (storedVariants.length ? 'Default' : ''),
-            stock: Number(product.stock || 0),
-            images: { productImage: mainProductImage, modelImage: mainModelImage },
-            sizes: product?.sizes || []
-          });
-        }
-      }
-      
-      return storedVariants;
-    }
-    
-    // Build gallery items
-    function buildGalleryItems(product, activeVariant) {
-      if (!activeVariant) return [];
-      
-      const items = [];
-      const seen = new Set();
-      
-      function addImage(key, label, src) {
-        const cleanSrc = String(src || '').trim();
-        if (!isUsableImageUrl(cleanSrc) || seen.has(cleanSrc)) return;
-        seen.add(cleanSrc);
-        items.push({ key, label, src });
-      }
-      
-      const colorLabel = activeVariant.color || 'Product';
-      addImage('productImage', colorLabel, activeVariant.images.productImage);
-      addImage('modelImage', `${colorLabel} on Model`, activeVariant.images.modelImage);
-      
-      return items;
-    }
-    
-    // Variant selection
-    window.selectProductVariant = function(variantId) {
-      _selectedVariantId = variantId || '';
-      _selectedGalleryIndex = 0;
-      renderProduct(_currentProduct, _currentDocId);
-    };
-    
-    // Size selection
-    window.selectProductSize = function(size) {
-      _selectedSize = size;
-      document.querySelectorAll('.size-option').forEach(btn => {
-        btn.classList.toggle('bg-[#8e4559]', btn.dataset.size === size);
-        btn.classList.toggle('text-white', btn.dataset.size === size);
-        btn.classList.toggle('border-[#8e4559]', btn.dataset.size === size);
-      });
-    };
-    
-    // Gallery image selection
-    window.selectGalleryImage = function(index) {
-      _selectedGalleryIndex = index;
-      updateGalleryDisplay();
-    };
-    
-    // Update gallery display
-    function updateGalleryDisplay() {
-      const container = document.getElementById('galleryContainer');
-      const dotsContainer = document.getElementById('galleryDots');
-      
-      if (!container || _galleryImages.length === 0) return;
-      
-      // Update active image
-      container.scrollTo({
-        left: _selectedGalleryIndex * window.innerWidth,
-        behavior: 'smooth'
-      });
-      
-      // Update dots
-      dotsContainer.innerHTML = _galleryImages.map((_, i) => 
-        `<button class="gallery-dot ${i === _selectedGalleryIndex ? 'active' : ''}" onclick="selectGalleryImage(${i})" aria-label="Go to image ${i + 1}"></button>`
+
+    const selectedVariant = variants.find(v => v.id === _selectedVariantId) || variants[0] || null;
+    const galleryItems = buildGalleryItems(product, selectedVariant);
+
+    const stock = selectedVariant ? Number(selectedVariant.stock) : Number(product.stock ?? 0);
+    const inStock = stock > 0;
+
+    // Update breadcrumb
+    document.getElementById('breadcrumbCategory').textContent = product.category || 'Product';
+
+    // Update product name
+    document.getElementById('productName').textContent = product.name || 'Product';
+
+    // Update price
+    const price = selectedVariant?.price || product.price || 0;
+    document.getElementById('productPrice').textContent = formatPrice(price);
+    document.getElementById('stickyPrice').textContent = formatPrice(price);
+
+    // Update description
+    const desc = product.shortDescription || product.description || '';
+    document.getElementById('productDescription').textContent = desc;
+    _descExpanded = false;
+    document.getElementById('productDescription').classList.add('desc-clamped');
+    document.getElementById('productDescription').classList.remove('desc-expanded');
+    document.getElementById('readMoreBtn').textContent = 'Read More';
+    // Hide read more if short text
+    document.getElementById('readMoreBtn').style.display = desc.length > 120 ? '' : 'none';
+
+    // Update gallery
+    _galleryImages = galleryItems;
+    const galleryContainer = document.getElementById('galleryContainer');
+
+    if (galleryItems.length > 0) {
+      galleryContainer.innerHTML = galleryItems.map((item, index) =>
+        `<div class="snap-center shrink-0 w-full h-full relative">
+          <img class="w-full h-full object-cover" src="${item.src}" alt="${product.name} - ${item.label}" loading="${index === 0 ? 'eager' : 'lazy'}" />
+        </div>`
       ).join('');
-    }
-    
-    // Render product
-    function renderProduct(product, docId) {
-      if (!product) {
-        document.getElementById('loadingState').classList.add('hidden');
-        document.getElementById('errorState').classList.remove('hidden');
-        return;
-      }
-      
-      _currentProduct = product;
-      _currentDocId = docId;
-      
-      // Normalize variants
-      const variants = normalizeVariants(product);
-      
-      // Auto-select first variant
-      if (variants.length && (!_selectedVariantId || !variants.some(v => v.id === _selectedVariantId))) {
-        _selectedVariantId = variants[0].id;
-      }
-      
-      const selectedVariant = variants.find(v => v.id === _selectedVariantId) || variants[0] || null;
-      const galleryItems = buildGalleryItems(product, selectedVariant);
-      
-      // Stock
-      const stock = selectedVariant ? Number(selectedVariant.stock) : Number(product.stock ?? 0);
-      const inStock = stock > 0;
-      
-      // Update breadcrumb
-      document.getElementById('breadcrumbCategory').textContent = product.category || 'Product';
-      
-      // Update product name
-      document.getElementById('productName').textContent = product.name || 'Product';
-      
-      // Update price
-      const price = selectedVariant?.price || product.price || 0;
-      document.getElementById('productPrice').textContent = formatPrice(price);
-      document.getElementById('stickyPrice').textContent = formatPrice(price);
-      
-      // Update description
-      document.getElementById('productDescription').textContent = product.shortDescription || product.description || '';
-      
-      // Update gallery
-      _galleryImages = galleryItems;
-      const galleryContainer = document.getElementById('galleryContainer');
-      
-      if (galleryItems.length > 0) {
-        galleryContainer.innerHTML = galleryItems.map((item, index) => 
-          `<div class="snap-center shrink-0 w-full h-[500px] bg-[#f6eceb]">
-            <img class="w-full h-full object-cover" src="${item.src}" alt="${product.name} - ${item.label}" loading="${index === 0 ? 'eager' : 'lazy'}" />
-          </div>`
-        ).join('');
-        
-        // Update dots
-        const dotsContainer = document.getElementById('galleryDots');
-        dotsContainer.innerHTML = galleryItems.map((_, i) => 
-          `<button class="gallery-dot ${i === 0 ? 'active' : ''}" onclick="selectGalleryImage(${i})" aria-label="Go to image ${i + 1}"></button>`
-        ).join('');
-        
-        // Add scroll listener for dot updates
-        galleryContainer.addEventListener('scroll', () => {
+
+      const dotsContainer = document.getElementById('galleryDots');
+      dotsContainer.innerHTML = galleryItems.map((_, i) =>
+        `<button class="gallery-dot ${i === 0 ? 'active' : ''}" onclick="selectGalleryImage(${i})" aria-label="Go to image ${i + 1}"></button>`
+      ).join('');
+
+      // Scroll listener for dot updates
+      let scrollTimeout;
+      galleryContainer.addEventListener('scroll', () => {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
           const scrollLeft = galleryContainer.scrollLeft;
           const index = Math.round(scrollLeft / window.innerWidth);
           _selectedGalleryIndex = index;
-          
           document.querySelectorAll('.gallery-dot').forEach((dot, i) => {
             dot.classList.toggle('active', i === index);
           });
-        });
-      }
-      
-      // Render color selector
-      const colorSelector = document.getElementById('colorSelector');
-      const namedVariants = variants.filter(v => v.color && v.color !== 'Default' && v.id !== '__main__');
-      
-      if (namedVariants.length > 1) {
-        colorSelector.classList.remove('hidden');
-        document.getElementById('colorOptions').innerHTML = namedVariants.map(v => 
-          `<button class="px-4 py-2 border text-[13px] font-jost uppercase tracking-wide transition-colors ${v.id === selectedVariant?.id ? 'bg-[#8e4559] text-white border-[#8e4559]' : 'border-[#857276] text-[#1f1a1b] hover:border-[#8e4559]'}" onclick="selectProductVariant('${v.id}')">${v.color}</button>`
-        ).join('');
-      } else {
-        colorSelector.classList.add('hidden');
-      }
-      
-      // Render size selector
-      const sizeSelector = document.getElementById('sizeSelector');
-      const sizes = selectedVariant?.sizes || product.sizes || [];
-      
-      if (sizes.length > 0) {
-        sizeSelector.classList.remove('hidden');
-        document.getElementById('sizeOptions').innerHTML = sizes.map(size => 
-          `<button class="size-option px-4 py-2 border text-[13px] font-jost transition-colors ${_selectedSize === size ? 'bg-[#8e4559] text-white border-[#8e4559]' : 'border-[#857276] text-[#1f1a1b] hover:border-[#8e4559]'}" data-size="${size}" onclick="selectProductSize('${size}')">${size}</button>`
-        ).join('');
-      } else {
-        sizeSelector.classList.add('hidden');
-      }
-      
-      // Update stock status
-      const stockBadge = document.getElementById('stockBadge');
-      if (inStock) {
-        stockBadge.innerHTML = '<span class="w-2 h-2 rounded-full bg-green-500"></span> In Stock';
-        stockBadge.className = 'inline-flex items-center gap-2 text-[12px] font-jost text-green-600';
-        document.getElementById('addToCartBtn').disabled = false;
-        document.getElementById('stickyAddBtn').disabled = false;
-      } else {
-        stockBadge.innerHTML = '<span class="w-2 h-2 rounded-full bg-red-500"></span> Out of Stock';
-        stockBadge.className = 'inline-flex items-center gap-2 text-[12px] font-jost text-red-600';
-        document.getElementById('addToCartBtn').disabled = true;
-        document.getElementById('stickyAddBtn').disabled = true;
-      }
-      
-      // Update product details
-      const detailsContent = document.getElementById('productDetailsContent');
-      detailsContent.innerHTML = (product.details || []).map(d => `<p>• ${d}</p>`).join('') || '<p>Premium quality jewellery with meticulous craftsmanship.</p>';
-      
-      // Check wishlist status
-      checkWishlistStatus();
-      
-      // Show content
-      document.getElementById('loadingState').classList.add('hidden');
-      document.getElementById('productContent').classList.remove('hidden');
+        }, 50);
+      }, { passive: true });
+    } else {
+      // Fallback: show placeholder
+      galleryContainer.innerHTML = `
+        <div class="snap-center shrink-0 w-full h-full relative bg-surface-container flex items-center justify-center">
+          <span class="material-symbols-outlined text-[64px] text-outline-variant">diamond</span>
+        </div>`;
+      document.getElementById('galleryDots').innerHTML = '';
     }
-    
-    // Add to cart
-    window.handleAddToCart = function() {
-      if (!_currentProduct) return;
-      
-      const cart = getCart();
-      const price = Number(_currentProduct.price) || 0;
-      const image = _currentProduct.images?.productImage || _currentProduct.image || '';
-      
-      const item = {
-        id: _currentDocId,
-        name: _currentProduct.name,
-        price: price,
-        image: image,
-        variant: _selectedVariantId,
-        size: _selectedSize,
-        quantity: 1
-      };
-      
-      // Check if already in cart
-      const existingIndex = cart.findIndex(i => i.id === item.id && i.variant === item.variant && i.size === item.size);
-      
-      if (existingIndex > -1) {
-        cart[existingIndex].quantity = (cart[existingIndex].quantity || 1) + 1;
-      } else {
-        cart.push(item);
-      }
-      
-      saveCart(cart);
-      showToast('Added to cart!');
-    };
-    
-    // Wishlist functions
-    function getWishlist() {
-      try {
-        return JSON.parse(localStorage.getItem('cc_wishlist') || '[]');
-      } catch (e) {
-        return [];
-      }
+
+    // Render color selector
+    const colorSelector = document.getElementById('colorSelector');
+    const namedVariants = variants.filter(v => v.color && v.color !== 'Default' && v.id !== '__main__');
+
+    if (namedVariants.length > 1) {
+      colorSelector.classList.remove('hidden');
+      document.getElementById('colorOptions').innerHTML = namedVariants.map(v =>
+        `<button class="variant-btn ${v.id === selectedVariant?.id ? 'active' : ''}" onclick="selectProductVariant('${v.id}')">${v.color}</button>`
+      ).join('');
+    } else {
+      colorSelector.classList.add('hidden');
     }
-    
-    function saveWishlist(wishlist) {
-      localStorage.setItem('cc_wishlist', JSON.stringify(wishlist));
+
+    // Render size selector
+    const sizeSelector = document.getElementById('sizeSelector');
+    const sizes = selectedVariant?.sizes || product.sizes || [];
+
+    if (sizes.length > 0) {
+      sizeSelector.classList.remove('hidden');
+      document.getElementById('sizeOptions').innerHTML = sizes.map(size =>
+        `<button class="variant-btn size-option ${_selectedSize === size ? 'active' : ''}" data-size="${size}" onclick="selectProductSize('${size}')">${size}</button>`
+      ).join('');
+    } else {
+      sizeSelector.classList.add('hidden');
     }
-    
-    function checkWishlistStatus() {
-      const wishlist = getWishlist();
-      const isInWishlist = wishlist.some(item => item.id === _currentDocId);
-      
-      const icon = document.getElementById('wishlistIcon');
-      const text = document.getElementById('wishlistText');
-      
-      if (isInWishlist) {
-        icon.textContent = 'favorite';
-        icon.style.fontVariationSettings = "'FILL' 1";
-        text.textContent = 'IN WISHLIST';
-      } else {
-        icon.textContent = 'favorite_border';
-        icon.style.fontVariationSettings = "'FILL' 0";
-        text.textContent = 'ADD TO WISHLIST';
-      }
+
+    // Update stock status
+    const stockBadge = document.getElementById('stockBadge');
+    if (inStock) {
+      stockBadge.innerHTML = '<span class="dot" style="background:#22c55e;"></span> In Stock';
+      stockBadge.className = 'stock-badge text-green-600';
+      document.getElementById('addToCartBtn').disabled = false;
+      document.getElementById('stickyAddBtn').disabled = false;
+    } else {
+      stockBadge.innerHTML = '<span class="dot" style="background:#ef4444;"></span> Out of Stock';
+      stockBadge.className = 'stock-badge text-red-600';
+      document.getElementById('addToCartBtn').disabled = true;
+      document.getElementById('stickyAddBtn').disabled = true;
     }
-    
-    window.toggleWishlist = function() {
-      if (!_currentDocId) return;
-      
-      const wishlist = getWishlist();
-      const index = wishlist.findIndex(item => item.id === _currentDocId);
-      
-      if (index > -1) {
-        wishlist.splice(index, 1);
-        showToast('Removed from wishlist');
-      } else {
-        wishlist.push({
-          id: _currentDocId,
-          name: _currentProduct?.name || '',
-          price: _currentProduct?.price || 0,
-          image: _currentProduct?.images?.productImage || ''
-        });
-        showToast('Added to wishlist!');
-      }
-      
-      saveWishlist(wishlist);
-      checkWishlistStatus();
-    };
-    
-    // Drawer functions
-    const drawer = document.getElementById('drawer');
-    const drawerOverlay = document.getElementById('drawerOverlay');
-    const menuBtn = document.getElementById('menuBtn');
-    const drawerClose = document.getElementById('drawerClose');
-    
-    function openDrawer() {
-      drawer.classList.remove('-translate-x-full');
-      drawerOverlay.classList.remove('hidden');
-      setTimeout(() => drawerOverlay.classList.remove('opacity-0'), 10);
-      document.body.style.overflow = 'hidden';
-    }
-    
-    function closeDrawer() {
-      drawer.classList.add('-translate-x-full');
-      drawerOverlay.classList.add('opacity-0');
-      setTimeout(() => drawerOverlay.classList.add('hidden'), 300);
-      document.body.style.overflow = '';
-    }
-    
-    menuBtn.addEventListener('click', openDrawer);
-    drawerClose.addEventListener('click', closeDrawer);
-    drawerOverlay.addEventListener('click', closeDrawer);
-    
-    // Sticky bar scroll logic
-    let lastScrollTop = 0;
-    const stickyBar = document.getElementById('stickyBar');
-    
-    window.addEventListener('scroll', () => {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      
-      if (scrollTop > 600) {
-        stickyBar.classList.remove('translate-y-full');
-        stickyBar.classList.add('translate-y-0');
-      } else {
-        stickyBar.classList.add('translate-y-full');
-        stickyBar.classList.remove('translate-y-0');
-      }
-      
-      lastScrollTop = scrollTop;
-    });
-    
-    // Load product from URL parameter or default
-    async function loadProduct() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const productId = urlParams.get('id') || 'elysian-bloom-earrings';
-      
-      // Check if Firebase is initialized
-      if (typeof firebase !== 'undefined' && firebase.apps.length > 0) {
-        try {
-          const db = firebase.firestore();
-          const docRef = db.collection('products').doc(productId);
-          const docSnap = await docRef.get();
-          
-          if (docSnap.exists) {
-            renderProduct({ ...docSnap.data(), id: docSnap.id }, productId);
-          } else {
-            // Try to load from collection
-            const snapshot = await db.collection('products').limit(1).get();
-            if (!snapshot.empty) {
-              const firstDoc = snapshot.docs[0];
-              renderProduct({ ...firstDoc.data(), id: firstDoc.id }, firstDoc.id);
-            } else {
-              // Load demo product
-              loadDemoProduct();
-            }
-          }
-        } catch (error) {
-          console.error('Firebase error:', error);
-          loadDemoProduct();
+
+    // Update product details accordion
+    const detailsContent = document.getElementById('productDetailsContent');
+    const details = product.details || [];
+    if (details.length > 0) {
+      // Pair details into 2-col grid
+      let html = '';
+      for (let i = 0; i < details.length; i += 2) {
+        const label1 = details[i]?.split(':')[0]?.trim() || `Detail ${i+1}`;
+        const value1 = details[i]?.includes(':') ? details[i].split(':').slice(1).join(':').trim() : details[i];
+        html += `<div>
+          <p class="font-label-caps text-[10px] text-on-surface-variant mb-1 uppercase tracking-wider">${i === 0 ? 'Material' : (i === 2 ? 'Weight' : 'Detail')}</p>
+          <p class="font-body-md">${value1 || details[i]}</p>
+        </div>`;
+        if (details[i + 1]) {
+          const label2 = details[i + 1]?.split(':')[0]?.trim() || `Detail ${i+2}`;
+          const value2 = details[i + 1]?.includes(':') ? details[i + 1].split(':').slice(1).join(':').trim() : details[i + 1];
+          html += `<div>
+            <p class="font-label-caps text-[10px] text-on-surface-variant mb-1 uppercase tracking-wider">${i === 0 ? 'Finish' : (i === 2 ? 'Stones' : 'Detail')}</p>
+            <p class="font-body-md">${value2 || details[i+1]}</p>
+          </div>`;
         }
-      } else {
+      }
+      detailsContent.innerHTML = html;
+    } else {
+      detailsContent.innerHTML = `
+        <div>
+          <p class="font-label-caps text-[10px] text-on-surface-variant mb-1 uppercase tracking-wider">Material</p>
+          <p class="font-body-md">18K Rose Gold</p>
+        </div>
+        <div>
+          <p class="font-label-caps text-[10px] text-on-surface-variant mb-1 uppercase tracking-wider">Finish</p>
+          <p class="font-body-md">High Polish</p>
+        </div>
+        <div>
+          <p class="font-label-caps text-[10px] text-on-surface-variant mb-1 uppercase tracking-wider">Weight</p>
+          <p class="font-body-md">4.52 Grams</p>
+        </div>
+        <div>
+          <p class="font-label-caps text-[10px] text-on-surface-variant mb-1 uppercase tracking-wider">Diamonds</p>
+          <p class="font-body-md">0.45 CT (VVS/EF)</p>
+        </div>`;
+    }
+
+    // Check wishlist status
+    checkWishlistStatus();
+
+    // Show content
+    document.getElementById('loadingState').classList.add('hidden');
+    document.getElementById('productContent').classList.remove('hidden');
+  }
+
+  // Add to cart
+  window.handleAddToCart = function() {
+    if (!_currentProduct) return;
+
+    const cart = getCart();
+    const price = Number(_currentProduct.price) || 0;
+    const image = _currentProduct.images?.productImage || _currentProduct.image || '';
+
+    const item = {
+      id: _currentDocId,
+      name: _currentProduct.name,
+      price: price,
+      image: image,
+      variant: _selectedVariantId,
+      size: _selectedSize,
+      quantity: 1
+    };
+
+    const existingIndex = cart.findIndex(i => i.id === item.id && i.variant === item.variant && i.size === item.size);
+
+    if (existingIndex > -1) {
+      cart[existingIndex].quantity = (cart[existingIndex].quantity || 1) + 1;
+    } else {
+      cart.push(item);
+    }
+
+    saveCart(cart);
+    showToast('Added to cart!');
+
+    // Also try the Firestore stock check if productId exists
+    if (_currentDocId && _currentDocId !== 'demo-product') {
+      window.addToCartWithId(_currentProduct.name, price, _currentDocId);
+    }
+  };
+
+  // Wishlist functions
+  function getWishlist() {
+    try {
+      return JSON.parse(localStorage.getItem('cc_wishlist') || '[]');
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveWishlist(wishlist) {
+    localStorage.setItem('cc_wishlist', JSON.stringify(wishlist));
+  }
+
+  function checkWishlistStatus() {
+    const wishlist = getWishlist();
+    const isInWishlist = wishlist.some(item => item.id === _currentDocId);
+
+    const fab = document.getElementById('wishlistFab');
+    if (fab) {
+      fab.classList.toggle('wishlisted', isInWishlist);
+    }
+  }
+
+  window.toggleWishlist = function() {
+    if (!_currentDocId) return;
+
+    const wishlist = getWishlist();
+    const index = wishlist.findIndex(item => item.id === _currentDocId);
+
+    if (index > -1) {
+      wishlist.splice(index, 1);
+      showToast('Removed from wishlist');
+    } else {
+      wishlist.push({
+        id: _currentDocId,
+        name: _currentProduct?.name || '',
+        price: _currentProduct?.price || 0,
+        image: _currentProduct?.images?.productImage || ''
+      });
+      showToast('Added to wishlist!');
+    }
+
+    saveWishlist(wishlist);
+    checkWishlistStatus();
+  };
+
+  // Drawer functions
+  const drawer = document.getElementById('drawer');
+  const drawerOverlay = document.getElementById('drawerOverlay');
+  const menuBtn = document.getElementById('menuBtn');
+  const drawerClose = document.getElementById('drawerClose');
+
+  function openDrawer() {
+    drawer.classList.remove('-translate-x-full');
+    drawerOverlay.classList.remove('hidden');
+    setTimeout(() => drawerOverlay.classList.remove('opacity-0'), 10);
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeDrawer() {
+    drawer.classList.add('-translate-x-full');
+    drawerOverlay.classList.add('opacity-0');
+    setTimeout(() => drawerOverlay.classList.add('hidden'), 300);
+    document.body.style.overflow = '';
+  }
+
+  menuBtn.addEventListener('click', openDrawer);
+  drawerClose.addEventListener('click', closeDrawer);
+  drawerOverlay.addEventListener('click', closeDrawer);
+
+  // Sticky bar scroll logic
+  let lastScrollTop = 0;
+  const stickyBar = document.getElementById('stickyBar');
+
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+    if (scrollTop > 800) {
+      stickyBar.classList.remove('translate-y-full');
+      stickyBar.classList.add('translate-y-0');
+    } else {
+      stickyBar.classList.add('translate-y-full');
+      stickyBar.classList.remove('translate-y-0');
+    }
+
+    lastScrollTop = scrollTop;
+  }, { passive: true });
+
+  // Load product from URL parameter or default
+  async function loadProduct() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id') || 'elysian-bloom-earrings';
+
+    if (typeof firebase !== 'undefined' && firebase.apps.length > 0) {
+      try {
+        const db = firebase.firestore();
+        const docRef = db.collection('products').doc(productId);
+        const docSnap = await docRef.get();
+
+        if (docSnap.exists) {
+          renderProduct({ ...docSnap.data(), id: docSnap.id }, productId);
+        } else {
+          const snapshot = await db.collection('products').limit(1).get();
+          if (!snapshot.empty) {
+            const firstDoc = snapshot.docs[0];
+            renderProduct({ ...firstDoc.data(), id: firstDoc.id }, firstDoc.id);
+          } else {
+            loadDemoProduct();
+          }
+        }
+      } catch (error) {
+        console.error('Firebase error:', error);
         loadDemoProduct();
       }
-      
-      // Load related products
-      loadRelatedProducts();
+    } else {
+      loadDemoProduct();
     }
-    
-    // Demo product data
-    function loadDemoProduct() {
-      const demoProduct = {
-        name: 'Elysian Bloom Diamond Earrings',
-        price: 1250.00,
-        category: 'Earrings',
-        shortDescription: 'Intricate filigree rose gold earrings featuring brilliant-cut diamonds. A masterpiece of artisanal craftsmanship that captures the essence of eternal elegance.',
-        description: 'Intricate filigree rose gold earrings featuring brilliant-cut diamonds. A masterpiece of artisanal craftsmanship that captures the essence of eternal elegance.',
-        details: [
-          '18K Rose Gold Plating on 925 Sterling Silver',
-          'SI-Quality Cubic Zirconia Diamonds',
-          'Secure push-back closures',
-          'Weight: 4.5 grams per earring',
-          'Dimensions: 22mm x 12mm'
-        ],
-        images: {
-          productImage: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800&q=80',
-          modelImage: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&q=80'
-        },
-        variants: [
-          {
-            id: 'rose-gold',
-            color: 'Rose Gold',
-            stock: 15,
-            images: {
-              productImage: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800&q=80',
-              modelImage: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&q=80'
-            }
-          },
-          {
-            id: 'silver',
-            color: 'Silver',
-            stock: 8,
-            images: {
-              productImage: 'https://images.unsplash.com/photo-1617038260897-41a606d3cbf8?w=800&q=80',
-              modelImage: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=800&q=80'
-            }
+
+    loadRelatedProducts();
+  }
+
+  // Demo product data
+  function loadDemoProduct() {
+    const demoProduct = {
+      name: 'Elysian Bloom Studs',
+      price: 1250.00,
+      category: 'Earrings',
+      shortDescription: 'Handcrafted in 18K rose gold, the Elysian Bloom Studs feature a central brilliant-cut diamond surrounded by delicate petals of hand-polished ceramic and smaller accent stones. A testament to timeless elegance and modern craftsmanship.',
+      description: 'Handcrafted in 18K rose gold, the Elysian Bloom Studs feature a central brilliant-cut diamond surrounded by delicate petals of hand-polished ceramic and smaller accent stones. A testament to timeless elegance and modern craftsmanship.',
+      details: [
+        'Material: 18K Rose Gold',
+        'Finish: High Polish',
+        'Weight: 4.52 Grams',
+        'Diamonds: 0.45 CT (VVS/EF)'
+      ],
+      images: {
+        productImage: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800&q=80',
+        modelImage: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&q=80'
+      },
+      variants: [
+        {
+          id: 'rose-gold',
+          color: 'Rose Gold',
+          stock: 15,
+          images: {
+            productImage: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800&q=80',
+            modelImage: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=800&q=80'
           }
-        ],
-        sizes: ['S', 'M', 'L'],
-        stock: 23
-      };
-      
-      renderProduct(demoProduct, 'demo-product');
-    }
-    
-    // Load related products
-    function loadRelatedProducts() {
-      const relatedContainer = document.getElementById('relatedProducts');
-      
-      const relatedProducts = [
-        {
-          id: 'bloom-pendant',
-          name: 'Bloom Pendant',
-          price: 850,
-          image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&q=80'
         },
         {
-          id: 'elysian-bangle',
-          name: 'Elysian Bangle',
-          price: 2400,
-          image: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&q=80'
-        },
-        {
-          id: 'petal-ring',
-          name: 'Petal Ring',
-          price: 1100,
-          image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=400&q=80'
+          id: 'silver',
+          color: 'Silver',
+          stock: 8,
+          images: {
+            productImage: 'https://images.unsplash.com/photo-1617038260897-41a606d3cbf8?w=800&q=80',
+            modelImage: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=800&q=80'
+          }
         }
-      ];
-      
-      relatedContainer.innerHTML = relatedProducts.map(product => 
-        `<a href="product.html?id=${product.id}" class="snap-start shrink-0 w-[240px] block">
-          <div class="aspect-[4/5] bg-[#f6eceb] mb-3 overflow-hidden">
-            <img class="w-full h-full object-cover active:scale-105 transition-transform duration-500" src="${product.image}" alt="${product.name}" loading="lazy" />
-          </div>
-          <p class="font-jost text-[14px] uppercase tracking-wide mb-1">${product.name}</p>
-          <p class="font-jost text-[#8e4559]">${formatPrice(product.price)}</p>
-        </a>`
-      ).join('');
-    }
-    
-    // Initialize
-    document.addEventListener('DOMContentLoaded', () => {
+      ],
+      sizes: ['S', 'M', 'L'],
+      stock: 23
+    };
+
+    renderProduct(demoProduct, 'demo-product');
+  }
+
+  // Load related products
+  function loadRelatedProducts() {
+    const relatedContainer = document.getElementById('relatedProducts');
+
+    const relatedProducts = [
+      {
+        id: 'bloom-pendant',
+        name: 'Bloom Pendant',
+        price: 850,
+        image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&q=80'
+      },
+      {
+        id: 'elysian-bangle',
+        name: 'Elysian Bangle',
+        price: 2400,
+        image: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&q=80'
+      },
+      {
+        id: 'petal-ring',
+        name: 'Petal Ring',
+        price: 1100,
+        image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=400&q=80'
+      }
+    ];
+
+    relatedContainer.innerHTML = relatedProducts.map(product =>
+      `<a href="product.html?id=${product.id}" class="snap-start shrink-0 w-[240px] block">
+        <div class="aspect-[4/5] bg-surface-container mb-3 overflow-hidden">
+          <img class="w-full h-full object-cover active:scale-105 transition-transform duration-500" src="${product.image}" alt="${product.name}" loading="lazy" />
+        </div>
+        <p class="font-jost text-[14px] uppercase tracking-wide mb-1">${product.name}</p>
+        <p class="font-jost text-[#9F4C67]">${formatPrice(product.price)}</p>
+      </a>`
+    ).join('');
+  }
+
+  // Initialize
+  document.addEventListener('DOMContentLoaded', () => {
+    updateCartBadges();
+    loadProduct();
+  });
+
+  // Re-check cart on visibility change
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
       updateCartBadges();
-      loadProduct();
-    });
-    
-    // Re-check cart on visibility change (for when user returns from cart page)
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) {
-        updateCartBadges();
-      }
-    });
-  </script>
-  
-  <!-- Safe area handling for iOS -->
-  <style>
+    }
+  });
+
+  // Micro-interactions
+  document.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('touchstart', () => {
+      btn.style.transform = 'scale(0.98)';
+    }, { passive: true });
+    btn.addEventListener('touchend', () => {
+      btn.style.transform = 'scale(1)';
+    }, { passive: true });
+  });
+</script>
+
+<!-- Safe area handling for iOS -->
+<style>
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+  @supports (padding-bottom: env(safe-area-inset-bottom)) {
     .safe-area-bottom {
-      padding-bottom: env(safe-area-inset-bottom, 0);
+      padding-bottom: max(12px, env(safe-area-inset-bottom));
     }
-    
-    @supports (padding-bottom: env(safe-area-inset-bottom)) {
-      .safe-area-bottom {
-        padding-bottom: max(12px, env(safe-area-inset-bottom));
-      }
-    }
-  </style>
+  }
+</style>
 </body>
 </html>
