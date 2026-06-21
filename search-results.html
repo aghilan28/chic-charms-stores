@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Search results • Chic Charms</title>
+<meta name="description" content="Search results – Chic Charms premium Indian jewellery."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&display=swap" rel="stylesheet"/>
+
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "secondary-fixed-dim": "#d1c4bc",
+          "surface-container-highest": "#eae0e0",
+          "surface-dim": "#e1d8d7",
+          "on-primary-fixed-variant": "#743044",
+          "error": "#ba1a1a",
+          "surface-bright": "#fff8f7",
+          "surface": "#fff8f7",
+          "primary-fixed": "#ffd9e0",
+          "on-error": "#ffffff",
+          "surface-variant": "#eae0e0",
+          "surface-container-lowest": "#ffffff",
+          "tertiary-container": "#af5975",
+          "on-primary": "#ffffff",
+          "primary-container": "#ab5d71",
+          "secondary-fixed": "#eee0d7",
+          "error-container": "#ffdad6",
+          "primary-fixed-dim": "#ffb1c3",
+          "on-primary-container": "#fffbff",
+          "on-secondary-fixed-variant": "#4e453f",
+          "surface-container-low": "#fcf1f1",
+          "surface-container-high": "#f0e6e5",
+          "surface-container": "#f6eceb",
+          "on-surface-variant": "#534346",
+          "primary": "#8e4559",
+          "on-tertiary-fixed-variant": "#772c47",
+          "outline-variant": "#d7c1c5",
+          "on-secondary-fixed": "#211a15",
+          "tertiary": "#92415c",
+          "on-secondary": "#ffffff",
+          "on-surface": "#1f1a1b",
+          "on-background": "#1f1a1b",
+          "on-secondary-container": "#6c635c",
+          "secondary-container": "#eee0d7",
+          "on-tertiary-container": "#fffbff",
+          "background": "#fff8f7",
+          "inverse-surface": "#342f2f",
+          "on-tertiary": "#ffffff",
+          "on-tertiary-fixed": "#3f001c",
+          "tertiary-fixed": "#ffd9e1",
+          "on-error-container": "#93000a",
+          "surface-tint": "#90475b",
+          "inverse-primary": "#ffb1c3",
+          "tertiary-fixed-dim": "#ffb1c6",
+          "inverse-on-surface": "#f9eeee",
+          "on-primary-fixed": "#3c0419",
+          "secondary": "#665d56",
+          "outline": "#857276",
+          "brand-rose": "#B5657A",
+          "brand-rose-deep": "#9F4C67"
+        },
+        fontFamily: {
+          "display": ["Playfair Display", "Georgia", "serif"],
+          "ui": ["Jost", "system-ui", "sans-serif"]
+        }
+      }
+    }
+  }
+</script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body {
+    margin: 0; min-height: 100dvh; background: #fff8f7; color: #1f1a1b;
+    font-family: "Jost", system-ui, sans-serif; overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; line-height: 1; }
+  button, a { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+  img { display: block; max-width: 100%; }
+
+  .mobile-shell {
+    width: 100%; max-width: 440px; margin: 0 auto; min-height: 100dvh;
+    background: #fff8f7; position: relative; box-shadow: 0 0 40px rgba(143,69,89,0.06);
+  }
+  @media (min-width: 768px) {
+    body { background: #f6eceb; }
+    .mobile-shell { box-shadow: 0 8px 48px rgba(47,42,42,0.10); }
+    .desktop-hint { display: block; text-align:center; padding:10px 16px; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#857276; background:#fcf1f1; border-bottom:1px solid #d7c1c5; }
+  }
+  @media (max-width: 767px) { .desktop-hint { display:none; } }
+
+  /* Search box */
+  .search-box {
+    display:flex; align-items:center; gap:10px;
+    background:#fcf1f1; border-radius:14px;
+    padding: 12px 14px; border:1px solid transparent; transition: border-color .2s;
+  }
+  .search-box:focus-within { border-color: #d7c1c5; background:#fff; }
+  .search-box input {
+    flex:1; background:transparent; border:0; outline:none;
+    font-family:"Jost", system-ui, sans-serif; font-size:16px; color:#1f1a1b;
+  }
+  .search-box input::placeholder { color:#857276; opacity:.85; }
+
+  .section-label {
+    font-family:"Jost", sans-serif; font-size:11px; font-weight:600;
+    text-transform:uppercase; letter-spacing:.14em; color:#8e4559;
+    border-bottom:1px solid rgba(215,193,197,.45); padding-bottom:8px; margin-bottom:14px;
+  }
+
+  /* Category row */
+  .cat-row {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 4px; border-bottom:1px solid #f6eceb;
+    text-decoration:none; color:inherit; transition: background .15s;
+  }
+  .cat-row:last-child { border-bottom:0; }
+  .cat-row:hover { background:#fcf1f1; }
+  .cat-row h4 { font-family:"Playfair Display", Georgia, serif; font-size:18px; color:#1f1a1b; margin:0; }
+  .cat-row p { font-size:13px; color:#534346; margin:2px 0 0; }
+
+  /* Collection card */
+  .collection-card {
+    position:relative; width:100%; aspect-ratio:16/7; overflow:hidden;
+    border-radius:10px; background:#eae0e0; border:1px solid rgba(215,193,197,.35);
+    cursor:pointer;
+  }
+  .collection-card img { width:100%; height:100%; object-fit:cover; transition: transform .6s cubic-bezier(.22,1,.36,1); }
+  .collection-card:hover img { transform:scale(1.04); }
+  .collection-card .cc-overlay {
+    position:absolute; inset:0; background:linear-gradient(90deg, rgba(255,248,247,.94) 38%, rgba(255,248,247,.18) 100%);
+    display:flex; align-items:center; padding:18px;
+  }
+
+  /* Product result row */
+  .prod-row {
+    display:flex; gap:14px; align-items:center; padding:10px 2px;
+    text-decoration:none; color:inherit; border-radius:8px; transition: background .15s;
+  }
+  .prod-row:hover { background:#fcf1f1; }
+  .prod-thumb {
+    width:72px; height:72px; flex:0 0 72px; background:#fff; border:1px solid #e1d8d7;
+    border-radius:6px; overflow:hidden;
+  }
+  .prod-thumb img { width:100%; height:100%; object-fit:cover; }
+  .prod-meta span.kicker { font-family:"Jost",sans-serif; font-size:10px; text-transform:uppercase; letter-spacing:.1em; color:#8e4559; font-weight:600; }
+  .prod-meta h4 { font-family:"Playfair Display", Georgia, serif; font-size:16px; color:#1f1a1b; margin:2px 0 2px; }
+  .prod-meta p { font-size:13px; color:#534346; margin:0; }
+
+  /* View all button */
+  .btn-rose {
+    width:100%; background:#8e4559; color:#fff; border:0; border-radius:10px;
+    padding:15px 20px; font-family:"Jost", sans-serif; font-size:12px; font-weight:600;
+    text-transform:uppercase; letter-spacing:.14em; cursor:pointer; transition: opacity .15s, transform .1s;
+  }
+  .btn-rose:active { transform: scale(.985); }
+  .btn-rose:hover { opacity:.92; }
+
+  /* Bottom nav */
+  .bottom-nav {
+    position: fixed; left: 50%; transform: translateX(-50%); bottom: 0;
+    width: 100%; max-width: 440px; z-index: 60;
+    display: flex; justify-content: space-around; align-items: center;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+    background: rgba(255,248,247,0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(215,193,197,0.5);
+  }
+  .bottom-nav a {
+    display:flex; flex-direction:column; align-items:center; gap:2px;
+    padding:6px 14px; color:#534346; text-decoration:none; border-radius:999px;
+    font-size:11px; font-weight:500; transition: color .15s;
+  }
+  .bottom-nav a.active { color:#8e4559; background: rgba(171,93,113,0.10); }
+  .bottom-nav .material-symbols-outlined { font-size:24px; }
+
+  .fade-in { animation: fadeUp .38s cubic-bezier(.16,1,.3,1) both; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(10px);} to { opacity:1; transform:translateY(0);} }
+  @media (prefers-reduced-motion: reduce) { .fade-in { animation:none; } }
+
+  .skeleton { background: linear-gradient(90deg,#f6eceb 25%, #fcf1f1 50%, #f6eceb 75%); background-size:200% 100%; animation: sh 1.1s infinite; }
+  @keyframes sh { to { background-position: -200% 0; } }
+</style>
+</head>
+<body class="bg-background text-on-surface font-ui">
+
+<div class="mobile-shell">
+  <div class="desktop-hint">Search Results – Mobile UI · Chic Charms · 390×844</div>
+
+  <!-- Announcement -->
+  <div class="w-full bg-surface-container-high py-[8px] px-5 text-center border-b border-outline-variant/30">
+    <span class="font-ui text-[11px] font-semibold tracking-[0.14em] uppercase text-on-surface-variant">Complimentary Signature Packaging on all Orders</span>
+  </div>
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 h-[72px] bg-surface/90 backdrop-blur-md flex items-center justify-between px-5 border-b border-outline-variant/30" style="backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);">
+    <button id="menuBtn" class="p-2 -ml-2 text-on-surface" aria-label="Menu">
+      <span class="material-symbols-outlined text-primary">menu</span>
+    </button>
+    <a href="index.html" class="font-display text-[22px] text-primary tracking-tight">Chic Charms</a>
+    <a href="search.html" class="p-2 -mr-2 text-on-surface" aria-label="Close">
+      <span class="material-symbols-outlined text-primary">close</span>
+    </a>
+  </header>
+
+  <main class="pb-[110px]">
+    <!-- Search Input -->
+    <section class="px-5 pt-4 pb-3">
+      <div class="search-box">
+        <span class="material-symbols-outlined text-on-surface-variant">search</span>
+        <input id="qInput" type="search" placeholder="Search jewelry, collections..." autocomplete="off" enterkeyhint="search"/>
+        <button id="clearBtn" class="p-1 text-on-surface-variant hover:text-primary" aria-label="Clear" style="display:none">
+          <span class="material-symbols-outlined" style="font-size:20px">close</span>
+        </button>
+      </div>
+      <div id="debounceHint" class="flex items-center gap-2 mt-2 px-1 text-[10px] uppercase tracking-widest text-on-surface-variant" style="opacity:0; transition:opacity .2s">
+        <span style="width:6px;height:6px;border-radius:50%;background:#8e4559;display:inline-block;animation:pulse 1s infinite"></span>
+        Updating results...
+      </div>
+    </section>
+
+    <div id="resultsWrap" class="fade-in">
+      <!-- 1. MATCHING CATEGORIES -->
+      <section class="px-5 py-5" id="catSection">
+        <h2 class="section-label">Categories</h2>
+        <div id="catList"></div>
+        <p id="catEmpty" class="text-sm text-on-surface-variant" style="display:none">No matching categories.</p>
+      </section>
+
+      <!-- 2. MATCHING COLLECTIONS -->
+      <section class="px-5 py-1" id="collectionSection" style="display:none">
+        <h2 class="section-label">Collections</h2>
+        <div id="collectionCard"></div>
+      </section>
+
+      <!-- 3. MATCHING PRODUCTS -->
+      <section class="px-5 py-5" id="prodSection">
+        <h2 class="section-label">Products</h2>
+        <div id="prodList" class="space-y-1"></div>
+        <p id="prodEmpty" class="text-sm text-on-surface-variant py-3" style="display:none"></p>
+        <div id="viewAllWrap" class="mt-5 pt-2" style="display:none">
+          <button id="viewAllBtn" class="btn-rose">View All <span id="viewAllCount">0</span> Results</button>
+        </div>
+      </section>
+    </div>
+
+    <div id="loadingState" class="px-5 py-10">
+      <div class="skeleton" style="height:14px;width:110px;border-radius:4px;margin-bottom:18px"></div>
+      <div class="skeleton" style="height:54px;border-radius:8px;margin-bottom:10px"></div>
+      <div class="skeleton" style="height:54px;border-radius:8px;margin-bottom:26px"></div>
+      <div class="skeleton" style="height:14px;width:90px;border-radius:4px;margin-bottom:18px"></div>
+      <div class="skeleton" style="height:72px;border-radius:8px;margin-bottom:10px"></div>
+      <div class="skeleton" style="height:72px;border-radius:8px;margin-bottom:10px"></div>
+      <div class="skeleton" style="height:72px;border-radius:8px"></div>
+    </div>
+
+  </main>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav" aria-label="Primary">
+    <a href="index.html">
+      <span class="material-symbols-outlined">home</span>
+      <span>Home</span>
+    </a>
+    <a href="search.html" class="active">
+      <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">search</span>
+      <span>Search</span>
+    </a>
+    <a href="shop.html#bestsellers">
+      <span class="material-symbols-outlined">favorite</span>
+      <span>Wishlist</span>
+    </a>
+    <a href="cart.html">
+      <span class="material-symbols-outlined">shopping_bag</span>
+      <span>Bag</span>
+    </a>
+    <a href="account.html">
+      <span class="material-symbols-outlined">person</span>
+      <span>Account</span>
+    </a>
+  </nav>
+</div>
+
+<div id="cartToast" role="status" aria-live="polite" style="position:fixed;left:50%;transform:translateX(-50%) translateY(20px);bottom:calc(84px + env(safe-area-inset-bottom,0px));background:#1f1a1b;color:#fff;padding:12px 18px;border-radius:999px;font-size:13px;z-index:100;opacity:0;pointer-events:none;transition:all .28s cubic-bezier(.22,1,.36,1);white-space:nowrap;max-width:calc(100vw - 32px);overflow:hidden;text-overflow:ellipsis"></div>
+
+<script src="script.js" defer></script>
+<script>
+/* Chic Charms – Search Results (mobile) */
+(function(){
+'use strict';
+
+const FIREBASE = {
+  apiKey: "AIzaSyA5Bh77_4HE3yQF0hi5ddvbFLZC7rEerxg",
+  projectId: "chic-charms-store"
+};
+
+const CATEGORIES = [
+  { key: "everyday-elegance", label: "Stud Earrings", aliases: ["stud","everyday","minimal","daily","earring"], img: "images/editorial-minimal-soul-closeup.png" },
+  { key: "everyday-elegance", label: "Hoop Earrings", aliases: ["hoop","gold hoops","circle"], img: "images/editorial-everyday-hoops.png", distinct:"hoops" },
+  { key: "modern-romance", label: "Drop Earrings", aliases: ["drop","dangle","romance","korean"], img: "images/story-soft-pearl-drop.png" },
+  { key: "after-dark", label: "Statement Earrings", aliases: ["statement","party","evening","bold","after dark"], img: "images/style-after-dark.png" },
+  { key: "heritage-muse", label: "Pearl Collection", aliases: ["pearl","pearls","muse","heritage","bridal"], img: "images/story-soft-pearl-drop.png" }
+];
+
+const COLLECTIONS = [
+  { key: "pearl", title: "The Pearl Edit", subtitle: "Featured Edit", match: ["pearl"], img: "images/story-soft-pearl-drop.png", category: "heritage-muse" },
+  { key: "korean", title: "Korean Morning Edit", subtitle: "K-Beauty Inspired", match: ["korean","minimal","daily"], img: "images/editorial-korean-morning-coffee.png", category: "modern-romance" },
+  { key: "gold", title: "Everyday Gold", subtitle: "Daily Luxury", match: ["gold","hoop"], img: "images/editorial-everyday-hoops.png", category: "everyday-elegance" },
+  { key: "evening", title: "After Dark", subtitle: "Soft Date Night", match: ["evening","party","statement","dark"], img: "images/editorial-soft-date-night.png", category: "after-dark" }
+];
+
+const qInput = document.getElementById('qInput');
+const clearBtn = document.getElementById('clearBtn');
+const debounceHint = document.getElementById('debounceHint');
+const resultsWrap = document.getElementById('resultsWrap');
+const loadingState = document.getElementById('loadingState');
+
+function getQuery(){ return new URLSearchParams(location.search).get('q') || ''; }
+
+let allProducts = [];
+let productsLoaded = false;
+
+function parseProduct(doc){
+  const f = doc.fields || {};
+  const gv = k => f[k]?.stringValue ?? f[k]?.integerValue ?? f[k]?.doubleValue ?? null;
+  return {
+    id: (doc.name||'').split('/').pop(),
+    name: gv('name') || 'Chic Charms Piece',
+    price: Number(gv('price')||0),
+    image: gv('image') || gv('imageUrl') || '',
+    category: (gv('category')||'').toLowerCase(),
+    description: gv('description') || ''
+  };
+}
+function productImg(p){
+  if(p.image && /^https?:\/\//.test(p.image)) return p.image;
+  if(p.image && p.image.startsWith('images/')) return p.image;
+  const fallbacks = [
+    "images/editorial-light-meets-gold.png",
+    "images/editorial-everyday-hoops.png",
+    "images/story-soft-pearl-drop.png",
+    "images/editorial-minimal-soul-closeup.png"
+  ];
+  let h=0; for(let i=0;i<p.name.length;i++) h=(h*31+p.name.charCodeAt(i))>>>0;
+  return fallbacks[h % fallbacks.length];
+}
+function inr(n){ return '₹' + Number(n||0).toLocaleString('en-IN'); }
+
+async function loadProducts(){
+  const url = `https://firestore.googleapis.com/v1/projects/${FIREBASE.projectId}/databases/(default)/documents/products?pageSize=80&key=${FIREBASE.apiKey}`;
+  try{
+    const r = await fetch(url);
+    if(!r.ok) throw new Error(r.status);
+    const j = await r.json();
+    allProducts = (j.documents||[]).map(parseProduct).filter(p=>p.price>0);
+  }catch(e){
+    // offline fallback
+    allProducts = [
+      {id:'fb1', name:'Baroque Pearl Studs', price:1299, image:'images/editorial-minimal-soul-closeup.png', category:'heritage-muse', description:'pearl stud'},
+      {id:'fb2', name:'Classic Akoya Strand', price:2450, image:'images/story-soft-pearl-drop.png', category:'heritage-muse', description:'pearl necklace'},
+      {id:'fb3', name:'Luminous Pearl Ring', price:950, image:'images/editorial-light-meets-gold.png', category:'heritage-muse', description:'pearl ring'},
+      {id:'fb4', name:'Tear Drop Diamond & Pearl', price:2100, image:'images/editorial-soft-date-night.png', category:'modern-romance', description:'pearl drop earrings'},
+      {id:'fb5', name:'Midnight Hoops', price:1899, image:'images/editorial-everyday-hoops.png', category:'everyday-elegance', description:'gold hoops'},
+      {id:'fb6', name:'Aurora Star Studs', price:899, image:'images/editorial-minimal-soul-closeup.png', category:'everyday-elegance', description:'minimal stud'}
+    ];
+  }
+  productsLoaded = true;
+  render();
+}
+
+function matches(text, q){
+  if(!q) return true;
+  text = (text||'').toLowerCase();
+  return q.split(/\s+/).filter(Boolean).every(tok => text.includes(tok));
+}
+
+function render(){
+  const q = qInput.value.trim().toLowerCase();
+  loadingState.style.display = 'none';
+  resultsWrap.style.display = '';
+
+  // --- Categories ---
+  const catCounts = {};
+  allProducts.forEach(p=>{
+    const key = p.category || 'everyday-elegance';
+    catCounts[key] = (catCounts[key]||0)+1;
+  });
+  // deduplicate CATEGORIES by label
+  const seen = new Set();
+  const matchedCats = CATEGORIES.filter(c=>{
+    if(seen.has(c.label)) return false;
+    seen.add(c.label);
+    if(!q) return true;
+    const hay = (c.label + ' ' + c.aliases.join(' ')).toLowerCase();
+    return matches(hay, q);
+  }).map(c=>{
+    const count = catCounts[c.key] || 0;
+    return {...c, count};
+  });
+
+  const catList = document.getElementById('catList');
+  const catEmpty = document.getElementById('catEmpty');
+  if(matchedCats.length){
+    catEmpty.style.display='none';
+    catList.innerHTML = matchedCats.map(c => `
+      <a class="cat-row" href="shop.html?category=${encodeURIComponent(c.key)}">
+        <div><h4>${esc(c.label)}</h4><p>${c.count} products</p></div>
+        <span class="material-symbols-outlined text-outline">chevron_right</span>
+      </a>
+    `).join('');
+  } else {
+    catList.innerHTML = '';
+    catEmpty.style.display = '';
+  }
+  document.getElementById('catSection').style.display = matchedCats.length || q ? '' : 'none';
+
+  // --- Collections ---
+  const coll = COLLECTIONS.find(col => !q || col.match.some(m => q.includes(m)));
+  const collSection = document.getElementById('collectionSection');
+  if(coll){
+    collSection.style.display = '';
+    document.getElementById('collectionCard').innerHTML = `
+      <div class="collection-card" data-cat="${escAttr(coll.category)}" role="link" tabindex="0">
+        <img src="${escAttr(coll.img)}" alt="${escAttr(coll.title)}" loading="lazy">
+        <div class="cc-overlay">
+          <div>
+            <span style="font-family:Jost,sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:#8e4559;font-weight:600">${esc(coll.subtitle)}</span>
+            <h3 style="font-family:'Playfair Display',Georgia,serif;font-size:22px;color:#1f1a1b;margin:4px 0 8px">${esc(coll.title)}</h3>
+            <span style="font-family:Jost,sans-serif;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;text-decoration:underline;text-underline-offset:3px;color:#1f1a1b">Explore</span>
+          </div>
+        </div>
+      </div>`;
+    const ccEl = document.getElementById('collectionCard').querySelector('.collection-card');
+    const goColl = ()=> location.href = 'shop.html?category=' + encodeURIComponent(coll.category);
+    ccEl.addEventListener('click', goColl);
+    ccEl.addEventListener('keydown', e=>{ if(e.key==='Enter') goColl(); });
+  } else {
+    collSection.style.display = 'none';
+  }
+
+  // --- Products ---
+  const prods = q
+    ? allProducts.filter(p => matches((p.name+' '+p.category+' '+p.description).toLowerCase(), q))
+    : allProducts.slice(0,8);
+
+  const prodList = document.getElementById('prodList');
+  const prodEmpty = document.getElementById('prodEmpty');
+  const viewAllWrap = document.getElementById('viewAllWrap');
+  const viewAllCount = document.getElementById('viewAllCount');
+
+  if(prods.length){
+    prodEmpty.style.display='none';
+    prodList.innerHTML = prods.map(p => `
+      <a class="prod-row" href="product.html?id=${encodeURIComponent(p.id)}">
+        <div class="prod-thumb"><img src="${escAttr(productImg(p))}" alt="${escAttr(p.name)}" loading="lazy"></div>
+        <div class="prod-meta">
+          <span class="kicker">Collection: ${esc((p.category||'Chic Charms').replace(/-/g,' ').replace(/\b\w/g,m=>m.toUpperCase()))}</span>
+          <h4>${esc(p.name)}</h4>
+          <p>Earrings • ${inr(p.price)}</p>
+        </div>
+      </a>
+    `).join('');
+    viewAllCount.textContent = prods.length;
+    viewAllWrap.style.display = '';
+  } else {
+    prodList.innerHTML = '';
+    prodEmpty.style.display='';
+    prodEmpty.textContent = q ? `No results for “${qInput.value.trim()}”. Try pearl, hoops, korean.` : 'Start typing to search.';
+    viewAllWrap.style.display='none';
+  }
+
+  document.getElementById('viewAllBtn').onclick = ()=>{
+    const qq = qInput.value.trim();
+    location.href = 'shop.html' + (qq ? '?q=' + encodeURIComponent(qq) : '');
+  };
+}
+
+// Input wiring
+function setQueryInUrl(q){
+  const url = new URL(location.href);
+  if(q) url.searchParams.set('q', q); else url.searchParams.delete('q');
+  history.replaceState(null, '', url);
+}
+
+let debounceT;
+qInput.addEventListener('input', ()=>{
+  clearBtn.style.display = qInput.value ? '' : 'none';
+  debounceHint.style.opacity = '1';
+  clearTimeout(debounceT);
+  debounceT = setTimeout(()=>{
+    debounceHint.style.opacity = '0';
+    setQueryInUrl(qInput.value.trim());
+    if(productsLoaded) render();
+  }, 320);
+});
+qInput.addEventListener('keydown', e=>{
+  if(e.key === 'Enter'){ e.preventDefault(); clearTimeout(debounceT); debounceHint.style.opacity='0'; setQueryInUrl(qInput.value.trim()); render(); }
+});
+clearBtn.addEventListener('click', ()=>{ qInput.value=''; clearBtn.style.display='none'; qInput.focus(); setQueryInUrl(''); render(); });
+
+document.getElementById('menuBtn').addEventListener('click', ()=>{ location.href='index.html'; });
+
+// init
+const initialQ = getQuery();
+qInput.value = initialQ;
+clearBtn.style.display = initialQ ? '' : 'none';
+resultsWrap.style.display = 'none';
+loadingState.style.display = '';
+loadProducts();
+
+function esc(s){ return String(s).replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m])); }
+function escAttr(s){ return esc(s); }
+
+})();
+</script>
+</body>
+</html>

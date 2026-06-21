@@ -323,7 +323,7 @@
         <!-- Live suggestions -->
         <div id="suggestBox" class="suggest-box" role="listbox" aria-label="Search suggestions"></div>
       </div>
-      <p class="text-[12px] text-on-surface-variant mt-3">Tip: try “pearl”, “hoops”, “korean”</p>
+      <p class="text-[12px] text-on-surface-variant mt-3">Press Enter to see results · try “pearl”, “hoops”, “korean”</p>
     </section>
 
     <!-- Recent Searches -->
@@ -508,7 +508,7 @@ function runSearch(q){
   q = (q||searchInput.value||'').trim();
   if(!q){ searchInput.focus(); return; }
   saveRecent(q);
-  window.location.href = 'shop.html?q=' + encodeURIComponent(q);
+  window.location.href = 'search-results.html?q=' + encodeURIComponent(q);
 }
 searchGoBtn.addEventListener('click', ()=> runSearch());
 searchInput.addEventListener('keydown', e=> { if(e.key==='Enter'){ e.preventDefault(); runSearch(); } });

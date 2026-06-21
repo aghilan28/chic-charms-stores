@@ -281,7 +281,7 @@
     <a href="index.html"><h1 class="font-display-lg text-[22px] tracking-[0.15em] text-primary uppercase">CHIC CHARMS</h1></a>
   </div>
   <div class="absolute right-margin_mobile flex gap-4 items-center">
-    <span class="material-symbols-outlined text-on-surface" aria-label="Search">search</span>
+    <a href="search.html" aria-label="Search"><span class="material-symbols-outlined text-on-surface">search</span></a>
     <a href="cart.html" class="relative flex items-center justify-center">
       <span class="material-symbols-outlined text-on-surface">shopping_bag</span>
       <span id="cartBadge" class="absolute -top-1 -right-1 w-4 h-4 bg-[#B5657A] text-white text-[9px] font-semibold rounded-full flex items-center justify-center hidden">0</span>
@@ -558,10 +558,10 @@ const SITE_CONFIG = {
     { label: "Shop All", href: "shop.html" },
     { label: "New Arrivals", href: "shop.html?filter=new" },
     { label: "Best Sellers", href: "shop.html?filter=bestseller" },
-    { label: "Earrings", href: "shop.html?category=earrings" },
-    { label: "Necklaces", href: "shop.html?category=necklaces" },
-    { label: "Rings", href: "shop.html?category=rings" },
-    { label: "Bracelets", href: "shop.html?category=bracelets" }
+    { label: "Earrings", href: "shop.html?category=everyday-elegance" },
+    { label: "Pearls", href: "shop.html?category=heritage-muse" },
+    { label: "Korean Edit", href: "shop.html?category=modern-romance" },
+    { label: "Evening", href: "shop.html?category=after-dark" }
   ],
   footerNav: [
     { title: "Quick Links", links: [
@@ -584,7 +584,7 @@ const SITE_CONFIG = {
   ],
   bottomNav: [
     { icon: "home", href: "index.html", active: false, filled: true },
-    { icon: "search", href: "shop.html", active: false },
+    { icon: "search", href: "search.html", active: false },
     { icon: "shopping_bag", href: "cart.html", active: false, hasBadge: true },
     { icon: "favorite", href: "#", active: false, action: "toggleWishlist" },
     { icon: "person", href: "account.html", active: false }
