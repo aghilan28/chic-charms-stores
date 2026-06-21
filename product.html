@@ -1279,53 +1279,6 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) upda
   }
 </style>
   <!-- Bottom Nav – Chic Charms Unified -->
-  
-<!-- Chic Charms – PDP Sticky ATC -->
-<div id="cc-pdp-atc" class="cc-pdp-atc" style="position:fixed;left:50%;transform:translateX(-50%);bottom:calc(72px + env(safe-area-inset-bottom,0px));width:100%;max-width:440px;z-index:59;background:#fff8f7;border-top:1px solid #d7c1c5;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 -8px 24px rgba(47,42,42,0.06)">
-  <div><div style="font-size:11px;color:#857276;text-transform:uppercase;letter-spacing:.1em">Price</div><div id="cc-pdp-price" style="font-family:'Playfair Display',serif;font-size:18px;color:#1f1a1b">₹—</div></div>
-  <button id="cc-pdp-add" style="background:#8e4559;color:#fff;border:0;border-radius:8px;padding:14px 22px;font-family:Jost,sans-serif;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;cursor:pointer;flex:1;max-width:220px">Add to Cart</button>
-</div>
-<script>
-(function(){
-  function syncPrice(){
-    // try to pull price from page
-    const el = document.querySelector('[data-product-price], .product-price, #productPrice, .price');
-    const priceText = el ? el.textContent : '';
-    const m = priceText.match(/[\d,]+/);
-    if(m) document.getElementById('cc-pdp-price').textContent = '₹' + m[0];
-    // hide if out of stock
-    const outEl = document.body.textContent.includes('out of stock') || document.body.textContent.includes('Out of stock');
-  }
-  setTimeout(syncPrice, 600);
-  setInterval(syncPrice, 1500);
-  document.getElementById('cc-pdp-add')?.addEventListener('click', function(){
-    // try to trigger the real add to cart button
-    const realBtn = document.querySelector('button[data-add], [onclick*="addToCart"], button:has(span):not(#cc-pdp-add)');
-    const addButtons = Array.from(document.querySelectorAll('button')).filter(b=>/add to cart/i.test(b.textContent));
-    if(addButtons[0] && addButtons[0]!==this){ addButtons[0].click(); return; }
-    // fallback: try window.addToCartWithId
-    const urlId = new URLSearchParams(location.search).get('id');
-    if(window.addToCartWithId && urlId){
-      const nameEl = document.querySelector('h1,h2');
-      const name = nameEl ? nameEl.textContent.trim().slice(0,80) : 'Chic Charms Piece';
-      const priceText = document.getElementById('cc-pdp-price').textContent.replace(/[^\d]/g,'');
-      window.addToCartWithId(name, Number(priceText)||1299, urlId);
-    }
-  });
-  // hide ATC when near footer
-  const footerObserver = new IntersectionObserver(entries=>{
-    const atc = document.getElementById('cc-pdp-atc');
-    if(!atc) return;
-    atc.style.transform = entries[0].isIntersecting ? 'translateX(-50%) translateY(120%)' : 'translateX(-50%) translateY(0)';
-    atc.style.transition = 'transform .25s ease';
-  }, {threshold:0});
-  setTimeout(()=>{
-    const foot = document.querySelector('.cc-site-footer');
-    if(foot) footerObserver.observe(foot);
-  }, 800);
-})();
-</script>
-<style>@media(min-width:768px){#cc-pdp-atc{display:none !important}}</style>
 
 <nav class="cc-bottom-nav" aria-label="Primary">
     <a href="index.html" data-nav="home">
@@ -1443,10 +1396,10 @@ document.addEventListener('DOMContentLoaded', function(){
   const nav = document.getElementById('drawerNav');
   if(nav){
     nav.innerHTML = `
-      <a href="shop.html" style="font-family:Jost,sans-serif;font-weight:500">Shop All</a>
+      <a href="index.html" style="font-family:Jost,sans-serif;font-weight:500">Shop All</a>
       <a href="search.html" style="font-family:Jost,sans-serif;font-weight:500">Search</a>
-      <a href="shop.html?filter=new" style="font-family:Jost,sans-serif;font-weight:500">New Arrivals</a>
-      <a href="shop.html?filter=bestseller" style="font-family:Jost,sans-serif;font-weight:500">Best Sellers</a>
+      <a href="index.html?filter=new" style="font-family:Jost,sans-serif;font-weight:500">New Arrivals</a>
+      <a href="index.html?filter=bestseller" style="font-family:Jost,sans-serif;font-weight:500">Best Sellers</a>
       <a href="wishlist.html" style="font-family:Jost,sans-serif;font-weight:500">Wishlist</a>
       <a href="cart.html" style="font-family:Jost,sans-serif;font-weight:500">Cart</a>
       <a href="account.html" style="font-family:Jost,sans-serif;font-weight:500">Account</a>

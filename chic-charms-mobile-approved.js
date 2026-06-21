@@ -143,6 +143,21 @@
   <div class="cc-grid" id="ccGrid2"></div>
 </main>
 
+<!-- Chic Charms – Unified Site Footer (Mobile Injection) -->
+<footer class="cc-site-footer" style="border-top:1px solid #d7c1c5; background:#fff8f7; padding:32px 20px 110px; margin-top:24px;">
+  <p style="font-family:Jost,sans-serif;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:#8e4559;margin:0 0 8px">Chic Charms</p>
+  <p style="font-family:Jost,sans-serif;font-size:14px;line-height:1.6;color:#534346;margin:0 0 16px;max-width:34ch">Fast mobile discovery for daily wear, gifting, and soft statement earrings. COD available · Ships in 24h · Skin-friendly finish.</p>
+  <nav style="display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:#857276">
+    <a href="about.html" style="color:inherit;text-decoration:none">About</a>
+    <a href="shipping.html" style="color:inherit;text-decoration:none">Shipping</a>
+    <a href="returns.html" style="color:inherit;text-decoration:none">Returns</a>
+    <a href="contact.html" style="color:inherit;text-decoration:none">Contact</a>
+    <a href="privacy.html" style="color:inherit;text-decoration:none">Privacy</a>
+    <a href="terms.html" style="color:inherit;text-decoration:none">Terms</a>
+  </nav>
+  <p style="font-family:Jost,sans-serif;font-size:11px;color:#857276;margin:16px 0 0">© <span class="cc-year-mobile">${new Date().getFullYear()}</span> Chic Charms. All rights reserved.</p>
+</footer>
+
 <nav class="cc-bottom-bar" aria-label="Filters">
   <button id="ccFilterBtn"><span class="material-symbols-outlined">tune</span> Filters</button>
   <button id="ccSortBtn"><span class="material-symbols-outlined">sort</span> Sort By</button>
@@ -518,6 +533,22 @@
     mountUI();
     wireDrawerNav();
     wireFilters();
+    
+    // Parse URL params for initial filters
+    const params = new URLSearchParams(window.location.search);
+    const filter = params.get('filter');
+    const cat = params.get('category');
+    if (filter) {
+      activeFilters.types = [filter];
+    }
+    if (cat) {
+      const slug = normalizeCategory(cat);
+      if (slug) activeFilters.collections = [slug];
+    }
+    if (params.get('price') === 'under299') {
+      activeFilters.prices = ["under500"];
+    }
+
     initBackend();
     updateCartCount();
     window.addEventListener("storage", updateCartCount);
