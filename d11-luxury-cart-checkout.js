@@ -114,7 +114,7 @@
         if (typeof window.handleCheckout === "function") {
           window.handleCheckout();
         } else {
-          window.location.href = "checkout.html";
+          window.location.href = "delivery-method.html";
         }
       });
     }

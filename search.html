@@ -474,6 +474,8 @@ document.documentElement.classList.add('cc-loading');
 <!-- Cart toast – compatible with script.js -->
 <div id="cartToast" role="status" aria-live="polite"></div>
 
+<!-- Shared category backend utils -->
+<script src="category-utils.js"></script>
 <!-- Main site script – gives you addToCartWithId, cart toast, etc. -->
 <script src="script.js" defer></script>
 
@@ -497,14 +499,6 @@ const POPULAR_SEARCHES = [
   "Drop Earrings",
   "Statement Earrings",
   "Minimal Earrings"
-];
-
-// Categories – map to your shop.html filters, with local images
-const CATEGORIES = [
-  { label: "Stud Earrings",  category: "everyday-elegance", img: "images/editorial-minimal-soul-closeup.png", alt: "Stud earrings" },
-  { label: "Hoop Earrings",  category: "everyday-elegance", img: "images/editorial-everyday-hoops.png", alt: "Hoop earrings" },
-  { label: "Drop Earrings",  category: "modern-romance",   img: "images/story-soft-pearl-drop.png", alt: "Drop earrings" },
-  { label: "Statement",      category: "after-dark",       img: "images/style-after-dark.png", alt: "Statement earrings" }
 ];
 
 const searchInput = document.getElementById('searchInput');
@@ -556,17 +550,28 @@ popularEl.querySelectorAll('button').forEach(b => b.addEventListener('click', ()
 
 // Categories
 const catGrid = document.getElementById('categoryGrid');
-catGrid.innerHTML = CATEGORIES.map(c => `
-  <div class="cat-card" data-category="${escAttr(c.category)}" data-label="${escAttr(c.label)}" role="button" tabindex="0">
-    <img src="${escAttr(c.img)}" alt="${escAttr(c.alt)}" loading="lazy" onerror="this.style.opacity=.6">
-    <div class="cat-label">${escHtml(c.label)}</div>
-  </div>
-`).join('');
-catGrid.querySelectorAll('.cat-card').forEach(el=>{
-  const go = ()=> { window.location.href = 'shop.html?category=' + encodeURIComponent(el.dataset.category); };
-  el.addEventListener('click', go);
-  el.addEventListener('keydown', e=> { if(e.key==='Enter') go(); });
-});
+function renderBackendCategories(){
+  const utils = window.CCCategoryUtils;
+  if(!utils) return;
+  utils.loadCategoryDataset().then(dataset => {
+    const categories = (dataset.categories || []).slice(0, 4);
+    if(!categories.length) return;
+    catGrid.innerHTML = categories.map(c => `
+      <div class="cat-card" data-category="${escAttr(c.slug)}" data-label="${escAttr(c.name)}" role="button" tabindex="0">
+        <img src="${escAttr(c.heroImage || c.editorialImage || 'images/hero-quiet-luxury-main.jpg')}" alt="${escAttr(c.name)}" loading="lazy" onerror="this.style.opacity=.6">
+        <div class="cat-label">${escHtml(c.name)}</div>
+      </div>
+    `).join('');
+    catGrid.querySelectorAll('.cat-card').forEach(el=>{
+      const go = ()=> { window.location.href = 'category.html?category=' + encodeURIComponent(el.dataset.category); };
+      el.addEventListener('click', go);
+      el.addEventListener('keydown', e=> { if(e.key==='Enter') go(); });
+    });
+  }).catch(err => {
+    console.warn('Category backend unavailable on search page', err);
+  });
+}
+renderBackendCategories();
 
 // Search execution
 function runSearch(q){

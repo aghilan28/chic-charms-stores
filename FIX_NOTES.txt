@@ -1,0 +1,49 @@
+CHIC CHARMS — CART FIX (MOBILE)
+================================
+Files changed: cart.html, index.html   (both live in the project ROOT folder)
+Desktop UI: UNCHANGED — every change is mobile-only (max-width: 767px).
+
+WHAT WAS WRONG
+--------------
+Your site had THREE competing mobile "skins" stacked on top of each other:
+
+  • The APPROVED skin   -> chic-charms-mobile-approved.css/.js  (used on the homepage)
+  • Two OLD/REJECTED skins -> mobile-app.js, final-mobile-stabilization.js,
+                              mobile-comprehensive.css, phase5-mobile-conversion.css,
+                              phase6-polish.css
+
+The homepage used the approved skin, but cart.html loaded the OLD skins.
+So when you tapped the cart button on the approved mobile homepage, you landed
+on cart.html — which the old skins then rebuilt into the rejected "old cart"
+look (extra cart icons, wrong bottom nav, over-styled cards). On desktop this
+was invisible because all of those layers are mobile-only.
+
+THE FIX
+-------
+cart.html
+  • Removed the 4 rejected stylesheets:
+        final-mobile-stabilization.css, phase6-polish.css,
+        phase5-mobile-conversion.css, mobile-comprehensive.css
+  • Removed the 2 rejected scripts:
+        final-mobile-stabilization.js, mobile-app.js
+    -> cart.html now renders in its OWN approved native design.
+  • Added a clean, mobile-only bottom navigation (.cc-bottom-nav) that exactly
+    matches the approved homepage, plus live cart-badge syncing.
+  • Kept ALL cart logic intact: renderCart, handleCheckout, stock checks,
+    quantity controls, and the sticky "Checkout" bar.
+
+index.html
+  • Added a tiny "cart button safety net": guarantees every cart control opens
+    cart.html and keeps the bag badge in sync — independent of other scripts.
+    It never blocks normal navigation (runs in capture phase, no preventDefault).
+
+HOW TO USE
+----------
+1. Unzip this file in your project ROOT (where cart.html and index.html are).
+2. Overwrite the existing cart.html and index.html.
+3. Commit & push to GitHub:
+       git add cart.html index.html
+       git commit -m "fix(mobile): cart renders approved UI; cart button always navigates"
+       git push
+
+That's it — no other files were modified.

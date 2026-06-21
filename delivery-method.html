@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Delivery Method | CHIC CHARMS</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&amp;family=Playfair+Display:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-lowest": "#ffffff",
+                    "on-error": "#ffffff",
+                    "error": "#ba1a1a",
+                    "surface-container": "#ffe8ee",
+                    "on-secondary-fixed-variant": "#4e453f",
+                    "surface": "#fff8f8",
+                    "surface-dim": "#ffcddd",
+                    "on-primary-fixed-variant": "#743044",
+                    "on-error-container": "#93000a",
+                    "on-background": "#2f121e",
+                    "primary-fixed-dim": "#ffb1c3",
+                    "inverse-on-surface": "#ffecf0",
+                    "tertiary-container": "#7a7373",
+                    "outline-variant": "#d7c1c5",
+                    "primary-fixed": "#ffd9e0",
+                    "surface-container-highest": "#ffd9e4",
+                    "primary": "#8e4559",
+                    "on-primary": "#ffffff",
+                    "secondary": "#665d56",
+                    "inverse-primary": "#ffb1c3",
+                    "surface-bright": "#fff8f8",
+                    "surface-container-low": "#fff0f3",
+                    "secondary-fixed": "#eee0d7",
+                    "on-secondary-container": "#6c635c",
+                    "on-tertiary-fixed-variant": "#4b4545",
+                    "surface-container-high": "#ffe0e9",
+                    "error-container": "#ffdad6",
+                    "on-secondary-fixed": "#211a15",
+                    "on-primary-container": "#fffbff",
+                    "inverse-surface": "#472633",
+                    "primary-container": "#ab5d71",
+                    "background": "#fff8f8",
+                    "tertiary-fixed": "#eae0e0",
+                    "outline": "#857276",
+                    "on-surface-variant": "#534346",
+                    "on-primary-fixed": "#3c0419",
+                    "tertiary-fixed-dim": "#cec4c4",
+                    "tertiary": "#615a5a",
+                    "surface-variant": "#ffd9e4",
+                    "surface-tint": "#90475b",
+                    "on-tertiary-container": "#fffbff",
+                    "on-secondary": "#ffffff",
+                    "on-surface": "#2f121e",
+                    "secondary-fixed-dim": "#d1c4bc",
+                    "on-tertiary-fixed": "#1f1a1b",
+                    "accent-rose": "#B5657A",
+                    "soft-blush": "#FAF5F2"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "safe-margin": "24px",
+                    "stack-lg": "32px",
+                    "section-gap": "48px",
+                    "gutter": "16px",
+                    "stack-md": "16px",
+                    "stack-sm": "8px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Jost"],
+                    "label-sm": ["Jost"],
+                    "display-lg": ["Playfair Display"],
+                    "body-md": ["Jost"],
+                    "label-lg": ["Jost"],
+                    "button": ["Jost"],
+                    "display-md": ["Playfair Display"],
+                    "headline-sm": ["Playfair Display"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .custom-bezier { transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .selection-glow {
+            box-shadow: 0px 10px 30px rgba(181, 101, 122, 0.15);
+        }
+        .active-card {
+            border-color: #B5657A !important;
+            transform: scale(1.02);
+            background-color: #ffffff;
+        }
+        /* Hide scrollbar */
+        ::-webkit-scrollbar { display: none; }
+        body { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary-fixed">
+<!-- Announcement Bar -->
+<div class="fixed top-0 left-0 w-full h-[40px] bg-[#B5657A] flex items-center justify-center z-[60]">
+<p class="text-white font-label-sm text-[12px] tracking-[0.2em] font-semibold">FREE SHIPPING ON ₹399+</p>
+</div>
+<!-- Header System -->
+<header class="fixed top-[40px] left-0 w-full h-[80px] bg-surface flex items-center px-safe-margin z-50">
+<button class="flex items-center justify-center p-2 hover:opacity-60 transition-opacity active:scale-95 duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]">
+<span class="material-symbols-outlined text-primary text-[28px]">arrow_back</span>
+</button>
+<div class="absolute left-1/2 -translate-x-1/2">
+<h1 class="font-display-md text-display-md font-bold tracking-widest text-primary">CHIC CHARMS</h1>
+</div>
+</header>
+<main class="pt-[140px] pb-32 px-safe-margin max-w-lg mx-auto">
+<!-- Progress Indicator -->
+<div class="mb-stack-lg">
+<div class="flex justify-between items-end mb-2">
+<span class="font-label-sm text-primary uppercase tracking-widest text-[11px] font-bold">Step 1 of 5</span>
+<span class="font-label-sm text-outline text-[11px]">20% Complete</span>
+</div>
+<div class="h-1 w-full bg-surface-container-highest overflow-hidden">
+<div class="h-full bg-accent-rose w-[20%] transition-all duration-700 ease-out"></div>
+</div>
+</div>
+<!-- Heading & Description -->
+<div class="text-center mb-stack-lg">
+<h2 class="font-display-lg text-[34px] leading-tight text-[#211a15] mb-stack-sm">Choose Delivery Method</h2>
+<p class="font-body-md text-primary opacity-80 max-w-[280px] mx-auto">Select how you would like to receive your Chic Charms order.</p>
+</div>
+<!-- Delivery Options -->
+<div class="flex flex-col gap-6" id="deliveryOptions">
+<!-- Option 1: In-Campus -->
+<div class="group relative bg-[#FAF5F2] border-2 border-transparent rounded-xl overflow-hidden cursor-pointer transition-all duration-500 custom-bezier hover:bg-white" id="in_campus" onclick="selectOption('in_campus')">
+<div class="h-44 w-full relative">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="A luxurious, minimalist photograph of an elegant university campus entrance with soft sunlight filtering through manicured gardens. The aesthetic is clean and high-end, featuring subtle rose gold accents in the architectural details, evoking a sense of premium service and exclusivity. Soft blush tones dominate the light-mode color palette." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBSi6LNr05WA1DIum_-pnYY_fXtz2zS5as3QlC8ewZJAI6MB5LzelAjT2xDpz_McO2z6yrqezcbHKyGG0V21LUsjl5JXVxWis_blF0Pe1uS0GI8odo2m0bGeOvqQUN5pnT-wjPzoqrD74s02g3KsHpfD4kOEV9eZh2wYpOLbxtWub4hm5rjclm899GZ7evT6anUuJvJ1lNQ2ocv1_9X1174WqKKenRORez8WSuhmZzlXi0ZzuhZBibr3WyiuZt7Q6ipGtuWDVC93Go')"></div>
+<div class="absolute top-4 right-4 h-6 w-6 rounded-full border-2 border-outline-variant flex items-center justify-center bg-white group-[.active-card]:bg-accent-rose group-[.active-card]:border-accent-rose transition-colors duration-300">
+<span class="material-symbols-outlined text-[16px] text-white hidden group-[.active-card]:block" style="font-variation-settings: 'wght' 700">check</span>
+</div>
+</div>
+<div class="p-6">
+<h3 class="font-display-md text-xl text-on-surface mb-1">In-Campus Delivery</h3>
+<p class="font-body-md text-on-surface-variant text-sm mb-3">Collect your order from one of our designated pickup locations inside CIT or CITAR campus.</p>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-accent-rose">location_on</span>
+<span class="font-label-lg text-primary text-xs font-semibold">6 Pickup Locations Available</span>
+</div>
+</div>
+</div>
+<!-- Option 2: Off-Campus -->
+<div class="group relative bg-[#FAF5F2] border-2 border-transparent rounded-xl overflow-hidden cursor-pointer transition-all duration-500 custom-bezier hover:bg-white" id="off_campus" onclick="selectOption('off_campus')">
+<div class="h-44 w-full relative">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="A lifestyle shot of a premium delivery package being presented at a sophisticated modern doorstep. The lighting is warm and golden-hour soft, highlighting the pristine pink packaging of a luxury brand. The background shows a high-end residential neighborhood with minimalist aesthetic, maintaining the brand's monochromatic rose and champagne palette." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBfYFZa2of5UdcnDcJJionzVZbx3djaawr4VF6k8vXKdWuX6okX_oNodndkzCKa98Ok59JuRLnE4afZpBJPcxEZuVVY-Q9W2Ylxx-e8PZ08WC3KKUIt1TKgkq1K46sP8iUnVqY737WcTbBhAYa3wOj1kA6i8Hq7Hl_97ZtGOL3dzq3CB6-zrLbaVVQWZBElc1zCcmbQGHBgoUq_du_ZKZmm15s34Re1_QZoR-qo1-45gveCSefLS7UN5dNG0XtWshIOvK01AXw-ncc')"></div>
+<div class="absolute top-4 right-4 h-6 w-6 rounded-full border-2 border-outline-variant flex items-center justify-center bg-white group-[.active-card]:bg-accent-rose group-[.active-card]:border-accent-rose transition-colors duration-300">
+<span class="material-symbols-outlined text-[16px] text-white hidden group-[.active-card]:block" style="font-variation-settings: 'wght' 700">check</span>
+</div>
+</div>
+<div class="p-6">
+<h3 class="font-display-md text-xl text-on-surface mb-1">Off-Campus Delivery</h3>
+<p class="font-body-md text-on-surface-variant text-sm mb-3">Receive your order at your preferred location outside campus.</p>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-accent-rose">local_shipping</span>
+<span class="font-label-lg text-primary text-xs font-semibold">Standard Delivery Available</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Information Note -->
+<div class="mt-stack-lg p-5 bg-soft-blush rounded-xl flex gap-4 border border-outline-variant/30">
+<span class="material-symbols-outlined text-primary text-[20px]">info</span>
+<p class="text-[13px] leading-relaxed text-on-surface-variant">
+                Campus delivery is available at designated pickup locations for students and faculty. Off-campus delivery is available for locations outside campus within supported regions.
+            </p>
+</div>
+</main>
+<!-- Footer Action -->
+<div class="fixed bottom-0 left-0 w-full bg-white p-4 pb-safe border-t border-outline-variant/20 z-50">
+<div class="max-w-lg mx-auto">
+<button class="w-full h-14 bg-accent-rose text-white font-button text-sm tracking-[0.2em] uppercase transition-all duration-500 custom-bezier disabled:opacity-30 disabled:cursor-not-allowed hover:bg-primary-container active:scale-95 flex items-center justify-center gap-2" disabled="" id="continueBtn" onclick="handleContinue()">
+                CONTINUE
+                <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<script>
+        const state = {
+            deliveryType: null
+        };
+
+        function selectOption(id) {
+            // Remove active classes from all
+            document.querySelectorAll('#deliveryOptions > div').forEach(el => {
+                el.classList.remove('active-card', 'selection-glow');
+            });
+
+            // Add active class to selected
+            const selected = document.getElementById(id);
+            selected.classList.add('active-card', 'selection-glow');
+
+            // Update state
+            state.deliveryType = id;
+            
+            // Enable button
+            const btn = document.getElementById('continueBtn');
+            btn.disabled = false;
+
+            // Haptic feedback simulation
+            if (window.navigator && window.navigator.vibrate) {
+                window.navigator.vibrate(5);
+            }
+        }
+
+        function handleContinue() {
+            if (!state.deliveryType) return;
+
+            const target = state.deliveryType === 'in_campus' 
+                ? '/checkout/campus-selection' 
+                : '/checkout/address-details';
+            
+            const btn = document.getElementById('continueBtn');
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">progress_activity</span>';
+            btn.disabled = true;
+
+            console.log('Navigating to:', target, 'with state:', state);
+            
+            // Artificial delay for premium transition feel
+            setTimeout(() => {
+                window.location.href = 'checkout.html?delivery=' + state.deliveryType;
+            }, 800);
+        }
+
+        // Handle micro-interactions for the list items
+        document.querySelectorAll('#deliveryOptions > div').forEach(card => {
+            card.addEventListener('mousedown', () => {
+                if (!card.classList.contains('active-card')) {
+                    card.style.transform = 'scale(0.98)';
+                }
+            });
+            card.addEventListener('mouseup', () => {
+                if (!card.classList.contains('active-card')) {
+                    card.style.transform = '';
+                }
+            });
+        });
+    </script>
+</body></html>

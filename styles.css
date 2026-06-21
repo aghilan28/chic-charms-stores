@@ -657,17 +657,19 @@ button:active:not(:disabled) {
 
 .logo {
   font-family: var(--font-head);
-  font-size: 1.45rem;
+  font-size: 28px;
   font-weight: 500;
-  color: var(--charcoal);
-  letter-spacing: 0.02em;
+  color: #8e4559;
+  text-decoration: none;
+  letter-spacing: -0.01em;
   flex: 0 0 auto;
   min-width: 160px;
   z-index: 1;
+  text-transform: none;
 }
 
 .logo span {
-  color: var(--rose-dark);
+  color: inherit;
 }
 
 .nav-links {

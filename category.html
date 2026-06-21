@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Category • Chic Charms</title>
+  <meta name="description" content="Chic Charms mobile category landing page." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Jost:wght@300;400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      color-scheme: light;
+      --background: #fff8f7;
+      --surface: #faf5f2;
+      --surface-lowest: #ffffff;
+      --surface-container: #f6eceb;
+      --surface-container-high: #f0e6e5;
+      --surface-variant: #eae0e0;
+      --on-surface: #2f2a2a;
+      --on-surface-variant: #534346;
+      --outline: #857276;
+      --outline-variant: #d7c1c5;
+      --primary: #8e4559;
+      --brand-rose: #b5657a;
+      --brand-deep: #9f4c67;
+      --brand-muted: #8f6674;
+      --brand-champagne: #f4e6dd;
+      --brand-blush: #fdf2f5;
+      --shadow: 0 12px 32px rgba(47, 42, 42, 0.04);
+      --shell: 440px;
+    }
+
+    * { box-sizing: border-box; }
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+    body {
+      margin: 0;
+      min-height: max(884px, 100dvh);
+      background: var(--background);
+      color: var(--on-surface);
+      font-family: "Jost", system-ui, sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: calc(78px + env(safe-area-inset-bottom, 0px));
+    }
+    img {
+      display: block;
+      max-width: 100%;
+    }
+    button, a {
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: 300;
+      font-style: normal;
+      font-size: 24px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      direction: ltr;
+      -webkit-font-feature-settings: 'liga';
+      -webkit-font-smoothing: antialiased;
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+    }
+    body.drawer-open {
+      overflow: hidden;
+    }
+
+    .mobile-shell {
+      width: 100%;
+      max-width: var(--shell);
+      margin: 0 auto;
+      min-height: 100dvh;
+      background: var(--background);
+      position: relative;
+    }
+    .desktop-hint {
+      display: none;
+      text-align: center;
+      padding: 10px 16px;
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--outline);
+      background: #fcf1f1;
+      border-bottom: 1px solid var(--outline-variant);
+    }
+
+    .announcement-bar {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: var(--shell);
+      height: 40px;
+      background: var(--brand-rose);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      padding: 0 16px;
+      text-align: center;
+    }
+    .announcement-bar p {
+      margin: 0;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    .header {
+      position: fixed;
+      top: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: var(--shell);
+      height: 80px;
+      background: var(--background);
+      border-bottom: 1px solid rgba(181, 101, 122, 0.12);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+    }
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      background: transparent;
+      color: var(--on-surface);
+      text-decoration: none;
+      cursor: pointer;
+      border-radius: 999px;
+    }
+    .brand-mark {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: var(--primary);
+      text-decoration: none;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 24px;
+      line-height: 1;
+      letter-spacing: -.02em;
+      white-space: nowrap;
+    }
+
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.2);
+      z-index: 10001;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s ease;
+    }
+    .nav-drawer {
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 280px;
+      background: var(--surface-lowest);
+      z-index: 10002;
+      transform: translateX(-100%);
+      transition: transform .3s ease;
+      box-shadow: 0 18px 40px rgba(47,42,42,.12);
+      border-radius: 0 22px 22px 0;
+      overflow: hidden;
+    }
+    .drawer-inner {
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+    .drawer-brand {
+      margin: 0 0 16px;
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: .12em;
+      color: var(--primary);
+    }
+    .drawer-copy {
+      margin: 0 0 28px;
+      color: var(--brand-muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .drawer-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .drawer-link {
+      display: block;
+      text-decoration: none;
+      padding: 16px 0 16px 16px;
+      color: var(--on-surface-variant);
+      border-left: 4px solid transparent;
+      transition: background .2s ease, color .2s ease, border-color .2s ease;
+    }
+    .drawer-link strong {
+      display: block;
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 1.35;
+      color: inherit;
+    }
+    .drawer-link span {
+      display: block;
+      margin-top: 2px;
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--brand-muted);
+    }
+    .drawer-link.is-active {
+      color: var(--primary);
+      border-left-color: var(--primary);
+      background: linear-gradient(90deg, rgba(181,101,122,.08), transparent 80%);
+    }
+    body.drawer-open .drawer-overlay {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    body.drawer-open .nav-drawer {
+      transform: translateX(0);
+    }
+
+    .page-main {
+      margin-top: 120px;
+    }
+
+    .breadcrumb {
+      padding: 16px 20px;
+    }
+    .breadcrumb p {
+      margin: 0;
+      font-size: 12px;
+      color: var(--brand-muted);
+      letter-spacing: .04em;
+    }
+    .breadcrumb p span {
+      margin: 0 8px;
+      opacity: .5;
+    }
+
+    .hero-section {
+      padding: 0 20px;
+      margin-bottom: 80px;
+    }
+    .hero-media {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      width: 100%;
+      overflow: hidden;
+      margin-bottom: 24px;
+      background: var(--surface);
+    }
+    .hero-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+    .hero-media::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(255, 248, 247, .42), transparent);
+    }
+    .hero-copy {
+      max-width: 34ch;
+    }
+    .hero-title {
+      margin: 0 0 12px;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 40px;
+      line-height: 1.1;
+      letter-spacing: -.02em;
+      color: var(--on-surface);
+      font-weight: 400;
+    }
+    .hero-description {
+      margin: 0;
+      color: var(--on-surface-variant);
+      font-size: 16px;
+      line-height: 1.6;
+      font-weight: 400;
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 120px;
+      z-index: 40;
+      padding: 24px 20px;
+      border-top: 1px solid rgba(244, 230, 221, .4);
+      border-bottom: 1px solid rgba(244, 230, 221, .4);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: rgba(255, 248, 247, .95);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .toolbar-count {
+      margin: 0;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--on-surface-variant);
+    }
+    .view-toggle {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .view-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border: 0;
+      background: transparent;
+      color: var(--on-surface-variant);
+      cursor: pointer;
+      padding: 0;
+    }
+    .view-btn .material-symbols-outlined {
+      font-size: 20px;
+    }
+    .view-btn.active {
+      color: var(--primary);
+    }
+
+    .product-section {
+      padding: 32px 20px 0;
+    }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 48px 16px;
+    }
+    .product-grid.single {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    .product-card {
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+    }
+    .product-card.reveal-init {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1);
+    }
+    .product-card.reveal-init.reveal-show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .product-media {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      overflow: hidden;
+      background: var(--surface);
+      margin-bottom: 16px;
+    }
+    .product-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      transition: transform .7s cubic-bezier(.22,1,.36,1);
+    }
+    .product-card:hover .product-media img {
+      transform: scale(1.05);
+    }
+    .wish-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 32px;
+      height: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      border-radius: 999px;
+      background: rgba(255,255,255,.82);
+      color: var(--on-surface-variant);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      cursor: pointer;
+      z-index: 2;
+    }
+    .wish-btn.active {
+      background: var(--brand-rose);
+      color: #fff;
+    }
+    .product-tag {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      max-width: calc(100% - 58px);
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.88);
+      color: var(--brand-muted);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .product-name {
+      margin: 0 0 4px;
+      color: var(--on-surface);
+      font-size: 16px;
+      line-height: 1.45;
+      font-weight: 400;
+      transition: color .2s ease;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .product-card:hover .product-name {
+      color: var(--primary);
+    }
+    .product-price {
+      margin: 0;
+      color: var(--brand-muted);
+      font-size: 13px;
+      letter-spacing: .08em;
+      font-weight: 500;
+    }
+    .product-price strong {
+      font-weight: 500;
+      color: var(--brand-muted);
+    }
+
+    .loading-grid {
+      padding: 32px 20px 0;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 48px 16px;
+    }
+    .skeleton-card {
+      display: flex;
+      flex-direction: column;
+    }
+    .skeleton-media,
+    .skeleton-line {
+      background: linear-gradient(90deg, #f6eceb 25%, #fcf1f1 50%, #f6eceb 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.2s linear infinite;
+    }
+    .skeleton-media {
+      aspect-ratio: 4 / 5;
+      margin-bottom: 16px;
+    }
+    .skeleton-line {
+      height: 12px;
+      border-radius: 999px;
+      margin-bottom: 8px;
+    }
+    .skeleton-line.lg { width: 82%; }
+    .skeleton-line.md { width: 44%; }
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .editorial-section {
+      background: var(--surface);
+      padding: 80px 20px;
+      margin-top: 32px;
+      display: none;
+    }
+    .editorial-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .editorial-media {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      margin-bottom: 40px;
+      background: var(--surface-container);
+    }
+    .editorial-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .editorial-title {
+      margin: 0 0 16px;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 32px;
+      line-height: 1.3;
+      font-weight: 400;
+      color: var(--on-surface);
+    }
+    .editorial-description {
+      margin: 0 0 32px;
+      color: var(--on-surface-variant);
+      font-size: 16px;
+      line-height: 1.6;
+      max-width: 22rem;
+    }
+    .editorial-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 0 32px;
+      background: var(--brand-rose);
+      color: #fff;
+      border: 0;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      transition: background .2s ease;
+    }
+    .editorial-cta:hover {
+      background: var(--brand-deep);
+    }
+
+    .related-section {
+      padding: 80px 20px 0;
+      display: none;
+    }
+    .related-title {
+      margin: 0 0 32px;
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--on-surface);
+    }
+    .related-list {
+      border-top: 1px solid rgba(244, 230, 221, .6);
+    }
+    .related-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 24px 0;
+      border-bottom: 1px solid rgba(244, 230, 221, .6);
+      text-decoration: none;
+    }
+    .related-link strong {
+      display: block;
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--on-surface-variant);
+      transition: color .2s ease;
+    }
+    .related-link span.meta {
+      display: block;
+      margin-top: 4px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--brand-muted);
+    }
+    .related-link .material-symbols-outlined {
+      font-size: 20px;
+      color: var(--on-surface-variant);
+      transition: color .2s ease;
+    }
+    .related-link.is-active strong,
+    .related-link.is-active .material-symbols-outlined {
+      color: var(--primary);
+    }
+    .related-link:not(.is-active):hover strong,
+    .related-link:not(.is-active):hover .material-symbols-outlined {
+      color: var(--primary);
+    }
+
+    .empty-state {
+      padding: 32px 20px 0;
+      display: none;
+    }
+    .empty-box {
+      border: 1px solid rgba(244,230,221,.6);
+      background: var(--surface);
+      padding: 28px 20px;
+    }
+    .empty-box h2 {
+      margin: 0 0 12px;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 30px;
+      line-height: 1.2;
+      font-weight: 400;
+    }
+    .empty-box p {
+      margin: 0;
+      color: var(--on-surface-variant);
+      font-size: 15px;
+      line-height: 1.65;
+    }
+    .empty-actions {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .btn-primary,
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 20px;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--brand-rose);
+      color: #fff;
+      border: 0;
+    }
+    .btn-secondary {
+      border: 1px solid var(--brand-rose);
+      color: var(--brand-rose);
+      background: transparent;
+    }
+
+    .footer {
+      background: var(--surface-container);
+      padding: 48px 20px 120px;
+      border-top: 1px solid rgba(244,230,221,.3);
+      margin-top: 32px;
+    }
+    .footer-accordion {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-bottom: 48px;
+    }
+    .footer-block {
+      display: flex;
+      flex-direction: column;
+    }
+    .footer-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 16px 0;
+      border: 0;
+      border-bottom: 1px solid rgba(244,230,221,.4);
+      background: transparent;
+      text-align: left;
+      cursor: pointer;
+    }
+    .footer-trigger span.label {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--on-surface);
+    }
+    .footer-content {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      padding: 16px 0 8px;
+    }
+    .footer-content a {
+      text-decoration: none;
+      color: #6c635c;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    .footer-content.open {
+      display: flex;
+    }
+    .footer-brand {
+      text-align: center;
+    }
+    .footer-brand h4 {
+      margin: 0 0 24px;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 24px;
+      font-weight: 400;
+      color: var(--primary);
+    }
+    .footer-social {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 24px;
+      color: var(--on-surface-variant);
+    }
+    .footer-brand p {
+      margin: 0;
+      font-size: 11px;
+      color: #6c635c;
+      opacity: .72;
+      letter-spacing: .12em;
+    }
+
+    .cc-bottom-nav {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 0;
+      width: 100%;
+      max-width: var(--shell);
+      z-index: 120;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+      background: rgba(255,248,247,.96);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(215,193,197,.5);
+    }
+    .cc-bottom-nav a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      padding: 6px 14px;
+      color: var(--on-surface-variant);
+      text-decoration: none;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 500;
+      transition: color .15s ease;
+    }
+    .cc-bottom-nav a.active,
+    .cc-bottom-nav a[aria-current="page"] {
+      color: var(--primary);
+      background: rgba(171,93,113,.10);
+    }
+
+    @media (min-width: 768px) {
+      body {
+        background: var(--surface-container);
+      }
+      .desktop-hint {
+        display: block;
+      }
+      .mobile-shell {
+        box-shadow: 0 8px 48px rgba(47,42,42,.10);
+      }
+      .announcement-bar,
+      .header,
+      .cc-bottom-nav {
+        max-width: var(--shell);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="mobile-shell">
+    <div class="desktop-hint">Category Landing · approved mobile layout</div>
+
+    <div class="announcement-bar">
+      <p>Free Shipping on ₹399+</p>
+    </div>
+
+    <header class="header">
+      <button aria-label="Menu" class="icon-btn" id="menuBtn" type="button">
+        <span class="material-symbols-outlined" style="font-size:28px;">menu</span>
+      </button>
+      <a class="brand-mark" href="index.html">Chic Charms</a>
+      <a aria-label="Search" class="icon-btn" href="search.html">
+        <span class="material-symbols-outlined">search</span>
+      </a>
+    </header>
+
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <aside class="nav-drawer" id="navDrawer">
+      <div class="drawer-inner">
+        <h2 class="drawer-brand">CHIC CHARMS</h2>
+        <p class="drawer-copy">Curated business categories sourced from your live backend and styled to match the approved luxury mobile direction.</p>
+        <nav class="drawer-nav" id="drawerLinks"></nav>
+      </div>
+    </aside>
+
+    <main class="page-main">
+      <nav class="breadcrumb">
+        <p id="breadcrumbText">Home <span>|</span> Category</p>
+      </nav>
+
+      <section class="hero-section">
+        <div class="hero-media">
+          <img id="heroImage" src="images/hero-quiet-luxury-main.jpg" alt="Category hero" loading="eager" />
+        </div>
+        <div class="hero-copy">
+          <h1 class="hero-title" id="heroTitle">Category</h1>
+          <p class="hero-description" id="heroDescription">Loading approved category design from the backend.</p>
+        </div>
+      </section>
+
+      <section class="toolbar">
+        <p class="toolbar-count" id="toolbarCount">Showing 0 Products</p>
+        <div class="view-toggle">
+          <button aria-label="View 1 column" class="view-btn" id="singleColBtn" type="button">
+            <span class="material-symbols-outlined">rectangle</span>
+          </button>
+          <button aria-label="View 2 columns" class="view-btn active" id="doubleColBtn" type="button">
+            <span class="material-symbols-outlined">grid_view</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="loading-grid" id="loadingState">
+        <div class="skeleton-card"><div class="skeleton-media"></div><div class="skeleton-line lg"></div><div class="skeleton-line md"></div></div>
+        <div class="skeleton-card"><div class="skeleton-media"></div><div class="skeleton-line lg"></div><div class="skeleton-line md"></div></div>
+        <div class="skeleton-card"><div class="skeleton-media"></div><div class="skeleton-line lg"></div><div class="skeleton-line md"></div></div>
+        <div class="skeleton-card"><div class="skeleton-media"></div><div class="skeleton-line lg"></div><div class="skeleton-line md"></div></div>
+      </section>
+
+      <section class="product-section" id="productSection" style="display:none;">
+        <div class="product-grid" id="productGrid"></div>
+      </section>
+
+      <section class="empty-state" id="emptyState">
+        <div class="empty-box">
+          <h2>No pieces available yet</h2>
+          <p id="emptyMessage">No products are available for this category right now.</p>
+          <div class="empty-actions">
+            <a class="btn-primary" href="shop.html">Browse Full Shop</a>
+            <a class="btn-secondary" href="search-results.html">Back to Search Results</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="editorial-section" id="editorialSection">
+        <div class="editorial-inner">
+          <div class="editorial-media">
+            <img id="editorialImage" src="images/editorial-light-meets-gold.png" alt="Editorial" loading="lazy" />
+          </div>
+          <h2 class="editorial-title" id="editorialTitle">Curated For Every Occasion</h2>
+          <p class="editorial-description" id="editorialDescription">Discover pieces designed to complement your everyday moments and special celebrations. Each charm tells a story of elegance.</p>
+          <a class="editorial-cta" href="shop.html" id="editorialCta">Explore Full Edit</a>
+        </div>
+      </section>
+
+      <section class="related-section" id="relatedSection">
+        <h3 class="related-title">Other Categories</h3>
+        <div class="related-list" id="relatedList"></div>
+      </section>
+
+      <footer class="footer">
+        <div class="footer-accordion">
+          <div class="footer-block">
+            <button class="footer-trigger" type="button">
+              <span class="label">Client Care</span>
+              <span class="material-symbols-outlined">add</span>
+            </button>
+            <div class="footer-content">
+              <a href="contact.html">Contact Us</a>
+              <a href="contact.html">Track Order</a>
+              <a href="contact.html">Book an Appointment</a>
+            </div>
+          </div>
+          <div class="footer-block">
+            <button class="footer-trigger" type="button">
+              <span class="label">Information</span>
+              <span class="material-symbols-outlined">add</span>
+            </button>
+            <div class="footer-content">
+              <a href="shipping.html">Shipping</a>
+              <a href="returns.html">Returns</a>
+              <a href="privacy.html">Privacy Policy</a>
+            </div>
+          </div>
+          <div class="footer-block">
+            <button class="footer-trigger" type="button">
+              <span class="label">About Us</span>
+              <span class="material-symbols-outlined">add</span>
+            </button>
+            <div class="footer-content">
+              <a href="about.html">Our Heritage</a>
+              <a href="about.html">Sustainability</a>
+              <a href="contact.html">Press</a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-brand">
+          <h4>Chic Charms</h4>
+          <div class="footer-social">
+            <span class="material-symbols-outlined">share</span>
+            <span class="material-symbols-outlined">person</span>
+            <span class="material-symbols-outlined">mail</span>
+          </div>
+          <p>© <span class="cc-year"></span> Chic Charms. All Rights Reserved.</p>
+        </div>
+      </footer>
+    </main>
+
+    <nav class="cc-bottom-nav" aria-label="Primary">
+      <a href="index.html" data-nav="home">
+        <span class="material-symbols-outlined">home</span>
+        <span>Home</span>
+      </a>
+      <a href="search.html" data-nav="search">
+        <span class="material-symbols-outlined">search</span>
+        <span>Search</span>
+      </a>
+      <a href="wishlist.html" data-nav="wishlist">
+        <span class="material-symbols-outlined">favorite</span>
+        <span>Wishlist</span>
+      </a>
+      <a href="cart.html" data-nav="cart">
+        <span class="material-symbols-outlined">shopping_bag</span>
+        <span>Bag</span>
+      </a>
+      <a href="account.html" data-nav="account">
+        <span class="material-symbols-outlined">person</span>
+        <span>Account</span>
+      </a>
+    </nav>
+  </div>
+
+  <script src="category-utils.js"></script>
+  <script src="script.js" defer></script>
+  <script>
+    (function () {
+      'use strict';
+
+      const utils = window.CCCategoryUtils;
+      const params = new URLSearchParams(window.location.search);
+      const requestedCategory = params.get('category') || params.get('slug') || params.get('key') || params.get('label') || '';
+
+      const breadcrumbText = document.getElementById('breadcrumbText');
+      const heroImage = document.getElementById('heroImage');
+      const heroTitle = document.getElementById('heroTitle');
+      const heroDescription = document.getElementById('heroDescription');
+      const toolbarCount = document.getElementById('toolbarCount');
+      const loadingState = document.getElementById('loadingState');
+      const productSection = document.getElementById('productSection');
+      const productGrid = document.getElementById('productGrid');
+      const emptyState = document.getElementById('emptyState');
+      const emptyMessage = document.getElementById('emptyMessage');
+      const editorialSection = document.getElementById('editorialSection');
+      const editorialImage = document.getElementById('editorialImage');
+      const editorialTitle = document.getElementById('editorialTitle');
+      const editorialDescription = document.getElementById('editorialDescription');
+      const editorialCta = document.getElementById('editorialCta');
+      const relatedSection = document.getElementById('relatedSection');
+      const relatedList = document.getElementById('relatedList');
+      const drawerLinks = document.getElementById('drawerLinks');
+      const menuBtn = document.getElementById('menuBtn');
+      const drawerOverlay = document.getElementById('drawerOverlay');
+      const navDrawer = document.getElementById('navDrawer');
+      const singleColBtn = document.getElementById('singleColBtn');
+      const doubleColBtn = document.getElementById('doubleColBtn');
+
+      let currentCategory = null;
+      let currentProducts = [];
+
+      document.querySelectorAll('.cc-year').forEach(function (element) {
+        element.textContent = new Date().getFullYear();
+      });
+
+      document.querySelectorAll('.cc-bottom-nav a').forEach(function (link) {
+        link.classList.remove('active');
+        link.removeAttribute('aria-current');
+      });
+      const searchLink = document.querySelector('.cc-bottom-nav a[data-nav="search"]');
+      if (searchLink) {
+        searchLink.classList.add('active');
+        searchLink.setAttribute('aria-current', 'page');
+      }
+
+      function openDrawer() {
+        document.body.classList.add('drawer-open');
+      }
+      function closeDrawer() {
+        document.body.classList.remove('drawer-open');
+      }
+      menuBtn.addEventListener('click', openDrawer);
+      drawerOverlay.addEventListener('click', closeDrawer);
+
+      function setGridMode(mode) {
+        const single = mode === 'single';
+        productGrid.classList.toggle('single', single);
+        singleColBtn.classList.toggle('active', single);
+        doubleColBtn.classList.toggle('active', !single);
+      }
+      singleColBtn.addEventListener('click', function () { setGridMode('single'); });
+      doubleColBtn.addEventListener('click', function () { setGridMode('double'); });
+
+      function toggleFooterAccordion(trigger) {
+        const content = trigger.nextElementSibling;
+        const icon = trigger.querySelector('.material-symbols-outlined');
+        const willOpen = !content.classList.contains('open');
+        content.classList.toggle('open', willOpen);
+        icon.textContent = willOpen ? 'remove' : 'add';
+      }
+      document.querySelectorAll('.footer-trigger').forEach(function (trigger) {
+        trigger.addEventListener('click', function () {
+          toggleFooterAccordion(trigger);
+        });
+      });
+
+      function revealCards() {
+        if (!('IntersectionObserver' in window)) return;
+        const observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('reveal-show');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.1 });
+        productGrid.querySelectorAll('.product-card').forEach(function (card) {
+          card.classList.add('reveal-init');
+          observer.observe(card);
+        });
+      }
+
+      function getProductImage(product) {
+        return product.image || product.modelImage || (currentCategory && (currentCategory.heroImage || currentCategory.editorialImage)) || 'images/hero-quiet-luxury-main.jpg';
+      }
+
+      function applyCategoryContent(category) {
+        currentCategory = category;
+        document.title = 'Chic Charms | ' + category.name;
+        heroImage.src = category.heroImage || category.editorialImage || 'images/hero-quiet-luxury-main.jpg';
+        heroImage.alt = category.name;
+        heroTitle.textContent = category.title || category.name;
+        heroDescription.textContent = category.description || ('Discover our curated edit of ' + category.name + '.');
+        breadcrumbText.innerHTML = 'Home <span>|</span> ' + utils.escapeHtml(category.name);
+        editorialImage.src = category.editorialImage || category.heroImage || 'images/editorial-light-meets-gold.png';
+        editorialImage.alt = category.name + ' editorial image';
+        editorialTitle.textContent = 'Curated For Every Occasion';
+        editorialDescription.textContent = category.description || ('Discover pieces designed to complement your everyday moments and special celebrations.');
+        editorialCta.href = 'shop.html?category=' + encodeURIComponent(category.slug);
+      }
+
+      function renderDrawer(categories) {
+        drawerLinks.innerHTML = categories.map(function (category) {
+          const isActive = currentCategory && currentCategory.slug === category.slug;
+          return '<a class="drawer-link' + (isActive ? ' is-active' : '') + '" href="category.html?category=' + encodeURIComponent(category.slug) + '">' +
+            '<strong>' + utils.escapeHtml(category.name) + '</strong>' +
+            '<span>' + utils.escapeHtml(category.shortDescription || category.description || 'Live backend category') + '</span>' +
+          '</a>';
+        }).join('');
+      }
+
+      function renderRelated(categories) {
+        relatedList.innerHTML = categories.map(function (category) {
+          const isActive = currentCategory && currentCategory.slug === category.slug;
+          return '<a class="related-link' + (isActive ? ' is-active' : '') + '" href="category.html?category=' + encodeURIComponent(category.slug) + '">' +
+            '<div>' +
+              '<strong>' + utils.escapeHtml(category.name) + '</strong>' +
+              '<span class="meta">' + utils.escapeHtml(category.shortDescription || category.description || 'Live backend category') + '</span>' +
+            '</div>' +
+            '<span class="material-symbols-outlined">arrow_forward_ios</span>' +
+          '</a>';
+        }).join('');
+        relatedSection.style.display = categories.length ? 'block' : 'none';
+      }
+
+      function bindWishlistButtons() {
+        const WISH_KEY = 'cc_wishlist';
+        function getWish() {
+          try {
+            return JSON.parse(localStorage.getItem(WISH_KEY) || '[]');
+          } catch (error) {
+            return [];
+          }
+        }
+        function setWish(items) {
+          localStorage.setItem(WISH_KEY, JSON.stringify(items));
+        }
+        function syncWish() {
+          const items = getWish();
+          productGrid.querySelectorAll('[data-wish]').forEach(function (button) {
+            button.classList.toggle('active', items.indexOf(button.getAttribute('data-wish')) !== -1);
+          });
+        }
+        syncWish();
+        productGrid.querySelectorAll('[data-wish]').forEach(function (button) {
+          button.addEventListener('click', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const id = button.getAttribute('data-wish');
+            let items = getWish();
+            if (items.indexOf(id) !== -1) items = items.filter(function (value) { return value !== id; });
+            else items.push(id);
+            setWish(items);
+            syncWish();
+          });
+        });
+      }
+
+      function renderProducts(products) {
+        currentProducts = products.slice();
+        if (!products.length) {
+          productSection.style.display = 'none';
+          emptyState.style.display = 'block';
+          editorialSection.style.display = 'none';
+          toolbarCount.textContent = 'Showing 0 Products';
+          return;
+        }
+
+        productGrid.innerHTML = products.map(function (product) {
+          const tag = product.tag ? '<span class="product-tag">' + utils.escapeHtml(product.tag) + '</span>' : '';
+          return '<article class="product-card">' +
+            '<div class="product-media">' +
+              '<a href="product.html?id=' + encodeURIComponent(product.id) + '" style="display:block;width:100%;height:100%;text-decoration:none;color:inherit;">' +
+                '<img src="' + utils.escapeHtml(getProductImage(product)) + '" alt="' + utils.escapeHtml(product.name) + '" loading="lazy" />' +
+                tag +
+              '</a>' +
+              '<button class="wish-btn" type="button" data-wish="' + utils.escapeHtml(product.id) + '" aria-label="Toggle wishlist for ' + utils.escapeHtml(product.name) + '">' +
+                '<span class="material-symbols-outlined" style="font-size:20px;">favorite</span>' +
+              '</button>' +
+            '</div>' +
+            '<h3 class="product-name">' + utils.escapeHtml(product.name) + '</h3>' +
+            '<p class="product-price"><strong>' + utils.formatPrice(product.price) + '</strong></p>' +
+          '</article>';
+        }).join('');
+
+        toolbarCount.textContent = 'Showing ' + products.length + ' Products';
+        productSection.style.display = 'block';
+        emptyState.style.display = 'none';
+        editorialSection.style.display = 'block';
+        bindWishlistButtons();
+        revealCards();
+      }
+
+      async function init() {
+        try {
+          const dataset = await utils.loadCategoryDataset();
+          const category = utils.getCategoryByInput(requestedCategory, dataset) || dataset.categories[0] || null;
+          if (!category) throw new Error('No backend categories available');
+          applyCategoryContent(category);
+          renderDrawer(dataset.categories);
+          renderRelated(dataset.categories);
+          const categoryProducts = utils.resolveProductsForCategory(dataset.products, category.slug, dataset);
+          renderProducts(categoryProducts);
+          loadingState.style.display = 'none';
+        } catch (error) {
+          console.error('Category page failed to load products', error);
+          loadingState.style.display = 'none';
+          productSection.style.display = 'none';
+          editorialSection.style.display = 'none';
+          relatedSection.style.display = 'none';
+          emptyState.style.display = 'block';
+          toolbarCount.textContent = 'Unable to load products';
+          emptyMessage.textContent = 'The live category backend could not be reached at the moment. Please try again or continue shopping through the main store.';
+        }
+      }
+
+      init();
+    })();
+  </script>
+
+  <script>
+    (function () {
+      const WISH_KEY = 'cc_wishlist';
+      window.CCWish = {
+        get() { try { return JSON.parse(localStorage.getItem(WISH_KEY) || '[]'); } catch (e) { return []; } },
+        set(a) { localStorage.setItem(WISH_KEY, JSON.stringify(a)); },
+        has(id) { return window.CCWish.get().includes(String(id)); },
+        toggle(id) {
+          id = String(id);
+          let wish = window.CCWish.get();
+          if (wish.includes(id)) wish = wish.filter(function (value) { return value !== id; });
+          else wish.push(id);
+          window.CCWish.set(wish);
+          return wish.includes(id);
+        }
+      };
+      document.addEventListener('click', function (event) {
+        const link = event.target.closest('a[href="wishlist.html"]');
+        if (!link) return;
+        if (window.CCWish.get().length === 0) {
+          event.preventDefault();
+          window.location.href = 'shop.html?filter=wishlist-empty';
+        }
+      }, true);
+    })();
+  </script>
+
+  <script>
+    (function () {
+      function fix() {
+        document.querySelectorAll('a[href]').forEach(function (anchor) {
+          let href = anchor.getAttribute('href') || '';
+          if (anchor.getAttribute('aria-label') === 'Wishlist' || (/favorite|wishlist/i.test(anchor.textContent) && href.includes('bestsellers'))) {
+            anchor.setAttribute('href', 'wishlist.html');
+          }
+          if (href === '#bestsellers' || href === 'index.html#bestsellers') {
+            const isWish = anchor.closest('[aria-label*="Wishlist"]') || anchor.querySelector('svg path[d*="20.8 4.6"]');
+            anchor.setAttribute('href', isWish ? 'wishlist.html' : 'shop.html');
+          }
+          if (href.includes('mobile-home.html')) anchor.setAttribute('href', 'index.html');
+          const txt = (anchor.textContent || '').trim().toLowerCase();
+          if (txt === 'shop' || txt === 'best sellers') {
+            if (href.startsWith('#')) anchor.setAttribute('href', 'shop.html');
+          }
+          if (txt === 'about' && href.startsWith('#')) anchor.setAttribute('href', 'about.html');
+          if (txt === 'reviews' && href.startsWith('#')) anchor.setAttribute('href', 'index.html#testimonials');
+          if (txt === 'cart' && !href.includes('cart.html')) anchor.setAttribute('href', 'cart.html');
+          if (txt === 'search' && !href.includes('search.html')) anchor.setAttribute('href', 'search.html');
+        });
+      }
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fix);
+      else fix();
+      new MutationObserver(fix).observe(document.documentElement, { childList: true, subtree: true });
+    })();
+  </script>
+</body>
+</html>

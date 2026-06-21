@@ -88,7 +88,7 @@
 <header class="cc-header">
   <button class="cc-header-btn" id="ccMenuBtn" aria-label="Menu"><span class="material-symbols-outlined">menu</span></button>
   <a href="index.html" class="cc-logo">CHIC CHARMS</a>
-  <a href="cart.html" class="cc-header-btn cc-header-cart" aria-label="Cart">
+  <a href="#" data-cc-app-cart="true" class="cc-header-btn cc-header-cart" aria-label="Cart">
     <span class="material-symbols-outlined">shopping_bag</span>
     <span class="cc-cart-count hidden"></span>
   </a>
@@ -113,7 +113,7 @@
       <a href="#" data-cat="after-dark">Party Collection</a>
       <a href="#" data-cat="heritage-muse">Bridal Collection</a>
       <a href="#" data-price="under299" style="color:#B5657A">Under ₹299</a>
-      <a href="cart.html">Cart</a>
+      <a href="#" data-cc-app-cart="true">Cart</a>
       <a href="account.html">Account</a>
       <a href="about.html">About Chic Charms</a>
       <a href="contact.html">Contact</a>

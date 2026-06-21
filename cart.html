@@ -7,7 +7,7 @@
   <title>My Cart – Chic Charms</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="payment-system.css" />
   <style>
@@ -421,12 +421,69 @@
       }
     }
   </style>
-  <link rel="stylesheet" href="final-mobile-stabilization.css" media="(max-width: 768px)" />
-  <link rel="stylesheet" href="phase6-polish.css" media="(max-width: 767px)" />
-  <link rel="stylesheet" href="phase5-mobile-conversion.css" media="(max-width: 767px)" />
-  <link rel="stylesheet" href="mobile-comprehensive.css" media="(max-width: 1024px)" />
+  <link rel="stylesheet" href="mobile-cart-approved.css" />
 </head>
 <body>
+
+  <!-- APPROVED MOBILE CART UI: exact mobile replacement. Desktop markup below is hidden on mobile by mobile-cart-approved.css. -->
+  <div id="ccApprovedCartMobile" aria-label="Approved mobile cart">
+    <div class="ccap-announcement"><span>DELIVERY OPTIONS AT CHECKOUT</span></div>
+
+    <header class="ccap-header" aria-label="Cart header">
+      <button class="ccap-icon-button" type="button" data-ccap-back aria-label="Go back">
+        <svg class="ccap-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/><path d="M9 12h12"/></svg>
+      </button>
+      <p class="ccap-brand">CHIC CHARMS</p>
+      <a class="ccap-bag-link" href="cart.html" aria-label="Shopping bag">
+        <svg class="ccap-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12H7L6 8Z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg>
+        <span class="ccap-bag-count" id="ccapBagCount">0</span>
+      </a>
+    </header>
+
+    <section class="ccap-page-title">
+      <h1>Your Selection</h1>
+      <p id="ccapTitleCount">Your cart is ready for a new favourite.</p>
+    </section>
+
+    <section class="ccap-empty" id="ccapEmpty" aria-live="polite">
+      <div class="ccap-empty-symbol">
+        <svg class="ccap-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12H7L6 8Z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg>
+      </div>
+      <h2>Your cart is empty</h2>
+      <p>Looks like you haven't added anything yet. Find your next glow-up below.</p>
+      <a href="index.html#bestsellers">Browse Best Sellers</a>
+    </section>
+
+    <section class="ccap-section ccap-hide-when-empty" aria-label="Cart items">
+      <div class="ccap-items" id="ccapItems"></div>
+    </section>
+
+    <section class="ccap-section ccap-summary ccap-hide-when-empty" aria-label="Order summary">
+      <div class="ccap-row"><span>Subtotal</span><strong id="ccapSubtotal">₹0</strong></div>
+      <div class="ccap-row"><span>Delivery</span><strong class="ccap-delivery-note" id="ccapDeliveryNote">Calculated at checkout</strong></div>
+      <div class="ccap-row ccap-total-row"><span>Total</span><strong id="ccapFinalTotal">₹0</strong></div>
+    </section>
+
+    <section class="ccap-look ccap-hide-when-empty" aria-label="Complete the look">
+      <div class="ccap-look-head">
+        <h2>Complete The Look</h2>
+        <svg class="ccap-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+      </div>
+      <div class="ccap-look-scroller" id="ccapRecommendations" aria-live="polite">
+        <div class="ccap-reco-loading">Loading pieces from your store…</div>
+      </div>
+    </section>
+
+    <footer class="ccap-sticky" aria-label="Checkout bar">
+      <div>
+        <span class="ccap-sticky-label">Total Amount</span>
+        <strong class="ccap-sticky-amount" id="ccapStickyTotal">₹0</strong>
+      </div>
+      <button class="ccap-checkout-btn" type="button" data-ccap-checkout>Proceed To Checkout</button>
+    </footer>
+    <div class="ccap-toast" id="ccapToast" role="status" aria-live="polite"></div>
+  </div>
+
 
   <!-- ░░ NAVBAR ░░ -->
   <header class="navbar" id="navbar">
@@ -800,51 +857,8 @@
     refreshCartStock().then(renderCart);
   </script>
   <script type="module" src="auth-nav.js"></script>
-  <script src="final-mobile-stabilization.js" defer></script>
-  <script src="mobile-app.js" defer></script>
+  <script src="mobile-cart-approved.js" defer></script>
 
-  <!-- Phase 5: Sticky Checkout CTA (mobile only, injected by JS) -->
-  <script>
-  (function() {
-    if (window.innerWidth > 767) return;
-    // Inject sticky CTA bar
-    var bar = document.createElement('div');
-    bar.className = 'p5-sticky-checkout';
-    bar.id = 'p5StickyCheckout';
-    bar.innerHTML =
-      '<div class="p5-sticky-total">' +
-        '<span class="p5-sticky-total-label">Total</span>' +
-        '<span class="p5-sticky-total-amount" id="p5StickyAmount">₹0</span>' +
-      '</div>' +
-      '<button class="p5-sticky-btn" onclick="handleCheckout()" aria-label="Proceed to checkout">' +
-        '🔒 Checkout' +
-      '</button>';
-    document.body.appendChild(bar);
 
-    // Sync amount whenever cart renders
-    var _orig = window.renderCart;
-    function syncAmount() {
-      try {
-        var raw = localStorage.getItem('cart');
-        var cart = JSON.parse(raw) || [];
-        var sub = cart.reduce(function(s,i){ return s + (Number(i.price)||0)*(Number(i.quantity)||1); }, 0);
-        var ship = sub >= 399 ? 0 : 49;
-        var total = sub + ship;
-        var el = document.getElementById('p5StickyAmount');
-        if (el) el.textContent = '₹' + total.toLocaleString('en-IN');
-        // Hide bar if cart empty
-        if (bar) bar.style.display = cart.length === 0 ? 'none' : 'flex';
-      } catch(e) {}
-    }
-    // Patch renderCart to also sync sticky
-    if (typeof window.renderCart === 'function') {
-      var orig = window.renderCart;
-      window.renderCart = function() { orig(); syncAmount(); };
-    }
-    // Also run on load
-    setTimeout(syncAmount, 100);
-    window.addEventListener('storage', syncAmount);
-  })();
-  </script>
 </body>
 </html>

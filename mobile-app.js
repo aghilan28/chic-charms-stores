@@ -138,7 +138,7 @@
     }
 
     if (!inner.querySelector(".ma-header-cart")) {
-      var cart = el("a", "ma-header-cart", { href: "cart.html", "aria-label": "Cart" });
+      var cart = el("a", "ma-header-cart", { href: "#", "data-cc-app-cart": "true", "aria-label": "Cart" });
       cart.innerHTML = icon("cart") + '<span data-ma-cart-count hidden></span>';
       inner.appendChild(cart);
       state.headerCart = cart;
@@ -257,14 +257,13 @@
       ["index.html#categories", "Categories", "shop", false],
       ["index.html#bestsellers", "Discover", "discover", false],
       ["account.html", "Account", "account", page === "account.html"],
-      ["cart.html", "Cart", "cart", page === "cart.html"]
+      ["#", "Cart", "cart", page === "cart.html", true]
     ];
     var nav = el("nav", "ma-bottom-nav", { "aria-label": "Mobile bottom navigation" });
     tabs.forEach(function (tab) {
-      var link = el("a", "ma-nav-tab" + (tab[3] ? " is-active" : ""), {
-        href: tab[0],
-        "aria-label": tab[1]
-      });
+      var attrs = { href: tab[0], "aria-label": tab[1] };
+      if (tab[4]) attrs["data-cc-app-cart"] = "true";
+      var link = el("a", "ma-nav-tab" + (tab[3] ? " is-active" : ""), attrs);
       link.innerHTML = icon(tab[2]) + "<span>" + tab[1] + "</span>";
       if (tab[1] === "Cart") {
         link.innerHTML += '<span class="ma-nav-badge" data-ma-cart-count hidden></span>';

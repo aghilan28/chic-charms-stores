@@ -479,7 +479,7 @@
       '<nav class="cc-app-menu-list">' + rows.map(function (row) {
         return '<a href="index.html#bestsellers" data-final-category="' + row[2] + '"><img src="' + row[3] + '" alt="" loading="lazy" decoding="async"><span><b>' + row[0] + '</b><em>' + row[1] + '</em></span>' + icon("arrow") + '</a>';
       }).join("") + '</nav>',
-      '<div class="cc-app-menu-foot"><a href="account.html">' + icon("account") + '<span>My Account</span></a><a href="cart.html">' + icon("bag") + '<span>Cart</span></a><a href="contact.html"><span>Support</span></a></div>'
+      '<div class="cc-app-menu-foot"><a href="account.html">' + icon("account") + '<span>My Account</span></a><a href="#" data-cc-app-cart="true">' + icon("bag") + '<span>Cart</span></a><a href="contact.html"><span>Support</span></a></div>'
     ].join("");
     document.body.appendChild(backdrop);
     document.body.appendChild(drawer);
@@ -592,7 +592,7 @@
       /* Trust strip */
       '<div class="cc-app-cart-trust" style="padding:8px 16px;flex:0 0 auto;"><span>Secure checkout</span><span>COD available</span><span>7-day returns</span></div>',
       /* Checkout button — sticky footer */
-      '<a class="cc-app-checkout" href="checkout.html"><span>Checkout</span><strong>Rs.' + subtotal + '</strong></a>'
+      '<a class="cc-app-checkout" href="delivery-method.html"><span>Checkout</span><strong>Rs.' + subtotal + '</strong></a>'
     ].join("");
   }
 

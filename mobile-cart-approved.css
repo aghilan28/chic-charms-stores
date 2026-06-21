@@ -1,0 +1,633 @@
+/* ============================================================
+   Chic Charms — Approved Cart Page Mobile Replacement
+   This file is intentionally mobile-only. On phones, it makes the
+   approved cart app the ONLY visible body child, so legacy/broken
+   cart/nav/footer/mobile-conversion elements cannot appear.
+   ============================================================ */
+
+@media (min-width: 768px) {
+  #ccApprovedCartMobile { display: none !important; }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --ccap-background: #fff8f7;
+    --ccap-surface: #fff8f7;
+    --ccap-surface-container: #f6eceb;
+    --ccap-surface-high: #f0e6e5;
+    --ccap-surface-highest: #eae0e0;
+    --ccap-on-surface: #1f1a1b;
+    --ccap-charcoal: #2f2a2a;
+    --ccap-muted: #534346;
+    --ccap-outline: #857276;
+    --ccap-outline-variant: #d7c1c5;
+    --ccap-primary: #8e4559;
+    --ccap-approved-rose: #b5657a;
+    --ccap-primary-container: #ab5d71;
+    --ccap-tertiary-container: #af5975;
+  }
+
+  html,
+  body {
+    margin: 0 !important;
+    min-width: 0 !important;
+    overflow-x: hidden !important;
+    background: var(--ccap-background) !important;
+  }
+
+  /* Critical: hide every old cart/page element on mobile. */
+  body > :not(#ccApprovedCartMobile):not(script):not(style) {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  #ccApprovedCartMobile {
+    display: block !important;
+    visibility: visible !important;
+    min-height: max(884px, 100dvh);
+    padding: 0 0 calc(100px + env(safe-area-inset-bottom, 0px));
+    background: var(--ccap-background);
+    color: var(--ccap-on-surface);
+    font-family: "Plus Jakarta Sans", "Jost", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  #ccApprovedCartMobile *,
+  #ccApprovedCartMobile *::before,
+  #ccApprovedCartMobile *::after {
+    box-sizing: border-box;
+  }
+
+  .ccap-announcement {
+    position: sticky;
+    top: 0;
+    z-index: 10000;
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ccap-approved-rose);
+    color: #fff;
+  }
+
+  .ccap-announcement span {
+    color: #fff;
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .ccap-header {
+    position: sticky;
+    top: 40px;
+    z-index: 9999;
+    width: 100%;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    background: rgba(255, 248, 247, 0.98);
+    border-bottom: 1px solid var(--ccap-outline-variant);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+  }
+
+  .ccap-icon-button,
+  .ccap-bag-link {
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ccap-muted);
+    text-decoration: none;
+    cursor: pointer;
+    touch-action: manipulation;
+    padding: 0;
+  }
+
+  .ccap-icon-button:active,
+  .ccap-bag-link:active,
+  .ccap-qty button:active,
+  .ccap-remove:active,
+  .ccap-checkout-btn:active {
+    transform: scale(0.96);
+  }
+
+  .ccap-svg {
+    width: 24px;
+    height: 24px;
+    stroke: currentColor;
+    stroke-width: 1.9;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .ccap-brand {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    color: var(--ccap-primary);
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 24px;
+    line-height: 32px;
+    font-weight: 500;
+    letter-spacing: 0.20em;
+    white-space: nowrap;
+  }
+
+  .ccap-bag-link {
+    position: relative;
+    margin-left: auto;
+    color: var(--ccap-primary);
+  }
+
+  .ccap-bag-count {
+    position: absolute;
+    top: 4px;
+    right: 2px;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: 999px;
+    background: var(--ccap-primary);
+    color: #fff;
+    font-size: 10px;
+    line-height: 16px;
+    font-weight: 800;
+    text-align: center;
+  }
+
+  .ccap-page-title {
+    padding: 32px 24px;
+  }
+
+  .ccap-page-title h1 {
+    margin: 0;
+    color: var(--ccap-charcoal);
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 28px;
+    line-height: 36px;
+    font-weight: 500;
+  }
+
+  .ccap-page-title p {
+    margin: 8px 0 0;
+    color: rgba(83, 67, 70, 0.72);
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .ccap-section {
+    padding-left: 24px;
+    padding-right: 24px;
+    margin-bottom: 48px;
+  }
+
+  .ccap-items {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .ccap-item {
+    display: flex;
+    gap: 24px;
+    min-width: 0;
+    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    animation: ccapFadeIn 0.32s ease both;
+  }
+
+  @keyframes ccapFadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .ccap-item-image {
+    width: 120px;
+    height: 140px;
+    flex: 0 0 120px;
+    overflow: hidden;
+    border-radius: 4px;
+    background: var(--ccap-surface-container);
+  }
+
+  .ccap-item-image img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
+
+  .ccap-item-body {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 4px 0;
+  }
+
+  .ccap-item-name {
+    margin: 0;
+    color: var(--ccap-on-surface);
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 18px;
+    line-height: 28px;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+  }
+
+  .ccap-item-variant {
+    margin: 4px 0 0;
+    color: rgba(83, 67, 70, 0.70);
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .ccap-item-price {
+    margin: 8px 0 0;
+    color: var(--ccap-primary);
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 800;
+  }
+
+  .ccap-stock-note {
+    display: block;
+    margin-top: 3px;
+    color: #c0392b;
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 700;
+  }
+
+  .ccap-item-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  .ccap-qty {
+    min-height: 34px;
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    padding: 4px 8px;
+    border: 1px solid var(--ccap-outline-variant);
+    border-radius: 999px;
+    background: rgba(255, 248, 247, 0.52);
+  }
+
+  .ccap-qty button {
+    width: 26px;
+    height: 26px;
+    border: 0;
+    background: transparent;
+    border-radius: 999px;
+    color: var(--ccap-primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .ccap-qty button:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .ccap-qty span {
+    width: 16px;
+    color: var(--ccap-on-surface);
+    text-align: center;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 700;
+  }
+
+  .ccap-remove {
+    border: 0;
+    background: transparent;
+    color: var(--ccap-tertiary-container);
+    padding: 10px 0 10px 8px;
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .ccap-summary {
+    display: grid;
+    gap: 16px;
+  }
+
+  .ccap-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    color: var(--ccap-muted);
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .ccap-row strong { color: var(--ccap-on-surface); font-weight: 500; }
+  .ccap-row .ccap-free,
+  .ccap-delivery-note {
+    color: var(--ccap-primary);
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 800;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    text-align: right;
+  }
+
+  .ccap-total-row {
+    padding-top: 16px;
+    border-top: 1px solid var(--ccap-outline-variant);
+    color: var(--ccap-on-surface);
+  }
+
+  .ccap-total-row span,
+  .ccap-total-row strong {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 24px;
+    line-height: 32px;
+    font-weight: 500;
+  }
+
+  .ccap-look { margin-bottom: 48px; }
+
+  .ccap-look-head {
+    padding: 0 24px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .ccap-look-head h2 {
+    margin: 0;
+    color: var(--ccap-on-surface);
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 24px;
+    line-height: 32px;
+    font-weight: 500;
+  }
+
+  .ccap-look-scroller {
+    display: flex;
+    gap: 24px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0 24px 4px;
+  }
+
+  .ccap-look-scroller::-webkit-scrollbar { display: none; }
+
+
+  .ccap-reco-loading,
+  .ccap-reco-empty {
+    width: calc(100vw - 48px);
+    flex: 0 0 calc(100vw - 48px);
+    padding: 22px;
+    border: 1px solid var(--ccap-outline-variant);
+    border-radius: 8px;
+    background: linear-gradient(135deg, #fffbff 0%, #fcf1f1 100%);
+    color: rgba(83, 67, 70, 0.76);
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  .ccap-look-card {
+    width: 240px;
+    flex: 0 0 240px;
+    scroll-snap-align: start;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .ccap-look-image {
+    position: relative;
+    aspect-ratio: 4/5;
+    overflow: hidden;
+    border-radius: 8px;
+    background: var(--ccap-surface-container);
+  }
+
+  .ccap-look-image img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
+
+  .ccap-fav {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.82);
+    color: var(--ccap-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  .ccap-look-card h3 {
+    margin: 16px 0 4px;
+    color: var(--ccap-on-surface);
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 600;
+  }
+
+  .ccap-look-card p {
+    margin: 0;
+    color: var(--ccap-primary);
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 800;
+  }
+
+  .ccap-sticky {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10001;
+    min-height: 100px;
+    padding: 16px 24px calc(16px + env(safe-area-inset-bottom, 0px));
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    background: rgba(255, 248, 247, 0.98);
+    border-top: 1px solid var(--ccap-outline-variant);
+    box-shadow: 0 -4px 20px rgba(142, 69, 89, 0.05);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+  }
+
+  .ccap-sticky-label {
+    display: block;
+    color: var(--ccap-muted);
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 700;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+  }
+
+  .ccap-sticky-amount {
+    display: block;
+    color: var(--ccap-primary);
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 24px;
+    line-height: 32px;
+    font-weight: 500;
+  }
+
+  .ccap-checkout-btn {
+    flex: 0 0 auto;
+    min-height: 52px;
+    border: 0;
+    border-radius: 8px;
+    background: var(--ccap-approved-rose);
+    color: #fff;
+    padding: 16px 20px;
+    font-size: 13px;
+    line-height: 20px;
+    font-weight: 800;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 10px 24px rgba(181, 101, 122, 0.22);
+    white-space: nowrap;
+  }
+
+  .ccap-empty {
+    display: none;
+    margin: 0 24px 48px;
+    padding: 56px 24px;
+    border: 1px solid var(--ccap-outline-variant);
+    border-radius: 8px;
+    background: linear-gradient(135deg, #fffbff 0%, #fcf1f1 100%);
+    text-align: center;
+  }
+
+  .ccap-empty.is-visible { display: block; }
+
+  .ccap-empty-symbol {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 18px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffd9e0;
+    color: var(--ccap-primary);
+  }
+
+  .ccap-empty h2 {
+    margin: 0 0 8px;
+    color: var(--ccap-charcoal);
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 28px;
+    line-height: 36px;
+    font-weight: 500;
+  }
+
+  .ccap-empty p {
+    margin: 0 0 24px;
+    color: var(--ccap-muted);
+    font-size: 15px;
+    line-height: 24px;
+  }
+
+  .ccap-empty a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 14px 20px;
+    border-radius: 8px;
+    background: var(--ccap-approved-rose);
+    color: #fff;
+    text-decoration: none;
+    font-size: 13px;
+    line-height: 20px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .ccap-hide-when-empty.is-empty,
+  .ccap-sticky.is-empty { display: none !important; }
+
+  .ccap-toast {
+    position: fixed;
+    left: 24px;
+    right: 24px;
+    bottom: calc(112px + env(safe-area-inset-bottom, 0px));
+    z-index: 10003;
+    padding: 13px 16px;
+    border-radius: 999px;
+    background: #342f2f;
+    color: #fff;
+    text-align: center;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 700;
+    box-shadow: 0 10px 28px rgba(31, 26, 27, 0.18);
+    opacity: 0;
+    transform: translateY(14px);
+    pointer-events: none;
+    transition: opacity 220ms ease, transform 220ms ease;
+  }
+
+  .ccap-toast.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 374px) {
+    .ccap-header,
+    .ccap-page-title,
+    .ccap-section,
+    .ccap-look-head,
+    .ccap-look-scroller,
+    .ccap-sticky { padding-left: 18px; padding-right: 18px; }
+    .ccap-brand { font-size: 21px; letter-spacing: 0.16em; }
+    .ccap-item { gap: 16px; }
+    .ccap-item-image { width: 104px; height: 126px; flex-basis: 104px; }
+    .ccap-checkout-btn { padding-left: 14px; padding-right: 14px; font-size: 12px; }
+  }
+}

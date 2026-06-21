@@ -80,7 +80,7 @@ export function setupAuthUI() {
            </span>
          </a>
          ${adminLink}
-         <a href="cart.html" class="d7-icon-btn d7-cart-btn" aria-label="Cart" title="Cart">
+         <a href="#" data-cc-app-cart="true" class="d7-icon-btn d7-cart-btn" aria-label="Cart" title="Cart">
            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
              <line x1="3" y1="6" x2="21" y2="6"/>
@@ -101,7 +101,7 @@ export function setupAuthUI() {
          </button>`;
     } else {
       nav.innerHTML =
-        `<a href="cart.html" class="d7-icon-btn d7-cart-btn" aria-label="Cart" title="Cart">
+        `<a href="#" data-cc-app-cart="true" class="d7-icon-btn d7-cart-btn" aria-label="Cart" title="Cart">
            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
              <line x1="3" y1="6" x2="21" y2="6"/>

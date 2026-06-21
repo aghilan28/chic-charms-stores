@@ -1,5 +1,5 @@
 Folder PATH listing for volume OS
-Volume serial number is 000000FC 368E:D4C2
+Volume serial number is 0000006C 368E:D4C2
 C:.
 |   .firebaserc
 |   .gitignore
@@ -122,8 +122,11 @@ C:.
 |   qa2-cart-footer-empty.png
 |   qa2-product-mobile.png
 |   razorpay-demo.js
+|   README.md
 |   returns.html
 |   script.js
+|   search-results.html
+|   search.html
 |   serve.json
 |   shipping.html
 |   shop.html
@@ -131,6 +134,7 @@ C:.
 |   styles.css
 |   terms.html
 |   USER_SYSTEM.md
+|   wishlist.html
 |   _desktop-restored.png
 |   
 +---.firebase
