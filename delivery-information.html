@@ -46,7 +46,7 @@
       var applyCouponBtn=document.getElementById('applyCouponBtn');
       var activeCoupon=null;
 
-      function route(name){return location.protocol==='file:' ? name+'.html' : '/'+name;}
+      function route(name){return name+'.html';}
       function cart(){try{return JSON.parse(localStorage.getItem('cart')||'[]')||[]}catch(e){return[]}}
       function money(n){return '₹'+Number(n||0).toLocaleString('en-IN')}
       function totals(){var c=cart();var subtotal=c.reduce(function(s,i){return s+(Number(i.price)||0)*(Number(i.quantity)||1)},0);var qty=c.reduce(function(s,i){return s+(Number(i.quantity)||1)},0);return{items:c,qty:qty,subtotal:subtotal,shipping:subtotal>=399?0:49,total:subtotal+(subtotal>=399?0:49)}}
