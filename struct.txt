@@ -1,8 +1,10 @@
 Folder PATH listing for volume OS
-Volume serial number is 0000001A 368E:D4C2
+Volume serial number is 000000FC 368E:D4C2
 C:.
 |   .firebaserc
 |   .gitignore
+|   01-mobile-ux-forensic-audit.md
+|   02-comprehensive-reports.md
 |   404.html
 |   about.html
 |   account-mobile-after-fix.png
@@ -42,6 +44,8 @@ C:.
 |   check-shop-desktop.png
 |   checkout-prefill.js
 |   checkout.html
+|   chic-charms-mobile-approved.css
+|   chic-charms-mobile-approved.js
 |   confirmation.html
 |   contact.html
 |   d10-luxury-motion.css
@@ -81,6 +85,7 @@ C:.
 |   IMAGE_FILENAME_MAP.md
 |   index.html
 |   INTEGRATION_INSTRUCTIONS.md
+|   INTEGRATION_README.md
 |   mobile-app.css
 |   mobile-app.js
 |   mobile-authority-check.png
@@ -90,11 +95,14 @@ C:.
 |   mobile-check.png
 |   mobile-commerce.css
 |   mobile-commerce.js
+|   mobile-comprehensive.css
 |   mobile-fixes.css
 |   mobile-fixes.js
+|   mobile-home.html
 |   mobile-phase2.css
 |   mobile-phase2.js
 |   mobile-phase3.css
+|   mobile-product.css
 |   mobile.css
 |   PATCH_admin.html.md
 |   PATCH_product.html.md
@@ -119,7 +127,7 @@ C:.
 |   serve.json
 |   shipping.html
 |   shop.html
-|   STC.txt
+|   struct.txt
 |   styles.css
 |   terms.html
 |   USER_SYSTEM.md

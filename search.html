@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Search • Chic Charms</title>
+<meta name="description" content="Search Chic Charms premium Indian jewellery – pearls, hoops, studs, Korean edits."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&display=swap" rel="stylesheet"/>
+
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "secondary-fixed-dim": "#d1c4bc",
+          "surface-container-highest": "#eae0e0",
+          "surface-dim": "#e1d8d7",
+          "on-primary-fixed-variant": "#743044",
+          "error": "#ba1a1a",
+          "surface-bright": "#fff8f7",
+          "surface": "#fff8f7",
+          "primary-fixed": "#ffd9e0",
+          "on-error": "#ffffff",
+          "surface-variant": "#eae0e0",
+          "surface-container-lowest": "#ffffff",
+          "tertiary-container": "#af5975",
+          "on-primary": "#ffffff",
+          "primary-container": "#ab5d71",
+          "secondary-fixed": "#eee0d7",
+          "error-container": "#ffdad6",
+          "primary-fixed-dim": "#ffb1c3",
+          "on-primary-container": "#fffbff",
+          "on-secondary-fixed-variant": "#4e453f",
+          "surface-container-low": "#fcf1f1",
+          "surface-container-high": "#f0e6e5",
+          "surface-container": "#f6eceb",
+          "on-surface-variant": "#534346",
+          "primary": "#8e4559",
+          "on-tertiary-fixed-variant": "#772c47",
+          "outline-variant": "#d7c1c5",
+          "on-secondary-fixed": "#211a15",
+          "tertiary": "#92415c",
+          "on-secondary": "#ffffff",
+          "on-surface": "#1f1a1b",
+          "on-background": "#1f1a1b",
+          "on-secondary-container": "#6c635c",
+          "secondary-container": "#eee0d7",
+          "on-tertiary-container": "#fffbff",
+          "background": "#fff8f7",
+          "inverse-surface": "#342f2f",
+          "on-tertiary": "#ffffff",
+          "on-tertiary-fixed": "#3f001c",
+          "tertiary-fixed": "#ffd9e1",
+          "on-error-container": "#93000a",
+          "surface-tint": "#90475b",
+          "inverse-primary": "#ffb1c3",
+          "tertiary-fixed-dim": "#ffb1c6",
+          "inverse-on-surface": "#f9eeee",
+          "on-primary-fixed": "#3c0419",
+          "secondary": "#665d56",
+          "outline": "#857276",
+          "brand-rose": "#B5657A",
+          "brand-rose-deep": "#9F4C67",
+          "shop-ink": "#211816"
+        },
+        borderRadius: {
+          DEFAULT: "0.25rem",
+          lg: "0.5rem",
+          xl: "0.75rem",
+          full: "9999px"
+        },
+        fontFamily: {
+          "display": ["Playfair Display", "Georgia", "serif"],
+          "ui": ["Jost", "system-ui", "sans-serif"]
+        }
+      }
+    }
+  }
+</script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    background: #fff8f7;
+    color: #1f1a1b;
+    font-family: "Jost", system-ui, sans-serif;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+    line-height: 1;
+  }
+  button, a { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+  img { display: block; max-width: 100%; }
+  .hide-scrollbar::-webkit-scrollbar { display: none; }
+  .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* Mobile shell - keeps the design mobile-first, centers on desktop */
+  .mobile-shell {
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto;
+    min-height: 100dvh;
+    background: #fff8f7;
+    position: relative;
+    box-shadow: 0 0 40px rgba(143,69,89,0.06);
+  }
+  @media (min-width: 768px) {
+    body { background: #f6eceb; }
+    .mobile-shell { box-shadow: 0 8px 48px rgba(47,42,42,0.10); }
+    .desktop-hint {
+      display: block;
+      text-align: center;
+      padding: 10px 16px;
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #857276;
+      background: #fcf1f1;
+      border-bottom: 1px solid #d7c1c5;
+    }
+  }
+  @media (max-width: 767px) { .desktop-hint { display: none; } }
+
+  /* Stagger in */
+  .stagger-in > * { opacity: 0; transform: translateY(10px); animation: staggerFadeIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+  .stagger-in > *:nth-child(1) { animation-delay: 0.05s; }
+  .stagger-in > *:nth-child(2) { animation-delay: 0.12s; }
+  .stagger-in > *:nth-child(3) { animation-delay: 0.19s; }
+  .stagger-in > *:nth-child(4) { animation-delay: 0.26s; }
+  .stagger-in > *:nth-child(5) { animation-delay: 0.33s; }
+  @keyframes staggerFadeIn { to { opacity: 1; transform: translateY(0); } }
+  @media (prefers-reduced-motion: reduce) {
+    .stagger-in > * { animation: none; opacity: 1; transform: none; }
+  }
+
+  /* Search input */
+  .search-underline-input {
+    width: 100%;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid #d7c1c5;
+    padding: 14px 36px 14px 2px;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 20px;
+    color: #1f1a1b;
+    outline: none;
+    transition: border-color .25s;
+  }
+  .search-underline-input::placeholder { color: #857276; opacity: .9; }
+  .search-underline-input:focus { border-color: #8e4559; }
+
+  /* Chips */
+  .pill-rose {
+    padding: 8px 16px;
+    background: #fcf1f1;
+    border: 1px solid rgba(215,193,197,0.7);
+    color: #B5657A;
+    font-family: "Jost", sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    border-radius: 9999px;
+    transition: all .18s;
+    white-space: nowrap;
+  }
+  .pill-rose:hover, .pill-rose:active { background: rgba(255,177,195,0.16); }
+
+  /* Category card */
+  .cat-card {
+    position: relative;
+    aspect-ratio: 3/4;
+    overflow: hidden;
+    border-radius: 8px;
+    background: #eae0e0;
+    cursor: pointer;
+  }
+  .cat-card img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.22,1,.36,1); }
+  .cat-card:hover img { transform: scale(1.06); }
+  .cat-card .cat-label {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 14px 10px;
+    background: linear-gradient(to top, rgba(0,0,0,.58), transparent);
+    color: #fff;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 17px;
+    text-align: center;
+  }
+
+  /* Trending product card */
+  .trend-card { width: 68vw; max-width: 240px; flex: 0 0 auto; scroll-snap-align: start; }
+  .trend-media {
+    position: relative; aspect-ratio: 4/5; background: #f6eceb; overflow: hidden; margin-bottom: 10px;
+    border-radius: 6px;
+  }
+  .trend-media img { width:100%; height:100%; object-fit: cover; }
+  .wish-btn {
+    position: absolute; top: 10px; right: 10px;
+    width: 38px; height: 38px; border-radius: 50%;
+    background: rgba(255,248,247,0.88);
+    display: grid; place-items: center;
+    border: 0; color: #1f1a1b; transition: all .2s;
+  }
+  .wish-btn.liked { background: #8e4559; color: #fff; }
+  .wish-btn .material-symbols-outlined { font-size: 20px; font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+  .wish-btn.liked .material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+
+  /* Bottom nav */
+  .bottom-nav {
+    position: fixed;
+    left: 50%; transform: translateX(-50%);
+    bottom: 0;
+    width: 100%;
+    max-width: 440px;
+    z-index: 60;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+    background: rgba(255,248,247,0.94);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(215,193,197,0.5);
+  }
+  .bottom-nav a {
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    padding: 6px 14px; color: #534346; text-decoration: none; border-radius: 999px;
+    font-size: 11px; font-weight: 500;
+    transition: color .15s;
+  }
+  .bottom-nav a.active { color: #8e4559; background: rgba(171,93,113,0.10); }
+  .bottom-nav .material-symbols-outlined { font-size: 24px; }
+
+  /* Live suggestions dropdown */
+  .suggest-box {
+    position: absolute; left:0; right:0; top:100%;
+    background: #fff;
+    border: 1px solid #e1d8d7;
+    border-radius: 10px;
+    box-shadow: 0 14px 40px rgba(47,42,42,0.08);
+    margin-top: 8px;
+    overflow: hidden;
+    z-index: 40;
+    display: none;
+  }
+  .suggest-box.open { display: block; }
+  .suggest-item {
+    padding: 12px 14px; font-size: 14px; cursor: pointer;
+    border-bottom: 1px solid #f6eceb; display: flex; justify-content: space-between; align-items: center;
+  }
+  .suggest-item:last-child { border-bottom: 0; }
+  .suggest-item:hover { background: #fff8f7; }
+
+  /* Toast reuse – matches script.js #cartToast */
+  #cartToast {
+    position: fixed; left: 50%; transform: translateX(-50%) translateY(20px);
+    bottom: calc(84px + env(safe-area-inset-bottom, 0px));
+    background: #1f1a1b; color: #fff; padding: 12px 18px; border-radius: 999px;
+    font-size: 13px; font-weight: 500; z-index: 100;
+    opacity: 0; pointer-events: none; transition: all .28s cubic-bezier(.22,1,.36,1);
+    white-space: nowrap; max-width: calc(100vw - 32px); overflow: hidden; text-overflow: ellipsis;
+  }
+  #cartToast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* Recent search chip */
+  .recent-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #f6eceb; padding: 6px 12px; border-radius: 999px;
+    font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: #534346;
+    cursor: pointer;
+  }
+  .recent-chip button { background: none; border: 0; padding: 0; color: #857276; cursor: pointer; line-height: 1; }
+</style>
+</head>
+<body class="bg-background text-on-surface font-ui">
+
+<div class="mobile-shell">
+  <div class="desktop-hint">Search – Mobile UI · Chic Charms · 390×844 optimized</div>
+
+  <!-- Announcement -->
+  <div class="h-[40px] bg-brand-rose flex items-center justify-center">
+    <p class="text-[11px] font-ui font-semibold text-white tracking-[0.18em] uppercase">Free shipping on ₹399+</p>
+  </div>
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 h-[68px] bg-surface/85 backdrop-blur-md flex items-center px-5 border-b border-outline-variant/40" style="backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);">
+    <button id="menuBtn" class="flex items-center justify-center p-2 -ml-2 text-on-surface" aria-label="Menu">
+      <span class="material-symbols-outlined text-[26px]">menu</span>
+    </button>
+    <h1 class="absolute left-1/2 -translate-x-1/2 font-display text-[28px] text-primary tracking-tight whitespace-nowrap">Chic Charms</h1>
+    <div class="ml-auto">
+      <a href="shop.html" class="flex items-center justify-center p-2 -mr-2 text-on-surface" aria-label="Close search">
+        <span class="material-symbols-outlined text-[26px]">close</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="pb-[110px]">
+    <!-- Search Input -->
+    <section class="px-5 pt-8 pb-4 stagger-in">
+      <div class="relative">
+        <input id="searchInput"
+          class="search-underline-input"
+          type="search"
+          placeholder="Search for earrings, collections and styles"
+          autocomplete="off"
+          enterkeyhint="search"
+          autofocus />
+        <button id="searchGoBtn" class="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-outline hover:text-primary" aria-label="Search">
+          <span class="material-symbols-outlined">search</span>
+        </button>
+        <div class="absolute bottom-0 left-0 w-0 h-[1.5px] bg-primary transition-all duration-500" id="searchFocusBar"></div>
+
+        <!-- Live suggestions -->
+        <div id="suggestBox" class="suggest-box" role="listbox" aria-label="Search suggestions"></div>
+      </div>
+      <p class="text-[12px] text-on-surface-variant mt-3">Tip: try “pearl”, “hoops”, “korean”</p>
+    </section>
+
+    <!-- Recent Searches -->
+    <section class="px-5 py-3 stagger-in" id="recentWrap" style="display:none">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-[11px] uppercase tracking-widest text-outline font-semibold">Recent</span>
+        <button id="clearRecentBtn" class="text-[11px] text-primary font-medium">Clear</button>
+      </div>
+      <div id="recentList" class="flex flex-wrap gap-2"></div>
+    </section>
+
+    <!-- Popular Searches -->
+    <section class="px-5 py-7 stagger-in">
+      <h2 class="font-display text-[22px] text-on-surface mb-4">Popular Searches</h2>
+      <div id="popularChips" class="flex flex-wrap gap-2.5">
+        <!-- injected -->
+      </div>
+    </section>
+
+    <!-- Shop By Category -->
+    <section class="px-5 py-7 stagger-in">
+      <h2 class="font-display text-[22px] text-on-surface mb-4">Shop By Category</h2>
+      <div class="grid grid-cols-2 gap-3" id="categoryGrid">
+        <!-- injected -->
+      </div>
+    </section>
+
+    <!-- Trending Now -->
+    <section class="py-7 stagger-in overflow-hidden">
+      <div class="px-5 flex items-center justify-between mb-4">
+        <h2 class="font-display text-[22px] text-on-surface">Trending Now</h2>
+        <a href="shop.html?sort=bestseller" class="text-[12px] font-semibold text-primary tracking-wider uppercase">View all</a>
+      </div>
+      <div id="trendingRow" class="flex overflow-x-auto hide-scrollbar snap-x snap-mandatory gap-3 px-5" style="scroll-padding-inline:20px;">
+        <!-- JS fills -->
+        <div id="trendingSkeleton" class="flex gap-3">
+          <div class="trend-card"><div class="trend-media bg-surface-container animate-pulse"></div><div class="h-3 bg-surface-container rounded w-2/3 mb-2"></div><div class="h-4 bg-surface-container rounded w-1/2"></div></div>
+          <div class="trend-card"><div class="trend-media bg-surface-container animate-pulse"></div><div class="h-3 bg-surface-container rounded w-2/3 mb-2"></div><div class="h-4 bg-surface-container rounded w-1/2"></div></div>
+        </div>
+      </div>
+      <p id="trendingStatus" class="px-5 text-sm text-on-surface-variant mt-3" style="display:none;"></p>
+    </section>
+
+    <!-- SEO footer block -->
+    <section class="px-5 py-8 border-t border-outline-variant/40 mt-2">
+      <p class="text-[11px] uppercase tracking-widest text-primary font-semibold mb-2">Chic Charms Search</p>
+      <p class="text-[14px] leading-relaxed text-on-surface-variant">Fast mobile discovery for daily wear, gifting, and soft statement earrings. COD available · Ships in 24h · Skin-friendly finish.</p>
+      <div class="flex flex-wrap gap-x-4 gap-y-1 mt-4 text-[12px] text-outline">
+        <a href="about.html" class="hover:text-primary">About</a>
+        <a href="shipping.html" class="hover:text-primary">Shipping</a>
+        <a href="returns.html" class="hover:text-primary">Returns</a>
+        <a href="contact.html" class="hover:text-primary">Contact</a>
+        <a href="privacy.html" class="hover:text-primary">Privacy</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Bottom Nav – matches shop.html -->
+  <nav class="bottom-nav" aria-label="Primary">
+    <a href="index.html">
+      <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 0">home</span>
+      <span>Home</span>
+    </a>
+    <a href="search.html" class="active">
+      <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">search</span>
+      <span>Search</span>
+    </a>
+    <a href="shop.html#bestsellers" id="wishlistTab">
+      <span class="material-symbols-outlined">favorite</span>
+      <span>Wishlist</span>
+    </a>
+    <a href="cart.html">
+      <span class="material-symbols-outlined">shopping_bag</span>
+      <span>Bag</span>
+    </a>
+    <a href="account.html">
+      <span class="material-symbols-outlined">person</span>
+      <span>Account</span>
+    </a>
+  </nav>
+</div>
+
+<!-- Cart toast – compatible with script.js -->
+<div id="cartToast" role="status" aria-live="polite"></div>
+
+<!-- Main site script – gives you addToCartWithId, cart toast, etc. -->
+<script src="script.js" defer></script>
+
+<script>
+/* ============================================================
+   Chic Charms – Search Discovery (Mobile)
+   Wired to Firestore – chic-charms-store
+   ============================================================ */
+(function(){
+'use strict';
+
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyA5Bh77_4HE3yQF0hi5ddvbFLZC7rEerxg",
+  projectId: "chic-charms-store"
+};
+
+const POPULAR_SEARCHES = [
+  "Pearl Earrings",
+  "Gold Hoops",
+  "Stud Earrings",
+  "Drop Earrings",
+  "Statement Earrings",
+  "Minimal Earrings"
+];
+
+// Categories – map to your shop.html filters, with local images
+const CATEGORIES = [
+  { label: "Stud Earrings",  category: "everyday-elegance", img: "images/editorial-minimal-soul-closeup.png", alt: "Stud earrings" },
+  { label: "Hoop Earrings",  category: "everyday-elegance", img: "images/editorial-everyday-hoops.png", alt: "Hoop earrings" },
+  { label: "Drop Earrings",  category: "modern-romance",   img: "images/story-soft-pearl-drop.png", alt: "Drop earrings" },
+  { label: "Statement",      category: "after-dark",       img: "images/style-after-dark.png", alt: "Statement earrings" }
+];
+
+const searchInput = document.getElementById('searchInput');
+const searchGoBtn = document.getElementById('searchGoBtn');
+const suggestBox = document.getElementById('suggestBox');
+const recentWrap = document.getElementById('recentWrap');
+const recentList = document.getElementById('recentList');
+const clearRecentBtn = document.getElementById('clearRecentBtn');
+
+const RECENT_KEY = 'cc_recent_searches';
+function getRecent(){ try { return JSON.parse(localStorage.getItem(RECENT_KEY)||'[]'); } catch(e){ return []; } }
+function saveRecent(term){
+  term = (term||'').trim(); if(!term) return;
+  let r = getRecent().filter(t => t.toLowerCase() !== term.toLowerCase());
+  r.unshift(term);
+  localStorage.setItem(RECENT_KEY, JSON.stringify(r.slice(0,6)));
+  renderRecent();
+}
+function removeRecent(term){
+  let r = getRecent().filter(t => t !== term);
+  localStorage.setItem(RECENT_KEY, JSON.stringify(r));
+  renderRecent();
+}
+function renderRecent(){
+  const r = getRecent();
+  if(!r.length){ recentWrap.style.display='none'; return; }
+  recentWrap.style.display='block';
+  recentList.innerHTML = r.map(t => `
+    <span class="recent-chip" data-term="${escAttr(t)}">
+      <span class="rc-label">${escHtml(t)}</span>
+      <button type="button" class="rc-del" aria-label="Remove">×</button>
+    </span>
+  `).join('');
+  recentList.querySelectorAll('.recent-chip').forEach(chip=>{
+    const term = chip.dataset.term;
+    chip.querySelector('.rc-label').addEventListener('click', ()=> runSearch(term));
+    chip.querySelector('.rc-del').addEventListener('click', (e)=>{ e.stopPropagation(); removeRecent(term); });
+  });
+}
+clearRecentBtn.addEventListener('click', ()=>{ localStorage.removeItem(RECENT_KEY); renderRecent(); });
+renderRecent();
+
+// Popular chips
+const popularEl = document.getElementById('popularChips');
+popularEl.innerHTML = POPULAR_SEARCHES.map(s =>
+  `<button class="pill-rose" data-q="${escAttr(s)}">${escHtml(s)}</button>`
+).join('');
+popularEl.querySelectorAll('button').forEach(b => b.addEventListener('click', ()=> runSearch(b.dataset.q)));
+
+// Categories
+const catGrid = document.getElementById('categoryGrid');
+catGrid.innerHTML = CATEGORIES.map(c => `
+  <div class="cat-card" data-category="${escAttr(c.category)}" data-label="${escAttr(c.label)}" role="button" tabindex="0">
+    <img src="${escAttr(c.img)}" alt="${escAttr(c.alt)}" loading="lazy" onerror="this.style.opacity=.6">
+    <div class="cat-label">${escHtml(c.label)}</div>
+  </div>
+`).join('');
+catGrid.querySelectorAll('.cat-card').forEach(el=>{
+  const go = ()=> { window.location.href = 'shop.html?category=' + encodeURIComponent(el.dataset.category); };
+  el.addEventListener('click', go);
+  el.addEventListener('keydown', e=> { if(e.key==='Enter') go(); });
+});
+
+// Search execution
+function runSearch(q){
+  q = (q||searchInput.value||'').trim();
+  if(!q){ searchInput.focus(); return; }
+  saveRecent(q);
+  window.location.href = 'shop.html?q=' + encodeURIComponent(q);
+}
+searchGoBtn.addEventListener('click', ()=> runSearch());
+searchInput.addEventListener('keydown', e=> { if(e.key==='Enter'){ e.preventDefault(); runSearch(); } });
+
+// Search focus bar animation
+searchInput.addEventListener('focus', ()=> { document.getElementById('searchFocusBar').style.width='100%'; });
+searchInput.addEventListener('blur', ()=> { setTimeout(()=> { document.getElementById('searchFocusBar').style.width='0'; suggestBox.classList.remove('open'); }, 150); });
+
+// Live suggestions (local + from trending cache)
+let trendingCache = [];
+function updateSuggestions(val){
+  val = val.trim().toLowerCase();
+  if(!val){ suggestBox.classList.remove('open'); return; }
+  const pool = [...POPULAR_SEARCHES, ...getRecent(), ...trendingCache.map(p=>p.name)];
+  const uniq = [...new Set(pool)];
+  const hits = uniq.filter(s => s.toLowerCase().includes(val)).slice(0,6);
+  if(!hits.length){ suggestBox.classList.remove('open'); return; }
+  suggestBox.innerHTML = hits.map(h=>`<div class="suggest-item" data-q="${escAttr(h)}">${escHtml(h)} <span class="material-symbols-outlined text-[18px] text-outline">north_west</span></div>`).join('');
+  suggestBox.classList.add('open');
+  suggestBox.querySelectorAll('.suggest-item').forEach(it=> it.addEventListener('mousedown', e=>{ e.preventDefault(); runSearch(it.dataset.q); }));
+}
+let suggestTimer;
+searchInput.addEventListener('input', ()=>{
+  clearTimeout(suggestTimer);
+  suggestTimer = setTimeout(()=> updateSuggestions(searchInput.value), 120);
+});
+searchInput.addEventListener('focus', ()=> updateSuggestions(searchInput.value));
+
+/* ---------- Trending products – Firestore ---------- */
+const trendingRow = document.getElementById('trendingRow');
+const trendingStatus = document.getElementById('trendingStatus');
+
+function parseFirestoreProduct(doc){
+  const f = doc.fields || {};
+  const gv = k => f[k]?.stringValue ?? f[k]?.integerValue ?? f[k]?.doubleValue ?? null;
+  const name = gv('name') || 'Chic Charms Piece';
+  const price = Number(gv('price') || 0);
+  const image = gv('image') || gv('imageUrl') || '';
+  const category = gv('category') || '';
+  const id = (doc.name || '').split('/').pop() || '';
+  return { id, name, price, image, category };
+}
+function productImageUrl(p){
+  if(p.image && /^https?:\/\//.test(p.image)) return p.image;
+  if(p.image && p.image.startsWith('images/')) return p.image;
+  // Fallbacks – use your local editorial images
+  const fallbacks = [
+    "images/editorial-light-meets-gold.png",
+    "images/style-modern-romance.jpg",
+    "images/editorial-soft-date-night.png",
+    "images/style-everyday-elegance.png"
+  ];
+  let h = 0; for(let i=0;i<p.name.length;i++) h = (h*31 + p.name.charCodeAt(i))>>>0;
+  return fallbacks[h % fallbacks.length];
+}
+function inr(n){ return '₹' + Number(n||0).toLocaleString('en-IN'); }
+
+function renderTrending(products){
+  trendingCache = products;
+  if(!products.length){
+    trendingStatus.textContent = 'No trending products found yet.';
+    trendingStatus.style.display = 'block';
+    return;
+  }
+  document.getElementById('trendingSkeleton')?.remove();
+  trendingRow.innerHTML = products.map(p => `
+    <div class="trend-card">
+      <div class="trend-media">
+        <a href="product.html?id=${encodeURIComponent(p.id)}">
+          <img src="${escAttr(productImageUrl(p))}" alt="${escAttr(p.name)}" loading="lazy">
+        </a>
+        <button class="wish-btn" data-wish="${escAttr(p.id)}" aria-label="Add to wishlist">
+          <span class="material-symbols-outlined">favorite</span>
+        </button>
+      </div>
+      <p class="text-[11px] uppercase tracking-widest text-primary font-semibold mb-1">Trending</p>
+      <h3 class="font-display text-[17px] text-on-surface leading-snug mb-1"><a href="product.html?id=${encodeURIComponent(p.id)}" style="text-decoration:none;color:inherit">${escHtml(p.name)}</a></h3>
+      <p class="text-[14px] text-on-surface-variant mb-2">${inr(p.price)}</p>
+      <button class="w-full py-[9px] rounded-full bg-[#241316] text-[#fffaf6] text-[11px] font-semibold tracking-widest uppercase" data-add="${escAttr(p.id)}" data-name="${escAttr(p.name)}" data-price="${escAttr(p.price)}">Add to bag</button>
+    </div>
+  `).join('');
+
+  // Wishlist toggle
+  const WISH_KEY='cc_wishlist';
+  const getWish = ()=> { try{return JSON.parse(localStorage.getItem(WISH_KEY)||'[]')}catch(e){return []}};
+  const setWish = (a)=> localStorage.setItem(WISH_KEY, JSON.stringify(a));
+  function syncWishUI(){
+    const w = getWish();
+    trendingRow.querySelectorAll('[data-wish]').forEach(btn=>{
+      btn.classList.toggle('liked', w.includes(btn.dataset.wish));
+    });
+  }
+  syncWishUI();
+  trendingRow.querySelectorAll('[data-wish]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id = btn.dataset.wish;
+      let w = getWish();
+      if(w.includes(id)) w = w.filter(x=>x!==id); else w.push(id);
+      setWish(w); syncWishUI();
+    });
+  });
+
+  // Add to cart – use your real addToCartWithId if available
+  trendingRow.querySelectorAll('[data-add]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id = btn.dataset.add;
+      const name = btn.dataset.name;
+      const price = Number(btn.dataset.price);
+      if(window.addToCartWithId){
+        window.addToCartWithId(name, price, id);
+      } else if(window.addToCart){
+        // script.js addToCart(name, price, productId, cardStock)
+        window.addToCart(name, price, id, 99);
+      } else {
+        // Fallback local
+        const cart = JSON.parse(localStorage.getItem('cart')||'[]');
+        const ex = cart.find(i=>i.name===name);
+        if(ex) ex.quantity++; else cart.push({name, price, quantity:1, productId:id});
+        localStorage.setItem('cart', JSON.stringify(cart));
+        showToast(name + ' – Added to cart');
+      }
+    });
+  });
+}
+
+function showToast(msg){
+  const t = document.getElementById('cartToast');
+  if(!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._tt);
+  t._tt = setTimeout(()=> t.classList.remove('show'), 2600);
+}
+
+async function loadTrending(){
+  const url = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/products?pageSize=12&key=${FIREBASE_CONFIG.apiKey}`;
+  try{
+    const r = await fetch(url);
+    if(!r.ok) throw new Error(r.status);
+    const j = await r.json();
+    const docs = j.documents || [];
+    let products = docs.map(parseFirestoreProduct).filter(p=>p.price>0);
+    // Shuffle a bit for "trending"
+    products = products.sort(()=>0.5-Math.random()).slice(0,8);
+    renderTrending(products);
+  } catch(e){
+    console.warn('Trending fetch failed', e);
+    // graceful fallback – 4 curated local items
+    renderTrending([
+      {id:'fallback-1', name:'Aurora Star Studs', price:1299, image:'images/editorial-light-meets-gold.png'},
+      {id:'fallback-2', name:'Midnight Hoops', price:2450, image:'images/editorial-everyday-hoops.png'},
+      {id:'fallback-3', name:'Pearl Drop Earrings', price:1899, image:'images/story-soft-pearl-drop.png'},
+      {id:'fallback-4', name:'Crystal Path Cuff', price:899, image:'images/editorial-minimal-soul-closeup.png'}
+    ]);
+    trendingStatus.textContent = 'Showing curated picks (offline).';
+    trendingStatus.style.display = 'block';
+  }
+}
+loadTrending();
+
+// Menu button – open your existing nav if present, else go home
+document.getElementById('menuBtn').addEventListener('click', ()=>{
+  const navLinks = document.getElementById('navLinks');
+  const hamburger = document.getElementById('hamburger');
+  if(navLinks && hamburger){ hamburger.click(); }
+  else { window.location.href = 'index.html'; }
+});
+
+// helpers
+function escHtml(s){ return String(s).replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m])); }
+function escAttr(s){ return escHtml(s).replace(/"/g,'&quot;'); }
+
+})();
+</script>
+</body>
+</html>
