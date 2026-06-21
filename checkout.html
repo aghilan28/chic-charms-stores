@@ -238,6 +238,9 @@
       margin-bottom: 8px;
     }
     .summary-row span:last-child { color: var(--text); font-weight: 500; }
+    .summary-row.summary-coupon-row { color: var(--rose-dark); font-weight: 700; }
+    .summary-row.summary-coupon-row span:last-child { color: var(--rose-dark); font-weight: 700; }
+    .summary-coupon-code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.78rem; letter-spacing: 0.04em; }
 
     .summary-divider { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
 
@@ -583,6 +586,14 @@
             <span>Shipping</span>
             <span id="summaryShipping">₹49</span>
           </div>
+          <div class="summary-row summary-coupon-row" id="summaryCouponDiscountRow" style="display:none;">
+            <span>Campus Discount</span>
+            <span id="summaryCouponDiscount">-₹50</span>
+          </div>
+          <div class="summary-row summary-coupon-row" id="summaryCouponCodeRow" style="display:none;">
+            <span>Coupon</span>
+            <span class="summary-coupon-code" id="summaryCouponCode"></span>
+          </div>
           <hr class="summary-divider" />
           <div class="summary-grand">
             <span class="summary-grand-label">Total</span>
@@ -713,6 +724,7 @@
     };
   </script>
 
+  <script src="coupon-session.js"></script>
   <script type="module">
     /* ============================================================
        CHECKOUT PAGE — with full Inventory Control
@@ -766,6 +778,7 @@
     };
 
     let currentUser = null;
+    let VerifiedCouponState = null;
 
     /* ============================================================
        SHARED HELPERS
@@ -777,12 +790,24 @@
       return '₹' + Number(value || 0).toLocaleString('en-IN');
     }
 
-    function getCartTotals(cart) {
+    function getCartTotals(cart, couponOverride) {
       const subtotal = cart.reduce(function (sum, item) {
         return sum + Number(item.price) * (item.quantity || 1);
       }, 0);
       const shipping = subtotal >= 399 ? 0 : 49;
-      return { subtotal, shipping, total: subtotal + shipping };
+      const coupon = couponOverride !== undefined ? couponOverride : (VerifiedCouponState || (window.ChicCoupon && window.ChicCoupon.getStoredCoupon ? window.ChicCoupon.getStoredCoupon() : null));
+      const discountAmount = window.ChicCoupon ? window.ChicCoupon.getDiscount(coupon) : 0;
+      return { subtotal, shipping, discountAmount, coupon, total: Math.max(0, subtotal + shipping - discountAmount) };
+    }
+
+    async function verifyCouponAtCheckout() {
+      try {
+        const coupon = await window.ChicCoupon.fetchSession();
+        VerifiedCouponState = coupon && coupon.couponApplied === true && coupon.couponType === 'campus' ? coupon : null;
+      } catch (e) {
+        VerifiedCouponState = null;
+      }
+      return VerifiedCouponState;
     }
 
     function setCheckoutButtonState(btn, isLoading, label) {
@@ -911,6 +936,13 @@
 
       $id('summarySubtotal').textContent = formatINR(totals.subtotal);
       $id('summaryShipping').textContent = totals.shipping === 0 ? 'Free 🎉' : '₹49';
+      const showCoupon = totals.discountAmount > 0 && totals.coupon && totals.coupon.couponType === 'campus';
+      $id('summaryCouponDiscountRow').style.display = showCoupon ? 'flex' : 'none';
+      $id('summaryCouponCodeRow').style.display = showCoupon ? 'flex' : 'none';
+      if (showCoupon) {
+        $id('summaryCouponDiscount').textContent = '-' + formatINR(totals.discountAmount);
+        $id('summaryCouponCode').textContent = totals.coupon.couponCode;
+      }
       $id('summaryTotal').textContent    = formatINR(totals.total);
     }
 
@@ -1085,7 +1117,7 @@
        ORDERS: FIRESTORE SAVE + CUSTOMER PROFILE + EMAILS
        Returns the saved order summary object. Redirect stays in caller.
     ============================================================ */
-    function buildOrderData(fields, cart, totals, paymentMethod, paymentId) {
+    function buildOrderData(fields, cart, totals, paymentMethod, paymentId, coupon) {
       return {
         customerName:  fields.fullName,
         phone:         fields.phone,
@@ -1094,6 +1126,10 @@
         subtotal:      totals.subtotal,
         shipping:      totals.shipping,
         totalAmount:   totals.total,
+        couponCode:    coupon ? coupon.couponCode : null,
+        couponType:    coupon ? coupon.couponType : null,
+        discountAmount: coupon ? Number(coupon.discountAmount || 0) : 0,
+        couponSessionId: coupon ? coupon.couponSessionId : null,
         paymentMethod,
         paymentId:     paymentId || null,
         userEmail:     currentUser.email,
@@ -1103,7 +1139,7 @@
       };
     }
 
-    function buildOrderSummary(fields, cart, totals, paymentMethod, paymentId, orderId) {
+    function buildOrderSummary(fields, cart, totals, paymentMethod, paymentId, orderId, coupon) {
       return {
         name: fields.fullName,
         phone: fields.phone,
@@ -1112,6 +1148,10 @@
         items: cart,
         subtotal: totals.subtotal,
         shipping: totals.shipping,
+        discountAmount: coupon ? Number(coupon.discountAmount || 0) : 0,
+        couponCode: coupon ? coupon.couponCode : null,
+        couponType: coupon ? coupon.couponType : null,
+        couponSessionId: coupon ? coupon.couponSessionId : null,
         total: totals.total,
         paymentMethod,
         paymentId: paymentId || null,
@@ -1153,8 +1193,9 @@
       console.log('[Checkout] Step: creating order — user:', currentUser.uid, '| method:', paymentMethod);
 
       const cart = loadCart();
-      const totals = getCartTotals(cart);
-      const orderData = buildOrderData(fields, cart, totals, paymentMethod, paymentId);
+      const verifiedCoupon = await verifyCouponAtCheckout();
+      const totals = getCartTotals(cart, verifiedCoupon);
+      const orderData = buildOrderData(fields, cart, totals, paymentMethod, paymentId, verifiedCoupon);
 
       const orderRef = await addDoc(collection(db, 'orders'), orderData);
       console.log('[Checkout] ✅ Order document created. ID:', orderRef.id, '| userId:', currentUser.uid);
@@ -1179,7 +1220,7 @@
       await sendCheckoutEmails(orderData, cart);
 
       console.log('[Checkout] Step: clearing cart and preparing redirect');
-      const orderSummary = buildOrderSummary(fields, cart, totals, paymentMethod, paymentId, orderRef.id);
+      const orderSummary = buildOrderSummary(fields, cart, totals, paymentMethod, paymentId, orderRef.id, verifiedCoupon);
       localStorage.setItem('lastOrder', JSON.stringify(orderSummary));
       localStorage.removeItem('cart');
 
@@ -1299,7 +1340,6 @@
         return;
       }
 
-      const totals = getCartTotals(cart);
       const btn    = $id('payOnlineBtn');
 
       console.log('[Checkout] Step: validating stock before opening Razorpay');
@@ -1323,6 +1363,10 @@
         CheckoutState.isSubmitting = false;
         return;
       }
+
+      const verifiedCoupon = await verifyCouponAtCheckout();
+      const totals = getCartTotals(cart, verifiedCoupon);
+      renderSummary();
 
       console.log('[Checkout] Stock valid — opening Razorpay modal (TEST MODE)');
       btn.innerHTML = '<span class="btn-spinner"></span> Opening payment…';
@@ -1401,6 +1445,7 @@
     $id('placeOrderBtn').addEventListener('click', window.placeOrder);
 
     renderSummary();
+    verifyCouponAtCheckout().then(renderSummary);
   </script>
 
   <!-- Auth navbar -->

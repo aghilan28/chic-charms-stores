@@ -108,6 +108,17 @@
         /* Hide scrollbar */
         ::-webkit-scrollbar { display: none; }
         body { -ms-overflow-style: none; scrollbar-width: none; }
+        .coupon-panel { margin-top: 24px; padding: 22px; background: linear-gradient(135deg,#fff,#FAF5F2); border: 1px solid rgba(181,101,122,.18); border-radius: 18px; box-shadow: 0 14px 40px rgba(181,101,122,.10); }
+        .coupon-panel h3 { font-family: 'Playfair Display', serif; font-size: 22px; color: #2f121e; margin: 0 0 6px; }
+        .coupon-panel p { color: #534346; font-size: 13px; line-height: 1.55; margin: 0 0 16px; }
+        .coupon-form { display: flex; gap: 10px; }
+        .coupon-input { flex: 1; min-width: 0; height: 52px; border: 1px solid #d7c1c5; border-radius: 12px; background: #fff; padding: 0 14px; color: #2f121e; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; outline: none; }
+        .coupon-input:focus { border-color: #B5657A; box-shadow: 0 0 0 3px rgba(181,101,122,.12); }
+        .coupon-apply { width: 94px; height: 52px; border: 0; border-radius: 12px; background: #8e4559; color: #fff; font-weight: 800; font-size: 13px; }
+        .coupon-message { display: none; margin-top: 12px; border-radius: 14px; padding: 12px; font-size: 13px; line-height: 1.5; }
+        .coupon-message.success { display: block; background: #f0fff4; border: 1px solid #b7ebc6; color: #246b37; }
+        .coupon-message.error { display: block; background: #fff1f1; border: 1px solid #ffc7c7; color: #93000a; }
+        .coupon-code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 900; }
     </style>
 <style>
     body {
@@ -189,6 +200,16 @@
                 Campus delivery is available at designated pickup locations for students and faculty. Off-campus delivery is available for locations outside campus within supported regions.
             </p>
 </div>
+<!-- Campus Coupon Validation -->
+<section class="coupon-panel" aria-labelledby="couponTitle">
+<h3 id="couponTitle">Campus Coupon</h3>
+<p>Enter your CIT campus coupon. Apply validates with the backend only; navigation happens only when you tap Continue.</p>
+<div class="coupon-form">
+<input class="coupon-input" id="couponInput" placeholder="CIT2026A1" maxlength="9" inputmode="text" autocomplete="off" />
+<button class="coupon-apply" id="applyCouponBtn" type="button">Apply</button>
+</div>
+<div class="coupon-message" id="couponMessage" role="status" aria-live="polite"></div>
+</section>
 </main>
 <!-- Footer Action -->
 <div class="fixed bottom-0 left-0 w-full bg-white p-4 pb-safe border-t border-outline-variant/20 z-50">
@@ -199,65 +220,109 @@
 </button>
 </div>
 </div>
+<script src="coupon-session.js"></script>
 <script>
         const state = {
-            deliveryType: null
+            deliveryType: null,
+            couponApplied: false,
+            couponCode: null,
+            couponType: null,
+            discountAmount: 0
         };
 
+        function restoreCouponState() {
+            const stored = window.ChicCoupon && window.ChicCoupon.getStoredCoupon ? window.ChicCoupon.getStoredCoupon() : null;
+            if (stored && stored.couponApplied === true && stored.couponType === 'campus') {
+                state.couponApplied = true;
+                state.couponCode = stored.couponCode;
+                state.couponType = stored.couponType;
+                state.discountAmount = stored.discountAmount;
+                showCouponSuccess(stored.couponCode);
+            }
+        }
+
+        function showCouponSuccess(code) {
+            const msg = document.getElementById('couponMessage');
+            msg.className = 'coupon-message success';
+            msg.innerHTML = '✓ <strong>Campus Benefit Unlocked</strong><br>Coupon Applied: <span class="coupon-code">' + String(code).replace(/[&<>"]/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]); }) + '</span>';
+        }
+
+        function showCouponError(message) {
+            const msg = document.getElementById('couponMessage');
+            msg.className = 'coupon-message error';
+            msg.textContent = message || 'Invalid coupon code';
+        }
+
         function selectOption(id) {
-            // Remove active classes from all
             document.querySelectorAll('#deliveryOptions > div').forEach(el => {
                 el.classList.remove('active-card', 'selection-glow');
             });
-
-            // Add active class to selected
             const selected = document.getElementById(id);
             selected.classList.add('active-card', 'selection-glow');
-
-            // Update state
             state.deliveryType = id;
-            
-            // Enable button
+            localStorage.setItem('cc_delivery_type', id);
             const btn = document.getElementById('continueBtn');
             btn.disabled = false;
+            if (window.navigator && window.navigator.vibrate) window.navigator.vibrate(5);
+        }
 
-            // Haptic feedback simulation
-            if (window.navigator && window.navigator.vibrate) {
-                window.navigator.vibrate(5);
+        async function applyCoupon() {
+            const input = document.getElementById('couponInput');
+            const btn = document.getElementById('applyCouponBtn');
+            const code = input.value.trim().toUpperCase();
+            input.value = code;
+            btn.disabled = true;
+            btn.textContent = 'Checking';
+            try {
+                const result = await window.ChicCoupon.validate(code);
+                if (result && result.valid === true) {
+                    state.couponApplied = true;
+                    state.couponCode = result.couponCode;
+                    state.couponType = result.couponType;
+                    state.discountAmount = Number(result.discountAmount || 0);
+                    showCouponSuccess(result.couponCode);
+                } else {
+                    state.couponApplied = false;
+                    state.couponCode = null;
+                    state.couponType = null;
+                    state.discountAmount = 0;
+                    showCouponError(result && result.message ? result.message : 'Invalid coupon code');
+                }
+            } catch (err) {
+                state.couponApplied = false;
+                showCouponError('Could not validate coupon. Please try again.');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Apply';
             }
         }
 
         function handleContinue() {
             if (!state.deliveryType) return;
-
-            const target = state.deliveryType === 'in_campus' 
-                ? '/checkout/campus-selection' 
-                : '/checkout/address-details';
-            
             const btn = document.getElementById('continueBtn');
             btn.innerHTML = '<span class="material-symbols-outlined animate-spin">progress_activity</span>';
             btn.disabled = true;
 
-            console.log('Navigating to:', target, 'with state:', state);
-            
-            // Artificial delay for premium transition feel
-            setTimeout(() => {
-                window.location.href = 'checkout.html?delivery=' + state.deliveryType;
-            }, 800);
+            const stored = window.ChicCoupon.getStoredCoupon();
+            const hasCampusCoupon = stored && stored.couponApplied === true && stored.couponType === 'campus';
+            const nextPage = hasCampusCoupon ? 'campus-verification.html' : 'checkout-review.html';
+            setTimeout(() => { window.location.href = nextPage; }, 500);
         }
 
-        // Handle micro-interactions for the list items
+        document.getElementById('applyCouponBtn').addEventListener('click', applyCoupon);
+        document.getElementById('couponInput').addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') { e.preventDefault(); applyCoupon(); }
+        });
+
         document.querySelectorAll('#deliveryOptions > div').forEach(card => {
             card.addEventListener('mousedown', () => {
-                if (!card.classList.contains('active-card')) {
-                    card.style.transform = 'scale(0.98)';
-                }
+                if (!card.classList.contains('active-card')) card.style.transform = 'scale(0.98)';
             });
             card.addEventListener('mouseup', () => {
-                if (!card.classList.contains('active-card')) {
-                    card.style.transform = '';
-                }
+                if (!card.classList.contains('active-card')) card.style.transform = '';
             });
         });
+
+        restoreCouponState();
     </script>
 </body></html>

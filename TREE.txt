@@ -1,0 +1,425 @@
+Folder PATH listing for volume OS
+Volume serial number is 000000F4 368E:D4C2
+C:.
+|   .firebaserc
+|   .gitignore
+|   01-mobile-ux-forensic-audit.md
+|   02-comprehensive-reports.md
+|   404.html
+|   about.html
+|   account-mobile-after-fix.png
+|   account-mobile-before-fix.png
+|   account-mobile-check.png
+|   account-mobile-live.png
+|   account.html
+|   admin-e5-integration.js
+|   admin-e6-ecosystem.js
+|   admin-guard.js
+|   admin-nav.css
+|   admin-ops-safety.css
+|   admin-ops-safety.js
+|   admin-orders.html
+|   admin-safe-image.js
+|   admin-session-ux.js
+|   admin-session.css
+|   admin.html
+|   auth-mobile-after-fix.png
+|   auth-mobile-check.png
+|   auth-nav.js
+|   auth-ui.js
+|   auth.html
+|   auth.js
+|   AUTH_INTEGRATION.md
+|   AUTH_INTEGRATION_V2.md
+|   campus-verification.html
+|   cart-merge.js
+|   cart-mobile-after-fix.png
+|   cart-mobile-before-fix.png
+|   cart-mobile-check.png
+|   cart.html
+|   category-home-sync.js
+|   category-utils.js
+|   category.html
+|   check-account-mobile.png
+|   check-cart-mobile-2.png
+|   check-cart-mobile.png
+|   check-product-desktop.png
+|   check-product-mobile.png
+|   check-shop-desktop.png
+|   checkout-prefill.js
+|   checkout-review.html
+|   checkout.html
+|   chic-charms-mobile-approved.css
+|   chic-charms-mobile-approved.js
+|   confirmation.html
+|   contact.html
+|   d10-luxury-motion.css
+|   d10-restore.css
+|   d11-luxury-cart-checkout.css
+|   d11-luxury-cart-checkout.js
+|   d12-luxury-mobile-final.css
+|   d12-luxury-mobile-final.js
+|   d14-luxury-stage4.css
+|   d14-luxury-stage4.js
+|   d15-luxury-stage4-final.css
+|   d15-luxury-stage4-final.js
+|   d3-luxury.css
+|   d5-mobile-luxury.css
+|   d6-brand-story.css
+|   d7-luxury-motion.css
+|   d8-luxury-polish.css
+|   d8-mobile-typography-image.css
+|   d9-editorial-refinement.css
+|   d9-luxury-mobile-pdp.css
+|   d9-luxury-mobile-pdp.js
+|   delivery-information.html
+|   delivery-method.html
+|   desktop-authority-check.png
+|   desktop-check.png
+|   E5-INTEGRATION.md
+|   E6-admin-integration-patch.html
+|   E6-ECOSYSTEM.md
+|   e6-unified-ecosystem.css
+|   emergency-mobile-hotfix.css
+|   faq.html
+|   final-mobile-stabilization.css
+|   final-mobile-stabilization.js
+|   firebase.json
+|   firestore.indexes.json
+|   firestore.rules
+|   FIX_NOTES.txt
+|   git
+|   google-auth.js
+|   IMAGE_FILENAME_MAP.md
+|   index.html
+|   INTEGRATION_INSTRUCTIONS.md
+|   INTEGRATION_README.md
+|   mobile-app.css
+|   mobile-app.js
+|   mobile-authority-check.png
+|   mobile-authority-closed.png
+|   mobile-brand-system.css
+|   mobile-brand-system.js
+|   mobile-cart-approved.css
+|   mobile-cart-approved.js
+|   mobile-check.png
+|   mobile-commerce.css
+|   mobile-commerce.js
+|   mobile-comprehensive.css
+|   mobile-fixes.css
+|   mobile-fixes.js
+|   mobile-home.html
+|   mobile-phase2.css
+|   mobile-phase2.js
+|   mobile-phase3.css
+|   mobile-product.css
+|   mobile.css
+|   PATCH_admin.html.md
+|   PATCH_product.html.md
+|   payment-system.css
+|   phase5-mobile-conversion.css
+|   phase6-polish.css
+|   privacy.html
+|   product.html
+|   qa-1440-product.png
+|   qa-1440-shop.png
+|   qa-390-product.png
+|   qa-390-shop.png
+|   qa-account-mobile-footer.png
+|   qa-cart-mobile-footer-empty.png
+|   qa-live-pdp.png
+|   qa2-account-footer.png
+|   qa2-cart-footer-empty.png
+|   qa2-product-mobile.png
+|   razorpay-demo.js
+|   README.md
+|   returns.html
+|   script.js
+|   search-results.html
+|   search.html
+|   serve.json
+|   shipping.html
+|   shop.html
+|   struct.txt
+|   styles.css
+|   terms.html
+|   TREE.txt
+|   USER_SYSTEM.md
+|   wishlist.html
+|   _desktop-restored.png
+|   
++---.firebase
+|       hosting..cache
+|       
++---.vscode
+|       settings.json
+|       
++---images
+|       ad.png
+|       as.jpg
+|       avatar-ritu-weekend-edit.jpg
+|       avatar-sahana-cafe-edit.png
+|       avatar-subashree-event-edit.jpeg
+|       editorial-everyday-hoops.png
+|       editorial-korean-morning-coffee.png
+|       editorial-light-meets-gold.png
+|       editorial-minimal-soul-closeup.png
+|       editorial-soft-date-night.png
+|       hero-quiet-luxury-main.jpg
+|       hero-quiet-luxury-main.png
+|       newsletter-inner-circle-portrait.png
+|       story-intimate-jewelry-detail.png
+|       story-soft-pearl-drop.png
+|       style-after-dark.png
+|       style-everyday-elegance.png
+|       style-heritage-muse.png
+|       style-modern-romance.jpg
+|       
+\---node_modules
+    |   .package-lock.json
+    |   
+    +---.bin
+    |       playwright
+    |       playwright-core
+    |       playwright-core.cmd
+    |       playwright-core.ps1
+    |       playwright.cmd
+    |       playwright.ps1
+    |       
+    +---playwright
+    |   |   cli.js
+    |   |   index.d.ts
+    |   |   index.js
+    |   |   index.mjs
+    |   |   jsx-runtime.js
+    |   |   jsx-runtime.mjs
+    |   |   LICENSE
+    |   |   NOTICE
+    |   |   package.json
+    |   |   README.md
+    |   |   test.d.ts
+    |   |   test.js
+    |   |   test.mjs
+    |   |   ThirdPartyNotices.txt
+    |   |   
+    |   +---lib
+    |   |   |   errorContext.js
+    |   |   |   globals.js
+    |   |   |   index.js
+    |   |   |   isomorphic.js
+    |   |   |   isomorphic.js.txt
+    |   |   |   package.js
+    |   |   |   program.js
+    |   |   |   util.js
+    |   |   |   
+    |   |   +---agents
+    |   |   |       agentParser.js
+    |   |   |       copilot-setup-steps.yml
+    |   |   |       generateAgents.js
+    |   |   |       playwright-test-coverage.prompt.md
+    |   |   |       playwright-test-generate.prompt.md
+    |   |   |       playwright-test-generator.agent.md
+    |   |   |       playwright-test-heal.prompt.md
+    |   |   |       playwright-test-healer.agent.md
+    |   |   |       playwright-test-plan.prompt.md
+    |   |   |       playwright-test-planner.agent.md
+    |   |   |       
+    |   |   +---cli
+    |   |   |       reportActions.js
+    |   |   |       testActions.js
+    |   |   |       
+    |   |   +---common
+    |   |   |       index.js
+    |   |   |       index.js.txt
+    |   |   |       
+    |   |   +---loader
+    |   |   |       loaderProcessEntry.js
+    |   |   |       loaderProcessEntry.js.txt
+    |   |   |       
+    |   |   +---matchers
+    |   |   |       expect.js
+    |   |   |       expect.js.LICENSE
+    |   |   |       expect.js.txt
+    |   |   |       
+    |   |   +---mcp
+    |   |   |   \---test
+    |   |   |           browserBackend.js
+    |   |   |           generatorTools.js
+    |   |   |           plannerTools.js
+    |   |   |           seed.js
+    |   |   |           streams.js
+    |   |   |           testBackend.js
+    |   |   |           testContext.js
+    |   |   |           testTool.js
+    |   |   |           testTools.js
+    |   |   |           
+    |   |   +---runner
+    |   |   |       index.js
+    |   |   |       index.js.txt
+    |   |   |       
+    |   |   +---transform
+    |   |   |       babelBundle.js
+    |   |   |       babelBundle.js.LICENSE
+    |   |   |       babelBundle.js.txt
+    |   |   |       esmLoader.js
+    |   |   |       esmLoader.js.LICENSE
+    |   |   |       esmLoader.js.txt
+    |   |   |       
+    |   |   \---worker
+    |   |           workerProcessEntry.js
+    |   |           workerProcessEntry.js.txt
+    |   |           
+    |   \---types
+    |           test.d.ts
+    |           testReporter.d.ts
+    |           
+    \---playwright-core
+        |   browsers.json
+        |   cli.js
+        |   index.d.ts
+        |   index.js
+        |   index.mjs
+        |   LICENSE
+        |   NOTICE
+        |   package.json
+        |   README.md
+        |   ThirdPartyNotices.txt
+        |   
+        +---bin
+        |       install_media_pack.ps1
+        |       install_webkit_wsl.ps1
+        |       reinstall_chrome_beta_linux.sh
+        |       reinstall_chrome_beta_mac.sh
+        |       reinstall_chrome_beta_win.ps1
+        |       reinstall_chrome_stable_linux.sh
+        |       reinstall_chrome_stable_mac.sh
+        |       reinstall_chrome_stable_win.ps1
+        |       reinstall_msedge_beta_linux.sh
+        |       reinstall_msedge_beta_mac.sh
+        |       reinstall_msedge_beta_win.ps1
+        |       reinstall_msedge_dev_linux.sh
+        |       reinstall_msedge_dev_mac.sh
+        |       reinstall_msedge_dev_win.ps1
+        |       reinstall_msedge_stable_linux.sh
+        |       reinstall_msedge_stable_mac.sh
+        |       reinstall_msedge_stable_win.ps1
+        |       
+        +---lib
+        |   |   bootstrap.js
+        |   |   coreBundle.js
+        |   |   package.js
+        |   |   serverRegistry.js
+        |   |   serverRegistry.js.LICENSE
+        |   |   utilsBundle.js
+        |   |   utilsBundle.js.LICENSE
+        |   |   xdg-open
+        |   |   
+        |   +---entry
+        |   |       cliDaemon.js
+        |   |       dashboardApp.js
+        |   |       mcp.js
+        |   |       oopBrowserDownload.js
+        |   |       
+        |   +---server
+        |   |   |   deviceDescriptorsSource.json
+        |   |   |   
+        |   |   +---chromium
+        |   |   |       appIcon.png
+        |   |   |       
+        |   |   \---electron
+        |   |           loader.js
+        |   |           
+        |   +---tools
+        |   |   +---cli-client
+        |   |   |   |   channelSessions.js
+        |   |   |   |   cli.js
+        |   |   |   |   help.json
+        |   |   |   |   minimist.js
+        |   |   |   |   output.js
+        |   |   |   |   program.js
+        |   |   |   |   registry.js
+        |   |   |   |   session.js
+        |   |   |   |   
+        |   |   |   \---skill
+        |   |   |       |   SKILL.md
+        |   |   |       |   
+        |   |   |       \---references
+        |   |   |               element-attributes.md
+        |   |   |               playwright-tests.md
+        |   |   |               request-mocking.md
+        |   |   |               running-code.md
+        |   |   |               session-management.md
+        |   |   |               spec-driven-testing.md
+        |   |   |               storage-state.md
+        |   |   |               test-generation.md
+        |   |   |               tracing.md
+        |   |   |               video-recording.md
+        |   |   |               
+        |   |   +---dashboard
+        |   |   |       appIcon.png
+        |   |   |       
+        |   |   +---trace
+        |   |   |       SKILL.md
+        |   |   |       
+        |   |   \---utils
+        |   |           extension.js
+        |   |           socketConnection.js
+        |   |           
+        |   \---vite
+        |       +---dashboard
+        |       |   |   index.html
+        |       |   |   playwright-logo.svg
+        |       |   |   
+        |       |   \---assets
+        |       |           codicon-DCmgc-ay.ttf
+        |       |           firefox-1bWoP6pv.svg
+        |       |           firefox-beta-k3eOH_eK.svg
+        |       |           firefox-nightly-Cp5nfeDT.svg
+        |       |           index-BY2S1tHT.css
+        |       |           index-DpEq2p62.js
+        |       |           safari-na3_-uQk.svg
+        |       |           
+        |       +---htmlReport
+        |       |       index.html
+        |       |       report.css
+        |       |       report.js
+        |       |       
+        |       +---recorder
+        |       |   |   index.html
+        |       |   |   playwright-logo.svg
+        |       |   |   
+        |       |   \---assets
+        |       |           codeMirrorModule-BHYmBp6h.js
+        |       |           codeMirrorModule-DYBRYzYX.css
+        |       |           codicon-DCmgc-ay.ttf
+        |       |           index-4ZiSSCmn.css
+        |       |           index-DA10QRaq.js
+        |       |           
+        |       \---traceViewer
+        |           |   codeMirrorModule.DYBRYzYX.css
+        |           |   codicon.DCmgc-ay.ttf
+        |           |   defaultSettingsView.BDKsFU3c.css
+        |           |   index.BCnMPevh.js
+        |           |   index.CzXZzn5A.css
+        |           |   index.html
+        |           |   manifest.webmanifest
+        |           |   playwright-logo.svg
+        |           |   snapshot.html
+        |           |   snapshot.v8KI4P3m.js
+        |           |   sw.bundle.js
+        |           |   uiMode.Btcz36p_.css
+        |           |   uiMode.C2Efnu2P.js
+        |           |   uiMode.html
+        |           |   xtermModule.DYP7pi_n.css
+        |           |   
+        |           \---assets
+        |                   codeMirrorModule-Ds_H_9Yq.js
+        |                   defaultSettingsView-D31xz8zv.js
+        |                   urlMatch-BYQrIQwR.js
+        |                   xtermModule-CsJ4vdCR.js
+        |                   
+        \---types
+                protocol.d.ts
+                structs.d.ts
+                types.d.ts
+                

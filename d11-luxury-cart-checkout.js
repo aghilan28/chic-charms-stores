@@ -114,7 +114,7 @@
         if (typeof window.handleCheckout === "function") {
           window.handleCheckout();
         } else {
-          window.location.href = "delivery-method.html";
+          window.location.href = IS_MOBILE() ? "delivery-information.html" : "checkout.html";
         }
       });
     }
@@ -548,7 +548,7 @@
     }
   }
 
-  /* ── Prefetch checkout.html when cart has items ── */
+  /* ── Prefetch checkout page when cart has items ── */
   function prefetchCheckout() {
     if (!document.querySelector(".cart-page")) return;
     const cart = localStorage.getItem("cart");
@@ -558,11 +558,11 @@
       if (!items || items.length === 0) return;
     } catch (e) { return; }
 
-    if (document.querySelector("link[rel='prefetch'][href='checkout.html']")) return;
+    if (document.querySelector("link[rel='prefetch'][href='delivery-information.html']")) return;
 
     const link = document.createElement("link");
     link.rel = "prefetch";
-    link.href = "checkout.html";
+    link.href = IS_MOBILE() ? "delivery-information.html" : "checkout.html";
     document.head.appendChild(link);
   }
 

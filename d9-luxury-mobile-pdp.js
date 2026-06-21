@@ -406,7 +406,7 @@
       sticky.querySelector(".pdp-sticky-buy-now").addEventListener("click", () => {
         const current = document.querySelector("#addToCartBtn, .btn-add-cart:not(:disabled)");
         if (current) current.click();
-        setTimeout(() => { window.location.href = "delivery-method.html"; }, 220);
+        setTimeout(() => { window.location.href = "delivery-information.html"; }, 220);
       });
     }
 

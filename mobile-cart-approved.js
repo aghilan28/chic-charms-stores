@@ -379,7 +379,7 @@
       return;
     }
     if (typeof window.handleCheckout === "function") window.handleCheckout();
-    else window.location.href = "checkout.html";
+    else window.location.href = "delivery-information.html";
   }
 
   function installEvents() {
