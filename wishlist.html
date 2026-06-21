@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Wishlist • Chic Charms</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box}body{margin:0;font-family:Jost,system-ui,sans-serif;background:#fff8f7;color:#1f1a1b;min-height:100dvh}
+.mobile-shell{max-width:440px;margin:0 auto;background:#fff8f7;min-height:100dvh;position:relative}
+header{position:sticky;top:0;z-index:40;background:rgba(255,248,247,.93);backdrop-filter:blur(10px);border-bottom:1px solid #d7c1c5;display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:68px}
+h1{font-family:"Playfair Display",serif;font-size:22px;color:#8e4559;margin:0}
+.grid{padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{background:#fff;border-radius:10px;overflow:hidden;border:1px solid #e1d8d7}
+.card img{width:100%;aspect-ratio:4/5;object-fit:cover;background:#f6eceb}
+.card-body{padding:10px}
+.card-body h3{font-family:"Playfair Display",serif;font-size:15px;margin:0 0 4px}
+.card-body p{margin:0;color:#534346;font-size:13px}
+.btn{width:100%;margin-top:8px;border:0;background:#1f1a1b;color:#fffaf6;border-radius:999px;padding:9px;font-family:Jost,sans-serif;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;cursor:pointer}
+.empty{padding:48px 24px;text-align:center;color:#534346}
+.empty a{display:inline-block;margin-top:14px;background:#8e4559;color:#fff;padding:12px 20px;border-radius:999px;text-decoration:none;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.1em}
+.cc-bottom-nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:440px;z-index:60;display:flex;justify-content:space-around;align-items:center;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));background:rgba(255,248,247,0.96);backdrop-filter:blur(12px);border-top:1px solid rgba(215,193,197,0.5)}
+.cc-bottom-nav a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 14px;color:#534346;text-decoration:none;border-radius:999px;font-size:11px}
+.cc-bottom-nav a.active{color:#8e4559;background:rgba(171,93,113,0.10)}
+.material-symbols-outlined{font-family:'Material Symbols Outlined';font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24}
+body{padding-bottom:90px}
+</style>
+</head>
+<body>
+<div class="mobile-shell">
+<header><a href="index.html" style="text-decoration:none;color:inherit"><span class="material-symbols-outlined">arrow_back</span></a><h1>Wishlist</h1><a href="cart.html"><span class="material-symbols-outlined">shopping_bag</span></a></header>
+<div id="grid" class="grid"></div>
+<div id="empty" class="empty" style="display:none">
+  <p>Your wishlist is empty.</p>
+  <p style="font-size:13px">Save pieces you love while browsing.</p>
+  <a href="shop.html">Start Shopping</a>
+</div>
+<nav class="cc-bottom-nav">
+  <a href="index.html"><span class="material-symbols-outlined">home</span><span>Home</span></a>
+  <a href="search.html"><span class="material-symbols-outlined">search</span><span>Search</span></a>
+  <a href="wishlist.html" class="active"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">favorite</span><span>Wishlist</span></a>
+  <a href="cart.html"><span class="material-symbols-outlined">shopping_bag</span><span>Bag</span></a>
+  <a href="account.html"><span class="material-symbols-outlined">person</span><span>Account</span></a>
+</nav>
+</div>
+<script src="script.js" defer></script>
+<script>
+const FIREBASE={apiKey:"AIzaSyA5Bh77_4HE3yQF0hi5ddvbFLZC7rEerxg",projectId:"chic-charms-store"};
+async function run(){
+  const ids = JSON.parse(localStorage.getItem('cc_wishlist')||'[]');
+  const grid=document.getElementById('grid'), empty=document.getElementById('empty');
+  if(!ids.length){grid.style.display='none';empty.style.display='';return}
+  let products=[];
+  for(const id of ids){
+    try{
+      const r=await fetch(`https://firestore.googleapis.com/v1/projects/${FIREBASE.projectId}/databases/(default)/documents/products/${id}?key=${FIREBASE.apiKey}`);
+      if(r.ok){const d=await r.json();const f=d.fields||{};const gv=k=>f[k]?.stringValue??f[k]?.integerValue??f[k]?.doubleValue??null;
+        products.push({id, name:gv('name')||'Chic Charms Piece', price:Number(gv('price')||1299), image:gv('image')||gv('imageUrl')||'images/editorial-light-meets-gold.png'})}
+    }catch(e){}
+  }
+  if(!products.length){grid.style.display='none';empty.style.display='';return}
+  grid.innerHTML = products.map(p=>`
+    <div class="card">
+      <a href="product.html?id=${encodeURIComponent(p.id)}"><img src="${p.image.startsWith('http')?p.image:p.image||'images/editorial-light-meets-gold.png'}" alt=""></a>
+      <div class="card-body">
+        <h3>${p.name}</h3>
+        <p>₹${Number(p.price).toLocaleString('en-IN')}</p>
+        <button class="btn" data-add="${p.id}" data-name="${p.name.replace(/"/g,'&quot;')}" data-price="${p.price}">Add to bag</button>
+      </div>
+    </div>`).join('');
+  grid.querySelectorAll('[data-add]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      if(window.addToCartWithId) window.addToCartWithId(btn.dataset.name, Number(btn.dataset.price), btn.dataset.add);
+      else alert('Added');
+    })
+  })
+}
+run();
+</script>
+</body>
+</html>

@@ -8,6 +8,36 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="description" content="Product details – Chic Charms" />
   <title>Product – Chic Charms</title>
+<!-- Chic Charms – FOUC / Icon Flash Guard -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0..1,0&display=swap" rel="stylesheet">
+<style>
+/* Prevent icon text flash (menu search shopping_bag) */
+.material-symbols-outlined{
+  font-family:'Material Symbols Outlined';font-weight:300;font-style:normal;
+  font-size:24px;line-height:1;letter-spacing:normal;text-transform:none;
+  display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;
+  -webkit-font-feature-settings:'liga';-webkit-font-smoothing:antialiased;
+  font-variation-settings:'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+  visibility:hidden;
+}
+.fonts-loaded .material-symbols-outlined{visibility:visible}
+/* hide body until first paint to avoid header collision */
+html.cc-loading body{opacity:0}
+html:not(.cc-loading) body{transition:opacity .18s ease}
+</style>
+<script>
+document.documentElement.classList.add('cc-loading');
+(function(){
+  function ready(){document.documentElement.classList.remove('cc-loading');document.documentElement.classList.add('fonts-loaded')}
+  if(document.fonts && document.fonts.ready){document.fonts.ready.then(ready);} 
+  window.addEventListener('load',ready);
+  setTimeout(ready,1200);
+})();
+</script>
+<!-- /FOUC Guard -->
+
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -485,7 +515,7 @@
 </div>
 
 <!-- Bottom Nav -->
-<nav id="bottomNav" class="fixed bottom-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-surface/95 backdrop-blur-lg border-t border-outline-variant safe-area-bottom"></nav>
+<nav id="bottomNav" style="display:none" class="fixed bottom-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-surface/95 backdrop-blur-lg border-t border-outline-variant safe-area-bottom"></nav>
 
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -586,7 +616,7 @@ const SITE_CONFIG = {
     { icon: "home", href: "index.html", active: false, filled: true },
     { icon: "search", href: "search.html", active: false },
     { icon: "shopping_bag", href: "cart.html", active: false, hasBadge: true },
-    { icon: "favorite", href: "#", active: false, action: "toggleWishlist" },
+    { icon: "favorite", href: "wishlist.html", active: false },
     { icon: "person", href: "account.html", active: false }
   ],
   footerTagline: "Curating timeless elegance and unparalleled craftsmanship for the modern muse."
@@ -1248,5 +1278,188 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) upda
     .safe-area-bottom { padding-bottom: max(12px, env(safe-area-inset-bottom)); }
   }
 </style>
+  <!-- Bottom Nav – Chic Charms Unified -->
+  
+<!-- Chic Charms – PDP Sticky ATC -->
+<div id="cc-pdp-atc" class="cc-pdp-atc" style="position:fixed;left:50%;transform:translateX(-50%);bottom:calc(72px + env(safe-area-inset-bottom,0px));width:100%;max-width:440px;z-index:59;background:#fff8f7;border-top:1px solid #d7c1c5;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 -8px 24px rgba(47,42,42,0.06)">
+  <div><div style="font-size:11px;color:#857276;text-transform:uppercase;letter-spacing:.1em">Price</div><div id="cc-pdp-price" style="font-family:'Playfair Display',serif;font-size:18px;color:#1f1a1b">₹—</div></div>
+  <button id="cc-pdp-add" style="background:#8e4559;color:#fff;border:0;border-radius:8px;padding:14px 22px;font-family:Jost,sans-serif;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;cursor:pointer;flex:1;max-width:220px">Add to Cart</button>
+</div>
+<script>
+(function(){
+  function syncPrice(){
+    // try to pull price from page
+    const el = document.querySelector('[data-product-price], .product-price, #productPrice, .price');
+    const priceText = el ? el.textContent : '';
+    const m = priceText.match(/[\d,]+/);
+    if(m) document.getElementById('cc-pdp-price').textContent = '₹' + m[0];
+    // hide if out of stock
+    const outEl = document.body.textContent.includes('out of stock') || document.body.textContent.includes('Out of stock');
+  }
+  setTimeout(syncPrice, 600);
+  setInterval(syncPrice, 1500);
+  document.getElementById('cc-pdp-add')?.addEventListener('click', function(){
+    // try to trigger the real add to cart button
+    const realBtn = document.querySelector('button[data-add], [onclick*="addToCart"], button:has(span):not(#cc-pdp-add)');
+    const addButtons = Array.from(document.querySelectorAll('button')).filter(b=>/add to cart/i.test(b.textContent));
+    if(addButtons[0] && addButtons[0]!==this){ addButtons[0].click(); return; }
+    // fallback: try window.addToCartWithId
+    const urlId = new URLSearchParams(location.search).get('id');
+    if(window.addToCartWithId && urlId){
+      const nameEl = document.querySelector('h1,h2');
+      const name = nameEl ? nameEl.textContent.trim().slice(0,80) : 'Chic Charms Piece';
+      const priceText = document.getElementById('cc-pdp-price').textContent.replace(/[^\d]/g,'');
+      window.addToCartWithId(name, Number(priceText)||1299, urlId);
+    }
+  });
+  // hide ATC when near footer
+  const footerObserver = new IntersectionObserver(entries=>{
+    const atc = document.getElementById('cc-pdp-atc');
+    if(!atc) return;
+    atc.style.transform = entries[0].isIntersecting ? 'translateX(-50%) translateY(120%)' : 'translateX(-50%) translateY(0)';
+    atc.style.transition = 'transform .25s ease';
+  }, {threshold:0});
+  setTimeout(()=>{
+    const foot = document.querySelector('.cc-site-footer');
+    if(foot) footerObserver.observe(foot);
+  }, 800);
+})();
+</script>
+<style>@media(min-width:768px){#cc-pdp-atc{display:none !important}}</style>
+
+<nav class="cc-bottom-nav" aria-label="Primary">
+    <a href="index.html" data-nav="home">
+      <span class="material-symbols-outlined">home</span>
+      <span>Home</span>
+    </a>
+    <a href="search.html" data-nav="search">
+      <span class="material-symbols-outlined">search</span>
+      <span>Search</span>
+    </a>
+    <a href="wishlist.html" data-nav="wishlist">
+      <span class="material-symbols-outlined">favorite</span>
+      <span>Wishlist</span>
+    </a>
+    <a href="cart.html" data-nav="cart">
+      <span class="material-symbols-outlined">shopping_bag</span>
+      <span>Bag</span>
+    </a>
+    <a href="account.html" data-nav="account">
+      <span class="material-symbols-outlined">person</span>
+      <span>Account</span>
+    </a>
+  </nav>
+  <style>
+  /* --- Chic Charms Unified Bottom Nav --- */
+  .cc-bottom-nav{
+    position:fixed;left:50%;transform:translateX(-50%);bottom:0;
+    width:100%;max-width:440px;z-index:60;
+    display:flex;justify-content:space-around;align-items:center;
+    padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));
+    background:rgba(255,248,247,0.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border-top:1px solid rgba(215,193,197,0.5);
+  }
+  .cc-bottom-nav a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 14px;color:#534346;text-decoration:none;border-radius:999px;font-size:11px;font-weight:500;transition:color .15s}
+  .cc-bottom-nav a.active,.cc-bottom-nav a[aria-current="page"]{color:#8e4559;background:rgba(171,93,113,0.10)}
+  .cc-bottom-nav .material-symbols-outlined{font-size:24px}
+  /* body padding for bottom nav */
+  body{padding-bottom:calc(78px + env(safe-area-inset-bottom,0px)) !important}
+  @media(min-width:768px){body{padding-bottom:0 !important}.cc-bottom-nav{display:none !important}}
+  </style>
+  <script>
+  // Auto-activate current tab
+  (function(){
+    var path=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+    document.querySelectorAll('.cc-bottom-nav a').forEach(function(a){
+      var href=(a.getAttribute('href')||'').split('#')[0].split('?')[0];
+      if(href===path || (path===''&&href==='index.html')){a.classList.add('active');a.setAttribute('aria-current','page')}
+    });
+  })();
+  </script>
+<script>
+// Chic Charms – unified wishlist helper
+(function(){
+  const WISH_KEY='cc_wishlist';
+  window.CCWish = {
+    get(){ try{return JSON.parse(localStorage.getItem(WISH_KEY)||'[]')}catch(e){return []}},
+    set(a){ localStorage.setItem(WISH_KEY, JSON.stringify(a))},
+    has(id){ return CCWish.get().includes(String(id))},
+    toggle(id){
+      id=String(id); let w=CCWish.get();
+      if(w.includes(id)) w=w.filter(x=>x!==id); else w.push(id);
+      CCWish.set(w); return w.includes(id);
+    }
+  };
+  // Wishlist nav → if empty, go to shop, else wishlist.html
+  document.addEventListener('click', function(e){
+    const a = e.target.closest('a[href="wishlist.html"]');
+    if(!a) return;
+    if(CCWish.get().length===0){
+      e.preventDefault();
+      location.href='shop.html?filter=wishlist-empty';
+    }
+  }, true);
+})();
+</script>
+
+
+<script>
+// Chic Charms – Global Nav Link Sanitizer (fixes rejected shop / wishlist redirects)
+(function(){
+  function fix(){
+    document.querySelectorAll('a[href]').forEach(a=>{
+      let h = a.getAttribute('href')||'';
+      // wishlist icons
+      if(a.getAttribute('aria-label')==='Wishlist' || /favorite|wishlist/i.test(a.textContent) && h.includes('bestsellers')){
+        a.setAttribute('href','wishlist.html');
+      }
+      // Generic #bestsellers shop CTAs -> shop.html
+      if(h==='#bestsellers' || h==='index.html#bestsellers'){
+        // if it's clearly a wishlist heart icon, send to wishlist.html, else shop
+        const isWish = a.closest('[aria-label*="Wishlist"]') || a.querySelector('svg path[d*="20.8 4.6"]');
+        a.setAttribute('href', isWish ? 'wishlist.html' : 'shop.html');
+      }
+      // stray mobile-home / old shop
+      if(h.includes('mobile-home.html')) a.setAttribute('href','index.html');
+      // menu nav items
+      const txt = (a.textContent||'').trim().toLowerCase();
+      if(txt==='shop' || txt==='best sellers' || txt==='best sellers'){ if(h.startsWith('#')) a.setAttribute('href','shop.html'); }
+      if(txt==='about'){ if(h.startsWith('#')) a.setAttribute('href','about.html'); }
+      if(txt==='reviews'){ if(h.startsWith('#')) a.setAttribute('href','index.html#testimonials'); }
+      if(txt==='cart' && !h.includes('cart.html')) a.setAttribute('href','cart.html');
+      if(txt==='search' && !h.includes('search.html')) a.setAttribute('href','search.html');
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',fix);
+  else fix();
+  new MutationObserver(fix).observe(document.documentElement,{childList:true,subtree:true});
+})();
+</script>
+
+
+<script>
+// Override drawer nav – Chic Charms proper links
+document.addEventListener('DOMContentLoaded', function(){
+  const nav = document.getElementById('drawerNav');
+  if(nav){
+    nav.innerHTML = `
+      <a href="shop.html" style="font-family:Jost,sans-serif;font-weight:500">Shop All</a>
+      <a href="search.html" style="font-family:Jost,sans-serif;font-weight:500">Search</a>
+      <a href="shop.html?filter=new" style="font-family:Jost,sans-serif;font-weight:500">New Arrivals</a>
+      <a href="shop.html?filter=bestseller" style="font-family:Jost,sans-serif;font-weight:500">Best Sellers</a>
+      <a href="wishlist.html" style="font-family:Jost,sans-serif;font-weight:500">Wishlist</a>
+      <a href="cart.html" style="font-family:Jost,sans-serif;font-weight:500">Cart</a>
+      <a href="account.html" style="font-family:Jost,sans-serif;font-weight:500">Account</a>
+      <hr style="border:0;border-top:1px solid #e1d8d7;margin:8px 0">
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="shipping.html">Shipping</a>
+      <a href="returns.html">Returns</a>
+    `;
+    nav.querySelectorAll('a').forEach(a=>{a.style.cssText+=';padding:8px 0;color:#1f1a1b;text-decoration:none;display:block'});
+  }
+});
+</script>
+
 </body>
 </html>

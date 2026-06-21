@@ -12,6 +12,36 @@
       content="earrings India, affordable earrings, Korean earrings, trendy jewellery, earrings under 299"
     />
     <title>Chic Charms – Your Glow-Up Starts at Your Ears</title>
+<!-- Chic Charms – FOUC / Icon Flash Guard -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0..1,0&display=swap" rel="stylesheet">
+<style>
+/* Prevent icon text flash (menu search shopping_bag) */
+.material-symbols-outlined{
+  font-family:'Material Symbols Outlined';font-weight:300;font-style:normal;
+  font-size:24px;line-height:1;letter-spacing:normal;text-transform:none;
+  display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;
+  -webkit-font-feature-settings:'liga';-webkit-font-smoothing:antialiased;
+  font-variation-settings:'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+  visibility:hidden;
+}
+.fonts-loaded .material-symbols-outlined{visibility:visible}
+/* hide body until first paint to avoid header collision */
+html.cc-loading body{opacity:0}
+html:not(.cc-loading) body{transition:opacity .18s ease}
+</style>
+<script>
+document.documentElement.classList.add('cc-loading');
+(function(){
+  function ready(){document.documentElement.classList.remove('cc-loading');document.documentElement.classList.add('fonts-loaded')}
+  if(document.fonts && document.fonts.ready){document.fonts.ready.then(ready);} 
+  window.addEventListener('load',ready);
+  setTimeout(ready,1200);
+})();
+</script>
+<!-- /FOUC Guard -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -633,7 +663,7 @@
           <a href="search.html" class="mobile-commerce-icon" aria-label="Search">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.8-3.8"></path></svg>
           </a>
-          <a href="#bestsellers" class="mobile-commerce-icon" aria-label="Wishlist">
+          <a href="wishlist.html" class="mobile-commerce-icon" aria-label="Wishlist">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M20.8 4.6c-1.8-1.7-4.6-1.6-6.3.2L12 7.3 9.5 4.8C7.8 3 5 2.9 3.2 4.6 1.3 6.4 1.3 9.4 3.1 11.2L12 20l8.9-8.8c1.8-1.8 1.8-4.8-.1-6.6Z" />
             </svg>
@@ -648,7 +678,7 @@
         </div>
         <nav class="nav-links" id="navLinks" aria-label="Main navigation">
           <a href="#categories">Shop</a>
-          <a href="#bestsellers">Best Sellers</a>
+          <a href="shop.html">Best Sellers</a>
           <a href="#why-us" id="navAboutLink">About</a>
           <a href="#testimonials">Reviews</a>
           <a href="search.html">Search</a>
@@ -675,39 +705,39 @@
         </div>
 
         <div class="mobile-category-strip" aria-label="Shop quick categories">
-          <a href="#bestsellers" class="mobile-category-pill" data-mobile-category="all">
+          <a href="shop.html" class="mobile-category-pill" data-mobile-category="all">
             <span class="mobile-category-img"><img src="images/editorial-everyday-hoops.png" alt="" loading="lazy" /></span>
             <span>All</span>
           </a>
-          <a href="#bestsellers" class="mobile-category-pill" data-mobile-category="everyday-elegance">
+          <a href="shop.html" class="mobile-category-pill" data-mobile-category="everyday-elegance">
             <span class="mobile-category-img"><img src="images/style-everyday-elegance.png" alt="" loading="lazy" /></span>
             <span>Earrings</span>
           </a>
-          <a href="#bestsellers" class="mobile-category-pill" data-mobile-category="everyday-elegance">
+          <a href="shop.html" class="mobile-category-pill" data-mobile-category="everyday-elegance">
             <span class="mobile-category-img"><img src="images/editorial-minimal-soul-closeup.png" alt="" loading="lazy" /></span>
             <span>Minimal</span>
           </a>
-          <a href="#bestsellers" class="mobile-category-pill" data-mobile-category="modern-romance">
+          <a href="shop.html" class="mobile-category-pill" data-mobile-category="modern-romance">
             <span class="mobile-category-img"><img src="images/story-soft-pearl-drop.png" alt="" loading="lazy" /></span>
             <span>Pearl</span>
           </a>
-          <a href="#bestsellers" class="mobile-category-pill" data-mobile-category="modern-romance">
+          <a href="shop.html" class="mobile-category-pill" data-mobile-category="modern-romance">
             <span class="mobile-category-img"><img src="images/editorial-korean-morning-coffee.png" alt="" loading="lazy" /></span>
             <span>Korean</span>
           </a>
-          <a href="#bestsellers" class="mobile-category-pill" data-mobile-category="heritage-muse">
+          <a href="shop.html" class="mobile-category-pill" data-mobile-category="heritage-muse">
             <span class="mobile-category-img"><img src="images/style-heritage-muse.png" alt="" loading="lazy" /></span>
             <span>Bridal</span>
           </a>
-          <a href="#bestsellers" class="mobile-category-pill" data-mobile-category="everyday-elegance">
+          <a href="shop.html" class="mobile-category-pill" data-mobile-category="everyday-elegance">
             <span class="mobile-category-img"><img src="images/editorial-light-meets-gold.png" alt="" loading="lazy" /></span>
             <span>Gold</span>
           </a>
-          <a href="#bestsellers" class="mobile-category-pill" data-mobile-category="after-dark">
+          <a href="shop.html" class="mobile-category-pill" data-mobile-category="after-dark">
             <span class="mobile-category-img"><img src="images/style-after-dark.png" alt="" loading="lazy" /></span>
             <span>Party</span>
           </a>
-          <a href="#bestsellers" class="mobile-category-pill" data-mobile-category="all">
+          <a href="shop.html" class="mobile-category-pill" data-mobile-category="all">
             <span class="mobile-category-img mobile-category-price">₹299</span>
             <span>Under ₹299</span>
           </a>
@@ -718,22 +748,22 @@
     <main>
       <section class="mobile-promo-slider" aria-label="Featured mobile offers">
         <div class="mobile-promo-track" id="mobilePromoTrack">
-          <a href="#bestsellers" class="mobile-promo-card mobile-promo-card--new">
+          <a href="shop.html" class="mobile-promo-card mobile-promo-card--new">
             <img src="images/editorial-light-meets-gold.png" alt="Gold jewelry new arrivals" loading="eager" />
             <span>New Arrivals</span>
             <strong>Fresh drops under ₹299</strong>
           </a>
-          <a href="#bestsellers" class="mobile-promo-card mobile-promo-card--deal">
+          <a href="shop.html" class="mobile-promo-card mobile-promo-card--deal">
             <img src="images/editorial-everyday-hoops.png" alt="Everyday earrings under 299" loading="lazy" />
             <span>Under ₹299</span>
             <strong>Everyday shine, easy prices</strong>
           </a>
-          <a href="#bestsellers" class="mobile-promo-card mobile-promo-card--bridal">
+          <a href="shop.html" class="mobile-promo-card mobile-promo-card--bridal">
             <img src="images/style-heritage-muse.png" alt="Bridal jewelry edit" loading="lazy" />
             <span>Bridal Edit</span>
             <strong>Soft statement pieces</strong>
           </a>
-          <a href="#bestsellers" class="mobile-promo-card mobile-promo-card--minimal">
+          <a href="shop.html" class="mobile-promo-card mobile-promo-card--minimal">
             <img src="images/editorial-minimal-soul-closeup.png" alt="Minimal jewelry collection" loading="lazy" />
             <span>Minimal Collection</span>
             <strong>Quiet luxury for daily wear</strong>
@@ -760,7 +790,7 @@
               Every piece under ₹299.
             </p>
             <div class="hero-ctas">
-              <a href="#bestsellers" class="btn btn-primary"
+              <a href="shop.html" class="btn btn-primary"
                 >Discover the Edit</a
               >
               <a href="#categories" class="btn btn-ghost"
@@ -870,7 +900,7 @@
               jewellery should feel like an extension of you — not an occasion.
             </p>
 
-            <a href="#bestsellers" class="d6-story-cta">
+            <a href="shop.html" class="d6-story-cta">
               Discover the Edit
               <span class="d6-story-cta-arrow">→</span>
             </a>
@@ -962,13 +992,13 @@
               <p class="section-eyebrow">Browse the Edit</p>
               <h2 class="section-title" id="cat-heading">Shop by Style</h2>
             </div>
-            <a href="#bestsellers" class="section-view-all"
+            <a href="shop.html" class="section-view-all"
               >View All <span>→</span></a
             >
           </div>
           <div class="cat-grid">
             <a
-              href="index.html?category=everyday-elegance#bestsellers"
+              href="shop.html?category=everyday-elegance"
               class="cat-card"
               aria-label="Shop Everyday Elegance"
               data-category="everyday-elegance"
@@ -990,7 +1020,7 @@
             </a>
 
             <a
-              href="index.html?category=modern-romance#bestsellers"
+              href="shop.html?category=modern-romance"
               class="cat-card"
               aria-label="Shop Modern Romance"
               data-category="modern-romance"
@@ -1012,7 +1042,7 @@
             </a>
 
             <a
-              href="index.html?category=after-dark#bestsellers"
+              href="shop.html?category=after-dark"
               class="cat-card"
               aria-label="Shop After Dark"
               data-category="after-dark"
@@ -1034,7 +1064,7 @@
             </a>
 
             <a
-              href="index.html?category=heritage-muse#bestsellers"
+              href="shop.html?category=heritage-muse"
               class="cat-card"
               aria-label="Shop Heritage Muse"
               data-category="heritage-muse"
@@ -1211,7 +1241,7 @@
               carry warmth effortlessly.
             </p>
             <a
-              href="#bestsellers"
+              href="shop.html"
               class="d6-campaign-cta d6-reveal d6-delay-2"
               onclick="
                 event.preventDefault();
@@ -1246,7 +1276,7 @@
               effortless enough to live in.
             </p>
             <a
-              href="#bestsellers"
+              href="shop.html"
               class="d6-campaign-cta d6-reveal d6-delay-2"
               onclick="
                 event.preventDefault();
@@ -1274,7 +1304,7 @@
               <h3 class="d6-mood-card-title">
                 Morning Coffee<br /><em>Edit</em>
               </h3>
-              <a href="#bestsellers" class="d6-mood-card-link">Explore →</a>
+              <a href="shop.html" class="d6-mood-card-link">Explore →</a>
             </div>
           </div>
           <div class="d6-mood-card d6-reveal d6-delay-2">
@@ -1286,7 +1316,7 @@
             <div class="d6-mood-card-overlay">
               <span class="d6-mood-card-tag">Festive Edit</span>
               <h3 class="d6-mood-card-title">Soft Date<br /><em>Night</em></h3>
-              <a href="#bestsellers" class="d6-mood-card-link">Explore →</a>
+              <a href="shop.html" class="d6-mood-card-link">Explore →</a>
             </div>
           </div>
           <div class="d6-mood-card d6-reveal d6-delay-4">
@@ -1300,7 +1330,7 @@
               <h3 class="d6-mood-card-title">
                 Effortless<br /><em>Every Day</em>
               </h3>
-              <a href="#bestsellers" class="d6-mood-card-link">Explore →</a>
+              <a href="shop.html" class="d6-mood-card-link">Explore →</a>
             </div>
           </div>
         </div>
@@ -1538,9 +1568,9 @@
           <p class="d6-footer-col-title">Shop</p>
           <ul class="d6-footer-links">
             <li><a href="#categories">All Collections</a></li>
-            <li><a href="#bestsellers">Best Sellers</a></li>
-            <li><a href="#bestsellers">New Arrivals</a></li>
-            <li><a href="#bestsellers">Under ₹199</a></li>
+            <li><a href="shop.html">Best Sellers</a></li>
+            <li><a href="shop.html">New Arrivals</a></li>
+            <li><a href="shop.html">Under ₹199</a></li>
           </ul>
         </div>
         <div>
@@ -1581,28 +1611,74 @@
       aria-live="polite"
     ></div>
 
-    <nav class="mobile-bottom-nav" aria-label="Mobile bottom navigation">
-      <a href="index.html" class="mobile-bottom-tab is-active">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3V10.5Z" /></svg>
-        <span>Home</span>
-      </a>
-      <a href="search.html" class="mobile-bottom-tab">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.8-3.8"></path></svg>
-        <span>Search</span>
-      </a>
-      <a href="#bestsellers" class="mobile-bottom-tab">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6c-1.8-1.7-4.6-1.6-6.3.2L12 7.3 9.5 4.8C7.8 3 5 2.9 3.2 4.6 1.3 6.4 1.3 9.4 3.1 11.2L12 20l8.9-8.8c1.8-1.8 1.8-4.8-.1-6.6Z" /></svg>
-        <span>Wishlist</span>
-      </a>
-      <a href="cart.html" class="mobile-bottom-tab">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L22 6H6" /></svg>
-        <span>Cart</span>
-      </a>
-      <a href="account.html" class="mobile-bottom-tab">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21a8 8 0 0 0-16 0" /><circle cx="12" cy="7" r="4" /></svg>
-        <span>Account</span>
-      </a>
-    </nav>
+      <!-- Bottom Nav – Chic Charms Unified -->
+  
+<!-- Chic Charms – Unified Site Footer -->
+<footer class="cc-site-footer" style="border-top:1px solid #d7c1c5; background:#fff8f7; padding:32px 20px 110px; margin-top:24px;">
+  <p style="font-family:Jost,sans-serif;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:#8e4559;margin:0 0 8px">Chic Charms</p>
+  <p style="font-family:Jost,sans-serif;font-size:14px;line-height:1.6;color:#534346;margin:0 0 16px;max-width:34ch">Fast mobile discovery for daily wear, gifting, and soft statement earrings. COD available · Ships in 24h · Skin-friendly finish.</p>
+  <nav style="display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:#857276">
+    <a href="about.html" style="color:inherit;text-decoration:none">About</a>
+    <a href="shipping.html" style="color:inherit;text-decoration:none">Shipping</a>
+    <a href="returns.html" style="color:inherit;text-decoration:none">Returns</a>
+    <a href="contact.html" style="color:inherit;text-decoration:none">Contact</a>
+    <a href="privacy.html" style="color:inherit;text-decoration:none">Privacy</a>
+    <a href="terms.html" style="color:inherit;text-decoration:none">Terms</a>
+  </nav>
+  <p style="font-family:Jost,sans-serif;font-size:11px;color:#857276;margin:16px 0 0">© <span class="cc-year"></span> Chic Charms. All rights reserved.</p>
+</footer>
+<script>document.querySelectorAll('.cc-year').forEach(el=>el.textContent=new Date().getFullYear())</script>
+<!-- /Unified Footer -->
+
+<nav class="cc-bottom-nav" aria-label="Primary">
+    <a href="index.html" data-nav="home">
+      <span class="material-symbols-outlined">home</span>
+      <span>Home</span>
+    </a>
+    <a href="search.html" data-nav="search">
+      <span class="material-symbols-outlined">search</span>
+      <span>Search</span>
+    </a>
+    <a href="wishlist.html" data-nav="wishlist">
+      <span class="material-symbols-outlined">favorite</span>
+      <span>Wishlist</span>
+    </a>
+    <a href="cart.html" data-nav="cart">
+      <span class="material-symbols-outlined">shopping_bag</span>
+      <span>Bag</span>
+    </a>
+    <a href="account.html" data-nav="account">
+      <span class="material-symbols-outlined">person</span>
+      <span>Account</span>
+    </a>
+  </nav>
+  <style>
+  /* --- Chic Charms Unified Bottom Nav --- */
+  .cc-bottom-nav{
+    position:fixed;left:50%;transform:translateX(-50%);bottom:0;
+    width:100%;max-width:440px;z-index:60;
+    display:flex;justify-content:space-around;align-items:center;
+    padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));
+    background:rgba(255,248,247,0.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border-top:1px solid rgba(215,193,197,0.5);
+  }
+  .cc-bottom-nav a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 14px;color:#534346;text-decoration:none;border-radius:999px;font-size:11px;font-weight:500;transition:color .15s}
+  .cc-bottom-nav a.active,.cc-bottom-nav a[aria-current="page"]{color:#8e4559;background:rgba(171,93,113,0.10)}
+  .cc-bottom-nav .material-symbols-outlined{font-size:24px}
+  /* body padding for bottom nav */
+  body{padding-bottom:calc(78px + env(safe-area-inset-bottom,0px)) !important}
+  @media(min-width:768px){body{padding-bottom:0 !important}.cc-bottom-nav{display:none !important}}
+  </style>
+  <script>
+  // Auto-activate current tab
+  (function(){
+    var path=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+    document.querySelectorAll('.cc-bottom-nav a').forEach(function(a){
+      var href=(a.getAttribute('href')||'').split('#')[0].split('?')[0];
+      if(href===path || (path===''&&href==='index.html')){a.classList.add('active');a.setAttribute('aria-current','page')}
+    });
+  })();
+  </script>
 
     <!-- ░░ D6 SCROLL REVEAL ░░ -->
     <script>
@@ -2138,7 +2214,7 @@
         document.getElementById("searchInput").value = "";
         document.getElementById("categoryFilter").value = "all";
         document.getElementById("sortFilter").value = "default";
-        history.replaceState(null, "", "index.html#bestsellers");
+        /* removed hash */;
         filterAndRenderProducts();
       };
 
@@ -2229,7 +2305,7 @@
       function persistCategoryToUrl() {
         const slug = document.getElementById("categoryFilter").value;
         if (!slug || slug === "all") {
-          history.replaceState(null, "", "index.html#bestsellers");
+          /* removed hash */;
           return;
         }
         history.replaceState(
@@ -2637,6 +2713,67 @@
   if(g){
     g.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); var q=g.value.trim(); location.href='search.html'+(q?'?q='+encodeURIComponent(q):''); }});
   }
+})();
+</script>
+
+
+<script>
+// Chic Charms – unified wishlist helper
+(function(){
+  const WISH_KEY='cc_wishlist';
+  window.CCWish = {
+    get(){ try{return JSON.parse(localStorage.getItem(WISH_KEY)||'[]')}catch(e){return []}},
+    set(a){ localStorage.setItem(WISH_KEY, JSON.stringify(a))},
+    has(id){ return CCWish.get().includes(String(id))},
+    toggle(id){
+      id=String(id); let w=CCWish.get();
+      if(w.includes(id)) w=w.filter(x=>x!==id); else w.push(id);
+      CCWish.set(w); return w.includes(id);
+    }
+  };
+  // Wishlist nav → if empty, go to shop, else wishlist.html
+  document.addEventListener('click', function(e){
+    const a = e.target.closest('a[href="wishlist.html"]');
+    if(!a) return;
+    if(CCWish.get().length===0){
+      e.preventDefault();
+      location.href='shop.html?filter=wishlist-empty';
+    }
+  }, true);
+})();
+</script>
+
+
+<script>
+// Chic Charms – Global Nav Link Sanitizer (fixes rejected shop / wishlist redirects)
+(function(){
+  function fix(){
+    document.querySelectorAll('a[href]').forEach(a=>{
+      let h = a.getAttribute('href')||'';
+      // wishlist icons
+      if(a.getAttribute('aria-label')==='Wishlist' || /favorite|wishlist/i.test(a.textContent) && h.includes('bestsellers')){
+        a.setAttribute('href','wishlist.html');
+      }
+      // Generic #bestsellers shop CTAs -> shop.html
+      if(h==='#bestsellers' || h==='index.html#bestsellers'){
+        // if it's clearly a wishlist heart icon, send to wishlist.html, else shop
+        const isWish = a.closest('[aria-label*="Wishlist"]') || a.querySelector('svg path[d*="20.8 4.6"]');
+        a.setAttribute('href', isWish ? 'wishlist.html' : 'shop.html');
+      }
+      // stray mobile-home / old shop
+      if(h.includes('mobile-home.html')) a.setAttribute('href','index.html');
+      // menu nav items
+      const txt = (a.textContent||'').trim().toLowerCase();
+      if(txt==='shop' || txt==='best sellers' || txt==='best sellers'){ if(h.startsWith('#')) a.setAttribute('href','shop.html'); }
+      if(txt==='about'){ if(h.startsWith('#')) a.setAttribute('href','about.html'); }
+      if(txt==='reviews'){ if(h.startsWith('#')) a.setAttribute('href','index.html#testimonials'); }
+      if(txt==='cart' && !h.includes('cart.html')) a.setAttribute('href','cart.html');
+      if(txt==='search' && !h.includes('search.html')) a.setAttribute('href','search.html');
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',fix);
+  else fix();
+  new MutationObserver(fix).observe(document.documentElement,{childList:true,subtree:true});
 })();
 </script>
 
