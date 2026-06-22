@@ -31,7 +31,7 @@ import {
    This is the primary check — it works without any Firestore read.
    ── */
 const ADMIN_EMAILS = [
-  "cvmun28@gmail.com",  /* ← your admin Google account */
+  "chiccharms.in@gmail.com",  /* ← your admin Google account */
 ];
 
 function isKnownAdminEmail(email) {

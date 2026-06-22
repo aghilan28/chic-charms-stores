@@ -26,7 +26,7 @@ const DISPLAY_NAME_MAX = 12;
    Security is enforced by Firestore rules + admin-guard.js.
    ── */
 const ADMIN_EMAILS = [
-  "cvmun28@gmail.com",  /* ← your admin account */
+  "chiccharms.in@gmail.com",  /* ← your admin account */
 ];
 
 function isKnownAdminEmail(email) {

@@ -32,7 +32,7 @@ const db = getFirestore();
    but admin-guard.js will deny access immediately.
    ── */
 const ADMIN_EMAILS = [
-  "cvmun28@gmail.com",   /* ← your admin Google account */
+  "chiccharms.in@gmail.com",   /* ← your admin Google account */
 ];
 
 function isKnownAdminEmail(email) {

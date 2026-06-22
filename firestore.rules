@@ -10,13 +10,13 @@ service cloud.firestore {
 
       Preferred structure:
         admins/<firebase-auth-uid>
-          email: "cvmun28@gmail.com"   // optional but recommended
+          email: "chiccharms.in@gmail.com"   // optional but recommended
           active: true                 // optional; false disables access
           role: "admin"                // optional label
 
       Legacy single-admin structure also supported:
         admins/admin1
-          email: "cvmun28@gmail.com"   // required for legacy lookup
+          email: "chiccharms.in@gmail.com"   // required for legacy lookup
           active: true                 // optional; false disables access
           role: "admin"                // optional label
 
@@ -95,7 +95,7 @@ service cloud.firestore {
 
     function isKnownAdminEmail() {
       return hasAuthEmail()
-        && authEmail() == "cvmun28@gmail.com";
+        && authEmail() == "chiccharms.in@gmail.com";
     }
 
     function isAdmin() {

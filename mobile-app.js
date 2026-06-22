@@ -148,7 +148,7 @@
       });
     }
     if (!inner.querySelector(".ma-header-cart")) {
-      var cart = el("a", "ma-header-cart", { href: "#", "data-cc-app-cart": "true", "aria-label": "Cart" });
+      var cart = el("a", "ma-header-cart", { href: "cart.html", "aria-label": "Cart" });
       cart.innerHTML = icon("cart") + '<span class="mobile-cart-count" hidden></span>';
       inner.appendChild(cart);
       state.headerCart = cart;
@@ -267,13 +267,12 @@
       ["index.html#categories", "Categories",  "shop",        false],
       ["index.html#bestsellers","Discover",    "discover",    false],
       [accountHref,             accountLabel,  accountIcon,   accountActive],
-      ["#",                     "Cart",        "cart",        page === "cart.html", true]
+      ["cart.html",             "Cart",        "cart",        page === "cart.html"]
     ];
 
     var nav = el("nav", "ma-bottom-nav", { "aria-label": "Mobile bottom navigation" });
     tabs.forEach(function (tab) {
       var attrs = { href: tab[0], "aria-label": tab[1] };
-      if (tab[4]) attrs["data-cc-app-cart"] = "true";
       var link = el("a", "ma-nav-tab" + (tab[3] ? " is-active" : ""), attrs);
       link.innerHTML = icon(tab[2]) + "<span>" + tab[1] + "</span>";
       if (tab[1] === "Cart") {
