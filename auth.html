@@ -540,34 +540,27 @@
     googleProvider.setCustomParameters({ prompt: 'select_account' });
 
     /* ── Admin role check ── */
-    /* ── ADMIN EMAIL LIST — primary check, no Firestore needed ── */
-    const ADMIN_EMAILS_AUTH = ['cvmun28@gmail.com'];
-    function isKnownAdminEmailAuth(email) {
+    /* ── Admin emails — used for instant client-side routing only.
+       Security is enforced by admin-guard.js on every admin page load. ── */
+    const ADMIN_EMAILS_LOCAL = ['cvmun28@gmail.com'];
+
+    function isAdminEmail(email) {
       if (!email) return false;
-      return ADMIN_EMAILS_AUTH.includes(email.toLowerCase().trim());
+      return ADMIN_EMAILS_LOCAL.includes(String(email).toLowerCase().trim());
     }
 
     async function isAdminUser(uid) {
-      /* Layer 1: get current user email from Firebase Auth (instant, verified) */
-      try {
-        const currentUser = auth.currentUser;
-        if (currentUser && isKnownAdminEmailAuth(currentUser.email)) {
-          return true;
-        }
-        /* Also check the uid param against the known email list via auth */
-        /* (handles case where currentUser may differ) */
-      } catch (_) {}
+      /* Layer 1: check the current signed-in user's email (instant) */
+      const cu = auth.currentUser;
+      if (cu && isAdminEmail(cu.email)) return true;
 
-      /* Layer 2: Firestore admins/{uid} check (may fail due to rules) */
+      /* Layer 2: Firestore fallback (for future admins not in email list) */
       try {
         const snap = await getDoc(doc(db, 'admins', uid));
-        return snap.exists();
-      } catch (e) {
-        /* permission-denied — Firestore rules block client read.
-           Fall back to false; email check above handles the admin case. */
-        console.warn('[auth] Firestore admin check blocked:', e.code);
-        return false;
-      }
+        if (snap.exists()) return true;
+      } catch (e) { /* permission-denied — ignore */ }
+
+      return false;
     }
 
     /* ── Save/update Firestore user doc after Google sign-in ── */
@@ -881,7 +874,9 @@
       if (!checked) {
         checked = true;
         if (user) {
-          const admin = await isAdminUser(user.uid);
+          /* Use user.email directly — it's always set in the callback,
+             no async Firestore call needed for the known admin email. */
+          const admin = isAdminEmail(user.email) || await isAdminUser(user.uid);
           window.location.href = admin ? 'admin.html' : 'index.html';
         }
       }
