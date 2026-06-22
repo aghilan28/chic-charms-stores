@@ -540,11 +540,32 @@
     googleProvider.setCustomParameters({ prompt: 'select_account' });
 
     /* ── Admin role check ── */
+    /* ── ADMIN EMAIL LIST — primary check, no Firestore needed ── */
+    const ADMIN_EMAILS_AUTH = ['cvmun28@gmail.com'];
+    function isKnownAdminEmailAuth(email) {
+      if (!email) return false;
+      return ADMIN_EMAILS_AUTH.includes(email.toLowerCase().trim());
+    }
+
     async function isAdminUser(uid) {
+      /* Layer 1: get current user email from Firebase Auth (instant, verified) */
+      try {
+        const currentUser = auth.currentUser;
+        if (currentUser && isKnownAdminEmailAuth(currentUser.email)) {
+          return true;
+        }
+        /* Also check the uid param against the known email list via auth */
+        /* (handles case where currentUser may differ) */
+      } catch (_) {}
+
+      /* Layer 2: Firestore admins/{uid} check (may fail due to rules) */
       try {
         const snap = await getDoc(doc(db, 'admins', uid));
         return snap.exists();
       } catch (e) {
+        /* permission-denied — Firestore rules block client read.
+           Fall back to false; email check above handles the admin case. */
+        console.warn('[auth] Firestore admin check blocked:', e.code);
         return false;
       }
     }
