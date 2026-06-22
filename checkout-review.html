@@ -559,7 +559,11 @@
 
   <!-- Loading overlay -->
   <div class="loading-overlay" id="loadingOverlay">
-    <div class="loading-spinner"></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:16px;">
+      <div class="loading-spinner"></div>
+      <span id="loaderLabel" style="font-size:13px;font-weight:600;color:var(--primary);
+            letter-spacing:.06em;text-transform:uppercase;opacity:.8;"></span>
+    </div>
   </div>
 
   <!-- Toast -->
@@ -717,7 +721,7 @@
       <p class="footer-total-amount" id="footerTotal">₹—</p>
     </div>
     <button class="btn-pay" id="payBtn" disabled>
-      Proceed to Payment
+      <span class="btn-pay-text">Proceed to Payment</span>
       <span class="material-symbols-outlined" style="font-size:18px;">arrow_forward</span>
     </button>
   </nav>
@@ -725,6 +729,15 @@
 </div><!-- /mobile-shell -->
 
 <!-- ═══════════════════════ SCRIPTS ════════════════════════════════ -->
+
+<!--
+  ┌──────────────────────────────────────────────────────────────────┐
+  │  RAZORPAY CHECKOUT SCRIPT — official Razorpay JS SDK             │
+  │  Must be loaded from Razorpay CDN. Do not self-host.             │
+  └──────────────────────────────────────────────────────────────────┘
+-->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
 <!-- coupon-session.js provides window.ChicCoupon -->
 <script src="coupon-session.js"></script>
 
@@ -732,55 +745,87 @@
 (function () {
   'use strict';
 
+  /* ═══════════════════════════════════════════════════════════════
+     TOKEN YOU MUST FILL IN (only this one on the frontend)
+     ───────────────────────────────────────────────────────────────
+     TOKEN_1  →  YOUR_RAZORPAY_KEY_ID
+                 Get from: https://dashboard.razorpay.com/app/keys
+                 Starts with  rzp_live_  (production)
+                           or rzp_test_  (test mode)
+                 This key is safe to be in frontend code.
+                 NEVER put TOKEN_2 (key secret) here.
+     ═══════════════════════════════════════════════════════════════ */
+  const RAZORPAY_KEY_ID = 'TOKEN_1';  // ← REPLACE with your Key ID
+
+  /*
+     TOKEN_3  →  YOUR_FIREBASE_FUNCTIONS_BASE_URL
+                 Format: https://asia-south1-YOUR_PROJECT_ID.cloudfunctions.net
+                 Example: https://asia-south1-chic-charms-store.cloudfunctions.net
+                 Find it in: Firebase Console → Functions → your deployed functions
+  */
+  const FUNCTIONS_BASE  = 'TOKEN_3'; // ← REPLACE with your Cloud Functions base URL
+
   /* ─── Helpers ───────────────────────────────────────────────── */
   const $ = id => document.getElementById(id);
   const money = n => '₹' + Number(n || 0).toLocaleString('en-IN');
   const esc   = s => String(s).replace(/[&<>"]/g, m =>
     ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m]));
 
-  function showToast(msg, ms = 2400) {
+  /* ─── Toast ─────────────────────────────────────────────────── */
+  function showToast(msg, ms = 2800) {
     const t = $('toast');
     t.textContent = msg;
     t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), ms);
   }
 
+  /* ─── Loader ────────────────────────────────────────────────── */
+  function showLoader(label) {
+    const ol = $('loadingOverlay');
+    const lbl = $('loaderLabel');
+    if (lbl) lbl.textContent = label || '';
+    ol.classList.remove('hidden');
+  }
   function hideLoader() {
     $('loadingOverlay').classList.add('hidden');
   }
 
-  /* ─── Cart ──────────────────────────────────────────────────── */
+  /* ─── Button state ──────────────────────────────────────────── */
+  function setPayBtnState(busy, label) {
+    const btn = $('payBtn');
+    btn.disabled = busy || !window.__cartHasItems;
+    const txt = btn.querySelector('.btn-pay-text');
+    if (txt) txt.textContent = label || 'Proceed to Payment';
+  }
+
+  /* ─── Idempotency key (one per page load) ───────────────────── */
+  const IDEM_KEY = 'cc_idem_' + Date.now() + '_' + Math.random().toString(36).slice(2, 9);
+
+  /* ─── Data readers ──────────────────────────────────────────── */
   function getCart() {
     try { return JSON.parse(localStorage.getItem('cart')) || []; }
     catch { return []; }
   }
 
-  /* ─── Delivery info ─────────────────────────────────────────── */
   function getDelivery() {
-    // Try the key written by delivery-information.html
     const keys = ['cc_delivery', 'delivery_info', 'checkoutDelivery'];
     for (const k of keys) {
-      try {
-        const raw = localStorage.getItem(k);
-        if (raw) return JSON.parse(raw);
-      } catch { /* ignore */ }
+      try { const r = localStorage.getItem(k); if (r) return JSON.parse(r); }
+      catch { /* skip */ }
     }
-
-    // Fallback: individual fields saved by campus-verification.html
-    const name    = localStorage.getItem('cc_name')   || localStorage.getItem('checkoutName')   || '';
-    const phone   = localStorage.getItem('cc_phone')  || localStorage.getItem('checkoutPhone')  || '';
-    const address = localStorage.getItem('cc_address')|| localStorage.getItem('checkoutAddress')|| '';
-    const city    = localStorage.getItem('cc_city')   || '';
-    const state   = localStorage.getItem('cc_state')  || '';
-    const pincode = localStorage.getItem('cc_pincode')|| localStorage.getItem('checkoutPincode')|| '';
-    const dept    = localStorage.getItem('cc_dept')   || '';
-    const year    = localStorage.getItem('cc_year')   || '';
-
+    const name    = localStorage.getItem('cc_name')    || localStorage.getItem('checkoutName')    || '';
+    const phone   = localStorage.getItem('cc_phone')   || localStorage.getItem('checkoutPhone')   || '';
+    const email   = localStorage.getItem('cc_email')   || localStorage.getItem('checkoutEmail')   || '';
+    const address = localStorage.getItem('cc_address') || localStorage.getItem('checkoutAddress') || '';
+    const city    = localStorage.getItem('cc_city')    || '';
+    const state   = localStorage.getItem('cc_state')   || '';
+    const pincode = localStorage.getItem('cc_pincode') || localStorage.getItem('checkoutPincode') || '';
+    const dept    = localStorage.getItem('cc_dept')    || '';
+    const year    = localStorage.getItem('cc_year')    || '';
     if (!name && !address) return null;
-    return { name, phone, address, city, state, pincode, dept, year };
+    return { name, phone, email, address, city, state, pincode, dept, year };
   }
 
-  /* ─── Campus / coupon ───────────────────────────────────────── */
   function getCoupon() {
     if (!window.ChicCoupon) return null;
     return window.ChicCoupon.getStoredCoupon();
@@ -791,24 +836,18 @@
     return window.ChicCoupon.getDiscount(coupon);
   }
 
-  /* ─── Render: items ─────────────────────────────────────────── */
+  /* ─── Render helpers (UI — no changes from previous version) ── */
   function renderItems(cart) {
     const list = $('itemsList');
     $('itemCount').textContent = cart.length + ' Item' + (cart.length !== 1 ? 's' : '');
-
-    if (!cart.length) {
-      list.innerHTML = '';
-      return;
-    }
-
+    if (!cart.length) { list.innerHTML = ''; return; }
     list.innerHTML = cart.map(item => {
-      const qty   = Number(item.quantity || 1);
-      const price = Number(item.price    || 0);
+      const qty    = Number(item.quantity || 1);
+      const price  = Number(item.price    || 0);
       const imgSrc = item.image || item.img || '';
       const imgTag = imgSrc
         ? `<img src="${esc(imgSrc)}" alt="${esc(item.name || 'Product')}" loading="lazy" />`
         : `<span class="material-symbols-outlined" style="font-size:36px;color:var(--outline);">diamond</span>`;
-
       return `
         <div class="item-row">
           <div class="item-thumb">${imgTag}</div>
@@ -821,18 +860,13 @@
     }).join('');
   }
 
-  /* ─── Render: delivery card ─────────────────────────────────────
-     COUPON user  → campus delivery notice (address not required)
-     NORMAL user  → read-only summary of what they entered upstream  */
   function renderDelivery(info, hasCoupon) {
-    const el        = $('deliveryInfo');
-    const titleEl   = $('deliveryCardTitle');
-    const editBtn   = $('editAddressBtn');
-
+    const el      = $('deliveryInfo');
+    const titleEl = $('deliveryCardTitle');
+    const editBtn = $('editAddressBtn');
     if (hasCoupon) {
-      /* ── Campus delivery notice ── */
-      titleEl.textContent    = 'Campus Delivery';
-      editBtn.style.display  = 'none';
+      titleEl.textContent   = 'Campus Delivery';
+      editBtn.style.display = 'none';
       el.innerHTML = `
         <div style="display:flex;align-items:flex-start;gap:12px;">
           <div style="width:38px;height:38px;border-radius:50%;background:rgba(142,69,89,.08);
@@ -852,17 +886,13 @@
           </div>
         </div>`;
     } else {
-      /* ── Normal user: read-only address summary ── */
       titleEl.textContent   = 'Delivery Address';
-      editBtn.style.display = 'block';   // let them go back and edit if needed
-
+      editBtn.style.display = 'block';
       if (!info || (!info.name && !info.address)) {
-        /* Should not normally happen — delivery-information.html always saves data */
         el.innerHTML = `<p style="color:var(--muted);font-size:14px;line-height:1.6;">
           Your delivery details will appear here once saved on the previous step.</p>`;
         return;
       }
-
       const addressLine = [info.address, info.city, info.state].filter(Boolean).join(', ');
       el.innerHTML = `
         <p class="addr-name">${esc(info.name)}</p>
@@ -874,43 +904,28 @@
     }
   }
 
-  /* ─── Render: campus benefit (CONDITIONAL) ──────────────────── */
   function renderCampus(coupon, delivery) {
     const section = $('campusBenefitSection');
-
-    // ── Gate: only show if a valid coupon exists ──────────────
     if (!coupon || !coupon.couponApplied || !coupon.couponCode) {
-      section.style.display = 'none';
-      return;
+      section.style.display = 'none'; return;
     }
-
-    // ── Fill in details ───────────────────────────────────────
-    $('campusCouponBadge').textContent = coupon.couponCode;
-
-    // Student name from delivery info or coupon session
+    $('campusCouponBadge').textContent  = coupon.couponCode;
     const studentName = (delivery && delivery.name) || '';
-    $('campusStudentName').textContent = studentName || 'Verified Student';
-
-    // Privilege label from delivery dept/year if available
-    const dept = (delivery && delivery.dept) ? delivery.dept : '';
-    const year = (delivery && delivery.year) ? delivery.year : '';
+    $('campusStudentName').textContent  = studentName || 'Verified Student';
+    const dept      = (delivery && delivery.dept) ? delivery.dept : '';
+    const year      = (delivery && delivery.year) ? delivery.year : '';
     const privilege = [year, dept].filter(Boolean).join(' · ');
-    $('campusPrivilege').textContent = privilege || 'Campus Student Privilege';
-
+    $('campusPrivilege').textContent    = privilege || 'Campus Student Privilege';
     const disc = getDiscount(coupon);
     $('campusDiscountText').textContent = `-${money(disc)} Discount Unlocked`;
-
-    // ── Show ──────────────────────────────────────────────────
     section.style.display = 'block';
   }
 
-  /* ─── Render: payment summary ───────────────────────────────── */
   function renderSummary(cart, coupon) {
     const subtotal = cart.reduce((s, i) => s + Number(i.price || 0) * Number(i.quantity || 1), 0);
     const shipping = subtotal >= 399 ? 0 : 49;
     const discount = getDiscount(coupon);
     const total    = Math.max(0, subtotal + shipping - discount);
-
     const rows = $('summaryRows');
     rows.innerHTML = `
       <div class="summary-row">
@@ -924,18 +939,40 @@
       </div>` : ''}
       <div class="summary-row">
         <span class="summary-label">Delivery Charges</span>
-        <span class="summary-value">${shipping === 0 ? '<span style="color:var(--success);font-weight:800;">Free</span>' : money(shipping)}</span>
+        <span class="summary-value">${shipping === 0
+          ? '<span style="color:var(--success);font-weight:800;">Free</span>'
+          : money(shipping)}</span>
       </div>
       <div class="summary-row summary-total">
         <span class="summary-label">Total Amount</span>
         <span class="summary-value">${money(total)}</span>
       </div>
     `;
-
     $('footerTotal').textContent = money(total);
+    window.__orderAmounts = { subtotal, shipping, discount, total };
   }
 
-  /* ─── Payment option selector ───────────────────────────────── */
+  function render(cart, coupon, delivery) {
+    window.__cartHasItems = cart.length > 0;
+    if (!cart.length) {
+      $('emptyState').style.display            = 'block';
+      $('itemsCard').style.display             = 'none';
+      $('deliveryCard').style.display          = 'none';
+      $('campusBenefitSection').style.display  = 'none';
+      $('paymentCard').style.display           = 'none';
+      $('summaryCard').style.display           = 'none';
+      $('footerTotal').textContent             = '₹0';
+      $('payBtn').disabled                     = true;
+      return;
+    }
+    $('emptyState').style.display = 'none';
+    renderItems(cart);
+    renderDelivery(delivery, !!coupon);
+    renderCampus(coupon, delivery);
+    renderSummary(cart, coupon);
+  }
+
+  /* ─── Payment method selector ───────────────────────────────── */
   let selectedMethod = 'upi';
   function initPaymentSelector() {
     document.querySelectorAll('.pay-option').forEach(opt => {
@@ -947,88 +984,328 @@
     });
   }
 
-  /* ─── Back button ───────────────────────────────────────────── */
-  function initBackBtn() {
+  /* ─── Nav buttons ───────────────────────────────────────────── */
+  function initNavBtns() {
     $('backBtn').addEventListener('click', () => {
       if (history.length > 1) history.back();
       else location.href = 'delivery-information.html';
     });
-  }
-
-  /* ─── Edit address ──────────────────────────────────────────── */
-  function initEditBtn() {
     $('editAddressBtn').addEventListener('click', () => {
-      // Preserve coupon session; go back to delivery page
       location.href = 'delivery-information.html';
     });
   }
 
-  /* ─── Pay button ────────────────────────────────────────────── */
-  function initPayBtn(cart, coupon, delivery) {
-    const btn = $('payBtn');
-    btn.disabled = cart.length === 0;
+  /* ═══════════════════════════════════════════════════════════════
+     PAYMENT FLOW
+     ═══════════════════════════════════════════════════════════════ */
 
-    btn.addEventListener('click', () => {
-      if (!selectedMethod) {
-        showToast('Please select a payment method');
+  /* ── Step 1: Validate session ───────────────────────────────── */
+  function validateSession(cart, delivery, coupon) {
+    if (!cart.length) {
+      showToast('Your cart is empty.'); return false;
+    }
+    if (!selectedMethod) {
+      showToast('Please select a payment method.'); return false;
+    }
+    /* Non-coupon users must have a delivery address */
+    if (!coupon && (!delivery || (!delivery.name && !delivery.address))) {
+      showToast('Please complete your delivery information.'); return false;
+    }
+    return true;
+  }
+
+  /* ── Step 2: Create pending order via Cloud Function ────────── */
+  async function createPendingOrder(cart, delivery, coupon, delivery2) {
+    const amounts = window.__orderAmounts || {};
+    const payload = {
+      idempotencyKey: IDEM_KEY,
+      customerInfo: {
+        fullName: delivery?.name  || '',
+        phone:    delivery?.phone || '',
+        email:    delivery?.email || '',
+      },
+      deliveryInfo: delivery || {},
+      cartItems:    cart.map(i => ({
+        id:       i.id || i.productId || '',
+        name:     i.name     || '',
+        price:    Number(i.price    || 0),
+        quantity: Number(i.quantity || 1),
+        image:    i.image || i.img || '',
+      })),
+      couponInfo:   coupon ? {
+        couponCode:     coupon.couponCode,
+        couponType:     coupon.couponType,
+        discountAmount: coupon.discountAmount,
+      } : null,
+      studentInfo:   delivery ? {
+        dept: delivery.dept || '',
+        year: delivery.year || '',
+      } : null,
+      paymentMethod:  selectedMethod,
+      subtotal:       amounts.subtotal       || 0,
+      discount:       amounts.discount       || 0,
+      deliveryCharge: amounts.shipping       || 0,
+      total:          amounts.total          || 0,
+    };
+
+    const resp = await fetch(`${FUNCTIONS_BASE}/createOrder`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload),
+    });
+
+    if (!resp.ok) {
+      const errBody = await resp.json().catch(() => ({}));
+      throw new Error(errBody.error || `Server error ${resp.status}`);
+    }
+    return resp.json(); // { orderId, razorpayOrderId, amount, currency }
+  }
+
+  /* ── Step 3: Open Razorpay modal ────────────────────────────── */
+  function openRazorpay(orderData, delivery, internalOrderId) {
+    return new Promise((resolve, reject) => {
+      if (typeof Razorpay === 'undefined') {
+        reject(new Error('Razorpay SDK not loaded. Please check your connection and try again.'));
         return;
       }
 
-      // Persist selected payment method for next page
-      localStorage.setItem('cc_payment_method', selectedMethod);
+      const options = {
+        key:         RAZORPAY_KEY_ID,
+        amount:      Math.round(Number(orderData.amount) * 100), // paise
+        currency:    orderData.currency || 'INR',
+        order_id:    orderData.razorpayOrderId,
+        name:        'Chic Charms',
+        description: 'Order Payment',
+        image:       '',  // optional: your logo URL
+        prefill: {
+          name:    delivery?.name  || '',
+          contact: delivery?.phone || '',
+          email:   delivery?.email || '',
+        },
+        notes: {
+          internalOrderId: internalOrderId,
+        },
+        theme: { color: '#8e4559' },
 
-      // Navigate to checkout
-      location.href = 'checkout.html';
+        /* ── Payment success callback ── */
+        handler: function (response) {
+          resolve({
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_order_id:   response.razorpay_order_id,
+            razorpay_signature:  response.razorpay_signature,
+          });
+        },
+
+        modal: {
+          /* User closed modal — do NOT delete order; allow retry */
+          ondismiss: function () {
+            reject({ dismissed: true });
+          },
+          /* Ensure mobile checkout sheet, not desktop modal */
+          backdropclose: false,
+          escape:        false,
+          animation:     true,
+        },
+      };
+
+      const rzp = new Razorpay(options);
+
+      /* ── Payment failure event ── */
+      rzp.on('payment.failed', function (response) {
+        reject({
+          failed:  true,
+          message: response.error?.description || 'Payment could not be completed.',
+        });
+      });
+
+      rzp.open();
     });
   }
 
-  /* ─── Full render pipeline ──────────────────────────────────── */
-  function render(cart, coupon, delivery) {
-    if (!cart.length) {
-      $('emptyState').style.display  = 'block';
-      $('itemsCard').style.display   = 'none';
-      $('deliveryCard').style.display= 'none';
-      $('campusBenefitSection').style.display = 'none';
-      $('paymentCard').style.display = 'none';
-      $('summaryCard').style.display = 'none';
-      $('footerTotal').textContent   = '₹0';
-      $('payBtn').disabled           = true;
-      return;
+  /* ── Step 4: Verify payment via Cloud Function ──────────────── */
+  async function verifyPayment(rzpResponse, internalOrderId) {
+    const resp = await fetch(`${FUNCTIONS_BASE}/verifyPayment`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({
+        razorpay_payment_id: rzpResponse.razorpay_payment_id,
+        razorpay_order_id:   rzpResponse.razorpay_order_id,
+        razorpay_signature:  rzpResponse.razorpay_signature,
+        orderId:             internalOrderId,
+      }),
+    });
+
+    if (!resp.ok) {
+      const errBody = await resp.json().catch(() => ({}));
+      throw new Error(errBody.error || `Verification failed ${resp.status}`);
     }
+    return resp.json(); // { success, orderId }
+  }
 
-    $('emptyState').style.display = 'none';
+  /* ── Show payment failed UI (stays on page, allows retry) ───── */
+  function showPaymentFailed(message, onRetry) {
+    /* Remove any existing failure banner */
+    const existing = document.getElementById('payFailBanner');
+    if (existing) existing.remove();
 
-    renderItems(cart);
-    renderDelivery(delivery, !!coupon);   // coupon flag drives delivery card content
-    renderCampus(coupon, delivery);       // ← conditional campus benefit section
-    renderSummary(cart, coupon);
+    const banner = document.createElement('div');
+    banner.id = 'payFailBanner';
+    banner.style.cssText = `
+      position:fixed; bottom:120px; left:16px; right:16px; z-index:150;
+      background:#fff; border:1.5px solid #ba1a1a; border-radius:18px;
+      padding:18px 20px; box-shadow:0 8px 32px rgba(186,26,26,.14);
+      display:flex; align-items:flex-start; gap:14px;
+      animation: rise .3s ease both;
+    `;
+    banner.innerHTML = `
+      <div style="width:38px;height:38px;border-radius:50%;background:#ffdad6;
+                  display:grid;place-items:center;flex-shrink:0;">
+        <span class="material-symbols-outlined" style="color:#ba1a1a;font-size:20px;">error</span>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#ba1a1a;">Payment Failed</p>
+        <p style="margin:0 0 12px;font-size:13px;color:#534346;line-height:1.5;">
+          ${esc(message || 'Your payment could not be processed. Please try again.')}
+        </p>
+        <div style="display:flex;gap:10px;">
+          <button id="retryPayBtn" style="height:40px;padding:0 20px;border:0;border-radius:999px;
+            background:#8e4559;color:#fff;font-size:13px;font-weight:700;cursor:pointer;">
+            Retry Payment
+          </button>
+          <button id="dismissFailBtn" style="height:40px;padding:0 14px;border:1px solid #d7c1c5;
+            border-radius:999px;background:transparent;font-size:13px;color:#534346;cursor:pointer;">
+            Dismiss
+          </button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(banner);
+
+    document.getElementById('retryPayBtn').addEventListener('click', () => {
+      banner.remove();
+      if (typeof onRetry === 'function') onRetry();
+    });
+    document.getElementById('dismissFailBtn').addEventListener('click', () => banner.remove());
+  }
+
+  /* ── Master payment orchestrator ────────────────────────────── */
+  /* Stores last order ID so retry doesn't recreate if already pending */
+  let pendingOrderId = null;
+
+  async function initiatePayment() {
+    const cart     = getCart();
+    const delivery = getDelivery();
+    const coupon   = getCoupon();
+
+    /* Step 1 — validate */
+    if (!validateSession(cart, delivery, coupon)) return;
+
+    setPayBtnState(true, 'Creating Order…');
+    showLoader('Creating your order…');
+
+    try {
+      /* Step 2 — create pending order (skip if we already have one from a retry) */
+      let orderData;
+      if (!pendingOrderId) {
+        orderData     = await createPendingOrder(cart, delivery, coupon);
+        pendingOrderId = orderData.orderId;
+      } else {
+        /* Retry path: re-use existing Razorpay order — fetch from Firestore via
+           the createOrder endpoint which is idempotent via IDEM_KEY */
+        orderData = await createPendingOrder(cart, delivery, coupon);
+      }
+
+      hideLoader();
+      setPayBtnState(true, 'Opening Payment…');
+
+      /* Step 3 — open Razorpay (stays on page) */
+      let rzpResponse;
+      try {
+        rzpResponse = await openRazorpay(orderData, delivery, pendingOrderId);
+      } catch (rzpErr) {
+        setPayBtnState(false);
+        if (rzpErr && rzpErr.dismissed) {
+          /* User closed — order stays as pending_payment, allow retry */
+          showToast('Payment window closed. You can retry anytime.');
+          return;
+        }
+        /* Payment failed inside Razorpay */
+        const failMsg = (rzpErr && rzpErr.message) || 'Payment could not be completed.';
+        showPaymentFailed(failMsg, initiatePayment);
+        return;
+      }
+
+      /* Step 4 — verify on backend */
+      setPayBtnState(true, 'Verifying Payment…');
+      showLoader('Verifying payment…');
+
+      let verifyResult;
+      try {
+        verifyResult = await verifyPayment(rzpResponse, pendingOrderId);
+      } catch (vErr) {
+        hideLoader();
+        setPayBtnState(false);
+        showPaymentFailed(vErr.message || 'Payment verification failed. Please contact support.', initiatePayment);
+        return;
+      }
+
+      if (!verifyResult.success) {
+        hideLoader();
+        setPayBtnState(false);
+        showPaymentFailed('Payment could not be verified. Please contact support.', initiatePayment);
+        return;
+      }
+
+      /* ── SUCCESS — clear cart + redirect to order success ── */
+      localStorage.removeItem('cart');
+      localStorage.removeItem('cc_coupon_state');
+      localStorage.removeItem('cc_delivery');
+      localStorage.removeItem('cc_payment_method');
+
+      hideLoader();
+      location.href = `confirmation.html?orderId=${encodeURIComponent(pendingOrderId)}`;
+
+    } catch (err) {
+      hideLoader();
+      setPayBtnState(false);
+      console.error('[payment] flow error:', err);
+      showPaymentFailed(err.message || 'Something went wrong. Please try again.', initiatePayment);
+    }
+  }
+
+  /* ─── Wire pay button ───────────────────────────────────────── */
+  function initPayBtn(cart) {
+    const btn = $('payBtn');
+    btn.disabled = !cart.length;
+    /* Remove any stale listeners by replacing the button */
+    const fresh = btn.cloneNode(true);
+    btn.parentNode.replaceChild(fresh, btn);
+    $('payBtn').addEventListener('click', initiatePayment);
   }
 
   /* ─── Bootstrap ─────────────────────────────────────────────── */
   async function init() {
     initPaymentSelector();
-    initBackBtn();
-    initEditBtn();
+    initNavBtns();
 
     const cart     = getCart();
     const delivery = getDelivery();
 
-    // First paint with localStorage coupon (instant)
+    /* First paint: localStorage coupon */
     let coupon = getCoupon();
     render(cart, coupon, delivery);
-    initPayBtn(cart, coupon, delivery);
+    initPayBtn(cart);
 
-    // Then fetch from Firestore to re-validate (async update)
+    /* Async Firestore re-validation */
     if (window.ChicCoupon && typeof window.ChicCoupon.fetchSession === 'function') {
       try {
         const fresh = await window.ChicCoupon.fetchSession();
         if (JSON.stringify(fresh) !== JSON.stringify(coupon)) {
           coupon = fresh;
           render(cart, coupon, delivery);
-          initPayBtn(cart, coupon, delivery);
+          initPayBtn(cart);
         }
       } catch (e) {
-        // Silently degrade – localStorage version used
         console.warn('[checkout-review] Coupon re-validation skipped:', e.message);
       }
     }
@@ -1036,7 +1313,6 @@
     hideLoader();
   }
 
-  /* Run after DOM + coupon-session.js are ready */
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {

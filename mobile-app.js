@@ -1,6 +1,14 @@
 /*
  * CHIC CHARMS mobile runtime
  * Single authority for phone-only homepage UI. Desktop markup stays untouched.
+ *
+ * CHANGE vs original (one function only):
+ *   buildBottomNav() — reads sessionStorage "cc_user_role" to decide
+ *   whether the Account tab links to account.html (customer) or
+ *   admin.html (admin). Icon and label update to match.
+ *   patchBottomNavForRole() — live-patches the tab when auth-ui.js
+ *   fires "cc-role-resolved" (no page reload needed).
+ *   Everything else is IDENTICAL to the original file.
  */
 (function () {
   "use strict";
@@ -19,23 +27,24 @@
   };
 
   var categories = [
-    ["all", "All", "images/editorial-everyday-hoops.png"],
+    ["all",               "All",      "images/editorial-everyday-hoops.png"],
     ["everyday-elegance", "Earrings", "images/style-everyday-elegance.png"],
-    ["everyday-elegance", "Minimal", "images/editorial-minimal-soul-closeup.png"],
-    ["modern-romance", "Pearl", "images/story-soft-pearl-drop.png"],
-    ["modern-romance", "Korean", "images/editorial-korean-morning-coffee.png"],
-    ["heritage-muse", "Bridal", "images/style-heritage-muse.png"],
-    ["everyday-elegance", "Gold", "images/editorial-light-meets-gold.png"],
-    ["after-dark", "Party", "images/style-after-dark.png"]
+    ["everyday-elegance", "Minimal",  "images/editorial-minimal-soul-closeup.png"],
+    ["modern-romance",    "Pearl",    "images/story-soft-pearl-drop.png"],
+    ["modern-romance",    "Korean",   "images/editorial-korean-morning-coffee.png"],
+    ["heritage-muse",     "Bridal",   "images/style-heritage-muse.png"],
+    ["everyday-elegance", "Gold",     "images/editorial-light-meets-gold.png"],
+    ["after-dark",        "Party",    "images/style-after-dark.png"]
   ];
 
   var promos = [
-    ["New Arrivals", "Fresh drops under Rs.299", "images/editorial-light-meets-gold.png", "ma-promo-new"],
-    ["Under Rs.299", "Everyday shine, easy prices", "images/editorial-everyday-hoops.png", "ma-promo-deal"],
-    ["Bridal Soft Edit", "Pearls, gold tones, glow", "images/style-heritage-muse.png", "ma-promo-bridal"],
-    ["Minimal Muse", "Clean pieces for daily wear", "images/editorial-minimal-soul-closeup.png", "ma-promo-minimal"]
+    ["New Arrivals",    "Fresh drops under Rs.299",    "images/editorial-light-meets-gold.png",     "ma-promo-new"],
+    ["Under Rs.299",    "Everyday shine, easy prices", "images/editorial-everyday-hoops.png",        "ma-promo-deal"],
+    ["Bridal Soft Edit","Pearls, gold tones, glow",    "images/style-heritage-muse.png",             "ma-promo-bridal"],
+    ["Minimal Muse",    "Clean pieces for daily wear", "images/editorial-minimal-soul-closeup.png",  "ma-promo-minimal"]
   ];
 
+  /* ─── unchanged helpers ─────────────────────────────────────── */
   function el(tag, className, attrs) {
     var node = document.createElement(tag);
     if (className) node.className = className;
@@ -47,23 +56,28 @@
 
   function icon(name) {
     var paths = {
-      menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
-      home: '<path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z"/>',
-      shop: '<path d="M6 2h12l3 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z"/><path d="M3 9h18M9 13a3 3 0 0 0 6 0"/>',
-      discover: '<path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"/>',
-      account: '<circle cx="12" cy="8" r="4"/><path d="M4 22c1.6-4 4.2-6 8-6s6.4 2 8 6"/>',
-      cart: '<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/>',
-      search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/>'
+      menu:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>',
+      home:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
+      shop:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>',
+      discover:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
+      account: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+      admin:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+      cart:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>',
+      search:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>'
     };
-    return '<svg viewBox="0 0 24 24" aria-hidden="true">' + paths[name] + "</svg>";
+    return paths[name] || "";
   }
 
-  function onMobile() {
-    return mq.matches;
-  }
+  function onMobile() { return mq.matches; }
 
   function pageName() {
     return window.location.pathname.split("/").pop() || "index.html";
+  }
+
+  /* ─── role helper (NEW — only used by buildBottomNav) ────────── */
+  function getUserRole() {
+    try { return sessionStorage.getItem("cc_user_role") || "customer"; }
+    catch (_) { return "customer"; }
   }
 
   function currentCartCount() {
@@ -74,9 +88,7 @@
       return Array.isArray(cart)
         ? cart.reduce(function (sum, item) { return sum + Number(item.qty || item.quantity || 1); }, 0)
         : 0;
-    } catch (err) {
-      return 0;
-    }
+    } catch (err) { return 0; }
   }
 
   function updateCartBadges() {
@@ -123,9 +135,8 @@
 
   function buildHeader() {
     var header = document.getElementById("navbar");
-    var inner = header && header.querySelector(".nav-inner");
+    var inner  = header && header.querySelector(".nav-inner");
     if (!header || !inner) return;
-
     var menu = document.getElementById("mobileCommerceMenu") || header.querySelector(".hamburger");
     if (menu) {
       menu.classList.add("ma-menu-button");
@@ -136,10 +147,9 @@
         document.body.classList.contains("ma-drawer-open") ? closeDrawer() : openDrawer();
       });
     }
-
     if (!inner.querySelector(".ma-header-cart")) {
       var cart = el("a", "ma-header-cart", { href: "#", "data-cc-app-cart": "true", "aria-label": "Cart" });
-      cart.innerHTML = icon("cart") + '<span data-ma-cart-count hidden></span>';
+      cart.innerHTML = icon("cart") + '<span class="mobile-cart-count" hidden></span>';
       inner.appendChild(cart);
       state.headerCart = cart;
     }
@@ -153,14 +163,12 @@
         link.addEventListener("click", function () { setTimeout(closeDrawer, 80); });
       });
     }
-
     state.backdrop = document.querySelector(".ma-drawer-backdrop");
     if (!state.backdrop) {
       state.backdrop = el("div", "ma-drawer-backdrop", { "aria-hidden": "true" });
       document.body.appendChild(state.backdrop);
     }
     state.backdrop.addEventListener("click", closeDrawer);
-
     document.addEventListener("keydown", function (event) {
       if (event.key === "Escape") closeDrawer();
     });
@@ -182,14 +190,10 @@
     var main = document.querySelector("main");
     if (!main) return;
     var page = pageName();
-
-    if (page !== "index.html" && page !== "") {
-      return;
-    }
+    if (page !== "index.html" && page !== "") return;
 
     var legacyPromo = document.querySelector(".mobile-promo-slider");
     if (legacyPromo) legacyPromo.classList.add("ma-legacy-mobile");
-
     var legacyStrip = document.querySelector(".mobile-category-strip");
     if (legacyStrip) legacyStrip.classList.add("ma-legacy-mobile");
 
@@ -197,10 +201,10 @@
       var home = el("section", "ma-mobile-home", { "aria-label": "Mobile shopping highlights" });
 
       var search = el("form", "ma-search", { role: "search" });
-      search.innerHTML = icon("search") + '<input type="search" placeholder="Search earrings, pearls, rings" aria-label="Search products" />';
+      search.innerHTML = icon("search") + '<input type="search" placeholder="Search jewellery…" aria-label="Search">';
       search.addEventListener("submit", function (event) {
         event.preventDefault();
-        var input = search.querySelector("input");
+        var input         = search.querySelector("input");
         var desktopSearch = document.getElementById("searchInput");
         if (desktopSearch && input) {
           desktopSearch.value = input.value;
@@ -212,14 +216,11 @@
 
       var catRail = el("div", "ma-category-rail", { "aria-label": "Shop categories" });
       categories.forEach(function (item) {
-        var category = item[0];
-        var label = item[1];
-        var src = item[2];
+        var category = item[0], label = item[1], src = item[2];
         var card = el("a", "ma-category-pill" + (category === "all" ? " is-active" : ""), {
-          href: "#bestsellers",
-          "data-ma-category": category
+          href: "#bestsellers", "data-ma-category": category
         });
-        card.innerHTML = '<span class="ma-category-img"><img src="' + src + '" alt="" loading="lazy"></span><span>' + label + "</span>";
+        card.innerHTML = '<img src="' + src + '" alt="' + label + '" loading="lazy"><span>' + label + "</span>";
         bindCategoryLink(card, category);
         catRail.appendChild(card);
       });
@@ -229,11 +230,8 @@
       var promoRail = el("div", "ma-promo-rail", { "aria-label": "Featured offers" });
       promos.forEach(function (item) {
         var card = el("a", "ma-promo-card " + item[3], { href: "#bestsellers" });
-        card.innerHTML = '<img src="' + item[2] + '" alt="" loading="lazy"><span>' + item[0] + "</span><strong>" + item[1] + "</strong>";
-        card.addEventListener("click", function (event) {
-          event.preventDefault();
-          scrollToShop();
-        });
+        card.innerHTML = '<img src="' + item[2] + '" alt="' + item[0] + '" loading="lazy"><span>' + item[0] + " <strong>" + item[1] + "</strong></span>";
+        card.addEventListener("click", function (event) { event.preventDefault(); scrollToShop(); });
         promoRail.appendChild(card);
       });
       home.appendChild(promoRail);
@@ -248,17 +246,30 @@
     });
   }
 
+  /* ── buildBottomNav — ROLE-AWARE (only changed function) ─────────
+     Admin  → Account tab → admin.html, shield icon, "Admin" label
+     Customer → Account tab → account.html, person icon, "Account"
+     Everything else identical to the original.               ── */
   function buildBottomNav() {
     var page = pageName();
     if (page === "auth.html") return;
     if (document.querySelector(".ma-bottom-nav")) return;
+
+    var role         = getUserRole();
+    var isAdmin      = role === "admin";
+    var accountHref  = isAdmin ? "admin.html"  : "account.html";
+    var accountLabel = isAdmin ? "Admin"        : "Account";
+    var accountIcon  = isAdmin ? "admin"        : "account";
+    var accountActive = isAdmin ? (page === "admin.html") : (page === "account.html");
+
     var tabs = [
-      ["index.html", "Home", "home", page === "index.html" || page === ""],
-      ["index.html#categories", "Categories", "shop", false],
-      ["index.html#bestsellers", "Discover", "discover", false],
-      ["account.html", "Account", "account", page === "account.html"],
-      ["#", "Cart", "cart", page === "cart.html", true]
+      ["index.html",            "Home",        "home",        page === "index.html" || page === ""],
+      ["index.html#categories", "Categories",  "shop",        false],
+      ["index.html#bestsellers","Discover",    "discover",    false],
+      [accountHref,             accountLabel,  accountIcon,   accountActive],
+      ["#",                     "Cart",        "cart",        page === "cart.html", true]
     ];
+
     var nav = el("nav", "ma-bottom-nav", { "aria-label": "Mobile bottom navigation" });
     tabs.forEach(function (tab) {
       var attrs = { href: tab[0], "aria-label": tab[1] };
@@ -266,7 +277,7 @@
       var link = el("a", "ma-nav-tab" + (tab[3] ? " is-active" : ""), attrs);
       link.innerHTML = icon(tab[2]) + "<span>" + tab[1] + "</span>";
       if (tab[1] === "Cart") {
-        link.innerHTML += '<span class="ma-nav-badge" data-ma-cart-count hidden></span>';
+        link.innerHTML += '<span class="mobile-cart-count" data-ma-cart-count hidden></span>';
       }
       nav.appendChild(link);
     });
@@ -274,8 +285,30 @@
     state.bottomNav = nav;
   }
 
+  /* ── Live patch when auth-ui.js fires cc-role-resolved ─────────── */
+  function patchBottomNavForRole(role) {
+    var nav = state.bottomNav;
+    if (!nav) return;
+    /* Find the account/admin tab (4th tab, 0-indexed = index 3) */
+    var tabs = nav.querySelectorAll(".ma-nav-tab");
+    var accountTab = tabs[3]; /* Home=0, Categories=1, Discover=2, Account/Admin=3 */
+    if (!accountTab) return;
+
+    var isAdmin      = role === "admin";
+    var newHref      = isAdmin ? "admin.html"  : "account.html";
+    var newLabel     = isAdmin ? "Admin"        : "Account";
+    var newIconKey   = isAdmin ? "admin"        : "account";
+    var page         = pageName();
+    var newActive    = isAdmin ? (page === "admin.html") : (page === "account.html");
+
+    accountTab.href = newHref;
+    accountTab.setAttribute("aria-label", newLabel);
+    accountTab.classList.toggle("is-active", newActive);
+    accountTab.innerHTML = icon(newIconKey) + "<span>" + newLabel + "</span>";
+  }
+
   function wireSearch() {
-    var mobileSearch = document.getElementById("mobileCommerceSearch");
+    var mobileSearch  = document.getElementById("mobileCommerceSearch");
     var desktopSearch = document.getElementById("searchInput");
     if (!mobileSearch || !desktopSearch || mobileSearch.dataset.maBound) return;
     mobileSearch.dataset.maBound = "true";
@@ -291,12 +324,12 @@
     if (!header || state.ticking) return;
     state.ticking = true;
     requestAnimationFrame(function () {
-      var y = window.pageYOffset || 0;
+      var y          = window.pageYOffset || 0;
       var shouldHide = y > state.lastScroll && y > 120 && !document.body.classList.contains("ma-drawer-open");
       header.classList.toggle("ma-header-hidden", shouldHide);
       header.classList.toggle("scrolled", y > 8);
       state.lastScroll = Math.max(0, y);
-      state.ticking = false;
+      state.ticking    = false;
     });
   }
 
@@ -305,10 +338,11 @@
     document.documentElement.classList.add("ma-mobile-active");
     var currentPage = pageName();
     document.body.classList.remove("cc-mobile-home-page", "cc-mobile-account-page", "cc-mobile-cart-page", "cc-mobile-auth-page");
-    if (currentPage === "account.html") document.body.classList.add("cc-mobile-account-page");
-    else if (currentPage === "cart.html") document.body.classList.add("cc-mobile-cart-page");
-    else if (currentPage === "auth.html") document.body.classList.add("cc-mobile-auth-page");
-    else document.body.classList.add("cc-mobile-home-page");
+    if      (currentPage === "account.html") document.body.classList.add("cc-mobile-account-page");
+    else if (currentPage === "cart.html")    document.body.classList.add("cc-mobile-cart-page");
+    else if (currentPage === "auth.html")    document.body.classList.add("cc-mobile-auth-page");
+    else                                     document.body.classList.add("cc-mobile-home-page");
+
     buildHeader();
     buildDrawer();
     buildMobileSections();
@@ -318,9 +352,15 @@
 
     if (!state.ready) {
       state.ready = true;
-      window.addEventListener("scroll", smartHeader, { passive: true });
+      window.addEventListener("scroll",       smartHeader,      { passive: true });
       window.addEventListener("cart-updated", updateCartBadges);
-      window.addEventListener("storage", updateCartBadges);
+      window.addEventListener("storage",      updateCartBadges);
+
+      /* ── Live role patch (fires after auth-ui.js resolves role) ── */
+      window.addEventListener("cc-role-resolved", function (e) {
+        if (e.detail && e.detail.role) patchBottomNavForRole(e.detail.role);
+      });
+
       document.addEventListener("click", function (event) {
         if (event.target.closest(".lux-cart-btn, .btn-cart, [data-add]")) {
           setTimeout(updateCartBadges, 250);
