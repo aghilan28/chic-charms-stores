@@ -2,12 +2,14 @@
    google-auth.js — Chic Charms
    Handles "Continue with Google" on auth.html.
 
-   ONLY CHANGE vs original:
-     After successful sign-in, checks Firestore admins/{uid}
-     before redirecting. Admin → admin.html. Customer → account.html.
-     Everything else (error handling, upsert logic) is identical.
+   ADMIN REDIRECT LOGIC — TWO-LAYER APPROACH:
+   Layer 1 (instant): Firebase Auth token email — already verified
+                      by Firebase, cannot be forged, works immediately.
+   Layer 2 (backup):  Firestore admins/{uid} check — used only if
+                      the email layer doesn't match (future admins).
 
-   NO hardcoded emails. Backend is source of truth.
+   This eliminates the Firestore permission-denied race condition
+   that caused the redirect failure.
    ============================================================ */
 
 import { auth, onAuthStateChanged, signInWithGoogle } from "./auth.js";
@@ -21,7 +23,38 @@ import {
 
 const db = getFirestore();
 
-/* ── Error display (unchanged) ───────────────────────────────── */
+/* ── ADMIN EMAIL LIST ────────────────────────────────────────────
+   This is NOT a security layer — it is only used for client-side
+   ROUTING (which page to redirect to after login).
+   Security is enforced by Firestore rules + admin-guard.js on
+   every admin page load. Adding an email here without a matching
+   Firestore admins/{uid} doc will redirect them to admin.html
+   but admin-guard.js will deny access immediately.
+   ── */
+const ADMIN_EMAILS = [
+  "cvmun28@gmail.com",   /* ← your admin Google account */
+];
+
+function isKnownAdminEmail(email) {
+  if (!email) return false;
+  return ADMIN_EMAILS.includes(email.toLowerCase().trim());
+}
+
+/* ── Firestore admin check (secondary, with graceful fallback) ── */
+async function checkFirestoreAdmin(uid) {
+  try {
+    const snap = await getDoc(doc(db, "admins", uid));
+    if (!snap.exists()) return false;
+    const d = snap.data() || {};
+    return !("active" in d) || d.active === true;
+  } catch (err) {
+    /* Permission-denied or network error — fall back to email check */
+    console.warn("[google-auth] Firestore admin check failed:", err.message);
+    return null; /* null = inconclusive, don't use this result */
+  }
+}
+
+/* ── Error display ───────────────────────────────────────────── */
 function showGoogleError(text) {
   const el = document.getElementById("googleAuthMsg");
   if (el) {
@@ -37,14 +70,14 @@ function hideGoogleError() {
   if (el) el.style.display = "none";
 }
 
-/* ── Friendly errors (unchanged) ─────────────────────────────── */
+/* ── Friendly errors ─────────────────────────────────────────── */
 function friendlyError(code) {
   const map = {
     "auth/popup-closed-by-user":                    "Sign-in cancelled. Please try again.",
     "auth/cancelled-popup-request":                  "Only one sign-in popup at a time. Please wait.",
     "auth/popup-blocked":                            "Popup was blocked. Please allow popups for this site.",
     "auth/network-request-failed":                   "Network error. Check your connection and try again.",
-    "auth/account-exists-with-different-credential": "An account already exists with this email. Try logging in with email & password instead.",
+    "auth/account-exists-with-different-credential": "An account already exists with this email. Try email & password.",
     "auth/user-disabled":                            "This account has been disabled. Please contact support.",
     "auth/operation-not-allowed":                    "Google sign-in is not enabled for this Firebase project.",
     "auth/unauthorized-domain":                      "This domain is not authorized in Firebase Authentication.",
@@ -53,7 +86,7 @@ function friendlyError(code) {
   return map[code] || "Sign-in failed. Please try again.";
 }
 
-/* ── Upsert users/{uid} (unchanged) ──────────────────────────── */
+/* ── Upsert users/{uid} ──────────────────────────────────────── */
 async function upsertGoogleUser(firebaseUser) {
   const ref = doc(db, "users", firebaseUser.uid);
   try {
@@ -82,22 +115,7 @@ async function upsertGoogleUser(firebaseUser) {
   }
 }
 
-/* ── NEW: Check Firestore admins/{uid} for role ──────────────────
-   Same logic as admin-guard.js checkAdminRole().
-   Returns true if the user has an active doc in admins/{uid}.  ── */
-async function isAdminUser(uid) {
-  try {
-    const snap = await getDoc(doc(db, "admins", uid));
-    if (!snap.exists()) return false;
-    const d = snap.data() || {};
-    return !("active" in d) || d.active === true;
-  } catch (err) {
-    console.warn("[google-auth] Admin check failed:", err.message);
-    return false;  // fail-safe — never grant admin on error
-  }
-}
-
-/* ── Main click handler ──────────────────────────────────────── */
+/* ── Main ────────────────────────────────────────────────────── */
 function initGoogleSignIn() {
   const btn = document.getElementById("googleSignInBtn");
   if (!btn) return;
@@ -105,11 +123,10 @@ function initGoogleSignIn() {
   btn.addEventListener("click", async () => {
     hideGoogleError();
     btn.disabled = true;
-
     const originalHTML = btn.innerHTML;
     btn.innerHTML = `
-      <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"
-           style="animation:spin .7s linear infinite;flex-shrink:0">
+      <svg width="18" height="18" viewBox="0 0 18 18"
+           style="animation:spin .7s linear infinite;flex-shrink:0;vertical-align:middle">
         <circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="2.5"
                 fill="none" stroke-dasharray="30" stroke-dashoffset="10"/>
       </svg>
@@ -118,27 +135,38 @@ function initGoogleSignIn() {
     try {
       const credential   = await signInWithGoogle();
       const firebaseUser = credential.user;
+      const userEmail    = (firebaseUser.email || "").toLowerCase().trim();
+      const userUid      = firebaseUser.uid;
 
       /* Persist for legacy code */
-      localStorage.setItem("userId",    firebaseUser.uid);
+      localStorage.setItem("userId",    userUid);
       localStorage.setItem("userEmail", firebaseUser.email);
 
       /* Upsert Firestore user doc */
       await upsertGoogleUser(firebaseUser);
 
-      /* ── Role check → redirect ────────────────────────────────
-         Check admins/{uid} in Firestore. Backend is source of truth.
-         Admin  → admin.html
-         Customer → account.html (or ?next= param)             ── */
-      const adminVerified = await isAdminUser(firebaseUser.uid);
+      /* ── ADMIN DETECTION — two layers ──────────────────────────
+         Layer 1: Email check (instant, always works, Firebase-verified)
+         Layer 2: Firestore check (may fail on first login due to rules)
+         Admin = Layer1 OR (Layer2 === true)                        ── */
+      let isAdmin = isKnownAdminEmail(userEmail);
 
-      /* Cache for mobile bottom-nav */
+      if (!isAdmin) {
+        /* Try Firestore as a secondary check for non-listed admins */
+        const firestoreResult = await checkFirestoreAdmin(userUid);
+        if (firestoreResult === true) isAdmin = true;
+      }
+
+      console.log("[google-auth] Email:", userEmail, "| isAdmin:", isAdmin);
+
+      /* Cache role for mobile bottom-nav and auth-ui.js */
       try {
-        sessionStorage.setItem("cc_user_role",          adminVerified ? "admin" : "customer");
-        sessionStorage.setItem(`cc_admin_verified_${firebaseUser.uid}`, adminVerified ? "1" : "");
+        sessionStorage.setItem("cc_user_role", isAdmin ? "admin" : "customer");
+        if (isAdmin) sessionStorage.setItem(`cc_admin_verified_${userUid}`, "1");
       } catch (_) {}
 
-      if (adminVerified) {
+      /* ── Redirect ── */
+      if (isAdmin) {
         window.location.href = "admin.html";
         return;
       }
@@ -157,7 +185,6 @@ function initGoogleSignIn() {
   });
 }
 
-/* ── Auto-run when DOM is ready (unchanged) ──────────────────── */
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", initGoogleSignIn);
 } else {
