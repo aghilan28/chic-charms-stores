@@ -1074,20 +1074,41 @@ async function loadProduct() {
   }
 
   // Firebase is initialized above — use it directly
+  // Timeout: show error if product doesn't load within 10s
+  let _didRender = false;
+  const _t = setTimeout(() => {
+    if (!_didRender) {
+      document.getElementById('loadingState').classList.add('hidden');
+      document.getElementById('errorState').classList.remove('hidden');
+      document.querySelector('#errorState p').textContent = 'Product load timed out. Please check your connection and retry.';
+    }
+  }, 10000);
+
   try {
     const db = firebase.firestore();
     const docSnap = await db.collection('products').doc(productId).get();
+    clearTimeout(_t);
     if (docSnap.exists) {
-      renderProduct(docSnap.data(), docSnap.id);
+      try {
+        renderProduct(docSnap.data(), docSnap.id);
+        _didRender = true;
+      } catch(renderErr) {
+        console.error('[ChicCharms PDP] Render error:', renderErr);
+        document.getElementById('loadingState').classList.add('hidden');
+        document.getElementById('errorState').classList.remove('hidden');
+        document.querySelector('#errorState p').textContent = 'Could not display product. Please try again.';
+      }
     } else {
       document.getElementById('loadingState').classList.add('hidden');
       document.getElementById('errorState').classList.remove('hidden');
       document.querySelector('#errorState p').textContent = 'Product not found.';
     }
   } catch (error) {
+    clearTimeout(_t);
     console.error('[ChicCharms PDP] Firebase error:', error);
     document.getElementById('loadingState').classList.add('hidden');
     document.getElementById('errorState').classList.remove('hidden');
+    document.querySelector('#errorState p').textContent = 'Could not connect to store. Please check your connection and retry.';
   }
 
   loadRelatedProducts(productId);
