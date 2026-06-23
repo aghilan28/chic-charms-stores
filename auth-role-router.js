@@ -42,7 +42,11 @@ export async function redirectByRole(user) {
     }
 
     /* Customer — honour ?next= param but NEVER allow admin routes */
-    const next = new URLSearchParams(window.location.search).get("next") || "";
+    let next = new URLSearchParams(window.location.search).get("next") || "";
+    if (!next && sessionStorage.getItem("authRedirect")) {
+      next = sessionStorage.getItem("authRedirect");
+      sessionStorage.removeItem("authRedirect");
+    }
     const safeNext = next && !next.includes("admin") && next.startsWith("/") === false
       ? next
       : "account.html";
