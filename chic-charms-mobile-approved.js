@@ -21,11 +21,7 @@
       h.appendChild(l);
     }
     if (!document.querySelector('link[href*="Material+Symbols+Outlined"]')) {
-      const l2 = document.createElement("link");
-      l2.rel = "stylesheet";
-      l2.href = "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap";
-      h.appendChild(l2);
-    }
+      // Material Symbols font not needed — using inline SVGs
   }
 
   function getCart() {
@@ -86,10 +82,10 @@
     ui.innerHTML = `
 <div class="cc-announce">Free Shipping Across India</div>
 <header class="cc-header">
-  <button class="cc-header-btn" id="ccMenuBtn" aria-label="Menu"><span class="material-symbols-outlined">menu</span></button>
+  <button class="cc-header-btn" id="ccMenuBtn" aria-label="Menu"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
   <a href="index.html" class="cc-logo">CHIC CHARMS</a>
   <a href="#" data-cc-app-cart="true" class="cc-header-btn cc-header-cart" aria-label="Cart">
-    <span class="material-symbols-outlined">shopping_bag</span>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
     <span class="cc-cart-count hidden"></span>
   </a>
 </header>
@@ -99,7 +95,7 @@
   <div class="cc-drawer-inner">
     <div class="cc-drawer-top">
       <span class="cc-drawer-logo">CHIC CHARMS</span>
-      <button class="cc-drawer-close" id="ccDrawerClose" aria-label="Close"><span class="material-symbols-outlined">close</span></button>
+      <button class="cc-drawer-close" id="ccDrawerClose" aria-label="Close"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <nav class="cc-drawer-nav" id="ccDrawerNav">
       <a href="#" data-cat="all" class="is-active">Shop Jewellery</a>
@@ -159,8 +155,8 @@
 </footer>
 
 <nav class="cc-bottom-bar" aria-label="Filters">
-  <button id="ccFilterBtn"><span class="material-symbols-outlined">tune</span> Filters</button>
-  <button id="ccSortBtn"><span class="material-symbols-outlined">sort</span> Sort By</button>
+  <button id="ccFilterBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg> Filters</button>
+  <button id="ccSortBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="9" y1="18" x2="15" y2="18"/></svg> Sort By</button>
 </nav>
 
 <!-- Filter Modal -->
@@ -168,11 +164,11 @@
 <div class="cc-modal" id="ccFilterModal" role="dialog" aria-label="Filters" style="height:707px;max-height:88dvh">
   <div class="cc-modal-head">
     <h2>Filters</h2>
-    <button class="cc-modal-close" data-close="filter"><span class="material-symbols-outlined">close</span></button>
+    <button class="cc-modal-close" data-close="filter"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
   </div>
   <div class="cc-modal-body">
     <details class="cc-accordion" open>
-      <summary>Product Type <span class="acc-arrow material-symbols-outlined">expand_more</span></summary>
+      <summary>Product Type <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary>
       <div class="cc-accordion-content">
         <div class="cc-filter-grid" id="ccTypeFilters">
           <label class="cc-check"><input type="checkbox" value="drop"><span>Drop</span></label>
@@ -183,7 +179,7 @@
       </div>
     </details>
     <details class="cc-accordion">
-      <summary>Collection <span class="acc-arrow material-symbols-outlined">expand_more</span></summary>
+      <summary>Collection <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary>
       <div class="cc-accordion-content">
         <div style="display:flex;flex-direction:column;gap:12px" id="ccCollectionFilters">
           <label class="cc-check"><input type="checkbox" value="heritage-muse"><span>Pearl Collection</span></label>
@@ -193,7 +189,7 @@
       </div>
     </details>
     <details class="cc-accordion">
-      <summary>Price Range <span class="acc-arrow material-symbols-outlined">expand_more</span></summary>
+      <summary>Price Range <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary>
       <div class="cc-accordion-content">
         <div style="display:flex;flex-direction:column;gap:12px" id="ccPriceFilters">
           <label class="cc-check"><input type="checkbox" value="under500"><span>Under ₹499</span></label>
@@ -348,7 +344,7 @@
             <img src="${escapeAttr(p.image)}" alt="${name}" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22400%22%3E%3Crect width=%22400%22 height=%22400%22 fill=%22%23FAF1F4%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2242%22%3E🌸%3C/text%3E%3C/svg%3E'">
           </a>
           <button class="cc-wish${saved ? ' is-saved' : ''}" data-wish="${escapeAttr(p.id)}" aria-label="${saved ? 'Remove from wishlist' : 'Add to wishlist'}">
-            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' ${saved ? 1 : 0}">${saved ? 'favorite' : 'favorite_border'}</span>
+            ${saved ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>' : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>'}
           </button>
         </div>
         <div class="cc-product-info">
@@ -390,7 +386,7 @@
         saveWishlist(wl);
         btn.classList.toggle("is-saved", !was);
         const icon = btn.querySelector("span");
-        if (icon) { icon.textContent = was ? "favorite_border" : "favorite"; icon.style.fontVariationSettings = `'FILL' ${was ? 0 : 1}`; }
+        if (icon) { icon.innerHTML = was ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>' : '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>'; }
         btn.setAttribute("aria-label", was ? "Add to wishlist" : "Remove from wishlist");
         showToast(was ? "Removed from wishlist" : "Saved to wishlist");
       });
