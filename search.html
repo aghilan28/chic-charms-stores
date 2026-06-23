@@ -5,32 +5,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
-<style>
-/* ── FOUC Guard: prevent icon text flash on ALL pages ── */
-.material-symbols-outlined{
-  font-family:'Material Symbols Outlined';font-weight:normal;font-style:normal;
-  font-size:24px;line-height:1;letter-spacing:normal;text-transform:none;
-  display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;
-  -webkit-font-feature-settings:'liga';-webkit-font-smoothing:antialiased;
-  font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24;
-  visibility:hidden;
-}
-.fonts-loaded .material-symbols-outlined{visibility:visible}
-html.cc-loading body{opacity:0}
-html:not(.cc-loading) body{transition:opacity .2s ease}
-</style>
-<script>
-document.documentElement.classList.add('cc-loading');
-(function(){
-  function ready(){
-    document.documentElement.classList.remove('cc-loading');
-    document.documentElement.classList.add('fonts-loaded');
-  }
-  if(document.fonts&&document.fonts.ready){document.fonts.ready.then(ready);}
-  window.addEventListener('load',ready);
-  setTimeout(ready,800);
-})();
-</script>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <title>Search • Chic Charms</title>
 
@@ -325,12 +300,12 @@ document.documentElement.classList.add('cc-loading');
   <!-- Header -->
   <header class="sticky top-0 z-50 h-[68px] bg-surface/85 backdrop-blur-md flex items-center px-5 border-b border-outline-variant/40" style="backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);">
     <button id="menuBtn" class="flex items-center justify-center p-2 -ml-2 text-on-surface" aria-label="Menu">
-      <span class="material-symbols-outlined text-[26px]">menu</span>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
     <h1 class="absolute left-1/2 -translate-x-1/2 font-display text-[28px] text-primary tracking-tight whitespace-nowrap">Chic Charms</h1>
     <div class="ml-auto">
       <a href="shop.html" class="flex items-center justify-center p-2 -mr-2 text-on-surface" aria-label="Close search">
-        <span class="material-symbols-outlined text-[26px]">close</span>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </a>
     </div>
   </header>
@@ -347,7 +322,7 @@ document.documentElement.classList.add('cc-loading');
           enterkeyhint="search"
           autofocus />
         <button id="searchGoBtn" class="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-outline hover:text-primary" aria-label="Search">
-          <span class="material-symbols-outlined">search</span>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         </button>
         <div class="absolute bottom-0 left-0 w-0 h-[1.5px] bg-primary transition-all duration-500" id="searchFocusBar"></div>
 
@@ -423,23 +398,23 @@ document.documentElement.classList.add('cc-loading');
     <!-- Bottom Nav – Chic Charms Unified -->
   <nav class="cc-bottom-nav" aria-label="Primary">
     <a href="index.html" data-nav="home">
-      <span class="material-symbols-outlined">home</span>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span>Home</span>
     </a>
     <a href="search.html" data-nav="search">
-      <span class="material-symbols-outlined">search</span>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <span>Search</span>
     </a>
     <a href="wishlist.html" data-nav="wishlist">
-      <span class="material-symbols-outlined">favorite</span>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
       <span>Wishlist</span>
     </a>
     <a href="cart.html" data-nav="cart">
-      <span class="material-symbols-outlined">shopping_bag</span>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
       <span>Bag</span>
     </a>
     <a href="account.html" data-nav="account">
-      <span class="material-symbols-outlined">person</span>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       <span>Account</span>
     </a>
   </nav>
@@ -597,7 +572,7 @@ function updateSuggestions(val){
   const uniq = [...new Set(pool)];
   const hits = uniq.filter(s => s.toLowerCase().includes(val)).slice(0,6);
   if(!hits.length){ suggestBox.classList.remove('open'); return; }
-  suggestBox.innerHTML = hits.map(h=>`<div class="suggest-item" data-q="${escAttr(h)}">${escHtml(h)} <span class="material-symbols-outlined text-[18px] text-outline">north_west</span></div>`).join('');
+  suggestBox.innerHTML = hits.map(h=>`<div class="suggest-item" data-q="${escAttr(h)}">${escHtml(h)} <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="19" y1="19" x2="5" y2="5"/><polyline points="5 13 5 5 13 5"/></svg></div>`).join('');
   suggestBox.classList.add('open');
   suggestBox.querySelectorAll('.suggest-item').forEach(it=> it.addEventListener('mousedown', e=>{ e.preventDefault(); runSearch(it.dataset.q); }));
 }
@@ -652,7 +627,7 @@ function renderTrending(products){
           <img src="${escAttr(productImageUrl(p))}" alt="${escAttr(p.name)}" loading="lazy">
         </a>
         <button class="wish-btn" data-wish="${escAttr(p.id)}" aria-label="Add to wishlist">
-          <span class="material-symbols-outlined">favorite</span>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
         </button>
       </div>
       <p class="text-[11px] uppercase tracking-widest text-primary font-semibold mb-1">Trending</p>
