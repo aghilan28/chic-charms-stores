@@ -2,6 +2,35 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+<style>
+/* ── FOUC Guard: prevent icon text flash on ALL pages ── */
+.material-symbols-outlined{
+  font-family:'Material Symbols Outlined';font-weight:normal;font-style:normal;
+  font-size:24px;line-height:1;letter-spacing:normal;text-transform:none;
+  display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;
+  -webkit-font-feature-settings:'liga';-webkit-font-smoothing:antialiased;
+  font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24;
+  visibility:hidden;
+}
+.fonts-loaded .material-symbols-outlined{visibility:visible}
+html.cc-loading body{opacity:0}
+html:not(.cc-loading) body{transition:opacity .2s ease}
+</style>
+<script>
+document.documentElement.classList.add('cc-loading');
+(function(){
+  function ready(){
+    document.documentElement.classList.remove('cc-loading');
+    document.documentElement.classList.add('fonts-loaded');
+  }
+  if(document.fonts&&document.fonts.ready){document.fonts.ready.then(ready);}
+  window.addEventListener('load',ready);
+  setTimeout(ready,800);
+})();
+</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
@@ -17,32 +46,6 @@
 <!-- Chic Charms – FOUC / Icon Flash Guard -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0..1,0&display=swap" rel="stylesheet">
-<style>
-/* Prevent icon text flash (menu search shopping_bag) */
-.material-symbols-outlined{
-  font-family:'Material Symbols Outlined';font-weight:300;font-style:normal;
-  font-size:24px;line-height:1;letter-spacing:normal;text-transform:none;
-  display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;
-  -webkit-font-feature-settings:'liga';-webkit-font-smoothing:antialiased;
-  font-variation-settings:'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
-  visibility:hidden;
-}
-.fonts-loaded .material-symbols-outlined{visibility:visible}
-/* hide body until first paint to avoid header collision */
-html.cc-loading body{opacity:0}
-html:not(.cc-loading) body{transition:opacity .18s ease}
-</style>
-<script>
-document.documentElement.classList.add('cc-loading');
-(function(){
-  function ready(){document.documentElement.classList.remove('cc-loading');document.documentElement.classList.add('fonts-loaded')}
-  if(document.fonts && document.fonts.ready){document.fonts.ready.then(ready);} 
-  window.addEventListener('load',ready);
-  setTimeout(ready,1200);
-})();
-</script>
-<!-- /FOUC Guard -->
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -620,9 +623,7 @@ document.documentElement.classList.add('cc-loading');
       }
     </style>
     <!-- CHIC CHARMS APPROVED MOBILE COMMERCE – VISUAL FIDELITY ENFORCEMENT v1.0 -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@100..900&display=swap" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" />
-    <link rel="stylesheet" href="chic-charms-mobile-approved.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@100..900&display=swap" />    <link rel="stylesheet" href="chic-charms-mobile-approved.css" />
     <style>
       /* Prevent the desktop homepage from flashing on mobile while the approved UI injects */
       @media (max-width: 767px) {
