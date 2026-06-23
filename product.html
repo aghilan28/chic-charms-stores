@@ -1036,30 +1036,37 @@ window.toggleWishlist = function() {
   checkWishlist();
 };
 
-// ── Drawer ──
-const drawer = document.getElementById('drawer');
-const drawerOverlay = document.getElementById('drawerOverlay');
-document.getElementById('menuBtn').addEventListener('click', () => {
-  drawer.classList.remove('-translate-x-full');
-  drawerOverlay.classList.remove('hidden');
-  setTimeout(() => drawerOverlay.classList.remove('opacity-0'), 10);
-  document.body.style.overflow = 'hidden';
-});
+// ── Drawer + Sticky bar (wrapped in DOMContentLoaded to prevent null crashes) ──
+let drawer, drawerOverlay, stickyBar;
 function closeDrawerFn() {
+  if (!drawer || !drawerOverlay) return;
   drawer.classList.add('-translate-x-full');
   drawerOverlay.classList.add('opacity-0');
   setTimeout(() => { drawerOverlay.classList.add('hidden'); document.body.style.overflow = ''; document.body.style.position = ''; }, 300);
 }
-document.getElementById('drawerClose').addEventListener('click', closeDrawerFn);
-drawerOverlay.addEventListener('click', closeDrawerFn);
-
-// ── Sticky bar ──
-const stickyBar = document.getElementById('stickyBar');
-window.addEventListener('scroll', () => {
-  const st = window.pageYOffset || document.documentElement.scrollTop;
-  stickyBar.classList.toggle('translate-y-full', st <= 800);
-  stickyBar.classList.toggle('translate-y-0', st > 800);
-}, { passive: true });
+document.addEventListener('DOMContentLoaded', () => {
+  drawer = document.getElementById('drawer');
+  drawerOverlay = document.getElementById('drawerOverlay');
+  stickyBar = document.getElementById('stickyBar');
+  const menuBtn = document.getElementById('menuBtn');
+  const drawerClose = document.getElementById('drawerClose');
+  if (menuBtn) menuBtn.addEventListener('click', () => {
+    if (!drawer || !drawerOverlay) return;
+    drawer.classList.remove('-translate-x-full');
+    drawerOverlay.classList.remove('hidden');
+    setTimeout(() => drawerOverlay.classList.remove('opacity-0'), 10);
+    document.body.style.overflow = 'hidden';
+  });
+  if (drawerClose) drawerClose.addEventListener('click', closeDrawerFn);
+  if (drawerOverlay) drawerOverlay.addEventListener('click', closeDrawerFn);
+  if (stickyBar) {
+    window.addEventListener('scroll', () => {
+      const st = window.pageYOffset || document.documentElement.scrollTop;
+      stickyBar.classList.toggle('translate-y-full', st <= 800);
+      stickyBar.classList.toggle('translate-y-0', st > 800);
+    }, { passive: true });
+  }
+});
 
 // ── Firebase load ──
 async function loadProduct() {
