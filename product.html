@@ -268,7 +268,7 @@
 
 <!-- Announcement Bar -->
 <div class="fixed top-0 left-0 w-full z-[60] h-[40px] bg-[#B5657A] flex items-center justify-center">
-  <span id="announcementText" class="text-white font-label-caps text-[10px] tracking-[0.2em] uppercase">Loading...</span>
+  <span id="announcementText" class="text-white font-label-caps text-[10px] tracking-[0.2em] uppercase">Complimentary Express Shipping on Orders Above ₹500</span>
 </div>
 
 <!-- Header -->
@@ -1073,6 +1073,20 @@ async function loadProduct() {
     return;
   }
 
+  // Safety timeout — if product doesn't load in 8s, show error instead of infinite spinner
+  const loadTimeout = setTimeout(() => {
+    const ls = document.getElementById('loadingState');
+    const es = document.getElementById('errorState');
+    if (ls && !ls.classList.contains('hidden')) {
+      ls.classList.add('hidden');
+      if (es) { es.classList.remove('hidden'); document.querySelector('#errorState p').textContent = 'Could not load product. Please check your connection and try again.'; }
+    }
+  }, 8000);
+
+  // Clear timeout when done
+  const origRender = window.renderProduct;
+  window._loadTimeout = loadTimeout;
+
   // Firebase is initialized above — use it directly
   try {
     const db = firebase.firestore();
@@ -1085,6 +1099,7 @@ async function loadProduct() {
       document.querySelector('#errorState p').textContent = 'Product not found.';
     }
   } catch (error) {
+    clearTimeout(window._loadTimeout);
     console.error('[ChicCharms PDP] Firebase error:', error);
     document.getElementById('loadingState').classList.add('hidden');
     document.getElementById('errorState').classList.remove('hidden');
