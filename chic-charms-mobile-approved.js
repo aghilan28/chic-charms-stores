@@ -20,8 +20,7 @@
       l.href = "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@100..900&display=swap";
       h.appendChild(l);
     }
-    if (!document.querySelector('link[href*="Material+Symbols+Outlined"]')) {
-      // Material Symbols font not needed — using inline SVGs
+    // Material Symbols font not needed — icons are now inline SVGs
   }
 
   function getCart() {
