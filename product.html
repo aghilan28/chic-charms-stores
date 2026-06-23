@@ -1073,36 +1073,65 @@ async function loadProduct() {
     return;
   }
 
-  // Safety timeout — if product doesn't load in 8s, show error instead of infinite spinner
-  const loadTimeout = setTimeout(() => {
-    const ls = document.getElementById('loadingState');
-    const es = document.getElementById('errorState');
-    if (ls && !ls.classList.contains('hidden')) {
-      ls.classList.add('hidden');
-      if (es) { es.classList.remove('hidden'); document.querySelector('#errorState p').textContent = 'Could not load product. Please check your connection and try again.'; }
+  // Use direct REST API — reliable, no SDK initialization dependency
+  let _rendered = false;
+  const _safety = setTimeout(() => {
+    if (!_rendered) {
+      document.getElementById('loadingState').classList.add('hidden');
+      document.getElementById('errorState').classList.remove('hidden');
+      document.querySelector('#errorState p').textContent = 'Product load timed out. Tap Retry.';
     }
-  }, 8000);
+  }, 10000);
 
-  // Clear timeout when done
-  const origRender = window.renderProduct;
-  window._loadTimeout = loadTimeout;
-
-  // Firebase is initialized above — use it directly
   try {
-    const db = firebase.firestore();
-    const docSnap = await db.collection('products').doc(productId).get();
-    if (docSnap.exists) {
-      renderProduct(docSnap.data(), docSnap.id);
-    } else {
+    const _url = 'https://firestore.googleapis.com/v1/projects/chic-charms-store/databases/(default)/documents/products/'
+      + encodeURIComponent(productId)
+      + '?key=AIzaSyA5Bh77_4HE3yQF0hi5ddvbFLZC7rEerxg';
+    const _res  = await fetch(_url);
+    clearTimeout(_safety);
+    if (!_res.ok) throw new Error('HTTP ' + _res.status);
+    const _doc = await _res.json();
+    if (_doc.error)  throw new Error(_doc.error.message || 'Firestore error');
+    if (!_doc.fields) {
       document.getElementById('loadingState').classList.add('hidden');
       document.getElementById('errorState').classList.remove('hidden');
       document.querySelector('#errorState p').textContent = 'Product not found.';
+      return;
+    }
+    // Convert Firestore REST value types to plain JS
+    function _cv(v) {
+      if (!v) return null;
+      if ('stringValue'    in v) return v.stringValue;
+      if ('integerValue'   in v) return Number(v.integerValue);
+      if ('doubleValue'    in v) return Number(v.doubleValue);
+      if ('booleanValue'   in v) return v.booleanValue;
+      if ('nullValue'      in v) return null;
+      if ('timestampValue' in v) return new Date(v.timestampValue);
+      if ('arrayValue'     in v) return (v.arrayValue.values || []).map(_cv);
+      if ('mapValue'       in v) {
+        const o = {};
+        for (const [k,w] of Object.entries(v.mapValue.fields || {})) o[k] = _cv(w);
+        return o;
+      }
+      return null;
+    }
+    const _product = {};
+    for (const [k,v] of Object.entries(_doc.fields)) _product[k] = _cv(v);
+    try {
+      renderProduct(_product, productId);
+      _rendered = true;
+    } catch(renderErr) {
+      console.error('[PDP] renderProduct error:', renderErr);
+      document.getElementById('loadingState').classList.add('hidden');
+      document.getElementById('errorState').classList.remove('hidden');
+      document.querySelector('#errorState p').textContent = 'Display error. Please tap Retry.';
     }
   } catch (error) {
-    clearTimeout(window._loadTimeout);
-    console.error('[ChicCharms PDP] Firebase error:', error);
+    clearTimeout(_safety);
+    console.error('[PDP] load error:', error);
     document.getElementById('loadingState').classList.add('hidden');
     document.getElementById('errorState').classList.remove('hidden');
+    document.querySelector('#errorState p').textContent = 'Could not load product. Please check your connection.';
   }
 
   loadRelatedProducts(productId);
@@ -1115,6 +1144,7 @@ async function loadRelatedProducts(currentProductId) {
   const title = document.getElementById('relatedTitle');
 
   try {
+    if (typeof firebase === 'undefined') return;
     const db = firebase.firestore();
     let related = [];
 
