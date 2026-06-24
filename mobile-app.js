@@ -252,7 +252,7 @@
      Everything else identical to the original.               ── */
   function buildBottomNav() {
     var page = pageName();
-    if (page === "auth.html") return;
+    if (page === "auth.html" || page === "register.html") return;
     if (document.querySelector(".ma-bottom-nav")) return;
 
     var role         = getUserRole();
@@ -339,7 +339,7 @@
     document.body.classList.remove("cc-mobile-home-page", "cc-mobile-account-page", "cc-mobile-cart-page", "cc-mobile-auth-page");
     if      (currentPage === "account.html") document.body.classList.add("cc-mobile-account-page");
     else if (currentPage === "cart.html")    document.body.classList.add("cc-mobile-cart-page");
-    else if (currentPage === "auth.html")    document.body.classList.add("cc-mobile-auth-page");
+    else if (currentPage === "auth.html" || currentPage === "register.html")    document.body.classList.add("cc-mobile-auth-page");
     else                                     document.body.classList.add("cc-mobile-home-page");
 
     buildHeader();

@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Login or Sign Up – Chic Charms" />
-  <title>Login – Chic Charms</title>
+  <title>Register – Chic Charms</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
@@ -516,15 +516,18 @@
 
         <!-- Tab switcher -->
         <div class="auth-tabs" role="tablist">
-          <button class="auth-tab active" id="tabLogin"  role="tab" aria-selected="true"  aria-controls="panelLogin">Login</button>
-          <button class="auth-tab"        id="tabSignup" role="tab" aria-selected="false" aria-controls="panelSignup">Sign Up</button>
+          <button class="auth-tab" id="tabLogin"  role="tab" aria-selected="false"  aria-controls="panelLogin">Login</button>
+          <button class="auth-tab active" id="tabSignup" role="tab" aria-selected="true" aria-controls="panelSignup">Sign Up</button>
         </div>
 
         <!-- Error / success message -->
         <div class="auth-message" id="authMessage" role="alert" aria-live="polite"></div>
 
+        
+    
+
         <!-- ── LOGIN PANEL ── -->
-        <div id="panelLogin" role="tabpanel">
+        <div id="panelLogin" role="tabpanel" style="display: none;">
           <div class="auth-form" id="loginForm">
 
             <div class="auth-form-group">
@@ -581,7 +584,7 @@
         </div>
 
         <!-- ── SIGNUP PANEL ── -->
-        <div id="panelSignup" role="tabpanel" style="display:none;">
+        <div id="panelSignup" role="tabpanel" style="display:block;">
           <div class="auth-form" id="signupForm">
 
             <div class="auth-form-group">
@@ -682,68 +685,82 @@
 <div class="w-10"></div> <!-- Spacer for symmetry -->
 </header>
 
-<!-- Main Content Shell -->
-<main class="flex-grow pt-[160px] pb-12 px-margin-mobile">
+<main class="pt-[160px] pb-20 px-margin-mobile flex flex-col gap-10">
 <!-- Hero Section -->
-<section class="flex flex-col items-center text-center mb-10">
-<div class="mb-6 active:scale-105 transition-transform duration-500">
-<img alt="Chic Charms Monogram" class="w-[48px] h-[48px]" style="width: 48px; height: 48px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAYAAACOEfKtAAAEsklEQVR4AeyaT2hcdRDHZ9620Wi01YtEBP8VgyA1Wk+CoBTEza7eoqKt9i37x4paxbM1okep2CLNbprdtNgiVfGQ3S3qperBQ0EbFCkiHhrEW7GaYBOzb5zf4YXfj+62Xeb3Xlsyyw6/mXnv+5vZz5vNPngJQF8iAgpQhA9AASpAIQGhXCdQAQoJCOU6gQpQSEAo1wlUgEICQrlOoAIUEhDK1+IECpG5cgXo8ug7UoB9I3MFCtDl0XekAPtG5goUoMuj70gB9o3MFShAl0ffUSoA92ZfvaaRLz/HdohtrpGrnG3kK9TNLvYJumlMrp4r/1XPV07yOsPrM9Ut5fUX28vH8cQBTmdL2RuC5VMAeJhtO9tmQLgRPL8QcQMC3M/ri7x+sn4YfpnJV7Z6LnPedokCbOTLE0EmaDOwO86rnHACATdFAF/N5MpvJlkqMYD1XOUdAHwbLuMLAQJCfL+Rr+xKqo1EAPJVzyHCbrtpIlgioL1Ewd1hs4q9zNZ083vpTN7sDUAfsS3bWgLYU8+VHrZzvnzvAI8++vIQNzxlN8jxPAY0WmjWdhVa+3+3j12af2lnmb3DZu2VDgVbgOjPWIXAj28xqB8dHx+Ic75W7wAXhzrbAHE4bpAnbwWj6KlwtsY/JHE22bXYmvwZCZ+1qyDAyOK5m8bsnA/fO0C+8nm3MZoM21Mn3Vzy0Y529Vv+Kh+xK1EEWTv24fsHCDjqNBbhfidOMYgIDjjlEB5yYg+Bf4AIN9t9nT42nNpX165rfFrpzJk1NgS4K/Z9rf4BAgzazU3ABN+O2Zn0/OKX02fcarjRjeVREgDlXV1FOyhA4cVSgApQSEAo1wlUgEICQrlO4BULUNjY1SLXCRReKQWoAIUEhHKdQAUoJCCU6wQqQCEBoVwnUAEKCQjlOoEKUEhAKPc+gfwQfcHu6dDj26+34zR985DfrkdA/9ixD98B6GND3uMPttX3ysDgyGqQsrM4uHyfU5Jw3ok9BP4BEvxg94WAJTtO06dMZqdbj064sTzyDxCgbbdFBMWD2ZcesHNp+I1c8REEeMGphdh0Yg+Bd4BDZ677HIBOx70hwrpOEH1xcKx0T5xLem2MlUYJg0+dOkS/LnQGZp2ch8A7wKe//+BfiLBo94aIt0eIc/Vcec/H2eJt9jGf/vQTO0caufIkYXACAW+J9+YfNn64HxVfO7ZvKc75Wr0DNI2F7erX3PRbxl81xGsZ5Bv/ZTLzjR7/H23yq+f3cMw5vSxYF50CxAry1NtyJHg9bB34zs758hMBaJorNKvvAdFuNmZpMpfDqMNVGV51H6+JvBMDaLoNW7V3EeBJIHBubcyxpI3v+X4jpK1hs/phkrUSBWga39GqtWBxaRP/sDzPIA/zRP7E69/mmE8jorM86j/ynlO8jt+5cOu9hdmpbzhO9J04QNN9eHzmXNisHQlb1W08lZt53cCTgd3MnH8h66YxuUKrtpH/bDzIfpnXzx47PrFyoX18HUsFoK9mr8R9FKDwqqx5gEJ+oACFBBWgAhQSEMp1AhWgkIBQrhOoAIUEhHKdQAUoJCCU6wQqQCEBoVwncA0CFH5kv3KdQCFPBagAhQSE8v8BAAD//0c9J0UAAAAGSURBVAMAhth2sE/Oi/0AAAAASUVORK5CYII="/>
-</div>
-<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-[#2F2A2A] mb-3">Welcome Back</h1>
-<p class="font-body-md text-body-md text-[#8F6674] max-w-[280px] mx-auto">Sign in to access your orders, wishlist and account.</p>
+<section class="flex flex-col gap-3">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-brand-charcoal">
+                Create Your Account
+            </h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-[85%]">
+                Join Chic Charms and discover timeless pieces crafted for every moment.
+            </p>
 </section>
-<!-- Login Form Card -->
-<section class="max-w-[480px] mx-auto">
-<div class="bg-soft-surface p-7 rounded-luxury shadow-[0px_20px_40px_rgba(47,42,42,0.04)]">
-<form class="space-y-5" onsubmit="event.preventDefault();">
-<!-- Email Field -->
-<div class="space-y-2">
-<label class="block font-label-sm text-label-sm text-[#8F6674] uppercase tracking-wider ml-1">Email Address</label>
-<input class="w-full h-14 px-4 bg-white border border-luxury-rose/20 rounded-input font-body-md text-body-md focus:outline-none focus:border-luxury-rose transition-all input-focus-ring" placeholder="email@example.com" type="email" id="mobileLoginEmail"/>
+<!-- Registration Form Card -->
+<section class="bg-brand-surface rounded-[24px] p-7 glass-elevation border border-brand-rose/5">
+<form class="flex flex-col gap-6" id="registrationForm" onsubmit="return false;">
+<!-- Full Name -->
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-[12px] uppercase tracking-wider text-on-surface-variant ml-1">Full Name</label>
+<input class="input-refined w-full bg-white rounded-lg px-4 font-body-md text-brand-charcoal placeholder:text-outline-variant" placeholder="Enter your full name" type="text" id="mobileSignupName"/>
 </div>
-<!-- Password Field -->
-<div class="space-y-2">
-<div class="flex justify-between items-center px-1">
-<label class="block font-label-sm text-label-sm text-[#8F6674] uppercase tracking-wider">Password</label>
-<a class="font-label-sm text-label-sm text-[#9F4C67] hover:underline transition-all" href="#">Forgot Password?</a>
+<!-- Email -->
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-[12px] uppercase tracking-wider text-on-surface-variant ml-1">Email Address</label>
+<input class="input-refined w-full bg-white rounded-lg px-4 font-body-md text-brand-charcoal placeholder:text-outline-variant" placeholder="you@example.com" type="email" id="mobileSignupEmail"/>
 </div>
+<!-- Phone -->
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-[12px] uppercase tracking-wider text-on-surface-variant ml-1">Phone Number</label>
+<input class="input-refined w-full bg-white rounded-lg px-4 font-body-md text-brand-charcoal placeholder:text-outline-variant" maxlength="10" placeholder="10-digit mobile number" type="tel" id="mobileSignupPhone"/>
+</div>
+<!-- Password -->
+<div class="flex flex-col gap-2 relative">
+<label class="font-label-sm text-[12px] uppercase tracking-wider text-on-surface-variant ml-1">Password</label>
 <div class="relative">
-<input class="w-full h-14 px-4 bg-white border border-luxury-rose/20 rounded-input font-body-md text-body-md focus:outline-none focus:border-luxury-rose transition-all input-focus-ring" placeholder="••••••••" type="password" id="mobileLoginPassword"/>
-<button class="absolute right-4 top-1/2 -translate-y-1/2 text-[#8F6674]" type="button" id="mobilePwToggle">
-<span class="material-symbols-outlined text-[20px]">visibility</span>
+<input class="input-refined w-full bg-white rounded-lg px-4 font-body-md text-brand-charcoal placeholder:text-outline-variant pr-12" id="mobileSignupPassword" placeholder="Min. 8 characters" type="password"/>
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-brand-rose transition-colors" onclick="toggleMobilePassword('mobileSignupPassword')" type="button">
+<span class="material-symbols-outlined">visibility</span>
 </button>
 </div>
 </div>
-<!-- Sign In Button -->
-<button id="mobileLoginBtn" type="button" class="w-full h-14 bg-luxury-rose hover:bg-[#9F4C67] active:scale-[0.98] transition-all text-white font-button text-button rounded-input mt-4 uppercase shadow-sm">
-                        Sign In
-                    </button>
-</form>
-<!-- Divider -->
-<div class="relative my-8 flex items-center">
-<div class="flex-grow border-t border-outline-variant/30"></div>
-<span class="flex-shrink mx-4 font-label-sm text-[10px] text-outline tracking-[0.2em] uppercase">Or Continue With</span>
-<div class="flex-grow border-t border-outline-variant/30"></div>
+<!-- Confirm Password -->
+<div class="flex flex-col gap-2 relative">
+<label class="font-label-sm text-[12px] uppercase tracking-wider text-on-surface-variant ml-1">Confirm Password</label>
+<div class="relative">
+<input class="input-refined w-full bg-white rounded-lg px-4 font-body-md text-brand-charcoal placeholder:text-outline-variant pr-12" id="mobileSignupConfirm" placeholder="Repeat your password" type="password"/>
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-brand-rose transition-colors" onclick="toggleMobilePassword('mobileSignupConfirm')" type="button">
+<span class="material-symbols-outlined">visibility</span>
+</button>
 </div>
-<!-- Social Login -->
-<button id="mobileGoogleSignInBtn" class="w-full h-14 bg-white border border-outline-variant/30 hover:border-luxury-rose/40 active:scale-[0.98] transition-all text-on-surface font-button text-button rounded-input flex items-center justify-center gap-3 shadow-sm">
-<svg class="w-5 h-5" viewbox="0 0 24 24">
+</div>
+<!-- Action Button -->
+<button class="btn-primary w-full rounded-lg text-on-primary font-button uppercase tracking-[0.15em] mt-2 shadow-lg shadow-brand-rose/20" type="button" id="mobileSignupBtn">
+                    Create Account
+                </button>
+</form>
+<!-- Social Registration -->
+<div class="mt-10 mb-2">
+<div class="relative flex items-center justify-center mb-8">
+<div class="absolute w-full border-t border-outline-variant/30"></div>
+<span class="relative z-10 px-4 bg-brand-surface text-[11px] font-label-sm text-outline tracking-[0.2em] uppercase">Or Continue With</span>
+</div>
+<button id="mobileSignupGoogleBtn" type="button" class="w-full h-[56px] border border-outline-variant/40 rounded-lg flex items-center justify-center gap-3 bg-white hover:bg-surface-container-low transition-colors active:scale-[0.98]">
+<!-- Inline SVG for Google Logo -->
+<svg fill="none" height="20" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
 <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
 <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"></path>
-<path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"></path>
+<path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 12-4.53z" fill="#EA4335"></path>
 </svg>
-                    Continue With Google
-                </button>
-</div>
-<!-- Registration CTA -->
-<div class="mt-10 text-center">
-<p class="font-body-md text-body-md text-outline">
-                    New to Chic Charms? 
-                    <a class="ml-1 text-luxury-rose font-medium hover:underline" href="register.html">Create an account</a>
-</p>
+<span class="font-label-md text-brand-charcoal">Google</span>
+</button>
 </div>
 </section>
+<!-- Login CTA -->
+<div class="flex flex-col items-center justify-center gap-4 py-4">
+<p class="font-body-md text-on-surface-variant">Already have an account?</p>
+<a class="font-button text-brand-rose border-b border-brand-rose/30 pb-0.5 tracking-widest hover:border-brand-rose transition-all" href="auth.html">SIGN IN</a>
+</div>
 </main>
 <!-- Email -->
 <div class="flex flex-col gap-2">
@@ -1200,29 +1217,50 @@
     /* ── Wire buttons via addEventListener ── */
     document.getElementById('loginBtn').addEventListener('click', loginUser);
 
-    /* ══════════════════════════════════════════════════════════
-       MOBILE LOGIN FUNCTION
-    ══════════════════════════════════════════════════════════ */
-    window.mobileLoginUser = async function () {
-      const email    = document.getElementById('mobileLoginEmail').value.trim();
-      const password = document.getElementById('mobileLoginPassword').value;
+    
+    window.toggleMobilePassword = function(id) {
+        const el = document.getElementById(id);
+        const type = el.getAttribute('type') === 'password' ? 'text' : 'password';
+        el.setAttribute('type', type);
+        
+        const btn = el.nextElementSibling;
+        const icon = btn.querySelector('.material-symbols-outlined');
+        icon.textContent = type === 'password' ? 'visibility' : 'visibility_off';
+    };
+
+    window.mobileSignupUser = async function () {
+      const name     = document.getElementById('mobileSignupName').value.trim();
+      const email    = document.getElementById('mobileSignupEmail').value.trim();
+      const phone    = document.getElementById('mobileSignupPhone').value.trim();
+      const password = document.getElementById('mobileSignupPassword').value;
+      const confirm  = document.getElementById('mobileSignupConfirm').value;
 
       if (!email || !password) {
-        alert('Please enter your email and password.');
+        alert('⚠️ Please fill in all required fields.');
+        return;
+      }
+      if (password.length < 6) {
+        alert('⚠️ Password must be at least 6 characters.');
+        return;
+      }
+      if (password !== confirm) {
+        alert('⚠️ Passwords do not match.');
         return;
       }
 
-      const btn = document.getElementById('mobileLoginBtn');
+      const btn = document.getElementById('mobileSignupBtn');
       const originalText = btn.innerText;
       btn.textContent = "Connecting...";
       btn.disabled = true;
 
       try {
-        const cred = await signInWithEmailAndPassword(auth, email, password);
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        if (name) await updateProfile(cred.user, { displayName: name });
         localStorage.setItem('userEmail', cred.user.email);
         localStorage.setItem('userId',    cred.user.uid);
-
-        // redirectByRole will handle the rest
+        localStorage.setItem('userName',  name || email.split('@')[0]);
+        
+        alert('✅ Account created! Redirecting…');
         await redirectByRole(cred.user);
       } catch (err) {
         alert('⚠️ ' + friendlyError(err.code));
@@ -1231,23 +1269,12 @@
       }
     };
 
-    
-    
-    if(document.getElementById('mobileLoginBtn')) {
-        document.getElementById('mobileLoginBtn').addEventListener('click', mobileLoginUser);
+    if(document.getElementById('mobileSignupBtn')) {
+        document.getElementById('mobileSignupBtn').addEventListener('click', mobileSignupUser);
     }
-    if(document.getElementById('mobileGoogleSignInBtn')) {
-        document.getElementById('mobileGoogleSignInBtn').addEventListener('click', function() {
-            handleGoogleSignIn(this, 'googleAuthMsg');
-        });
-    }
-
-    if(document.getElementById('mobilePwToggle')) {
-        document.getElementById('mobilePwToggle').addEventListener('click', function() {
-            const input = document.getElementById('mobileLoginPassword');
-            const isText = input.type === 'text';
-            input.type = isText ? 'password' : 'text';
-            this.innerHTML = isText ? '<span class="material-symbols-outlined text-[20px]">visibility</span>' : '<span class="material-symbols-outlined text-[20px]">visibility_off</span>';
+    if(document.getElementById('mobileSignupGoogleBtn')) {
+        document.getElementById('mobileSignupGoogleBtn').addEventListener('click', function() {
+            handleGoogleSignIn(this, 'googleSignUpMsg');
         });
     }
 
@@ -1267,13 +1294,14 @@
     });
 
     
+    
     /* ── Enter key support ── */
     document.addEventListener('keydown', function (e) {
       if (e.key !== 'Enter') return;
       if (!e.target || e.target.tagName !== 'INPUT') return;
       if (window.innerWidth <= 768) {
-         if (e.target.id === 'mobileLoginEmail' || e.target.id === 'mobileLoginPassword') {
-            mobileLoginUser();
+         if (e.target.id === 'mobileSignupEmail' || e.target.id === 'mobileSignupPassword' || e.target.id === 'mobileSignupConfirm' || e.target.id === 'mobileSignupName' || e.target.id === 'mobileSignupPhone') {
+            mobileSignupUser();
          }
          return;
       }
