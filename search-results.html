@@ -427,45 +427,6 @@
       margin: 16px 0 0;
     }
 
-    .cc-bottom-nav {
-      position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: 0;
-      width: 100%;
-      max-width: var(--shell);
-      z-index: 61;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
-      background: rgba(255, 248, 247, 0.96);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-top: 1px solid rgba(215, 193, 197, 0.5);
-    }
-
-    .cc-bottom-nav a {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2px;
-      padding: 6px 14px;
-      color: var(--muted);
-      text-decoration: none;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 500;
-    }
-
-    .cc-bottom-nav a.active,
-    .cc-bottom-nav a[aria-current="page"] {
-      color: var(--rose);
-      background: rgba(171, 93, 113, 0.10);
-    }
-
-    .cc-bottom-nav .material-symbols-outlined { font-size: 24px; }
-
     @media (min-width: 768px) {
       body { background: #f6eceb; }
       .desktop-hint { display: block; }
@@ -475,6 +436,7 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="cc-bottom-nav.css" />
 </head>
 <body>
   <div class="mobile-shell">
@@ -547,28 +509,7 @@
       </footer>
     </main>
 
-    <nav class="cc-bottom-nav" aria-label="Primary">
-      <a href="index.html" data-nav="home">
-        <span class="material-symbols-outlined">home</span>
-        <span>Home</span>
-      </a>
-      <a href="search.html" data-nav="search">
-        <span class="material-symbols-outlined">search</span>
-        <span>Search</span>
-      </a>
-      <a href="wishlist.html" data-nav="wishlist">
-        <span class="material-symbols-outlined">favorite</span>
-        <span>Wishlist</span>
-      </a>
-      <a href="cart.html" data-nav="cart">
-        <span class="material-symbols-outlined">shopping_bag</span>
-        <span>Bag</span>
-      </a>
-      <a href="account.html" data-nav="account">
-        <span class="material-symbols-outlined">person</span>
-        <span>Account</span>
-      </a>
-    </nav>
+    
   </div>
 
   <script src="category-utils.js"></script>
@@ -599,15 +540,7 @@
         element.textContent = new Date().getFullYear();
       });
 
-      document.querySelectorAll('.cc-bottom-nav a').forEach(function (link) {
-        link.classList.remove('active');
-        link.removeAttribute('aria-current');
-      });
-      const searchLink = document.querySelector('.cc-bottom-nav a[data-nav="search"]');
-      if (searchLink) {
-        searchLink.classList.add('active');
-        searchLink.setAttribute('aria-current', 'page');
-      }
+      
 
       function getQuery() {
         return new URLSearchParams(window.location.search).get('q') || '';
@@ -818,5 +751,6 @@
       new MutationObserver(fix).observe(document.documentElement, { childList: true, subtree: true });
     })();
   </script>
+  <script src="cc-bottom-nav.js" defer></script>
 </body>
 </html>

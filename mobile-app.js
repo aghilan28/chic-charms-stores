@@ -2,13 +2,9 @@
  * CHIC CHARMS mobile runtime
  * Single authority for phone-only homepage UI. Desktop markup stays untouched.
  *
- * CHANGE vs original (one function only):
- *   buildBottomNav() — reads sessionStorage "cc_user_role" to decide
- *   whether the Account tab links to account.html (customer) or
- *   admin.html (admin). Icon and label update to match.
- *   patchBottomNavForRole() — live-patches the tab when auth-ui.js
- *   fires "cc-role-resolved" (no page reload needed).
- *   Everything else is IDENTICAL to the original file.
+ * NOTE: Bottom navigation is now a separate global component (cc-bottom-nav.js).
+ * This file no longer builds or manages bottom nav — it was removed to avoid
+ * duplicate/conflicting navigation bars.
  */
 (function () {
   "use strict";
@@ -18,7 +14,6 @@
   var state = {
     ready: false,
     backdrop: null,
-    bottomNav: null,
     headerCart: null,
     categoryRail: null,
     promoRail: null,
@@ -72,12 +67,6 @@
 
   function pageName() {
     return window.location.pathname.split("/").pop() || "index.html";
-  }
-
-  /* ─── role helper (NEW — only used by buildBottomNav) ────────── */
-  function getUserRole() {
-    try { return sessionStorage.getItem("cc_user_role") || "customer"; }
-    catch (_) { return "customer"; }
   }
 
   function currentCartCount() {
@@ -246,66 +235,6 @@
     });
   }
 
-  /* ── buildBottomNav — ROLE-AWARE (only changed function) ─────────
-     Admin  → Account tab → admin.html, shield icon, "Admin" label
-     Customer → Account tab → account.html, person icon, "Account"
-     Everything else identical to the original.               ── */
-  function buildBottomNav() {
-    var page = pageName();
-    if (page === "auth.html" || page === "register.html") return;
-    if (document.querySelector(".ma-bottom-nav")) return;
-
-    var role         = getUserRole();
-    var isAdmin      = role === "admin";
-    var accountHref  = isAdmin ? "admin.html"  : "account.html";
-    var accountLabel = isAdmin ? "Admin"        : "Account";
-    var accountIcon  = isAdmin ? "admin"        : "account";
-    var accountActive = isAdmin ? (page === "admin.html") : (page === "account.html");
-
-    var tabs = [
-      ["index.html",            "Home",        "home",        page === "index.html" || page === ""],
-      ["index.html#categories", "Categories",  "shop",        false],
-      ["index.html#bestsellers","Discover",    "discover",    false],
-      [accountHref,             accountLabel,  accountIcon,   accountActive],
-      ["cart.html",             "Cart",        "cart",        page === "cart.html"]
-    ];
-
-    var nav = el("nav", "ma-bottom-nav", { "aria-label": "Mobile bottom navigation" });
-    tabs.forEach(function (tab) {
-      var attrs = { href: tab[0], "aria-label": tab[1] };
-      var link = el("a", "ma-nav-tab" + (tab[3] ? " is-active" : ""), attrs);
-      link.innerHTML = icon(tab[2]) + "<span>" + tab[1] + "</span>";
-      if (tab[1] === "Cart") {
-        link.innerHTML += '<span class="mobile-cart-count" data-ma-cart-count hidden></span>';
-      }
-      nav.appendChild(link);
-    });
-    document.body.appendChild(nav);
-    state.bottomNav = nav;
-  }
-
-  /* ── Live patch when auth-ui.js fires cc-role-resolved ─────────── */
-  function patchBottomNavForRole(role) {
-    var nav = state.bottomNav;
-    if (!nav) return;
-    /* Find the account/admin tab (4th tab, 0-indexed = index 3) */
-    var tabs = nav.querySelectorAll(".ma-nav-tab");
-    var accountTab = tabs[3]; /* Home=0, Categories=1, Discover=2, Account/Admin=3 */
-    if (!accountTab) return;
-
-    var isAdmin      = role === "admin";
-    var newHref      = isAdmin ? "admin.html"  : "account.html";
-    var newLabel     = isAdmin ? "Admin"        : "Account";
-    var newIconKey   = isAdmin ? "admin"        : "account";
-    var page         = pageName();
-    var newActive    = isAdmin ? (page === "admin.html") : (page === "account.html");
-
-    accountTab.href = newHref;
-    accountTab.setAttribute("aria-label", newLabel);
-    accountTab.classList.toggle("is-active", newActive);
-    accountTab.innerHTML = icon(newIconKey) + "<span>" + newLabel + "</span>";
-  }
-
   function wireSearch() {
     var mobileSearch  = document.getElementById("mobileCommerceSearch");
     var desktopSearch = document.getElementById("searchInput");
@@ -345,7 +274,7 @@
     buildHeader();
     buildDrawer();
     buildMobileSections();
-    buildBottomNav();
+    /* bottom nav is now handled by cc-bottom-nav.js (global component) */
     wireSearch();
     updateCartBadges();
 
@@ -354,11 +283,6 @@
       window.addEventListener("scroll",       smartHeader,      { passive: true });
       window.addEventListener("cart-updated", updateCartBadges);
       window.addEventListener("storage",      updateCartBadges);
-
-      /* ── Live role patch (fires after auth-ui.js resolves role) ── */
-      window.addEventListener("cc-role-resolved", function (e) {
-        if (e.detail && e.detail.role) patchBottomNavForRole(e.detail.role);
-      });
 
       document.addEventListener("click", function (event) {
         if (event.target.closest(".lux-cart-btn, .btn-cart, [data-add]")) {

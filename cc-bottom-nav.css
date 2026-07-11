@@ -1,0 +1,83 @@
+/* ═══════════════════════════════════════════════════════════════════
+   CHIC CHARMS — Global Bottom Navigation Stylesheet
+   Source of truth: product.html cc-bottom-nav
+   Single shared stylesheet — do NOT duplicate inline.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* --- Chic Charms Unified Bottom Nav --- */
+.cc-bottom-nav {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  width: 100%;
+  max-width: 440px;
+  z-index: 60;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+  background: rgba(255, 248, 247, 0.96);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(215, 193, 197, 0.5);
+  box-shadow: 0 -2px 16px rgba(78, 45, 38, 0.06);
+}
+
+.cc-bottom-nav a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 14px;
+  min-height: 44px;
+  min-width: 44px;
+  color: #534346;
+  text-decoration: none;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+  font-family: 'Jost', 'Plus Jakarta Sans', system-ui, sans-serif;
+  transition: color 0.15s ease, background 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  position: relative;
+}
+
+.cc-bottom-nav a:active {
+  color: #8e4559;
+  background: rgba(171, 93, 113, 0.06);
+}
+
+.cc-bottom-nav a.active,
+.cc-bottom-nav a[aria-current="page"] {
+  color: #8e4559;
+  background: rgba(171, 93, 113, 0.10);
+}
+
+.cc-bottom-nav a svg {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.cc-bottom-nav a span {
+  white-space: nowrap;
+  line-height: 1;
+}
+
+/* --- Body spacing: prevent content overlap --- */
+body.cc-nav-active {
+  padding-bottom: calc(78px + env(safe-area-inset-bottom, 0px)) !important;
+}
+
+/* --- Desktop: hide bottom nav, remove padding --- */
+@media (min-width: 768px) {
+  body.cc-nav-active {
+    padding-bottom: 0 !important;
+  }
+
+  .cc-bottom-nav {
+    display: none !important;
+  }
+}

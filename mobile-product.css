@@ -291,12 +291,77 @@ button {
   background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 50%);
 }
 
-/* Promise icons */
+/* Promise Section Upgrades */
+#promiseSection {
+  margin-top: 40px !important;
+  margin-bottom: 32px !important;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+}
+#promiseGrid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 24px !important;
+}
+@media (min-width: 1024px) {
+  #promiseGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 32px !important;
+  }
+}
+.promise-card {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(179, 106, 126, 0.15) !important;
+  border-radius: 12px !important;
+  padding: 20px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+  height: 100% !important;
+  justify-content: flex-start !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+@media (min-width: 1024px) {
+  .promise-card {
+    padding: 24px !important;
+  }
+}
+.promise-card:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(179, 106, 126, 0.1) !important;
+}
 .promise-icon {
-  color: #8e4559;
-  font-size: 28px;
-  display: block;
-  margin-bottom: 8px;
+  font-size: 44px !important;
+  width: 44px !important;
+  height: 44px !important;
+  line-height: 1 !important;
+  color: #B36A7E !important;
+  display: block !important;
+  margin-bottom: 12px !important;
+  user-select: none !important;
+}
+.promise-title {
+  font-family: 'Jost', sans-serif !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  font-size: 12px !important;
+  color: #2F2A2A !important;
+  margin-bottom: 8px !important;
+  line-height: 1.4 !important;
+}
+.promise-desc {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 12px !important;
+  color: #534346 !important;
+  line-height: 1.6 !important;
+  margin: 0 !important;
+  text-align: center !important;
+}
+main {
+  padding-bottom: 180px !important;
 }
 
 /* ===== GALLERY SCROLL FIX ===== */

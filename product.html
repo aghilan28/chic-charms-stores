@@ -261,6 +261,7 @@
       }
     }
   </script>
+  <link rel="stylesheet" href="cc-bottom-nav.css" />
 </head>
 <body class="bg-surface text-on-surface font-body-md selection:bg-primary/20">
 
@@ -1299,57 +1300,6 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) upda
     .safe-area-bottom { padding-bottom: max(12px, env(safe-area-inset-bottom)); }
   }
 </style>
-  <!-- Bottom Nav – Chic Charms Unified -->
-
-<nav class="cc-bottom-nav" aria-label="Primary">
-    <a href="index.html" data-nav="home">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      <span>Home</span>
-    </a>
-    <a href="search.html" data-nav="search">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <span>Search</span>
-    </a>
-    <a href="wishlist.html" data-nav="wishlist">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-      <span>Wishlist</span>
-    </a>
-    <a href="cart.html" data-nav="cart">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-      <span>Bag</span>
-    </a>
-    <a href="account.html" data-nav="account">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      <span>Account</span>
-    </a>
-  </nav>
-  <style>
-  /* --- Chic Charms Unified Bottom Nav --- */
-  .cc-bottom-nav{
-    position:fixed;left:50%;transform:translateX(-50%);bottom:0;
-    width:100%;max-width:440px;z-index:60;
-    display:flex;justify-content:space-around;align-items:center;
-    padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));
-    background:rgba(255,248,247,0.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-    border-top:1px solid rgba(215,193,197,0.5);
-  }
-  .cc-bottom-nav a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 14px;color:#534346;text-decoration:none;border-radius:999px;font-size:11px;font-weight:500;transition:color .15s}
-  .cc-bottom-nav a.active,.cc-bottom-nav a[aria-current="page"]{color:#8e4559;background:rgba(171,93,113,0.10)}
-  .cc-bottom-nav .material-symbols-outlined{font-size:24px}
-  /* body padding for bottom nav */
-  body{padding-bottom:calc(78px + env(safe-area-inset-bottom,0px)) !important}
-  @media(min-width:768px){body{padding-bottom:0 !important}.cc-bottom-nav{display:none !important}}
-  </style>
-  <script>
-  // Auto-activate current tab
-  (function(){
-    var path=(location.pathname.split('/').pop()||'index.html').toLowerCase();
-    document.querySelectorAll('.cc-bottom-nav a').forEach(function(a){
-      var href=(a.getAttribute('href')||'').split('#')[0].split('?')[0];
-      if(href===path || (path===''&&href==='index.html')){a.classList.add('active');a.setAttribute('aria-current','page')}
-    });
-  })();
-  </script>
 <script>
 // Chic Charms – unified wishlist helper
 (function(){
@@ -1435,5 +1385,6 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 
+  <script src="cc-bottom-nav.js" defer></script>
 </body>
 </html>
