@@ -285,6 +285,7 @@
 </style>
   <link rel="stylesheet" href="cc-bottom-nav.css" />
   <link rel="stylesheet" href="cc-material-icons.css" />
+    <link rel="stylesheet" href="cc-global-header.css" />
 </head>
 <body class="bg-background text-on-surface font-ui">
 
@@ -301,7 +302,7 @@
     <button id="menuBtn" class="flex items-center justify-center p-2 -ml-2 text-on-surface" aria-label="Menu">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
-    <h1 class="absolute left-1/2 -translate-x-1/2 font-display text-[28px] text-primary tracking-tight whitespace-nowrap">Chic Charms</h1>
+    <h1 class="absolute left-1/2 -translate-x-1/2 font-display whitespace-nowrap" style="font-family:'Playfair Display',Georgia,serif;font-weight:500;font-size:clamp(2.05rem,5.2vw,2.6rem);letter-spacing:-0.01em;color:#8e4559;line-height:1;text-transform:none;">ChicCharms</h1>
     <div class="ml-auto">
       <a href="shop.html" class="flex items-center justify-center p-2 -mr-2 text-on-surface" aria-label="Close search">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -692,5 +693,6 @@ function escAttr(s){ return escHtml(s).replace(/"/g,'&quot;'); }
 
   <script src="cc-bottom-nav.js" defer></script>
   <script src="cc-material-icons.js" defer></script>
+    <script src="cc-global-header.js" defer></script>
 </body>
 </html>

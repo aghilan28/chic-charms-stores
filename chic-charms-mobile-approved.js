@@ -82,7 +82,7 @@
 <div class="cc-announce">Free Shipping Across India</div>
 <header class="cc-header">
   <button class="cc-header-btn" id="ccMenuBtn" aria-label="Menu"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
-  <a href="index.html" class="cc-logo">CHIC CHARMS</a>
+  <a href="index.html" class="cc-logo" aria-label="ChicCharms home">ChicCharms</a>
   <a href="#" data-cc-app-cart="true" class="cc-header-btn cc-header-cart" aria-label="Cart">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
     <span class="cc-cart-count hidden"></span>
@@ -93,7 +93,7 @@
 <aside class="cc-drawer" id="ccDrawer" aria-label="Navigation">
   <div class="cc-drawer-inner">
     <div class="cc-drawer-top">
-      <span class="cc-drawer-logo">CHIC CHARMS</span>
+      <span class="cc-drawer-logo">ChicCharms</span>
       <button class="cc-drawer-close" id="ccDrawerClose" aria-label="Close"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <nav class="cc-drawer-nav" id="ccDrawerNav">

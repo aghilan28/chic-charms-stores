@@ -1,0 +1,286 @@
+/* Unified Global Header styles for Chic Charms */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap');
+
+:root {
+  --gh-rose: #D4879C;
+  --gh-rose-dark: #B5657A;
+  --gh-rose-light: #EAB5C3;
+  --gh-cream: #FAF8F5;
+  --gh-charcoal: #1C1917;
+  --gh-muted: #4E4440;
+  --gh-muted-soft: #6E6460;
+  --gh-white: #FFFFFF;
+  --gh-border: rgba(181, 101, 122, 0.14);
+}
+
+/* Base header styles to ensure identical styling on all pages */
+header.navbar, .navbar {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  height: 68px !important;
+  z-index: 9999 !important;
+  background: rgba(250, 248, 245, 0.94) !important;
+  backdrop-filter: blur(16px) saturate(1.6) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(1.6) !important;
+  border-bottom: 1px solid var(--gh-border) !important;
+  box-sizing: border-box !important;
+  display: block !important;
+}
+
+.nav-inner {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  height: 68px !important;
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  padding: 0 20px !important;
+  position: relative !important;
+  box-sizing: border-box !important;
+}
+
+/* Responsive Logo with clamp() as requested */
+.logo, .cc-logo, .cc-drawer-logo {
+  font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif !important;
+  font-size: clamp(1.25rem, 3.5vw, 1.75rem) !important; /* Scaled responsively using clamp() */
+  font-weight: 500 !important;
+  color: #8e4559 !important;
+  text-decoration: none !important;
+  letter-spacing: -0.01em !important;
+  flex: 0 0 auto !important;
+  text-transform: none !important;
+  z-index: 10 !important;
+  line-height: 1.2 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+.logo span, .cc-logo span, .cc-drawer-logo span {
+  color: inherit !important;
+}
+
+/* Desktop Navigation links */
+.nav-links {
+  display: flex !important;
+  align-items: center !important;
+  gap: 24px !important;
+  position: absolute !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  white-space: nowrap !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  z-index: 1 !important;
+}
+
+.nav-links a {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-family: 'Jost', system-ui, sans-serif !important;
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase !important;
+  color: var(--gh-muted) !important;
+  line-height: 1 !important;
+  transition: color 0.2s ease !important;
+  text-decoration: none !important;
+}
+
+.nav-links a:hover {
+  color: var(--gh-charcoal) !important;
+}
+
+/* Header actions (Search, Wishlist, Cart, Login) */
+.nav-actions {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 16px !important;
+  flex: 0 0 auto !important;
+  min-width: 220px !important;
+  z-index: 10 !important;
+}
+
+.btn-nav {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: var(--gh-rose-dark) !important;
+  color: #fff !important;
+  padding: 8px 18px !important;
+  border-radius: 999px !important;
+  font-family: 'Jost', system-ui, sans-serif !important;
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  text-decoration: none !important;
+  transition: background 0.2s ease !important;
+  border: none !important;
+  cursor: pointer !important;
+}
+
+.btn-nav:hover {
+  background: var(--gh-rose) !important;
+}
+
+/* Mobile Hamburger Menu */
+.mobile-commerce-menu {
+  display: none !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  width: 36px !important;
+  height: 36px !important;
+  background: none !important;
+  border: none !important;
+  cursor: pointer !important;
+  padding: 4px !important;
+  z-index: 10 !important;
+}
+
+.mobile-commerce-menu span {
+  display: block !important;
+  width: 22px !important;
+  height: 1.5px !important;
+  background: var(--gh-charcoal) !important;
+  border-radius: 1px !important;
+  transition: transform 0.2s ease, opacity 0.2s ease !important;
+}
+
+/* Mobile Commerce Actions */
+.mobile-commerce-actions {
+  display: none !important;
+  align-items: center !important;
+  gap: 12px !important;
+  z-index: 10 !important;
+}
+
+.mobile-commerce-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 36px !important;
+  height: 36px !important;
+  color: var(--gh-charcoal) !important;
+  background: none !important;
+  border: none !important;
+  padding: 6px !important;
+  text-decoration: none !important;
+  position: relative !important;
+  box-sizing: border-box !important;
+}
+
+.mobile-commerce-icon svg {
+  width: 20px !important;
+  height: 20px !important;
+  stroke: var(--gh-charcoal) !important;
+}
+
+/* Mobile Cart Count Badge */
+.mobile-cart-count, .cc-cart-count {
+  position: absolute !important;
+  top: 2px !important;
+  right: 2px !important;
+  background: var(--gh-rose-dark) !important;
+  color: #fff !important;
+  font-size: 8px !important;
+  font-weight: 700 !important;
+  min-width: 14px !important;
+  height: 14px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-family: 'Jost', system-ui, sans-serif !important;
+  line-height: 1 !important;
+  box-sizing: border-box !important;
+}
+
+/* Wishlist Count Badge */
+.wishlist-count {
+  position: absolute !important;
+  top: 2px !important;
+  right: 2px !important;
+  background: var(--gh-rose-dark) !important;
+  color: #fff !important;
+  font-size: 8px !important;
+  font-weight: 700 !important;
+  min-width: 14px !important;
+  height: 14px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-family: 'Jost', system-ui, sans-serif !important;
+  line-height: 1 !important;
+  box-sizing: border-box !important;
+}
+
+/* Media Queries for responsive navbar behavior */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none !important; /* Hide desktop nav links */
+  }
+  
+  .nav-actions {
+    display: none !important; /* Hide desktop nav actions */
+  }
+
+  .mobile-commerce-menu {
+    display: flex !important; /* Show mobile menu */
+  }
+
+  .mobile-commerce-actions {
+    display: flex !important; /* Show mobile action icons */
+  }
+
+  /* Hamburger toggle animations */
+  .mobile-commerce-menu.open span:nth-child(1) {
+    transform: translateY(6.5px) rotate(45deg) !important;
+  }
+  .mobile-commerce-menu.open span:nth-child(2) {
+    opacity: 0 !important;
+  }
+  .mobile-commerce-menu.open span:nth-child(3) {
+    transform: translateY(-6.5px) rotate(-45deg) !important;
+  }
+  
+  /* Slide-out navigation menu for mobile */
+  .nav-links.open {
+    display: flex !important;
+    flex-direction: column !important;
+    position: fixed !important;
+    top: 68px !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    height: calc(100vh - 68px) !important;
+    background: #FFF9F7 !important;
+    transform: none !important;
+    padding: 32px 24px !important;
+    gap: 20px !important;
+    box-sizing: border-box !important;
+    align-items: flex-start !important;
+    z-index: 9998 !important;
+  }
+
+  .nav-links.open a {
+    font-size: 1.1rem !important;
+    letter-spacing: 0.08em !important;
+    width: 100% !important;
+    padding: 10px 0 !important;
+    border-bottom: 1px solid rgba(181, 101, 122, 0.08) !important;
+  }
+}
+
+/* Ensure page contents are pushed down so they are not hidden under the fixed header */
+body {
+  padding-top: 68px !important;
+}

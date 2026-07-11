@@ -124,6 +124,7 @@
   }
 </style>
   <link rel="stylesheet" href="cc-material-icons.css" />
+    <link rel="stylesheet" href="cc-global-header.css" />
 </head>
 <body class="bg-background text-charcoal font-body-md selection:bg-soft-blush selection:text-deep-rose">
 <!-- Announcement Bar -->
@@ -136,7 +137,7 @@
     <span class="material-symbols-outlined text-deep-rose">menu</span>
   </button>
   <div class="absolute left-1/2 -translate-x-1/2">
-    <h1 class="font-display-lg text-display-lg tracking-tighter text-deep-rose whitespace-nowrap">CHIC CHARMS</h1>
+    <h1 class="whitespace-nowrap" style="font-family:'Playfair Display',Georgia,serif;font-weight:500;font-size:clamp(2.05rem,5.2vw,2.6rem);letter-spacing:-0.01em;color:#8e4559;line-height:1;margin:0;">ChicCharms</h1>
   </div>
   <a href="cart.html" aria-label="Cart" class="w-touch-target-min h-touch-target-min flex items-center justify-end focus:outline-none relative">
     <span class="material-symbols-outlined text-deep-rose">shopping_bag</span>
@@ -148,7 +149,7 @@
 <aside class="fixed inset-y-0 left-0 z-[80] w-[85%] max-w-[400px] bg-background drawer-content -translate-x-full overflow-y-auto no-scrollbar" id="drawer">
   <div class="p-margin-horizontal pt-12 pb-24">
     <div class="flex justify-between items-center mb-12">
-      <span class="font-display-lg text-display-lg text-deep-rose">CHIC CHARMS</span>
+      <span style="font-family:'Playfair Display',Georgia,serif;font-weight:500;letter-spacing:-0.01em;color:#8e4559;line-height:1;text-transform:none;">ChicCharms</span>
       <button class="material-symbols-outlined text-menu-text" onclick="toggleDrawer(false)">close</button>
     </div>
     <nav class="flex flex-col">
@@ -639,5 +640,6 @@
   window.addEventListener("storage", updateCartCount);
 </script>
   <script src="cc-material-icons.js" defer></script>
+    <script src="cc-global-header.js" defer></script>
 </body>
 </html>

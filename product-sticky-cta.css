@@ -18,12 +18,11 @@
     padding-bottom: 0 !important;
   }
 
-  body.cc-product-page main {
-    padding-bottom: calc(
-      var(--cc-bottom-nav-total-height) + var(--cc-product-stack-spacing)
-    ) !important;
-  }
-
+  /*
+   * Reserve the final two-bar space from first paint. The entrance only
+   * animates transform/opacity, so the page never jumps when the CTA rises.
+   */
+  body.cc-product-page main,
   body.cc-product-page.cc-product-cta-ready main {
     padding-bottom: calc(
       var(--cc-product-cta-height) +
@@ -37,7 +36,8 @@
     left: 0 !important;
     right: 0;
     bottom: var(--cc-bottom-nav-total-height) !important;
-    z-index: 10000 !important;
+    /* Keep the nav visually on top while the CTA rises from behind it. */
+    z-index: 9998 !important;
     box-sizing: border-box;
     width: 100% !important;
     max-width: var(--cc-product-bar-max-width);
@@ -52,19 +52,26 @@
     background: rgba(255, 255, 255, 0.98);
     border-top: 1px solid #d7c1c5;
     box-shadow: 0 -8px 24px rgba(47, 42, 42, 0.08);
-    /* Enter from above so the CTA never travels through or covers the nav. */
-    transform: translateY(-8px);
+
+    /*
+     * Premium entrance state:
+     * The bar starts at the same bottom location as the nav (masked behind it),
+     * then only translateY/opacity animate until it rests directly above nav.
+     */
+    transform: translate3d(0, var(--cc-product-cta-height), 0);
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
     transition:
-      transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1),
-      opacity 0.2s ease,
-      visibility 0s linear 0.3s;
+      transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 260ms ease-out,
+      visibility 0s linear 420ms;
   }
 
   #stickyBar.cc-product-sticky-cta.is-ready {
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
     opacity: 1;
     visibility: visible;
     pointer-events: auto;

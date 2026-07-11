@@ -15,11 +15,12 @@
     @media (min-width:769px){body{background:#fff8f7}.mobile-page,.announce,.topbar,.sticky-cta{display:none}.desktop-fallback{min-height:100svh;display:grid;place-items:center;padding:40px}.desktop-card{max-width:560px;background:#faf5f2;border:1px solid #eadadd;border-radius:28px;padding:34px;text-align:center}.desktop-card h1{font-family:"Playfair Display",serif;color:#8e4559;margin:0 0 10px}.desktop-card p{color:#534346;line-height:1.65}.desktop-card a{display:inline-flex;margin-top:14px;height:52px;padding:0 24px;align-items:center;border-radius:999px;background:#b5657a;color:white;text-decoration:none;text-transform:uppercase;letter-spacing:.12em;font-weight:700;font-size:13px}}
   </style>
   <link rel="stylesheet" href="cc-material-icons.css" />
+    <link rel="stylesheet" href="cc-global-header.css" />
 </head>
 <body>
   <div class="desktop-fallback"><section class="desktop-card"><h1>Desktop checkout is unchanged</h1><p>This approved delivery information experience is wired only for mobile screens. Continue using the existing desktop checkout flow.</p><a href="checkout.html">Open desktop checkout</a></section></div>
   <div class="announce">Free shipping on ₹399+</div>
-  <header class="topbar"><button class="iconbtn" type="button" id="backBtn" aria-label="Go back"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="brand">Chic Charms</div><div class="secure">Secure</div></header>
+  <header class="topbar"><button class="iconbtn" type="button" id="backBtn" aria-label="Go back"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button><a href="index.html" class="brand" aria-label="ChicCharms home">ChicCharms</a><div class="secure">Secure</div></header>
   <main class="mobile-page wrap">
     <section class="intro"><p class="eyebrow">Checkout step 1</p><h1>Delivery Information</h1><p>Complete your delivery details below. Coupon validation is saved here, but redirection happens only when you tap Continue.</p></section>
     <div class="steps" aria-label="Checkout progress"><span class="step is-active"></span><span class="step"></span><span class="step"></span></div>
@@ -202,6 +203,7 @@
     });
 </script>
   <script src="cc-material-icons.js" defer></script>
+    <script src="cc-global-header.js" defer></script>
 </body>
 
 </html>
