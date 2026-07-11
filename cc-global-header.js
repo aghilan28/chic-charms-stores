@@ -1,197 +1,169 @@
-/* ==========================================================================
-   CHIC CHARMS — GLOBAL HEADER (inject + normalization)
-   - Ensures Playfair Display is loaded (exact desktop brand font)
-   - Injects ONE reusable header on pages that don't already have one
-   - Replaces any uppercase "CHIC CHARMS" / <img wordmark> with the EXACT
-     desktop wordmark:  ChicCharms   (no caps, no letterspacing, #8e4559)
-   - Syncs cart badge count across localStorage / sessionStorage
-   ========================================================================== */
+/* ═══════════════════════════════════════════════════════════════════
+   CHIC CHARMS — Global Reusable Header Component
+   Single source of truth for the site header across ALL pages.
+   
+   Usage: Include this script in any page that needs the global header.
+   The script checks if a header already exists; if not, it injects one.
+   
+   Pages using this:
+   - index.html (inline header can be replaced by this)
+   - product.html
+   - shop.html, cart.html, account.html, etc.
+   
+   This header includes:
+   - Announcement bar
+   - Logo (centered)
+   - Desktop nav links
+   - Mobile hamburger menu
+   - Search, Wishlist, Cart icons
+   - Auth state container
+   ═══════════════════════════════════════════════════════════════════ */
 (function () {
-  if (window.__ccGlobalHeaderInit) return;
-  window.__ccGlobalHeaderInit = true;
+  'use strict';
 
-  /* ---------- 1. Ensure Playfair Display 500 is available (desktop font) ---------- */
-  (function ensureFont() {
-    var href = 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Jost:wght@300;400;500;600&display=swap';
-    if (document.querySelector('link[href*="Playfair+Display"]')) return;
-    var l = document.createElement('link');
-    l.rel = 'stylesheet';
-    l.href = href;
-    document.head.appendChild(l);
-  })();
-
-  /* ---------- 2. Normalize any existing brand text nodes to the desktop wordmark ---------- */
-  var DESKTOP_WORDMARK_HTML = 'Chic<span>Charms</span>';
-  var DESKTOP_WORDMARK_TEXT = 'ChicCharms';
-
-  function normalizeLogoText(el) {
-    if (!el) return;
-    // Already correct?
-    if (el.getAttribute('data-cc-gh-normalized') === '1') return;
-
-    // If element contains the desktop markup already, leave it
-    var html = (el.innerHTML || '').replace(/\s+/g, ' ').trim();
-    var isUppercaseFlat = /^\s*(CHIC\s*CHARMS|Chic\s*Charms|chic\s*charms)\s*$/i.test(el.textContent || '');
-    var hasImage = el.querySelector('img');
-
-    if (hasImage && /wordmark/i.test(el.querySelector('img').alt || '')) {
-      // Replace wordmark image with text wordmark
-      el.innerHTML = DESKTOP_WORDMARK_HTML;
-    } else if (isUppercaseFlat) {
-      el.innerHTML = DESKTOP_WORDMARK_HTML;
-    }
-    el.setAttribute('data-cc-gh-normalized', '1');
+  /**
+   * Build the header HTML — EXACT match of index.html's header.
+   */
+  function buildHeaderHTML() {
+    return [
+      '<!-- ░░ ADMIN RETURN BANNER — only visible when admin is logged in ░░ -->',
+      '<div id="adminReturnBanner" class="admin-return-banner" aria-hidden="true">',
+      '  <span class="admin-return-copy">',
+      '    You are browsing as <strong id="adminReturnEmail"></strong>',
+      '  </span>',
+      '  <a href="admin.html">Back to Admin Dashboard</a>',
+      '</div>',
+      '',
+      '<!-- ░░ GLOBAL NAVBAR ░░ -->',
+      '<header class="navbar" id="navbar">',
+      '  <div class="nav-inner container">',
+      '    <button',
+      '      type="button"',
+      '      class="mobile-commerce-menu"',
+      '      id="mobileCommerceMenu"',
+      '      aria-expanded="false"',
+      '      aria-label="Open menu"',
+      '    >',
+      '      <span></span><span></span>',
+      '    </button>',
+      '    <a href="index.html" class="logo" aria-label="Chic Charms home">',
+      '      Chic<span>Charms</span>',
+      '    </a>',
+      '    <div class="mobile-commerce-actions" aria-label="Mobile shopping actions">',
+      '      <a href="search.html" class="mobile-commerce-icon" aria-label="Search">',
+      '        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.8-3.8"></path></svg>',
+      '      </a>',
+      '      <a href="wishlist.html" class="mobile-commerce-icon relative" aria-label="Wishlist">',
+      '        <svg viewBox="0 0 24 24" aria-hidden="true">',
+      '          <path d="M20.8 4.6c-1.8-1.7-4.6-1.6-6.3.2L12 7.3 9.5 4.8C7.8 3 5 2.9 3.2 4.6 1.3 6.4 1.3 9.4 3.1 11.2L12 20l8.9-8.8c1.8-1.8 1.8-4.8-.1-6.6Z" />',
+      '        </svg>',
+      '        <span class="wishlist-count absolute -top-1 -right-1 bg-primary text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center" style="display:none">0</span>',
+      '      </a>',
+      '      <a href="cart.html" class="mobile-commerce-icon mobile-commerce-cart" aria-label="Cart">',
+      '        <svg viewBox="0 0 24 24" aria-hidden="true">',
+      '          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4H6Z" />',
+      '          <path d="M3 6h18M16 10a4 4 0 0 1-8 0" />',
+      '        </svg>',
+      '        <span class="mobile-cart-count" aria-hidden="true"></span>',
+      '      </a>',
+      '    </div>',
+      '    <nav class="nav-links" id="navLinks" aria-label="Main navigation">',
+      '      <a href="shop.html">Shop</a>',
+      '      <a href="shop.html">Best Sellers</a>',
+      '      <a href="about.html" id="navAboutLink">About</a>',
+      '      <a href="index.html#testimonials">Reviews</a>',
+      '      <a href="search.html">Search</a>',
+      '      <a href="cart.html">Cart 🛍️</a>',
+      '    </nav>',
+      '    <div class="nav-actions" id="navActions">',
+      '      <!-- Auth state injected by auth-nav.js -->',
+      '    </div>',
+      '  </div>',
+      '</header>'
+    ].join('\n');
   }
 
-  function normalizeAllExistingLogos() {
-    var selectors = [
-      '.cc-logo', '.ccap-brand', '.brand-mark', '.brand', '.drawer-brand',
-      '.cc-drawer-logo', '.logo', '.cc-app-logo',
-      'header h1', 'header .brand', 'header [class*="brand"]'
-    ];
-    document.querySelectorAll(selectors.join(',')).forEach(normalizeLogoText);
-  }
-
-  /* ---------- 3. Cart count sync ---------- */
-  function getCartCount() {
-    try {
-      var raw = localStorage.getItem('cc_cart') || sessionStorage.getItem('cc_cart') || '[]';
-      var arr = JSON.parse(raw);
-      if (Array.isArray(arr)) {
-        return arr.reduce(function (n, it) { return n + (Number(it.qty) || Number(it.quantity) || 1); }, 0);
-      }
-      if (arr && typeof arr === 'object' && Array.isArray(arr.items)) {
-        return arr.items.reduce(function (n, it) { return n + (Number(it.qty) || Number(it.quantity) || 1); }, 0);
-      }
-    } catch (e) {}
-    return 0;
-  }
-  function syncCartBadges() {
-    var count = getCartCount();
-    document.querySelectorAll('[data-cc-gh-count], .cc-cart-count, .ccap-bag-count, .mobile-cart-count').forEach(function (b) {
-      if (!b) return;
-      if (count > 0) {
-        b.textContent = count > 99 ? '99+' : String(count);
-        b.classList.add('is-visible');
-        b.style.display = '';
-      } else {
-        b.textContent = '';
-        b.classList.remove('is-visible');
-        b.style.display = 'none';
-      }
-    });
-  }
-
-  /* ---------- 4. Inject Global Header if missing ---------- */
+  /**
+   * Inject the header if one doesn't already exist.
+   */
   function injectHeader() {
-    // Don't inject into admin pages or pages that already have a branded mobile header
-    var path = (location.pathname || '').toLowerCase();
-    if (/admin/.test(path)) return;
+    // If a .navbar already exists (e.g. index.html with inline header), skip injection
+    if (document.querySelector('header.navbar')) return;
 
-    // If page is mobile (≤767) AND has no branded header yet, inject the global one.
-    if (window.innerWidth >= 768) return;
+    var html = buildHeaderHTML();
+    var wrapper = document.createElement('div');
+    wrapper.innerHTML = html;
 
-    // If existing mobile header is present, just normalize it instead of injecting
-    var existingHeader = document.querySelector(
-      'header.cc-header, header.ccap-header, header.navbar#navbar, header.header, ' +
-      '.mobile-shell > header, .topbar, ' +
-      'header.fixed.top-\\[40px\\], ' +
-      'header.sticky.top-0.z-50, ' +
-      'header.sticky.top-\\[40px\\]'
-    );
-    if (existingHeader) {
-      normalizeAllExistingLogos();
-      syncCartBadges();
-      return;
+    // Insert each top-level element at the beginning of body
+    var fragment = document.createDocumentFragment();
+    while (wrapper.firstChild) {
+      fragment.appendChild(wrapper.firstChild);
     }
 
-    // Pages without any mobile header (policy pages, about, contact, faq, etc.)
-    var headerHTML =
-      '<header class="cc-global-header" role="banner" data-cc-global-header="1">' +
-        '<div class="cc-global-header__inner">' +
-          '<div class="cc-global-header__left">' +
-            '<button type="button" class="cc-global-header__btn" data-cc-gh-menu aria-label="Open menu">' +
-              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">' +
-                '<line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>' +
-              '</svg>' +
-            '</button>' +
-          '</div>' +
-          '<div class="cc-global-header__center">' +
-            '<a href="index.html" class="cc-global-header__logo" aria-label="ChicCharms home">' +
-              DESKTOP_WORDMARK_HTML +
-            '</a>' +
-          '</div>' +
-          '<div class="cc-global-header__right">' +
-            '<a href="cart.html" class="cc-global-header__btn" data-cc-gh-bag aria-label="Shopping bag">' +
-              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
-                '<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4H6Z"/>' +
-                '<path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>' +
-              '</svg>' +
-              '<span class="cc-global-header__bag-count" data-cc-gh-count></span>' +
-            '</a>' +
-          '</div>' +
-        '</div>' +
-      '</header>';
-
-    // Insert as very first child of <body>, after any admin banner
-    var body = document.body;
-    var anchor = body.querySelector('#adminReturnBanner');
-    var wrap = document.createElement('div');
-    wrap.innerHTML = headerHTML;
-    var headerEl = wrap.firstElementChild;
-
-    if (anchor && anchor.parentNode === body) {
-      anchor.insertAdjacentElement('afterend', headerEl);
+    // Insert before the first child of body
+    if (document.body.firstChild) {
+      document.body.insertBefore(fragment, document.body.firstChild);
     } else {
-      body.insertBefore(headerEl, body.firstChild);
+      document.body.appendChild(fragment);
     }
+  }
 
-    // Body top padding so content clears sticky header
-    body.style.paddingTop = '0';
-
-    // Wire menu button → slide open the existing drawer if one exists, else go to home menu
-    var menuBtn = headerEl.querySelector('[data-cc-gh-menu]');
-    if (menuBtn) {
+  /**
+   * Wire up mobile menu toggle (hamburger).
+   */
+  function wireMobileMenu() {
+    var menuBtn = document.getElementById('mobileCommerceMenu');
+    var navLinks = document.getElementById('navLinks');
+    
+    if (menuBtn && navLinks) {
       menuBtn.addEventListener('click', function () {
-        // Prefer existing drawer mechanisms used across the app
-        var candidates = [
-          document.getElementById('ccMenuBtn'),
-          document.getElementById('mobileCommerceMenu'),
-          document.getElementById('menuBtn'),
-          document.querySelector('[data-drawer-open]'),
-          document.querySelector('.mobile-commerce-menu'),
-          document.querySelector('.icon-btn#menuBtn')
-        ];
-        for (var i = 0; i < candidates.length; i++) {
-          if (candidates[i]) { candidates[i].click(); return; }
-        }
-        // Fallback: history back if there is history, else home
-        if (window.history.length > 1) history.back();
-        else location.href = 'index.html';
+        var isOpen = navLinks.classList.toggle('open');
+        menuBtn.setAttribute('aria-expanded', String(isOpen));
+        document.body.classList.toggle('d7-menu-open', isOpen);
       });
     }
-
-    syncCartBadges();
   }
 
+  /**
+   * Wire up cart badge updates.
+   */
+  function wireCartBadge() {
+    function updateMobileCartCount() {
+      var cart = [];
+      try { cart = JSON.parse(localStorage.getItem('cc_cart') || '[]'); } catch(e) {}
+      var count = cart.reduce(function(s, i) { return s + (Number(i.quantity) || 1); }, 0);
+      var badge = document.querySelector('.mobile-cart-count');
+      if (badge) {
+        badge.textContent = count > 9 ? '9+' : String(count);
+        badge.style.display = count > 0 ? '' : 'none';
+      }
+    }
+    updateMobileCartCount();
+    // Listen for storage changes from other tabs
+    window.addEventListener('storage', updateMobileCartCount);
+    // Periodic sync for same-tab updates
+    setInterval(updateMobileCartCount, 1500);
+  }
+
+  /**
+   * Boot
+   */
   function boot() {
-    normalizeAllExistingLogos();
     injectHeader();
-    syncCartBadges();
+    wireMobileMenu();
+    wireCartBadge();
   }
 
+  // Run on DOMContentLoaded or immediately if DOM is ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', boot);
   } else {
     boot();
   }
 
-  // Re-run shortly after to catch late-injected headers (approved mobile UI, etc.)
-  setTimeout(boot, 300);
-  setTimeout(boot, 1200);
-
-  // Re-sync cart count when storage changes
-  window.addEventListener('storage', syncCartBadges);
-  document.addEventListener('cc:cart-changed', syncCartBadges);
-  setInterval(syncCartBadges, 2000);
+  // Expose for external use
+  window.CCGlobalHeader = {
+    inject: injectHeader,
+    buildHTML: buildHeaderHTML
+  };
 })();

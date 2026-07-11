@@ -332,15 +332,17 @@ button {
   transform: translateY(-2px) !important;
   box-shadow: 0 4px 12px rgba(179, 106, 126, 0.1) !important;
 }
-.promise-icon {
-  font-size: 44px !important;
+.promise-icon-wrap {
   width: 44px !important;
   height: 44px !important;
-  line-height: 1 !important;
   color: #B36A7E !important;
   display: block !important;
-  margin-bottom: 12px !important;
+  margin: 0 auto 12px !important;
   user-select: none !important;
+}
+.promise-icon-wrap svg {
+  width: 44px !important;
+  height: 44px !important;
 }
 .promise-title {
   font-family: 'Jost', sans-serif !important;

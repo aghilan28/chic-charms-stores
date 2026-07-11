@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="theme-color" content="#B5657A" />
@@ -12,13 +12,16 @@
   <meta name="description" content="Product details – Chic Charms" />
   <title>Product – Chic Charms</title>
 
-
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <!-- Global Header (same as Home Page) -->
+  <link rel="stylesheet" href="cc-global-header.css" />
+  <link rel="stylesheet" href="cc-material-icons.css" />
 
   <!-- Mobile Product Styles -->
   <link rel="stylesheet" href="mobile-product.css" />
@@ -139,10 +142,9 @@
       transition: transform 0.15s ease;
     }
     .fab-circle:active { transform: scale(0.95); }
-    .fab-circle .material-symbols-outlined { font-size: 20px; }
-    .fab-circle.wishlisted .material-symbols-outlined {
-      font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 24;
-      color: #B5657A;
+    .fab-circle.wishlisted svg path {
+      fill: #B5657A;
+      stroke: #B5657A;
     }
 
     /* Variant buttons */
@@ -177,8 +179,33 @@
       background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 50%);
     }
 
-    /* Promise icon */
-    .promise-icon { color: #8e4559; font-size: 28px; display: block; margin-bottom: 8px; }
+    /* Promise icon — now SVG-based, not font-based */
+    .promise-icon-wrap {
+      color: #8e4559;
+      width: 28px;
+      height: 28px;
+      display: block;
+      margin: 0 auto 8px;
+    }
+    .promise-icon-wrap svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    /* Trust bar icon — inline SVG */
+    .trust-icon-wrap {
+      width: 16px;
+      height: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #8e4559;
+      flex-shrink: 0;
+    }
+    .trust-icon-wrap svg {
+      width: 16px;
+      height: 16px;
+    }
 
     /* Sticky Product CTA geometry lives in product-sticky-cta.css. */
 
@@ -193,6 +220,12 @@
     /* Hide sections until data loads */
     .data-section { display: none; }
     .data-section.has-data { display: block; }
+
+    /* Adjust main content top padding for global navbar (68px) */
+    main { padding-top: 68px !important; }
+    @media (max-width: 900px) {
+      main { padding-top: 68px !important; }
+    }
   </style>
 
   <script>
@@ -234,8 +267,7 @@
           },
           spacing: {
             "gutter_mobile": "12px",
-            "header_height": "80px",
-            "announcement_height": "40px",
+            "header_height": "68px",
             "section_gap": "64px",
             "stack_gap_md": "16px",
             "margin_mobile": "20px"
@@ -262,48 +294,29 @@
     }
   </script>
   <link rel="stylesheet" href="cc-bottom-nav.css" />
-  <link rel="stylesheet" href="cc-material-icons.css" />
   <link rel="stylesheet" href="product-sticky-cta.css" />
 </head>
 <body class="cc-product-page bg-surface text-on-surface font-body-md selection:bg-primary/20">
 
 <div id="toast" class="toast"></div>
 
-<!-- Announcement Bar -->
-<div class="fixed top-0 left-0 w-full z-[60] h-[40px] bg-[#B5657A] flex items-center justify-center">
-  <span id="announcementText" class="text-white font-label-caps text-[10px] tracking-[0.2em] uppercase">Complimentary Express Shipping on Orders Above ₹500</span>
-</div>
-
-<!-- Header -->
-<header class="fixed top-[40px] left-0 w-full z-[50] h-[96px] bg-[#FFF9F7]/95 backdrop-blur-md flex items-center px-margin_mobile">
-  <button class="absolute left-margin_mobile active:scale-95 transition-transform" id="menuBtn" aria-label="Menu">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-  </button>
-  <div class="w-full text-center">
-    <a href="index.html"><h1 class="font-display-lg text-[22px] tracking-[0.15em] text-primary uppercase">CHIC CHARMS</h1></a>
-  </div>
-  <div class="absolute right-margin_mobile flex gap-4 items-center">
-    <a href="search.html" aria-label="Search"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></a>
-    <a href="cart.html" class="relative flex items-center justify-center">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-      <span id="cartBadge" class="absolute -top-1 -right-1 w-4 h-4 bg-[#B5657A] text-white text-[9px] font-semibold rounded-full flex items-center justify-center hidden">0</span>
-    </a>
-  </div>
-</header>
+<!-- Global Header is injected by cc-global-header.js (identical to Home Page) -->
 
 <!-- Drawer -->
-<div id="drawerOverlay" class="fixed inset-0 bg-[#2F2A2A]/50 z-[100] hidden opacity-0"></div>
-<aside id="drawer" class="fixed top-0 left-0 w-[280px] h-full bg-surface z-[110] transform -translate-x-full">
+<div id="drawerOverlay" class="fixed inset-0 bg-[#2F2A2A]/50 z-[100] hidden opacity-0 transition-opacity duration-300"></div>
+<aside id="drawer" class="fixed top-0 left-0 w-[280px] h-full bg-surface z-[110] transform -translate-x-full transition-transform duration-300">
   <div class="p-6">
     <div class="flex justify-between items-center mb-12">
       <a href="index.html" class="font-display-lg text-[20px] tracking-[0.1em] text-primary">CHIC CHARMS</a>
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      <button id="drawerClose" aria-label="Close menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
     </div>
     <nav id="drawerNav" class="flex flex-col gap-5 text-[14px]"></nav>
   </div>
 </aside>
 
-<main class="pt-[120px] pb-[140px]">
+<main class="pb-[140px]">
   <!-- Loading -->
   <div id="loadingState" class="px-margin_mobile">
     <div class="h-4 w-32 skeleton mb-4"></div>
@@ -370,7 +383,7 @@
         <span id="stockBadge" class="stock-badge"></span>
       </div>
 
-      <!-- Trust -->
+      <!-- Trust — uses inline SVGs, NOT material icon font names -->
       <div id="trustBar" class="mt-8 py-4 border-y border-outline-variant flex justify-between items-center text-[10px] font-label-caps tracking-widest text-on-surface-variant uppercase"></div>
     </section>
 
@@ -426,7 +439,7 @@
     <!-- Gifting -->
     <section id="giftingSection" class="px-margin_mobile py-section_gap hidden">
       <div class="bg-[#FAF5F2] p-8 text-center border border-outline-variant/30">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12v10H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#8e4559" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12v10H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
         <h3 id="giftingTitle" class="font-headline-md text-[20px] mb-2"></h3>
         <p id="giftingDesc" class="text-on-surface-variant text-[14px] mb-6"></p>
         <button id="giftingCta" class="font-label-caps text-[11px] tracking-widest text-primary border-b border-primary pb-1 uppercase"></button>
@@ -444,7 +457,7 @@
       </div>
     </section>
 
-    <!-- Promise -->
+    <!-- Promise — uses inline SVG icons, NOT material-symbols-outlined text -->
     <section id="promiseSection" class="px-margin_mobile py-section_gap hidden">
       <h3 class="font-headline-md text-[22px] text-center mb-10">Our Promise</h3>
       <div id="promiseGrid" class="grid grid-cols-2 gap-x-gutter_mobile gap-y-12"></div>
@@ -516,15 +529,28 @@ if (typeof firebase !== 'undefined' && !firebase.apps.length) {
   console.log('[ChicCharms PDP] Firebase initialized');
 }
 
+// ── Inline SVG Icons (replaces all material-symbols-outlined text) ──
+const SVG_ICONS = {
+  shield_heart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3z"/><path d="M12 8v4"/><path d="M10 10h4"/></svg>',
+  truck: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11v10H3z"/><path d="M14 10h4l3 3v4h-7z"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg>',
+  sparkles: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 5.5L19 10l-5.5 1.5L12 17l-1.5-5.5L5 10l5.5-1.5L12 3z"/><path d="M5 3l.7 2.3L8 6l-2.3.7L5 9l-.7-2.3L2 6l2.3-.7L5 3z"/><path d="M19 15l.7 2.3L22 18l-2.3.7L19 21l-.7-2.3L16 18l2.3-.7L19 15z"/></svg>',
+  gift: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>',
+  verified: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L9 5H5v4L2 12l3 3v4h4l3 3 3-3h4v-4l3-3-3-3V5h-4l-3-3z"/><path d="M9 12l2 2 4-4"/></svg>',
+  shield_check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.4 8.5-8 10-4.6-1.5-8-5-8-10V7l8-4z"/><path d="M9 12l2 2 4-4"/></svg>',
+  leaf: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1.41-3.53C10.15 19.5 12 20 17 20s5-4 5-8c0-2-1-4-5-4z"/><path d="M3 12c2-2 4-3 7-3"/></svg>',
+  diamond: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 12L2 9l4-6z"/><path d="M2 9h20M8 3l4 18 4-18"/></svg>',
+  star: '<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>'
+};
+
 // ── Site Config (CMS-driven, single source of truth) ──
 const SITE_CONFIG = {
   currency: "₹",
   currencyCode: "INR",
   announcement: "Complimentary Express Shipping on Orders Above ₹500",
   trustFeatures: [
-    { icon: "verified", label: "Certified" },
-    { icon: "security", label: "Secure Pay" },
-    { icon: "eco", label: "Ethical" }
+    { icon: SVG_ICONS.shield_check, label: "Certified" },
+    { icon: SVG_ICONS.verified, label: "Secure Pay" },
+    { icon: SVG_ICONS.leaf, label: "Ethical" }
   ],
   shippingInfo: {
     shipping: [
@@ -549,10 +575,10 @@ const SITE_CONFIG = {
     cta: "Discover Packaging"
   },
   promiseFeatures: [
-    { icon: "health_and_safety", title: "Skin Friendly", description: "Hypoallergenic materials that are gentle on everyday wear." },
-    { icon: "local_shipping", title: "Fast Dispatch", description: "Orders are packed with care and shipped within 24–48 hours." },
-    { icon: "auto_awesome", title: "Trendy Designs", description: "Modern styles curated to elevate your everyday look." },
-    { icon: "card_giftcard", title: "Perfect for Gifting", description: "Beautiful pieces and elegant packaging for every occasion." }
+    { icon: SVG_ICONS.shield_heart, title: "Skin Friendly", description: "Hypoallergenic nickel-free metals." },
+    { icon: SVG_ICONS.sparkles, title: "Trendy Designs", description: "Curated styles updated weekly." },
+    { icon: SVG_ICONS.truck, title: "Fast Dispatch", description: "48-hour dispatch for in-stock items." },
+    { icon: SVG_ICONS.gift, title: "Perfect for Gifting", description: "Beautiful packaging included." }
   ],
   navigation: [
     { label: "Shop All", href: "shop.html" },
@@ -649,6 +675,12 @@ function updateCartBadges() {
     const b = document.getElementById(id);
     if (b) { b.textContent = count > 9 ? '9+' : String(count); b.classList.toggle('hidden', count === 0); }
   });
+  // Also update the global header's mobile cart count
+  const mobileCount = document.querySelector('.mobile-cart-count');
+  if (mobileCount) {
+    mobileCount.textContent = count > 9 ? '9+' : String(count);
+    mobileCount.style.display = count > 0 ? '' : 'none';
+  }
 }
 
 function getWishlist() {
@@ -668,7 +700,6 @@ function extractAllImages(product, variant) {
     images.push({ src, label });
   }
 
-  // 1. Variant images
   if (variant) {
     if (variant.images) {
       add(variant.images.productImage, 'Product');
@@ -676,7 +707,6 @@ function extractAllImages(product, variant) {
       add(variant.images.lifestyle, 'Lifestyle');
       add(variant.images.detail, 'Detail');
       add(variant.images.flat, 'Flat Lay');
-      // Also support array
       if (Array.isArray(variant.images.all)) variant.images.all.forEach((s, i) => add(s, `View ${i+1}`));
       if (Array.isArray(variant.images.gallery)) variant.images.gallery.forEach((s, i) => add(s, `View ${i+1}`));
     }
@@ -686,7 +716,6 @@ function extractAllImages(product, variant) {
     add(variant.imageUrl, 'Product');
   }
 
-  // 2. Product-level images
   if (product.images) {
     add(product.images.productImage, 'Product');
     add(product.images.modelImage, 'On Model');
@@ -702,12 +731,10 @@ function extractAllImages(product, variant) {
   add(product.imageUrl, 'Product');
   add(product.imageURL, 'Product');
 
-  // 3. Array fields
   ['imageUrls', 'galleryImages', 'photos'].forEach(key => {
     if (Array.isArray(product[key])) product[key].forEach((s, i) => add(s, `View ${i+1}`));
   });
 
-  // 4. All variant images (other colors)
   if (Array.isArray(product.variants)) {
     product.variants.forEach(v => {
       if (v.images) {
@@ -755,7 +782,7 @@ function normalizeVariants(product) {
   return stored;
 }
 
-// ── Dynamic detail fields: only show what the backend returns ──
+// ── Dynamic detail fields ──
 const DETAIL_FIELD_MAP = [
   { key: 'material', label: 'Material' },
   { key: 'finish', label: 'Finish' },
@@ -780,15 +807,11 @@ const DETAIL_FIELD_MAP = [
 
 function buildDetailRows(product) {
   const rows = [];
-
-  // From dedicated fields
   DETAIL_FIELD_MAP.forEach(f => {
     if (product[f.key] !== undefined && product[f.key] !== null && String(product[f.key]).trim() !== '') {
       rows.push({ label: f.label, value: String(product[f.key]) });
     }
   });
-
-  // From product.details array (key:value pairs)
   if (Array.isArray(product.details)) {
     product.details.forEach(d => {
       if (typeof d === 'string' && d.includes(':')) {
@@ -801,7 +824,6 @@ function buildDetailRows(product) {
       }
     });
   }
-
   return rows;
 }
 
@@ -878,12 +900,10 @@ function renderProduct(product, docId) {
   const oldPrice = Number(product.oldPrice || product.compareAtPrice || product.mrp || 0);
   const discount = oldPrice > price ? Math.round(((oldPrice - price) / oldPrice) * 100) : 0;
 
-  // Title
   document.title = (product.name || 'Product') + ' – Chic Charms';
   document.getElementById('breadcrumbCategory').textContent = product.category || CATEGORY_LABELS[product.categorySlug] || 'Product';
   document.getElementById('productName').textContent = product.name || '';
 
-  // Price block (dynamic)
   let priceHtml = `<p class="font-jost text-[24px] text-[#9F4C67] font-medium">${formatPrice(price)}</p>`;
   if (oldPrice > price) {
     priceHtml += `<span class="font-jost text-[14px] text-outline line-through ml-2">${formatPrice(oldPrice)}</span>`;
@@ -892,7 +912,6 @@ function renderProduct(product, docId) {
   document.getElementById('priceBlock').innerHTML = priceHtml;
   document.getElementById('stickyPrice').textContent = formatPrice(price);
 
-  // Rating (from data or hide)
   const rating = product.rating || null;
   const ratingBlock = document.getElementById('ratingBlock');
   if (rating) {
@@ -902,7 +921,6 @@ function renderProduct(product, docId) {
     ratingBlock.style.display = 'none';
   }
 
-  // Description (from data only)
   const desc = product.shortDescription || product.description || '';
   const descBlock = document.getElementById('descriptionBlock');
   if (desc) {
@@ -913,7 +931,6 @@ function renderProduct(product, docId) {
     descBlock.innerHTML = '';
   }
 
-  // Gallery (dynamic — any count)
   _galleryImages = extractAllImages(product, activeVariant);
   const gc = document.getElementById('galleryContainer');
   if (_galleryScrollListener) gc.removeEventListener('scroll', _galleryScrollListener);
@@ -944,7 +961,6 @@ function renderProduct(product, docId) {
   _selectedGalleryIndex = 0;
   updateGalleryDots();
 
-  // Color selector
   const namedVariants = variants.filter(v => v.color && v.color !== 'Default' && v.id !== '__main__');
   const cs = document.getElementById('colorSelector');
   if (namedVariants.length > 1) {
@@ -954,7 +970,6 @@ function renderProduct(product, docId) {
     ).join('');
   } else { cs.classList.add('hidden'); }
 
-  // Size selector
   const sizes = activeVariant?.sizes || product.sizes || [];
   const ss = document.getElementById('sizeSelector');
   if (sizes.length > 0) {
@@ -964,7 +979,6 @@ function renderProduct(product, docId) {
     ).join('');
   } else { ss.classList.add('hidden'); }
 
-  // Stock
   const sb = document.getElementById('stockBadge');
   if (inStock) {
     sb.innerHTML = '<span class="dot" style="background:#22c55e;"></span> In Stock';
@@ -978,7 +992,6 @@ function renderProduct(product, docId) {
     document.getElementById('stickyAddBtn').disabled = true;
   }
 
-  // Product details accordion (only fields that exist)
   const detailRows = buildDetailRows(product);
   const das = document.getElementById('detailsAccordionSection');
   if (detailRows.length > 0) {
@@ -988,7 +1001,6 @@ function renderProduct(product, docId) {
     ).join('');
   } else { das.classList.add('hidden'); }
 
-  // Care instructions
   const care = product.careInstructions || product.care || [];
   const cas = document.getElementById('careAccordionSection');
   if (Array.isArray(care) && care.length > 0) {
@@ -999,10 +1011,8 @@ function renderProduct(product, docId) {
     document.getElementById('careContent').innerHTML = `<p>${care}</p>`;
   } else { cas.classList.add('hidden'); }
 
-  // Wishlist
   checkWishlist();
 
-  // Show content and activate the product-only fixed CTA.
   document.getElementById('loadingState').classList.add('hidden');
   document.getElementById('productContent').classList.remove('hidden');
   setProductCtaReady(true);
@@ -1032,14 +1042,11 @@ function checkWishlist() {
   if (fab) {
     fab.classList.toggle('wishlisted', inW);
     fab.classList.toggle('active', inW);
-    const svg = fab.querySelector('svg path');
-    if (svg) svg.setAttribute('fill', inW ? 'currentColor' : 'none');
   }
 }
 
 window.toggleWishlist = function() {
   if (!_currentDocId || !window.CCWishlist) return;
-  
   const product = {
     id: _currentDocId,
     name: _currentProduct?.name || '',
@@ -1047,12 +1054,11 @@ window.toggleWishlist = function() {
     image: _currentProduct?.images?.productImage || _currentProduct?.image || '',
     category: _currentProduct?.category || ''
   };
-  
   window.CCWishlist.toggle(product);
   checkWishlist();
 };
 
-// ── Drawer (wrapped in DOMContentLoaded to prevent null crashes) ──
+// ── Drawer ──
 let drawer, drawerOverlay;
 function closeDrawerFn() {
   if (!drawer || !drawerOverlay) return;
@@ -1063,7 +1069,7 @@ function closeDrawerFn() {
 document.addEventListener('DOMContentLoaded', () => {
   drawer = document.getElementById('drawer');
   drawerOverlay = document.getElementById('drawerOverlay');
-  const menuBtn = document.getElementById('menuBtn');
+  const menuBtn = document.getElementById('mobileCommerceMenu');
   const drawerClose = document.getElementById('drawerClose');
   if (menuBtn) menuBtn.addEventListener('click', () => {
     if (!drawer || !drawerOverlay) return;
@@ -1088,7 +1094,6 @@ async function loadProduct() {
     return;
   }
 
-  // Use direct REST API — reliable, no SDK initialization dependency
   let _rendered = false;
   const _safety = setTimeout(() => {
     if (!_rendered) {
@@ -1113,7 +1118,6 @@ async function loadProduct() {
       document.querySelector('#errorState p').textContent = 'Product not found.';
       return;
     }
-    // Convert Firestore REST value types to plain JS
     function _cv(v) {
       if (!v) return null;
       if ('stringValue'    in v) return v.stringValue;
@@ -1163,7 +1167,6 @@ async function loadRelatedProducts(currentProductId) {
     const db = firebase.firestore();
     let related = [];
 
-    // 1. Try product.relatedProducts array of IDs
     if (_currentProduct?.relatedProducts && Array.isArray(_currentProduct.relatedProducts)) {
       for (const rid of _currentProduct.relatedProducts.slice(0, 8)) {
         try {
@@ -1173,7 +1176,6 @@ async function loadRelatedProducts(currentProductId) {
       }
     }
 
-    // 2. Fallback: same category products
     if (related.length < 4 && _currentProduct?.categorySlug) {
       const snap = await db.collection('products').where('categorySlug', '==', _currentProduct.categorySlug).limit(6).get();
       snap.forEach(doc => {
@@ -1183,7 +1185,6 @@ async function loadRelatedProducts(currentProductId) {
       });
     }
 
-    // 3. Fallback: random products
     if (related.length < 3) {
       const snap = await db.collection('products').limit(8).get();
       snap.forEach(doc => {
@@ -1215,14 +1216,11 @@ async function loadRelatedProducts(currentProductId) {
   }
 }
 
-// ── Render site config (CMS-driven) ──
+// ── Render site config (CMS-driven) — ALL icons are inline SVGs, NEVER material font names ──
 function renderSiteConfig() {
-  // Announcement
-  document.getElementById('announcementText').textContent = SITE_CONFIG.announcement;
-
-  // Trust bar
+  // Trust bar — inline SVG icons
   document.getElementById('trustBar').innerHTML = SITE_CONFIG.trustFeatures.map(f =>
-    `<div class="flex items-center gap-2"><span class="material-symbols-outlined text-[16px]">${f.icon}</span><span>${f.label}</span></div>`
+    `<div class="flex items-center gap-2"><span class="trust-icon-wrap">${f.icon}</span><span>${f.label}</span></div>`
   ).join('');
 
   // Shipping & Returns
@@ -1248,11 +1246,15 @@ function renderSiteConfig() {
   document.getElementById('giftingDesc').textContent = SITE_CONFIG.gifting.description;
   document.getElementById('giftingCta').textContent = SITE_CONFIG.gifting.cta;
 
-  // Promise
+  // Promise — inline SVG icons, NEVER material-symbols-outlined text
   const ps = document.getElementById('promiseSection');
   ps.classList.remove('hidden');
   document.getElementById('promiseGrid').innerHTML = SITE_CONFIG.promiseFeatures.map(f =>
-    `<div class="text-center"><span class="material-symbols-outlined promise-icon">${f.icon}</span><h4 class="font-label-caps text-[11px] tracking-widest uppercase mb-1">${f.title}</h4><p class="text-[12px] text-on-surface-variant">${f.description}</p></div>`
+    `<div class="text-center">
+      <span class="promise-icon-wrap">${f.icon}</span>
+      <h4 class="font-label-caps text-[11px] tracking-widest uppercase mb-1">${f.title}</h4>
+      <p class="text-[12px] text-on-surface-variant">${f.description}</p>
+    </div>`
   ).join('');
 
   // Footer
@@ -1302,9 +1304,7 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) upda
   function fix(){
     document.querySelectorAll('a[href]').forEach(a=>{
       let h = a.getAttribute('href')||'';
-      // stray mobile-home / old shop
       if(h.includes('mobile-home.html')) a.setAttribute('href','index.html');
-      // menu nav items
       const txt = (a.textContent||'').trim().toLowerCase();
       if(txt==='shop' || txt==='best sellers' || txt==='best sellers'){ if(h.startsWith('#')) a.setAttribute('href','shop.html'); }
       if(txt==='about'){ if(h.startsWith('#')) a.setAttribute('href','about.html'); }
@@ -1319,7 +1319,6 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) upda
   new MutationObserver(fix).observe(document.documentElement,{childList:true,subtree:true});
 })();
 </script>
-
 
 <script>
 // Override drawer nav – Chic Charms proper links
@@ -1345,6 +1344,7 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 
+  <script src="cc-global-header.js" defer></script>
   <script src="cc-bottom-nav.js" defer></script>
   <script src="cc-material-icons.js" defer></script>
 </body>
