@@ -360,9 +360,7 @@ button {
   margin: 0 !important;
   text-align: center !important;
 }
-main {
-  padding-bottom: 180px !important;
-}
+/* Product bottom clearance is owned by product-sticky-cta.css. */
 
 /* ===== GALLERY SCROLL FIX ===== */
 /* Gallery only scrolls horizontally, doesn't block page vertical scroll */
@@ -383,11 +381,7 @@ main {
   overscroll-behavior-x: contain;
 }
 
-/* Sticky bar above bottom nav */
-#stickyBar {
-  bottom: 60px;
-  z-index: 70;
-}
+/* Sticky CTA geometry is defined in product-sticky-cta.css. */
 
 /* Small phone */
 @media (max-width: 380px) {

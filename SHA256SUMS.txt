@@ -1,0 +1,6 @@
+f1ae980b38babe6e3fa6ca9bb87b970f57c45c7cb6cc36dec093200ebc5d3566  chic-charms-stores/cc-bottom-nav.css
+c8211c5e618317fff12e5f197b1ea2ba6bc85526c363db12c0e881d0cd1cc10e  chic-charms-stores/cc-bottom-nav.js
+b71d541a2453e32f699ce6513b4537d51a61dab84ff2097140fdfc73928421c3  chic-charms-stores/mobile-product.css
+7d9eeabff32274c3805f5198f44fa73b653daab0004be4bada4328af826a39d1  chic-charms-stores/product.html
+55b11c4c8dc553b19984ca507f8f375c93435d34c02ca072c23c67702b0c61b4  chic-charms-stores/product-sticky-cta.css
+d291eac8bbad775c0a997a882b8ab29377513d2c35956ced41c6b21a9269f289  chic-charms-stores/PRODUCT_BOTTOM_BARS_IMPLEMENTATION.md

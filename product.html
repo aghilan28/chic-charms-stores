@@ -5,7 +5,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="theme-color" content="#B5657A" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -180,8 +180,7 @@
     /* Promise icon */
     .promise-icon { color: #8e4559; font-size: 28px; display: block; margin-bottom: 8px; }
 
-    /* Sticky bar */
-    #stickyBar { bottom: 60px; z-index: 70; }
+    /* Sticky Product CTA geometry lives in product-sticky-cta.css. */
 
     /* Detail row */
     .detail-row { display: flex; flex-direction: column; }
@@ -264,8 +263,9 @@
   </script>
   <link rel="stylesheet" href="cc-bottom-nav.css" />
   <link rel="stylesheet" href="cc-material-icons.css" />
+  <link rel="stylesheet" href="product-sticky-cta.css" />
 </head>
-<body class="bg-surface text-on-surface font-body-md selection:bg-primary/20">
+<body class="cc-product-page bg-surface text-on-surface font-body-md selection:bg-primary/20">
 
 <div id="toast" class="toast"></div>
 
@@ -477,17 +477,14 @@
   </div>
 </main>
 
-<!-- Sticky Bottom Bar -->
-<div id="stickyBar" class="fixed left-0 w-full h-[80px] bg-white border-t border-outline-variant flex items-center justify-between px-margin_mobile translate-y-full transition-transform duration-300 safe-area-bottom">
-  <div class="flex flex-col">
+<!-- Product-only Sticky CTA. The global Bottom Navigation is injected once by cc-bottom-nav.js. -->
+<aside id="stickyBar" class="cc-product-sticky-cta" aria-label="Product purchase actions" aria-hidden="true">
+  <div class="cc-product-sticky-cta__price flex flex-col">
     <span class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-wider">Price</span>
     <span id="stickyPrice" class="font-jost text-[20px] font-semibold text-[#9F4C67]"></span>
   </div>
-  <button id="stickyAddBtn" class="px-8 h-12 bg-[#B5657A] text-white font-button text-[12px] tracking-widest uppercase active:scale-95 transition-transform" onclick="handleAddToCart()">Add to Cart</button>
-</div>
-
-<!-- Bottom Nav -->
-<nav id="bottomNav" style="display:none" class="fixed bottom-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-surface/95 backdrop-blur-lg border-t border-outline-variant safe-area-bottom"></nav>
+  <button id="stickyAddBtn" type="button" class="h-12 bg-[#B5657A] text-white font-button text-[12px] tracking-widest uppercase active:scale-95 transition-transform disabled:opacity-50 disabled:cursor-not-allowed" onclick="handleAddToCart()">Add to Cart</button>
+</aside>
 
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -585,13 +582,6 @@ const SITE_CONFIG = {
       { label: "Contact Us", href: "contact.html" }
     ]}
   ],
-  bottomNav: [
-    { icon: "home", href: "index.html", active: false, filled: true },
-    { icon: "search", href: "search.html", active: false },
-    { icon: "shopping_bag", href: "cart.html", active: false, hasBadge: true },
-    { icon: "favorite", href: "wishlist.html", active: false },
-    { icon: "person", href: "account.html", active: false }
-  ],
   footerTagline: "Curating timeless elegance and unparalleled craftsmanship for the modern muse."
 };
 
@@ -612,6 +602,17 @@ let _selectedGalleryIndex = 0;
 let _galleryImages = [];
 let _descExpanded = false;
 let _galleryScrollListener = null;
+
+// ── Product-only Sticky CTA state ──
+function setProductCtaReady(isReady) {
+  const bar = document.getElementById('stickyBar');
+  const ready = Boolean(isReady);
+  if (!bar) return;
+
+  bar.classList.toggle('is-ready', ready);
+  bar.setAttribute('aria-hidden', ready ? 'false' : 'true');
+  document.body.classList.toggle('cc-product-cta-ready', ready);
+}
 
 // ── Helpers ──
 function showToast(msg) {
@@ -856,6 +857,7 @@ window.buyNow = function() {
 // ── Main render: 100% data-driven ──
 function renderProduct(product, docId) {
   if (!product) {
+    setProductCtaReady(false);
     document.getElementById('loadingState').classList.add('hidden');
     document.getElementById('errorState').classList.remove('hidden');
     return;
@@ -1000,9 +1002,10 @@ function renderProduct(product, docId) {
   // Wishlist
   checkWishlist();
 
-  // Show content
+  // Show content and activate the product-only fixed CTA.
   document.getElementById('loadingState').classList.add('hidden');
   document.getElementById('productContent').classList.remove('hidden');
+  setProductCtaReady(true);
 }
 
 // ── Cart ──
@@ -1049,8 +1052,8 @@ window.toggleWishlist = function() {
   checkWishlist();
 };
 
-// ── Drawer + Sticky bar (wrapped in DOMContentLoaded to prevent null crashes) ──
-let drawer, drawerOverlay, stickyBar;
+// ── Drawer (wrapped in DOMContentLoaded to prevent null crashes) ──
+let drawer, drawerOverlay;
 function closeDrawerFn() {
   if (!drawer || !drawerOverlay) return;
   drawer.classList.add('-translate-x-full');
@@ -1060,7 +1063,6 @@ function closeDrawerFn() {
 document.addEventListener('DOMContentLoaded', () => {
   drawer = document.getElementById('drawer');
   drawerOverlay = document.getElementById('drawerOverlay');
-  stickyBar = document.getElementById('stickyBar');
   const menuBtn = document.getElementById('menuBtn');
   const drawerClose = document.getElementById('drawerClose');
   if (menuBtn) menuBtn.addEventListener('click', () => {
@@ -1072,13 +1074,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   if (drawerClose) drawerClose.addEventListener('click', closeDrawerFn);
   if (drawerOverlay) drawerOverlay.addEventListener('click', closeDrawerFn);
-  if (stickyBar) {
-    window.addEventListener('scroll', () => {
-      const st = window.pageYOffset || document.documentElement.scrollTop;
-      stickyBar.classList.toggle('translate-y-full', st <= 800);
-      stickyBar.classList.toggle('translate-y-0', st > 800);
-    }, { passive: true });
-  }
 });
 
 // ── Firebase load ──
@@ -1276,17 +1271,6 @@ function renderSiteConfig() {
       </div>
     </div>`
   ).join('');
-
-  // Bottom nav
-  document.getElementById('bottomNav').innerHTML = SITE_CONFIG.bottomNav.map(item => {
-    const filled = item.filled ? `style="font-variation-settings:'FILL'1"` : '';
-    const cls = item.active ? 'text-primary' : 'text-on-surface-variant opacity-60';
-    const badge = item.hasBadge ? `<span id="navCartBadge" class="absolute -top-1 -right-1 w-4 h-4 bg-[#B5657A] text-white text-[9px] font-semibold rounded-full flex items-center justify-center hidden">0</span>` : '';
-    const onclick = item.action ? `onclick="${item.action}(); return false;"` : '';
-    return `<a href="${item.href}" class="flex flex-col items-center justify-center ${cls} relative" ${onclick}>
-      <span class="material-symbols-outlined" ${filled}>${item.icon}</span>${badge}
-    </a>`;
-  }).join('');
 
   // Drawer nav
   const navItems = SITE_CONFIG.navigation.map(n => `<a href="${n.href}" class="font-jost text-on-surface hover:text-primary transition-colors">${n.label}</a>`);

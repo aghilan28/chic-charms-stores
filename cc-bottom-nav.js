@@ -9,7 +9,7 @@
   "use strict";
 
   /* ── Configuration ─────────────────────────────────────────────── */
-  var BREAKPOINT = 768;          // px — hide on desktop
+  var BREAKPOINT = 769;          // px — mobile/tablet navigation through 768px
   var Z_INDEX = 9999;           // ensure it's always on top
 
   /* Pages where the bottom nav should NOT appear */
