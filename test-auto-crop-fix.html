@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Test: Auto-Crop Fix Verification</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: sans-serif; padding: 20px; background: #f9f9f9; }
+        h1 { margin-bottom: 20px; color: #333; }
+        .test-section { margin-bottom: 40px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .test-section h2 { margin-bottom: 15px; color: #555; font-size: 1.2rem; }
+        .test-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .test-card { border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: white; }
+        .test-img-container { position: relative; overflow: hidden; aspect-ratio: 4 / 5; background: #f0f0f0; }
+        .test-img-container img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
+        .test-info { padding: 12px; }
+        .test-info h3 { font-size: 1rem; margin-bottom: 8px; color: #333; }
+        .test-info p { font-size: 0.9rem; color: #666; }
+        .status { padding: 10px; margin-top: 10px; border-radius: 4px; font-weight: bold; }
+        .status.pass { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .status.fail { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .instructions { background: #e7f3ff; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #007bff; }
+        .instructions h3 { color: #007bff; margin-bottom: 10px; }
+        .instructions ul { margin-left: 20px; }
+        .instructions li { margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+    <h1>✅ Auto-Crop Fix Verification Test Page</h1>
+    
+    <div class="instructions">
+        <h3>📋 Instructions:</h3>
+        <ul>
+            <li>Open your actual website's homescreen (index.html) in a new tab</li>
+            <li>Open Browser DevTools (F12 or Right-click → Inspect)</li>
+            <li>Go to Console tab and check for messages like "[ChicCharms] Image cropping fix applied"</li>
+            <li>Go to Elements tab and inspect a product card image</li>
+            <li>Verify the image has `aspect-ratio: 4/5`, `object-fit: cover`, and `object-position: center top`</li>
+            <li>Resize the browser window to test responsive behavior</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 1: Proper 4:5 Aspect Ratio (Portrait)</h2>
+        <div class="test-grid">
+            <div class="test-card">
+                <div class="test-img-container">
+                    <img src="https://via.placeholder.com/400x500" alt="Test image 1">
+                </div>
+                <div class="test-info">
+                    <h3>Test Product 1</h3>
+                    <p>This container should be taller than wide (4:5 ratio)</p>
+                </div>
+            </div>
+            <div class="test-card">
+                <div class="test-img-container">
+                    <img src="https://via.placeholder.com/800x600" alt="Test image 2">
+                </div>
+                <div class="test-info">
+                    <h3>Test Product 2</h3>
+                    <p>Wide image should be cropped to fit portrait frame</p>
+                </div>
+            </div>
+            <div class="test-card">
+                <div class="test-img-container">
+                    <img src="https://via.placeholder.com/600x800" alt="Test image 3">
+                </div>
+                <div class="test-info">
+                    <h3>Test Product 3</h3>
+                    <p>Tall image should fill the frame properly</p>
+                </div>
+            </div>
+        </div>
+        <div class="status pass">✅ If the containers are portrait (taller than wide), the CSS fix is working!</div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 2: Object-Fit Cover</h2>
+        <div class="test-grid">
+            <div class="test-card">
+                <div class="test-img-container" style="width: 200px; height: 250px;">
+                    <img src="https://via.placeholder.com/800x200" alt="Wide image" style="object-fit: cover;">
+                </div>
+                <div class="test-info">
+                    <h3>Wide Image Test</h3>
+                    <p>Wide image should be cropped (sides cut off) to fill frame</p>
+                </div>
+            </div>
+            <div class="test-card">
+                <div class="test-img-container" style="width: 200px; height: 250px;">
+                    <img src="https://via.placeholder.com/200x800" alt="Tall image" style="object-fit: cover;">
+                </div>
+                <div class="test-info">
+                    <h3>Tall Image Test</h3>
+                    <p>Tall image should be cropped (top/bottom cut off) to fill frame</p>
+                </div>
+            </div>
+        </div>
+        <div class="status pass">✅ If the images fill the frame without distortion, object-fit: cover is working!</div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 3: Check Your Actual Website</h2>
+        <p style="margin-bottom: 15px; color: #555;">Open your website's homescreen in a new tab and verify:</p>
+        <ol style="margin-left: 20px; line-height: 1.8; color: #666;">
+            <li>Product card images should be contained in portrait frames (taller than wide)</li>
+            <li>Images should fill the entire container without whitespace</li>
+            <li>Images should not be stretched or distorted</li>
+            <li>Badges ("Bestseller", "New") should be positioned inside the image container</li>
+            <li>On mobile (width < 768px), the grid should switch to 2 columns</li>
+            <li>On tablet (width 769px - 1100px), the grid should switch to 3 columns</li>
+            <li>On desktop (width > 1100px), the grid should have 4 columns</li>
+        </ol>
+        <div class="status" id="website-status">⏳ Open your website and check the console for fix verification...</div>
+    </div>
+
+    <script>
+        // Simple verification script
+        window.addEventListener('load', function() {
+            console.log('Test page loaded. Open your actual website to verify the fix.');
+            
+            // Check if images are properly contained
+            const testImages = document.querySelectorAll('.test-img-container img');
+            let allProper = true;
+            
+            testImages.forEach(img => {
+                const container = img.parentElement;
+                const computedStyle = window.getComputedStyle(container);
+                const imgStyle = window.getComputedStyle(img);
+                
+                if (imgStyle.objectFit !== 'cover') {
+                    allProper = false;
+                }
+            });
+            
+            const statusDiv = document.getElementById('website-status');
+            if (allProper) {
+                statusDiv.className = 'status pass';
+                statusDiv.textContent = '✅ Test page images are properly configured! Apply the same fix to your website.';
+            } else {
+                statusDiv.className = 'status fail';
+                statusDiv.textContent = '❌ Test page images are NOT properly configured! Check the CSS.';
+            }
+        });
+    </script>
+</body>
+</html>
