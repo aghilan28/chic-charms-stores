@@ -190,6 +190,13 @@
     } else {
       document.body.appendChild(wrapper);
     }
+
+    const pageName = window.location.pathname.split('/').pop().toLowerCase();
+    if (pageName === 'category.html' || pageName === 'shop.html') {
+      const searchIcon = wrapper.querySelector('a[aria-label="Search"]');
+      if (searchIcon) searchIcon.remove();
+    }
+
     
     if (!document.querySelector('link[href*="Material+Symbols+Outlined"]')) {
       const link = document.createElement('link');
