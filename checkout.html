@@ -1,16 +1,17 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Checkout – Chic Charms" />
-  <title>Checkout – Chic Charms</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="payment-system.css" />
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="Checkout – Chic Charms" name="description"/>
+<title>Checkout – Chic Charms</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Jost:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="styles.css" rel="stylesheet"/>
+<link href="payment-system.css" rel="stylesheet"/>
+<style>
     /* ── Checkout Page ── */
     .checkout-page {
       min-height: 100vh;
@@ -411,233 +412,173 @@
       color: var(--rose-dark);
     }
   </style>
-  <link rel="stylesheet" href="final-mobile-stabilization.css" media="(max-width: 768px)" />
-  <link rel="stylesheet" href="phase6-polish.css" media="(max-width: 767px)" />
-  <link rel="stylesheet" href="phase5-mobile-conversion.css" media="(max-width: 767px)" />
-  <link rel="stylesheet" href="mobile-comprehensive.css" media="(max-width: 1024px)" />
-  <link rel="stylesheet" href="cc-material-icons.css" />
-    <link rel="stylesheet" href="cc-global-header.css" />
+<link href="final-mobile-stabilization.css" media="(max-width: 768px)" rel="stylesheet"/>
+<link href="phase6-polish.css" media="(max-width: 767px)" rel="stylesheet"/>
+<link href="phase5-mobile-conversion.css" media="(max-width: 767px)" rel="stylesheet"/>
+<link href="mobile-comprehensive.css" media="(max-width: 1024px)" rel="stylesheet"/>
+<link href="cc-material-icons.css" rel="stylesheet"/>
+<link href="cc-global-header.css" rel="stylesheet"/>
 </head>
 <body>
+<!-- ░░ NAVBAR ░░ -->
 
-  <!-- ░░ NAVBAR ░░ -->
-  <header class="navbar" id="navbar">
-    <div class="nav-inner container">
-      <a href="index.html" class="logo" aria-label="Chic Charms home">Chic<span>Charms</span></a>
-      <nav class="nav-links" id="navLinks" aria-label="Main navigation">
-        <a href="index.html#categories">Shop</a>
-        <a href="index.html#bestsellers">Best Sellers</a>
-        <a href="index.html#why-us">About</a>
-        <a href="index.html#testimonials">Reviews</a>
-      </nav>
-      <div class="nav-actions" id="navActions">
-        <!-- auth-ui.js injects Login / My Account / Logout here -->
-      </div>
-    </div>
-  </header>
-
-  <!-- ░░ CHECKOUT PAGE ░░ -->
-  <main class="checkout-page">
-    <div class="container">
-
-      <div class="checkout-header">
-        <nav class="breadcrumb" aria-label="Breadcrumb">
-          <a href="index.html">Home</a>
-          <span>›</span>
-          <a href="cart.html">Cart</a>
-          <span>›</span>
-          <span style="color:var(--text); font-weight:500;">Checkout</span>
-        </nav>
-        <p class="section-eyebrow">Almost there!</p>
-        <h1>Checkout</h1>
-      </div>
-
-      <!-- Redirects away if cart is empty -->
-      <div class="empty-redirect" id="emptyRedirect" style="display:none;">
-        <p>Your cart is empty. Add some earrings first! 🌸</p>
-        <a href="index.html#bestsellers" class="btn btn-primary">Browse Best Sellers →</a>
-      </div>
-
-      <div class="checkout-layout" id="checkoutLayout">
-
-        <!-- ── Delivery Form ── -->
-        <section aria-label="Delivery details">
-
-          <!-- Trust banner -->
-          <div class="trust-banner" role="note" aria-label="Security and trust badges">
-            <span class="trust-banner-item">🔒 Secure Checkout</span>
-            <span class="trust-banner-item">💳 Cash on Delivery</span>
-            <span class="trust-banner-item">↩️ 7-Day Return Policy</span>
-            <span class="trust-banner-item">🚚 Free shipping ₹399+</span>
-          </div>
-
-          <div class="form-card">
-            <h2>Delivery Details</h2>
-
-            <!-- General validation error -->
-            <div class="form-global-error" id="globalError" role="alert">
+<!-- ░░ CHECKOUT PAGE ░░ -->
+<main class="checkout-page">
+<div class="container">
+<div class="checkout-header">
+<nav aria-label="Breadcrumb" class="breadcrumb">
+<a href="index.html">Home</a>
+<span>›</span>
+<a href="cart.html">Cart</a>
+<span>›</span>
+<span style="color:var(--text); font-weight:500;">Checkout</span>
+</nav>
+<p class="section-eyebrow">Almost there!</p>
+<h1>Checkout</h1>
+</div>
+<!-- Redirects away if cart is empty -->
+<div class="empty-redirect" id="emptyRedirect" style="display:none;">
+<p>Your cart is empty. Add some earrings first! 🌸</p>
+<a class="btn btn-primary" href="index.html#bestsellers">Browse Best Sellers →</a>
+</div>
+<div class="checkout-layout" id="checkoutLayout">
+<!-- ── Delivery Form ── -->
+<section aria-label="Delivery details">
+<!-- Trust banner -->
+<div aria-label="Security and trust badges" class="trust-banner" role="note">
+<span class="trust-banner-item">🔒 Secure Checkout</span>
+<span class="trust-banner-item">💳 Cash on Delivery</span>
+<span class="trust-banner-item">↩️ 7-Day Return Policy</span>
+<span class="trust-banner-item">🚚 Free shipping ₹399+</span>
+</div>
+<div class="form-card">
+<h2>Delivery Details</h2>
+<!-- General validation error -->
+<div class="form-global-error" id="globalError" role="alert">
               ⚠️ Please fill in all required fields before placing your order.
             </div>
-
-            <!-- ── INVENTORY ERROR BANNER (Part 2) ── -->
-            <div class="stock-error-banner" id="stockError" role="alert">
+<!-- ── INVENTORY ERROR BANNER (Part 2) ── -->
+<div class="stock-error-banner" id="stockError" role="alert">
               ⚠️ Some items in your cart are out of stock or have insufficient quantity:
               <ul id="stockErrorList"></ul>
-              <span style="display:block;margin-top:6px;">Please update your cart and try again.</span>
-            </div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label for="fullName">Full Name *</label>
-                <input
-                  type="text"
-                  id="fullName"
-                  placeholder="Priya Sharma"
-                  autocomplete="name"
-                  maxlength="80"
-                />
-                <p class="field-error" id="fullNameError">Please enter your full name.</p>
-              </div>
-              <div class="form-group">
-                <label for="phone">Phone Number *</label>
-                <input
-                  type="tel"
-                  id="phone"
-                  placeholder="98765 43210"
-                  autocomplete="tel"
-                  maxlength="15"
-                />
-                <p class="field-error" id="phoneError">Please enter a valid 10-digit number.</p>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="address">Delivery Address *</label>
-              <textarea
-                id="address"
-                rows="3"
-                placeholder="Flat / House no., Street, Area, City, PIN code"
-                autocomplete="street-address"
-                maxlength="300"
-              ></textarea>
-              <p class="field-error" id="addressError">Please enter your delivery address.</p>
-            </div>
-
-            <div class="form-group">
-              <label for="pincode">PIN Code *</label>
-              <input
-                type="text"
-                id="pincode"
-                placeholder="400001"
-                autocomplete="postal-code"
-                maxlength="6"
-              />
-              <p class="field-error" id="pincodeError">Please enter a valid 6-digit PIN code.</p>
-            </div>
-
-            <!-- Payment method selector -->
-            <div class="payment-methods" aria-label="Choose payment method">
-              <p class="payment-methods-label">Choose Payment Method</p>
-              <div class="payment-method-options">
-                <label class="payment-method-option" id="optOnline">
-                  <input type="radio" name="paymentMethod" value="online" checked />
-                  <span class="method-icon">💳</span>
-                  <span class="method-text">
-                    <strong>Pay Online</strong>
-                    <small>UPI • Cards • Net Banking • Wallets</small>
-                  </span>
-                  <span class="method-badge">Recommended</span>
-                </label>
-                <label class="payment-method-option" id="optCod">
-                  <input type="radio" name="paymentMethod" value="cod" />
-                  <span class="method-icon">🏠</span>
-                  <span class="method-text">
-                    <strong>Cash on Delivery</strong>
-                    <small>Pay when your order arrives</small>
-                  </span>
-                </label>
-              </div>
-            </div>
-
-            <!-- Pay Online button -->
-            <button class="btn-place-order btn-pay-online" id="payOnlineBtn">
+<span style="display:block;margin-top:6px;">Please update your cart and try again.</span>
+</div>
+<div class="form-row">
+<div class="form-group">
+<label for="fullName">Full Name *</label>
+<input autocomplete="name" id="fullName" maxlength="80" placeholder="Priya Sharma" type="text"/>
+<p class="field-error" id="fullNameError">Please enter your full name.</p>
+</div>
+<div class="form-group">
+<label for="phone">Phone Number *</label>
+<input autocomplete="tel" id="phone" maxlength="15" placeholder="98765 43210" type="tel"/>
+<p class="field-error" id="phoneError">Please enter a valid 10-digit number.</p>
+</div>
+</div>
+<div class="form-group">
+<label for="address">Delivery Address *</label>
+<textarea autocomplete="street-address" id="address" maxlength="300" placeholder="Flat / House no., Street, Area, City, PIN code" rows="3"></textarea>
+<p class="field-error" id="addressError">Please enter your delivery address.</p>
+</div>
+<div class="form-group">
+<label for="pincode">PIN Code *</label>
+<input autocomplete="postal-code" id="pincode" maxlength="6" placeholder="400001" type="text"/>
+<p class="field-error" id="pincodeError">Please enter a valid 6-digit PIN code.</p>
+</div>
+<!-- Payment method selector -->
+<div aria-label="Choose payment method" class="payment-methods">
+<p class="payment-methods-label">Choose Payment Method</p>
+<div class="payment-method-options">
+<label class="payment-method-option" id="optOnline">
+<input checked="" name="paymentMethod" type="radio" value="online"/>
+<span class="method-icon">💳</span>
+<span class="method-text">
+<strong>Pay Online</strong>
+<small>UPI • Cards • Net Banking • Wallets</small>
+</span>
+<span class="method-badge">Recommended</span>
+</label>
+<label class="payment-method-option" id="optCod">
+<input name="paymentMethod" type="radio" value="cod"/>
+<span class="method-icon">🏠</span>
+<span class="method-text">
+<strong>Cash on Delivery</strong>
+<small>Pay when your order arrives</small>
+</span>
+</label>
+</div>
+</div>
+<!-- Pay Online button -->
+<button class="btn-place-order btn-pay-online" id="payOnlineBtn">
               🔐 Pay Securely →
             </button>
-
-            <!-- COD button (hidden until COD selected) -->
-            <button class="btn-place-order btn-cod" id="placeOrderBtn" style="display:none;">
+<!-- COD button (hidden until COD selected) -->
+<button class="btn-place-order btn-cod" id="placeOrderBtn" style="display:none;">
               🏠 Place Order (COD) →
             </button>
-
-            <!-- Secure payment note with trust signals -->
-            <p class="payment-secure-note">
-              🔒 256-bit Encrypted &nbsp;·&nbsp; Secured by Razorpay &nbsp;·&nbsp; UPI • Cards • Wallets
+<!-- Secure payment note with trust signals -->
+<p class="payment-secure-note">
+              🔒 256-bit Encrypted  ·  Secured by Razorpay  ·  UPI • Cards • Wallets
             </p>
-          </div>
-        </section>
-
-        <!-- ── Order Summary ── -->
-        <aside class="checkout-summary" aria-label="Order summary">
-          <h2>Order Summary</h2>
-          <ul class="summary-items" id="summaryItems" style="list-style:none; padding:0; margin:0;"></ul>
-          <div class="summary-row">
-            <span>Subtotal</span>
-            <span id="summarySubtotal">₹0</span>
-          </div>
-          <div class="summary-row">
-            <span>Shipping</span>
-            <span id="summaryShipping">₹49</span>
-          </div>
-          <div class="summary-row summary-coupon-row" id="summaryCouponDiscountRow" style="display:none;">
-            <span>Campus Discount</span>
-            <span id="summaryCouponDiscount">-₹50</span>
-          </div>
-          <div class="summary-row summary-coupon-row" id="summaryCouponCodeRow" style="display:none;">
-            <span>Coupon</span>
-            <span class="summary-coupon-code" id="summaryCouponCode"></span>
-          </div>
-          <hr class="summary-divider" />
-          <div class="summary-grand">
-            <span class="summary-grand-label">Total</span>
-            <span class="summary-grand-price" id="summaryTotal">₹0</span>
-          </div>
-          <p class="summary-trust">
-            🔒 Secure & safe &nbsp;·&nbsp; COD available<br />
+</div>
+</section>
+<!-- ── Order Summary ── -->
+<aside aria-label="Order summary" class="checkout-summary">
+<h2>Order Summary</h2>
+<ul class="summary-items" id="summaryItems" style="list-style:none; padding:0; margin:0;"></ul>
+<div class="summary-row">
+<span>Subtotal</span>
+<span id="summarySubtotal">₹0</span>
+</div>
+<div class="summary-row">
+<span>Shipping</span>
+<span id="summaryShipping">₹49</span>
+</div>
+<div class="summary-row summary-coupon-row" id="summaryCouponDiscountRow" style="display:none;">
+<span>Campus Discount</span>
+<span id="summaryCouponDiscount">-₹50</span>
+</div>
+<div class="summary-row summary-coupon-row" id="summaryCouponCodeRow" style="display:none;">
+<span>Coupon</span>
+<span class="summary-coupon-code" id="summaryCouponCode"></span>
+</div>
+<hr class="summary-divider"/>
+<div class="summary-grand">
+<span class="summary-grand-label">Total</span>
+<span class="summary-grand-price" id="summaryTotal">₹0</span>
+</div>
+<p class="summary-trust">
+            🔒 Secure &amp; safe  ·  COD available<br/>
             🚚 Delivered in 3–5 days across India
           </p>
-        </aside>
-
-      </div>
-    </div>
-  </main>
-
-  <!-- ░░ FOOTER ░░ -->
-  <footer class="footer" aria-label="Site footer">
-    <div class="container footer-inner">
-      <div class="footer-brand">
-        <p class="logo">Chic<span>Charms</span></p>
-        <p class="footer-tagline">Your glow-up starts here.</p>
-      </div>
-      <nav class="footer-links" aria-label="Footer links">
-        <a href="#">About Us</a>
-        <a href="#">FAQs</a>
-        <a href="#">Shipping</a>
-        <a href="#">Returns</a>
-        <a href="#">Contact</a>
-      </nav>
-    </div>
-    <p class="footer-copy">© 2025 ChicCharms. Made with 🌸 in India.</p>
-  </footer>
-
-  <!-- ░░ RAZORPAY SDK ░░ -->
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
-  <!-- ░░ RAZORPAY DEMO SYSTEM — Test mode only ░░ -->
-  <!-- ⚠️  Remove or replace with live config before production -->
-  <script src="razorpay-demo.js"></script>
-
-  <!-- ░░ EMAILJS — raw fetch (no SDK) ░░ -->
-  <script>
+</aside>
+</div>
+</div>
+</main>
+<!-- ░░ FOOTER ░░ -->
+<footer aria-label="Site footer" class="footer">
+<div class="container footer-inner">
+<div class="footer-brand">
+<p class="logo">Chic<span>Charms</span></p>
+<p class="footer-tagline">Your glow-up starts here.</p>
+</div>
+<nav aria-label="Footer links" class="footer-links">
+<a href="#">About Us</a>
+<a href="#">FAQs</a>
+<a href="#">Shipping</a>
+<a href="#">Returns</a>
+<a href="#">Contact</a>
+</nav>
+</div>
+<p class="footer-copy">© 2025 ChicCharms. Made with 🌸 in India.</p>
+</footer>
+<!-- ░░ RAZORPAY SDK ░░ -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<!-- ░░ RAZORPAY DEMO SYSTEM — Test mode only ░░ -->
+<!-- ⚠️  Remove or replace with live config before production -->
+<script src="razorpay-demo.js"></script>
+<!-- ░░ EMAILJS — raw fetch (no SDK) ░░ -->
+<script>
     var EMAILJS_CONFIG = {
       publicKey:        "-gy-TugJ6KCoEwnSH",
       serviceId:        "service_g569w2p",
@@ -725,9 +666,8 @@
       ]);
     };
   </script>
-
-  <script src="coupon-session.js"></script>
-  <script type="module">
+<script src="coupon-session.js"></script>
+<script type="module">
     /* ============================================================
        CHECKOUT PAGE — with full Inventory Control
        ORDER FLOW:
@@ -1449,15 +1389,14 @@
     renderSummary();
     verifyCouponAtCheckout().then(renderSummary);
   </script>
-
-  <!-- Auth navbar -->
-  <script type="module">
+<!-- Auth navbar -->
+<script type="module">
     import { setupAuthUI } from "./auth-ui.js";
     setupAuthUI();
   </script>
-  <script src="final-mobile-stabilization.js" defer></script>
-  <script src="mobile-app.js" defer></script>
-  <script src="cc-material-icons.js" defer></script>
-    <script src="cc-global-header.js" defer></script>
+<script defer="" src="final-mobile-stabilization.js"></script>
+<script defer="" src="mobile-app.js"></script>
+<script defer="" src="cc-material-icons.js"></script>
+<script defer="" src="cc-global-header.js"></script>
 </body>
 </html>

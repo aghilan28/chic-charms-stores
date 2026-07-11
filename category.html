@@ -1,20 +1,18 @@
 <!DOCTYPE html>
+
 <html class="light" lang="en">
 <head>
-  <meta charset="utf-8" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Category • Chic Charms</title>
-  <meta name="description" content="Chic Charms mobile category landing page." />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  
-  <style>
+<meta charset="utf-8"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Category • Chic Charms</title>
+<meta content="Chic Charms mobile category landing page." name="description"/>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<style>
     :root {
       color-scheme: light;
       --background: #fff8f7;
@@ -756,156 +754,131 @@
       .header,
     }
   </style>
-  <link rel="stylesheet" href="cc-bottom-nav.css" />
-  <link rel="stylesheet" href="cc-material-icons.css" />
-    <link rel="stylesheet" href="cc-global-header.css" />
-</head>
+<link href="cc-bottom-nav.css" rel="stylesheet">
+<link href="cc-material-icons.css" rel="stylesheet">
+<link href="cc-global-header.css" rel="stylesheet"/>
+</link></link></link></link></head>
 <body>
-  <div class="mobile-shell">
-    <div class="desktop-hint">Category Landing · approved mobile layout</div>
+<div class="mobile-shell">
+<div class="desktop-hint">Category Landing · approved mobile layout</div>
 
-    <div class="announcement-bar">
-      <p>Free Shipping on ₹399+</p>
-    </div>
 
-    <header class="header">
-      <button aria-label="Menu" class="icon-btn" id="menuBtn" type="button">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-      </button>
-      <a class="brand-mark" href="index.html">ChicCharms</a>
-      <a aria-label="Search" class="icon-btn" href="search.html">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      </a>
-    </header>
-
-    <div class="drawer-overlay" id="drawerOverlay"></div>
-    <aside class="nav-drawer" id="navDrawer">
-      <div class="drawer-inner">
-        <h2 class="drawer-brand">ChicCharms</h2>
-        <p class="drawer-copy">Curated business categories sourced from your live backend and styled to match the approved luxury mobile direction.</p>
-        <nav class="drawer-nav" id="drawerLinks"></nav>
-      </div>
-    </aside>
-
-    <main class="page-main">
-      <nav class="breadcrumb">
-        <p id="breadcrumbText">Home <span>|</span> Category</p>
-      </nav>
-
-      <section class="hero-section">
-        <div class="hero-media">
-          <img id="heroImage" src="images/hero-quiet-luxury-main.jpg" alt="Category hero" loading="eager" />
-        </div>
-        <div class="hero-copy">
-          <h1 class="hero-title" id="heroTitle">Category</h1>
-          <p class="hero-description" id="heroDescription">Loading approved category design from the backend.</p>
-        </div>
-      </section>
-
-      <section class="toolbar">
-        <p class="toolbar-count" id="toolbarCount">Showing 0 Products</p>
-        <div class="view-toggle">
-          <button aria-label="View 1 column" class="view-btn" id="singleColBtn" type="button">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="7" width="18" height="10" rx="1"/></svg>
-          </button>
-          <button aria-label="View 2 columns" class="view-btn active" id="doubleColBtn" type="button">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-          </button>
-        </div>
-      </section>
-
-      <section class="loading-grid" id="loadingState">
-        <div class="skeleton-card"><div class="skeleton-media"></div><div class="skeleton-line lg"></div><div class="skeleton-line md"></div></div>
-        <div class="skeleton-card"><div class="skeleton-media"></div><div class="skeleton-line lg"></div><div class="skeleton-line md"></div></div>
-        <div class="skeleton-card"><div class="skeleton-media"></div><div class="skeleton-line lg"></div><div class="skeleton-line md"></div></div>
-        <div class="skeleton-card"><div class="skeleton-media"></div><div class="skeleton-line lg"></div><div class="skeleton-line md"></div></div>
-      </section>
-
-      <section class="product-section" id="productSection" style="display:none;">
-        <div class="product-grid" id="productGrid"></div>
-      </section>
-
-      <section class="empty-state" id="emptyState">
-        <div class="empty-box">
-          <h2>No pieces available yet</h2>
-          <p id="emptyMessage">No products are available for this category right now.</p>
-          <div class="empty-actions">
-            <a class="btn-primary" href="shop.html">Browse Full Shop</a>
-            <a class="btn-secondary" href="search-results.html">Back to Search Results</a>
-          </div>
-        </div>
-      </section>
-
-      <section class="editorial-section" id="editorialSection">
-        <div class="editorial-inner">
-          <div class="editorial-media">
-            <img id="editorialImage" src="images/editorial-light-meets-gold.png" alt="Editorial" loading="lazy" />
-          </div>
-          <h2 class="editorial-title" id="editorialTitle">Curated For Every Occasion</h2>
-          <p class="editorial-description" id="editorialDescription">Discover pieces designed to complement your everyday moments and special celebrations. Each charm tells a story of elegance.</p>
-          <a class="editorial-cta" href="shop.html" id="editorialCta">Explore Full Edit</a>
-        </div>
-      </section>
-
-      <section class="related-section" id="relatedSection">
-        <h3 class="related-title">Other Categories</h3>
-        <div class="related-list" id="relatedList"></div>
-      </section>
-
-      <footer class="footer">
-        <div class="footer-accordion">
-          <div class="footer-block">
-            <button class="footer-trigger" type="button">
-              <span class="label">Client Care</span>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            </button>
-            <div class="footer-content">
-              <a href="contact.html">Contact Us</a>
-              <a href="contact.html">Track Order</a>
-              <a href="contact.html">Book an Appointment</a>
-            </div>
-          </div>
-          <div class="footer-block">
-            <button class="footer-trigger" type="button">
-              <span class="label">Information</span>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            </button>
-            <div class="footer-content">
-              <a href="shipping.html">Shipping</a>
-              <a href="returns.html">Returns</a>
-              <a href="privacy.html">Privacy Policy</a>
-            </div>
-          </div>
-          <div class="footer-block">
-            <button class="footer-trigger" type="button">
-              <span class="label">About Us</span>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            </button>
-            <div class="footer-content">
-              <a href="about.html">Our Heritage</a>
-              <a href="about.html">Sustainability</a>
-              <a href="contact.html">Press</a>
-            </div>
-          </div>
-        </div>
-        <div class="footer-brand">
-          <h4>Chic Charms</h4>
-          <div class="footer-social">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          </div>
-          <p>© <span class="cc-year"></span> Chic Charms. All Rights Reserved.</p>
-        </div>
-      </footer>
-    </main>
-
-    
-  </div>
-
-  <script src="category-utils.js"></script>
-  <script src="script.js" defer></script>
-  <script>
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<aside class="nav-drawer" id="navDrawer">
+<div class="drawer-inner">
+<h2 class="drawer-brand">ChicCharms</h2>
+<p class="drawer-copy">Curated business categories sourced from your live backend and styled to match the approved luxury mobile direction.</p>
+<nav class="drawer-nav" id="drawerLinks"></nav>
+</div>
+</aside>
+<main class="page-main">
+<nav class="breadcrumb">
+<p id="breadcrumbText">Home <span>|</span> Category</p>
+</nav>
+<section class="hero-section">
+<div class="hero-media">
+<img alt="Category hero" id="heroImage" loading="eager" src="images/hero-quiet-luxury-main.jpg"/>
+</div>
+<div class="hero-copy">
+<h1 class="hero-title" id="heroTitle">Category</h1>
+<p class="hero-description" id="heroDescription">Loading approved category design from the backend.</p>
+</div>
+</section>
+<section class="toolbar">
+<p class="toolbar-count" id="toolbarCount">Showing 0 Products</p>
+<div class="view-toggle">
+<button aria-label="View 1 column" class="view-btn" id="singleColBtn" type="button">
+<svg aria-hidden="true" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-width="2" viewbox="0 0 24 24" width="20"><rect height="10" rx="1" width="18" x="3" y="7"></rect></svg>
+</button>
+<button aria-label="View 2 columns" class="view-btn active" id="doubleColBtn" type="button">
+<svg aria-hidden="true" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-width="2" viewbox="0 0 24 24" width="20"><rect height="7" width="7" x="3" y="3"></rect><rect height="7" width="7" x="14" y="3"></rect><rect height="7" width="7" x="14" y="14"></rect><rect height="7" width="7" x="3" y="14"></rect></svg>
+</button>
+</div>
+</section>
+<section class="loading-grid" id="loadingState">
+<div class="skeleton-card"><div class="skeleton-media"></div><div class="skeleton-line lg"></div><div class="skeleton-line md"></div></div>
+<div class="skeleton-card"><div class="skeleton-media"></div><div class="skeleton-line lg"></div><div class="skeleton-line md"></div></div>
+<div class="skeleton-card"><div class="skeleton-media"></div><div class="skeleton-line lg"></div><div class="skeleton-line md"></div></div>
+<div class="skeleton-card"><div class="skeleton-media"></div><div class="skeleton-line lg"></div><div class="skeleton-line md"></div></div>
+</section>
+<section class="product-section" id="productSection" style="display:none;">
+<div class="product-grid" id="productGrid"></div>
+</section>
+<section class="empty-state" id="emptyState">
+<div class="empty-box">
+<h2>No pieces available yet</h2>
+<p id="emptyMessage">No products are available for this category right now.</p>
+<div class="empty-actions">
+<a class="btn-primary" href="shop.html">Browse Full Shop</a>
+<a class="btn-secondary" href="search-results.html">Back to Search Results</a>
+</div>
+</div>
+</section>
+<section class="editorial-section" id="editorialSection">
+<div class="editorial-inner">
+<div class="editorial-media">
+<img alt="Editorial" id="editorialImage" loading="lazy" src="images/editorial-light-meets-gold.png"/>
+</div>
+<h2 class="editorial-title" id="editorialTitle">Curated For Every Occasion</h2>
+<p class="editorial-description" id="editorialDescription">Discover pieces designed to complement your everyday moments and special celebrations. Each charm tells a story of elegance.</p>
+<a class="editorial-cta" href="shop.html" id="editorialCta">Explore Full Edit</a>
+</div>
+</section>
+<section class="related-section" id="relatedSection">
+<h3 class="related-title">Other Categories</h3>
+<div class="related-list" id="relatedList"></div>
+</section>
+<footer class="footer">
+<div class="footer-accordion">
+<div class="footer-block">
+<button class="footer-trigger" type="button">
+<span class="label">Client Care</span>
+<svg aria-hidden="true" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-width="2" viewbox="0 0 24 24" width="20"><line x1="12" x2="12" y1="5" y2="19"></line><line x1="5" x2="19" y1="12" y2="12"></line></svg>
+</button>
+<div class="footer-content">
+<a href="contact.html">Contact Us</a>
+<a href="contact.html">Track Order</a>
+<a href="contact.html">Book an Appointment</a>
+</div>
+</div>
+<div class="footer-block">
+<button class="footer-trigger" type="button">
+<span class="label">Information</span>
+<svg aria-hidden="true" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-width="2" viewbox="0 0 24 24" width="20"><line x1="12" x2="12" y1="5" y2="19"></line><line x1="5" x2="19" y1="12" y2="12"></line></svg>
+</button>
+<div class="footer-content">
+<a href="shipping.html">Shipping</a>
+<a href="returns.html">Returns</a>
+<a href="privacy.html">Privacy Policy</a>
+</div>
+</div>
+<div class="footer-block">
+<button class="footer-trigger" type="button">
+<span class="label">About Us</span>
+<svg aria-hidden="true" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-width="2" viewbox="0 0 24 24" width="20"><line x1="12" x2="12" y1="5" y2="19"></line><line x1="5" x2="19" y1="12" y2="12"></line></svg>
+</button>
+<div class="footer-content">
+<a href="about.html">Our Heritage</a>
+<a href="about.html">Sustainability</a>
+<a href="contact.html">Press</a>
+</div>
+</div>
+</div>
+<div class="footer-brand">
+<h4>Chic Charms</h4>
+<div class="footer-social">
+<svg aria-hidden="true" fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="22"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line></svg>
+<svg aria-hidden="true" fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="22"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+<svg aria-hidden="true" fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+</div>
+<p>© <span class="cc-year"></span> Chic Charms. All Rights Reserved.</p>
+</div>
+</footer>
+</main>
+</div>
+<script src="category-utils.js"></script>
+<script defer="" src="script.js"></script>
+<script>
     (function () {
       'use strict';
 
@@ -1130,8 +1103,7 @@
       init();
     })();
   </script>
-
-  <script>
+<script>
     (function () {
       const WISH_KEY = 'cc_wishlist';
       window.CCWish = {
@@ -1157,8 +1129,7 @@
       }, true);
     })();
   </script>
-
-  <script>
+<script>
     (function () {
       function fix() {
         document.querySelectorAll('a[href]').forEach(function (anchor) {
@@ -1186,8 +1157,8 @@
       new MutationObserver(fix).observe(document.documentElement, { childList: true, subtree: true });
     })();
   </script>
-  <script src="cc-bottom-nav.js" defer></script>
-  <script src="cc-material-icons.js" defer></script>
-    <script src="cc-global-header.js" defer></script>
+<script defer="" src="cc-bottom-nav.js"></script>
+<script defer="" src="cc-material-icons.js"></script>
+<script defer="" src="cc-global-header.js"></script>
 </body>
 </html>

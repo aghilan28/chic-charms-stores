@@ -1,169 +1,243 @@
 /* ═══════════════════════════════════════════════════════════════════
    CHIC CHARMS — Global Reusable Header Component
-   Single source of truth for the site header across ALL pages.
-   
-   Usage: Include this script in any page that needs the global header.
-   The script checks if a header already exists; if not, it injects one.
-   
-   Pages using this:
-   - index.html (inline header can be replaced by this)
-   - product.html
-   - shop.html, cart.html, account.html, etc.
-   
-   This header includes:
-   - Announcement bar
-   - Logo (centered)
-   - Desktop nav links
-   - Mobile hamburger menu
-   - Search, Wishlist, Cart icons
-   - Auth state container
    ═══════════════════════════════════════════════════════════════════ */
 (function () {
   'use strict';
 
-  /**
-   * Build the header HTML — EXACT match of index.html's header.
-   */
-  function buildHeaderHTML() {
-    return [
-      '<!-- ░░ ADMIN RETURN BANNER — only visible when admin is logged in ░░ -->',
-      '<div id="adminReturnBanner" class="admin-return-banner" aria-hidden="true">',
-      '  <span class="admin-return-copy">',
-      '    You are browsing as <strong id="adminReturnEmail"></strong>',
-      '  </span>',
-      '  <a href="admin.html">Back to Admin Dashboard</a>',
-      '</div>',
-      '',
-      '<!-- ░░ GLOBAL NAVBAR ░░ -->',
-      '<header class="navbar" id="navbar">',
-      '  <div class="nav-inner container">',
-      '    <button',
-      '      type="button"',
-      '      class="mobile-commerce-menu"',
-      '      id="mobileCommerceMenu"',
-      '      aria-expanded="false"',
-      '      aria-label="Open menu"',
-      '    >',
-      '      <span></span><span></span>',
-      '    </button>',
-      '    <a href="index.html" class="logo" aria-label="Chic Charms home">',
-      '      Chic<span>Charms</span>',
-      '    </a>',
-      '    <div class="mobile-commerce-actions" aria-label="Mobile shopping actions">',
-      '      <a href="search.html" class="mobile-commerce-icon" aria-label="Search">',
-      '        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.8-3.8"></path></svg>',
-      '      </a>',
-      '      <a href="wishlist.html" class="mobile-commerce-icon relative" aria-label="Wishlist">',
-      '        <svg viewBox="0 0 24 24" aria-hidden="true">',
-      '          <path d="M20.8 4.6c-1.8-1.7-4.6-1.6-6.3.2L12 7.3 9.5 4.8C7.8 3 5 2.9 3.2 4.6 1.3 6.4 1.3 9.4 3.1 11.2L12 20l8.9-8.8c1.8-1.8 1.8-4.8-.1-6.6Z" />',
-      '        </svg>',
-      '        <span class="wishlist-count absolute -top-1 -right-1 bg-primary text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center" style="display:none">0</span>',
-      '      </a>',
-      '      <a href="cart.html" class="mobile-commerce-icon mobile-commerce-cart" aria-label="Cart">',
-      '        <svg viewBox="0 0 24 24" aria-hidden="true">',
-      '          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4H6Z" />',
-      '          <path d="M3 6h18M16 10a4 4 0 0 1-8 0" />',
-      '        </svg>',
-      '        <span class="mobile-cart-count" aria-hidden="true"></span>',
-      '      </a>',
-      '    </div>',
-      '    <nav class="nav-links" id="navLinks" aria-label="Main navigation">',
-      '      <a href="shop.html">Shop</a>',
-      '      <a href="shop.html">Best Sellers</a>',
-      '      <a href="about.html" id="navAboutLink">About</a>',
-      '      <a href="index.html#testimonials">Reviews</a>',
-      '      <a href="search.html">Search</a>',
-      '      <a href="cart.html">Cart 🛍️</a>',
-      '    </nav>',
-      '    <div class="nav-actions" id="navActions">',
-      '      <!-- Auth state injected by auth-nav.js -->',
-      '    </div>',
-      '  </div>',
-      '</header>'
-    ].join('\n');
-  }
-
-  /**
-   * Inject the header if one doesn't already exist.
-   */
   function injectHeader() {
-    // If a .navbar already exists (e.g. index.html with inline header), skip injection
-    if (document.querySelector('header.navbar')) return;
+    document.querySelectorAll('header, .navbar, .ccap-header').forEach(el => el.remove());
+    document.querySelectorAll('.announcement-bar, .ccap-announcement').forEach(el => el.remove());
+    document.querySelectorAll('div').forEach(el => {
+      if (el.className && typeof el.className === 'string' && el.className.includes('sticky top-0 z-[60] bg-primary')) {
+        el.remove();
+      }
+    });
 
-    var html = buildHeaderHTML();
-    var wrapper = document.createElement('div');
+    const headerCSS = `
+      :root {
+        --cc-brand-pink: #B5657A;
+        --cc-header-bg: #FFF9F7;
+        --cc-header-border: rgba(181, 101, 122, 0.12);
+        --cc-text-rose: #9F4C67;
+      }
+      
+      #cc-global-header-wrapper {
+        position: relative;
+        width: 100%;
+        z-index: 1000;
+        font-family: 'Inter', sans-serif;
+      }
+      
+      #cc-announcement-bar {
+        position: sticky;
+        top: 0;
+        z-index: 60;
+        background-color: var(--cc-brand-pink);
+        color: #ffffff;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      #cc-announcement-bar span {
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+      
+      #cc-main-header {
+        position: sticky;
+        top: 40px;
+        z-index: 50;
+        background-color: var(--cc-header-bg);
+        border-bottom: 1px solid var(--cc-header-border);
+        height: 80px;
+        padding: 0 16px;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      
+      #cc-main-header button,
+      #cc-main-header a {
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        text-decoration: none;
+      }
+      
+      #cc-main-header .cc-menu-btn {
+        grid-column: 1;
+        grid-row: 1;
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+      }
+      
+      #cc-main-header .cc-menu-btn span {
+        color: var(--cc-text-rose);
+      }
+      
+      #cc-main-header .cc-logo-container {
+        grid-column: 1 / -1;
+        grid-row: 1;
+        justify-self: center;
+        display: flex;
+        align-items: center;
+        pointer-events: none; /* allow clicks to pass through if they overlap icons */
+      }
+      
+      #cc-main-header .cc-logo {
+        pointer-events: auto; /* make the link clickable */
+        font-family: 'Playfair Display', Georgia, serif;
+        font-weight: 500;
+        font-size: clamp(2.05rem, 5.2vw, 2.6rem);
+        letter-spacing: -0.01em;
+        color: var(--cc-brand-pink);
+        line-height: 1;
+        margin: 0;
+        white-space: nowrap;
+      }
+      
+      #cc-main-header .cc-right-icons {
+        grid-column: 3;
+        grid-row: 1;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+      
+      #cc-main-header .cc-icon-link {
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        position: relative;
+      }
+      
+      #cc-main-header .cc-icon-link span.material-symbols-outlined {
+        color: var(--cc-text-rose);
+      }
+      
+      #cc-main-header .cc-cart-badge {
+        position: absolute;
+        top: 2px;
+        right: 0px;
+        background-color: var(--cc-text-rose);
+        color: white;
+        font-size: 10px;
+        font-weight: bold;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+      }
+      
+      @media (min-width: 768px) {
+        #cc-main-header {
+          padding: 0 40px;
+        }
+      }
+    `;
+
+    const html = `
+      <div id="cc-announcement-bar">
+        <span>Free Shipping Across India</span>
+      </div>
+      <header id="cc-main-header">
+        <button aria-label="Menu" class="cc-menu-btn" onclick="if(typeof toggleDrawer === 'function') { toggleDrawer(true); } else { document.body.classList.toggle('d7-menu-open'); }">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+        
+        <div class="cc-logo-container">
+          <a href="index.html" class="cc-logo">ChicCharms</a>
+        </div>
+        
+        <div class="cc-right-icons">
+          <a href="search.html" aria-label="Search" class="cc-icon-link" style="justify-content: center; margin-right: -8px;">
+            <span class="material-symbols-outlined">search</span>
+          </a>
+          <a href="cart.html" aria-label="Cart" class="cc-icon-link" style="justify-content: center;">
+            <span class="material-symbols-outlined">shopping_bag</span>
+            <span class="cc-cart-badge hidden" id="global-cart-badge" style="display:none;">0</span>
+          </a>
+        </div>
+      </header>
+    `;
+
+    const style = document.createElement('style');
+    style.innerHTML = headerCSS;
+    document.head.appendChild(style);
+
+    const wrapper = document.createElement('div');
+    wrapper.id = 'cc-global-header-wrapper';
     wrapper.innerHTML = html;
-
-    // Insert each top-level element at the beginning of body
-    var fragment = document.createDocumentFragment();
-    while (wrapper.firstChild) {
-      fragment.appendChild(wrapper.firstChild);
-    }
-
-    // Insert before the first child of body
-    if (document.body.firstChild) {
-      document.body.insertBefore(fragment, document.body.firstChild);
-    } else {
-      document.body.appendChild(fragment);
-    }
-  }
-
-  /**
-   * Wire up mobile menu toggle (hamburger).
-   */
-  function wireMobileMenu() {
-    var menuBtn = document.getElementById('mobileCommerceMenu');
-    var navLinks = document.getElementById('navLinks');
     
-    if (menuBtn && navLinks) {
-      menuBtn.addEventListener('click', function () {
-        var isOpen = navLinks.classList.toggle('open');
-        menuBtn.setAttribute('aria-expanded', String(isOpen));
-        document.body.classList.toggle('d7-menu-open', isOpen);
-      });
+    if (document.body.firstChild) {
+      document.body.insertBefore(wrapper, document.body.firstChild);
+    } else {
+      document.body.appendChild(wrapper);
+    }
+    
+    if (!document.querySelector('link[href*="Material+Symbols+Outlined"]')) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap';
+      document.head.appendChild(link);
+    }
+    if (!document.querySelector('link[href*="Playfair+Display"]')) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@100..900&display=swap';
+      document.head.appendChild(link);
     }
   }
 
-  /**
-   * Wire up cart badge updates.
-   */
   function wireCartBadge() {
-    function updateMobileCartCount() {
-      var cart = [];
-      try { cart = JSON.parse(localStorage.getItem('cc_cart') || '[]'); } catch(e) {}
-      var count = cart.reduce(function(s, i) { return s + (Number(i.quantity) || 1); }, 0);
-      var badge = document.querySelector('.mobile-cart-count');
+    function updateCount() {
+      let count = 0;
+      try {
+        const cart = JSON.parse(localStorage.getItem('cart') || localStorage.getItem('cc_cart') || '[]');
+        count = cart.reduce((sum, item) => sum + (Number(item.quantity) || Number(item.qty) || 1), 0);
+      } catch (e) {}
+      
+      const badge = document.getElementById('global-cart-badge');
       if (badge) {
-        badge.textContent = count > 9 ? '9+' : String(count);
-        badge.style.display = count > 0 ? '' : 'none';
+        if (count > 0) {
+          badge.textContent = count > 9 ? '9+' : String(count);
+          badge.style.display = 'flex';
+        } else {
+          badge.style.display = 'none';
+        }
       }
     }
-    updateMobileCartCount();
-    // Listen for storage changes from other tabs
-    window.addEventListener('storage', updateMobileCartCount);
-    // Periodic sync for same-tab updates
-    setInterval(updateMobileCartCount, 1500);
+
+    updateCount();
+    window.addEventListener('storage', updateCount);
+    window.addEventListener('cartUpdated', updateCount);
+    setInterval(updateCount, 1500);
   }
 
-  /**
-   * Boot
-   */
   function boot() {
     injectHeader();
-    wireMobileMenu();
     wireCartBadge();
   }
 
-  // Run on DOMContentLoaded or immediately if DOM is ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', boot);
   } else {
     boot();
   }
-
-  // Expose for external use
-  window.CCGlobalHeader = {
-    inject: injectHeader,
-    buildHTML: buildHeaderHTML
-  };
 })();

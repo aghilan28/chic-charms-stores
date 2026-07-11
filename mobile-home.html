@@ -4,9 +4,8 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<meta name="description" content="Chic Charms – Trendy aesthetic earrings under ₹299. Curated mobile storefront."/>
+<meta content="Chic Charms – Trendy aesthetic earrings under ₹299. Curated mobile storefront." name="description"/>
 <title>Chic Charms | Premium Jewellery</title>
-
 <!-- Desktop guard: this approved mobile UI is shown only on mobile -->
 <script>
   (function () {
@@ -18,7 +17,6 @@
     }
   })();
 </script>
-
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&amp;display=swap" rel="stylesheet"/>
@@ -123,189 +121,175 @@
     color: #6B4A58; background: #FDF2F5;
   }
 </style>
-  <link rel="stylesheet" href="cc-material-icons.css" />
-    <link rel="stylesheet" href="cc-global-header.css" />
+<link href="cc-material-icons.css" rel="stylesheet"/>
+<link href="cc-global-header.css" rel="stylesheet"/>
 </head>
 <body class="bg-background text-charcoal font-body-md selection:bg-soft-blush selection:text-deep-rose">
 <!-- Announcement Bar -->
-<div class="sticky top-0 z-[60] bg-primary text-on-primary h-[40px] flex items-center justify-center">
-  <span class="font-label-md text-label-md uppercase tracking-[0.12em] font-semibold">Free Shipping Across India</span>
-</div>
+
 <!-- Main Header -->
-<header class="sticky top-[40px] z-50 bg-background border-b border-header-border h-[80px] px-margin-horizontal flex items-center justify-between">
-  <button aria-label="Menu" class="w-touch-target-min h-touch-target-min flex items-center justify-start focus:outline-none" onclick="toggleDrawer(true)">
-    <span class="material-symbols-outlined text-deep-rose">menu</span>
-  </button>
-  <div class="absolute left-1/2 -translate-x-1/2">
-    <h1 class="whitespace-nowrap" style="font-family:'Playfair Display',Georgia,serif;font-weight:500;font-size:clamp(2.05rem,5.2vw,2.6rem);letter-spacing:-0.01em;color:#8e4559;line-height:1;margin:0;">ChicCharms</h1>
-  </div>
-  <a href="cart.html" aria-label="Cart" class="w-touch-target-min h-touch-target-min flex items-center justify-end focus:outline-none relative">
-    <span class="material-symbols-outlined text-deep-rose">shopping_bag</span>
-    <span id="cart-count" class="absolute -top-1 -right-1 bg-deep-rose text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center hidden"></span>
-  </a>
-</header>
+
 <!-- Navigation Drawer -->
 <div class="fixed inset-0 z-[70] bg-black/40 opacity-0 pointer-events-none modal-overlay" id="drawer-overlay" onclick="toggleDrawer(false)"></div>
 <aside class="fixed inset-y-0 left-0 z-[80] w-[85%] max-w-[400px] bg-background drawer-content -translate-x-full overflow-y-auto no-scrollbar" id="drawer">
-  <div class="p-margin-horizontal pt-12 pb-24">
-    <div class="flex justify-between items-center mb-12">
-      <span style="font-family:'Playfair Display',Georgia,serif;font-weight:500;letter-spacing:-0.01em;color:#8e4559;line-height:1;text-transform:none;">ChicCharms</span>
-      <button class="material-symbols-outlined text-menu-text" onclick="toggleDrawer(false)">close</button>
-    </div>
-    <nav class="flex flex-col">
-      <a class="h-[64px] flex items-center border-b border-outline-variant font-label-lg text-label-lg uppercase tracking-widest text-deep-rose bg-soft-blush px-4" href="#" onclick="filterByCategory('all'); return false;">Shop Jewellery</a>
-      <a class="h-[64px] flex items-center border-b border-outline-variant font-label-lg text-label-lg uppercase tracking-widest text-menu-text hover:bg-soft-blush px-4 transition-colors" href="#" onclick="filterByCategory('all'); return false;">Collections</a>
-      <a class="h-[64px] flex items-center border-b border-outline-variant font-label-lg text-label-lg uppercase tracking-widest text-menu-text hover:bg-soft-blush px-4 transition-colors" href="#" onclick="filterByCategory('all'); return false;">Curations</a>
-      <a class="h-[64px] flex items-center border-b border-outline-variant font-label-lg text-label-lg uppercase tracking-widest text-primary font-bold px-4 hover:bg-soft-blush transition-colors" href="#" onclick="filterByTag('new'); return false;">New Arrivals</a>
-      <a class="h-[64px] flex items-center border-b border-outline-variant font-label-lg text-label-lg uppercase tracking-widest text-menu-text hover:bg-soft-blush px-4 transition-colors" href="#" onclick="filterByTag('bestseller'); return false;">Best Sellers</a>
-      <a class="h-[64px] flex items-center border-b border-outline-variant font-label-lg text-label-lg uppercase tracking-widest text-menu-text italic px-4 hover:bg-soft-blush transition-colors" href="#" onclick="filterByCategory('heritage-muse'); return false;">Pearl Collection</a>
-      <a class="h-[64px] flex items-center border-b border-outline-variant font-label-lg text-label-lg uppercase tracking-widest text-menu-text hover:bg-soft-blush px-4 transition-colors" href="#" onclick="filterByCategory('everyday-elegance'); return false;">Minimal Collection</a>
-      <a class="h-[64px] flex items-center border-b border-outline-variant font-label-lg text-label-lg uppercase tracking-widest text-menu-text hover:bg-soft-blush px-4 transition-colors" href="#" onclick="filterByCategory('after-dark'); return false;">Korean Collection</a>
-      <a class="h-[64px] flex items-center border-b border-outline-variant font-label-lg text-label-lg uppercase tracking-widest text-menu-text hover:bg-soft-blush px-4 transition-colors" href="#" onclick="filterByCategory('after-dark'); return false;">Party Collection</a>
-      <a class="h-[64px] flex items-center border-b border-outline-variant font-label-lg text-label-lg uppercase tracking-widest text-menu-text hover:bg-soft-blush px-4 transition-colors" href="#" onclick="filterByCategory('heritage-muse'); return false;">Bridal Collection</a>
-      <a class="h-[64px] flex items-center border-b border-outline-variant font-label-lg text-label-lg uppercase tracking-widest text-primary px-4 hover:bg-soft-blush transition-colors" href="#" onclick="filterByPrice('under299'); return false;">Under ₹299</a>
-      <a class="h-[64px] flex items-center border-b border-outline-variant font-label-lg text-label-lg uppercase tracking-widest text-menu-text hover:bg-soft-blush px-4 transition-colors" href="cart.html">Cart</a>
-      <a class="h-[64px] flex items-center border-b border-outline-variant font-label-lg text-label-lg uppercase tracking-widest text-menu-text hover:bg-soft-blush px-4 transition-colors" href="account.html">Account</a>
-      <a class="h-[64px] flex items-center border-b border-outline-variant font-label-lg text-label-lg uppercase tracking-widest text-menu-text hover:bg-soft-blush px-4 transition-colors" href="about.html">About Chic Charms</a>
-      <a class="h-[64px] flex items-center font-label-lg text-label-lg uppercase tracking-widest text-menu-text hover:bg-soft-blush px-4 transition-colors" href="contact.html">Contact</a>
-    </nav>
-  </div>
+<div class="p-margin-horizontal pt-12 pb-24">
+<div class="flex justify-between items-center mb-12">
+<span style="font-family:'Playfair Display',Georgia,serif;font-weight:500;letter-spacing:-0.01em;color:#8e4559;line-height:1;text-transform:none;">ChicCharms</span>
+<button class="material-symbols-outlined text-menu-text" onclick="toggleDrawer(false)">close</button>
+</div>
+<nav class="flex flex-col">
+<a class="h-[64px] flex items-center border-b border-outline-variant font-label-lg text-label-lg uppercase tracking-widest text-deep-rose bg-soft-blush px-4" href="#" onclick="filterByCategory('all'); return false;">Shop Jewellery</a>
+<a class="h-[64px] flex items-center border-b border-outline-variant font-label-lg text-label-lg uppercase tracking-widest text-menu-text hover:bg-soft-blush px-4 transition-colors" href="#" onclick="filterByCategory('all'); return false;">Collections</a>
+<a class="h-[64px] flex items-center border-b border-outline-variant font-label-lg text-label-lg uppercase tracking-widest text-menu-text hover:bg-soft-blush px-4 transition-colors" href="#" onclick="filterByCategory('all'); return false;">Curations</a>
+<a class="h-[64px] flex items-center border-b border-outline-variant font-label-lg text-label-lg uppercase tracking-widest text-primary font-bold px-4 hover:bg-soft-blush transition-colors" href="#" onclick="filterByTag('new'); return false;">New Arrivals</a>
+<a class="h-[64px] flex items-center border-b border-outline-variant font-label-lg text-label-lg uppercase tracking-widest text-menu-text hover:bg-soft-blush px-4 transition-colors" href="#" onclick="filterByTag('bestseller'); return false;">Best Sellers</a>
+<a class="h-[64px] flex items-center border-b border-outline-variant font-label-lg text-label-lg uppercase tracking-widest text-menu-text italic px-4 hover:bg-soft-blush transition-colors" href="#" onclick="filterByCategory('heritage-muse'); return false;">Pearl Collection</a>
+<a class="h-[64px] flex items-center border-b border-outline-variant font-label-lg text-label-lg uppercase tracking-widest text-menu-text hover:bg-soft-blush px-4 transition-colors" href="#" onclick="filterByCategory('everyday-elegance'); return false;">Minimal Collection</a>
+<a class="h-[64px] flex items-center border-b border-outline-variant font-label-lg text-label-lg uppercase tracking-widest text-menu-text hover:bg-soft-blush px-4 transition-colors" href="#" onclick="filterByCategory('after-dark'); return false;">Korean Collection</a>
+<a class="h-[64px] flex items-center border-b border-outline-variant font-label-lg text-label-lg uppercase tracking-widest text-menu-text hover:bg-soft-blush px-4 transition-colors" href="#" onclick="filterByCategory('after-dark'); return false;">Party Collection</a>
+<a class="h-[64px] flex items-center border-b border-outline-variant font-label-lg text-label-lg uppercase tracking-widest text-menu-text hover:bg-soft-blush px-4 transition-colors" href="#" onclick="filterByCategory('heritage-muse'); return false;">Bridal Collection</a>
+<a class="h-[64px] flex items-center border-b border-outline-variant font-label-lg text-label-lg uppercase tracking-widest text-primary px-4 hover:bg-soft-blush transition-colors" href="#" onclick="filterByPrice('under299'); return false;">Under ₹299</a>
+<a class="h-[64px] flex items-center border-b border-outline-variant font-label-lg text-label-lg uppercase tracking-widest text-menu-text hover:bg-soft-blush px-4 transition-colors" href="cart.html">Cart</a>
+<a class="h-[64px] flex items-center border-b border-outline-variant font-label-lg text-label-lg uppercase tracking-widest text-menu-text hover:bg-soft-blush px-4 transition-colors" href="account.html">Account</a>
+<a class="h-[64px] flex items-center border-b border-outline-variant font-label-lg text-label-lg uppercase tracking-widest text-menu-text hover:bg-soft-blush px-4 transition-colors" href="about.html">About Chic Charms</a>
+<a class="h-[64px] flex items-center font-label-lg text-label-lg uppercase tracking-widest text-menu-text hover:bg-soft-blush px-4 transition-colors" href="contact.html">Contact</a>
+</nav>
+</div>
 </aside>
 <main class="px-margin-horizontal pb-[120px]">
-  <!-- Breadcrumb & Results -->
-  <div class="mt-margin-horizontal flex flex-col gap-2">
-    <nav class="flex items-center gap-2 text-menu-text font-label-md text-label-md uppercase tracking-wider">
-      <a href="index.html">Home</a>
-      <span class="text-outline-variant">|</span>
-      <span class="text-deep-rose font-semibold" id="crumb-label">Earrings</span>
-    </nav>
-    <p class="text-menu-text font-label-md text-label-md opacity-60" id="result-count">Loading products…</p>
-  </div>
-  <!-- Product Grid -->
-  <div class="mt-stack-lg grid grid-cols-2 gap-x-grid-gap-x gap-y-grid-gap-y" id="product-grid">
-    <div class="cc-empty">Loading the Chic Charms edit…</div>
-  </div>
-  <!-- Editorial Insertion -->
-  <section class="mt-grid-gap-y -mx-margin-horizontal relative h-[450px]" id="editorial">
-    <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('images/editorial-light-meets-gold.png'), linear-gradient(180deg,#e8c7cf,#d6a8b5);">
-      <div class="absolute inset-0 bg-black/10"></div>
-      <div class="absolute inset-0 flex flex-col items-center justify-end pb-12 gap-6">
-        <h2 class="font-headline-lg text-headline-lg text-white text-center tracking-tight px-12">The Eternal Pearl Collection</h2>
-        <button class="bg-white text-primary px-10 py-4 font-label-lg text-label-lg uppercase tracking-widest hover:bg-opacity-90 transition-all luxury-shadow" onclick="filterByCategory('heritage-muse')">Discover</button>
-      </div>
-    </div>
-  </section>
-  <!-- Product Grid Continued -->
-  <div class="mt-grid-gap-y grid grid-cols-2 gap-x-grid-gap-x gap-y-grid-gap-y" id="product-grid-2"></div>
+<!-- Breadcrumb & Results -->
+<div class="mt-margin-horizontal flex flex-col gap-2">
+<nav class="flex items-center gap-2 text-menu-text font-label-md text-label-md uppercase tracking-wider">
+<a href="index.html">Home</a>
+<span class="text-outline-variant">|</span>
+<span class="text-deep-rose font-semibold" id="crumb-label">Earrings</span>
+</nav>
+<p class="text-menu-text font-label-md text-label-md opacity-60" id="result-count">Loading products…</p>
+</div>
+<!-- Product Grid -->
+<div class="mt-stack-lg grid grid-cols-2 gap-x-grid-gap-x gap-y-grid-gap-y" id="product-grid">
+<div class="cc-empty">Loading the Chic Charms edit…</div>
+</div>
+<!-- Editorial Insertion -->
+<section class="mt-grid-gap-y -mx-margin-horizontal relative h-[450px]" id="editorial">
+<div class="absolute inset-0 bg-cover bg-center" style="background-image: url('images/editorial-light-meets-gold.png'), linear-gradient(180deg,#e8c7cf,#d6a8b5);">
+<div class="absolute inset-0 bg-black/10"></div>
+<div class="absolute inset-0 flex flex-col items-center justify-end pb-12 gap-6">
+<h2 class="font-headline-lg text-headline-lg text-white text-center tracking-tight px-12">The Eternal Pearl Collection</h2>
+<button class="bg-white text-primary px-10 py-4 font-label-lg text-label-lg uppercase tracking-widest hover:bg-opacity-90 transition-all luxury-shadow" onclick="filterByCategory('heritage-muse')">Discover</button>
+</div>
+</div>
+</section>
+<!-- Product Grid Continued -->
+<div class="mt-grid-gap-y grid grid-cols-2 gap-x-grid-gap-x gap-y-grid-gap-y" id="product-grid-2"></div>
 </main>
 <!-- Bottom Action Bar -->
 <nav class="fixed bottom-0 left-0 w-full bg-background border-t border-outline-variant h-[60px] z-[50] flex safe-area-bottom luxury-shadow">
-  <button class="flex-1 flex items-center justify-center gap-2 font-label-lg text-label-lg uppercase tracking-widest border-r border-outline-variant text-menu-text hover:bg-soft-blush transition-colors" onclick="openModal('filter-modal')">
-    <span class="material-symbols-outlined text-[20px] text-primary">tune</span>
+<button class="flex-1 flex items-center justify-center gap-2 font-label-lg text-label-lg uppercase tracking-widest border-r border-outline-variant text-menu-text hover:bg-soft-blush transition-colors" onclick="openModal('filter-modal')">
+<span class="material-symbols-outlined text-[20px] text-primary">tune</span>
     Filters
   </button>
-  <button class="flex-1 flex items-center justify-center gap-2 font-label-lg text-label-lg uppercase tracking-widest text-menu-text hover:bg-soft-blush transition-colors" onclick="openModal('sort-modal')">
-    <span class="material-symbols-outlined text-[20px] text-primary">sort</span>
+<button class="flex-1 flex items-center justify-center gap-2 font-label-lg text-label-lg uppercase tracking-widest text-menu-text hover:bg-soft-blush transition-colors" onclick="openModal('sort-modal')">
+<span class="material-symbols-outlined text-[20px] text-primary">sort</span>
     Sort By
   </button>
 </nav>
 <!-- Filter Modal -->
 <div class="fixed inset-0 z-[100] bg-black/40 opacity-0 pointer-events-none modal-overlay" id="filter-modal-overlay" onclick="closeModal('filter-modal')"></div>
 <div class="fixed bottom-0 left-0 w-full h-[707px] bg-background z-[110] modal-content translate-y-full flex flex-col" id="filter-modal">
-  <div class="flex items-center justify-between p-margin-horizontal h-[64px] border-b border-outline-variant">
-    <h2 class="font-label-lg text-label-lg uppercase tracking-widest text-deep-rose">Filters</h2>
-    <button class="material-symbols-outlined text-menu-text" onclick="closeModal('filter-modal')">close</button>
-  </div>
-  <div class="flex-1 overflow-y-auto p-margin-horizontal space-y-4">
-    <!-- Accordion: Product -->
-    <details class="group py-4 border-b border-outline-variant" open="">
-      <summary class="flex justify-between items-center list-none cursor-pointer">
-        <span class="font-label-lg text-label-lg uppercase tracking-widest text-accordion-title">Product Type</span>
-        <span class="material-symbols-outlined transition-transform group-open:rotate-180 text-primary">expand_more</span>
-      </summary>
-      <div class="mt-4 grid grid-cols-2 gap-3">
-        <label class="flex items-center gap-3">
-          <input class="filter-type w-5 h-5 border-outline-variant text-primary focus:ring-primary rounded-none" type="checkbox" value="drop"/>
-          <span class="font-body-md text-charcoal">Drop</span>
-        </label>
-        <label class="flex items-center gap-3">
-          <input class="filter-type w-5 h-5 border-outline-variant text-primary focus:ring-primary rounded-none" type="checkbox" value="stud"/>
-          <span class="font-body-md text-charcoal">Stud</span>
-        </label>
-        <label class="flex items-center gap-3">
-          <input class="filter-type w-5 h-5 border-outline-variant text-primary focus:ring-primary rounded-none" type="checkbox" value="hoop"/>
-          <span class="font-body-md text-charcoal">Hoop</span>
-        </label>
-        <label class="flex items-center gap-3">
-          <input class="filter-type w-5 h-5 border-outline-variant text-primary focus:ring-primary rounded-none" type="checkbox" value="statement"/>
-          <span class="font-body-md text-charcoal">Statement</span>
-        </label>
-      </div>
-    </details>
-    <!-- Accordion: Collection -->
-    <details class="group py-4 border-b border-outline-variant">
-      <summary class="flex justify-between items-center list-none cursor-pointer">
-        <span class="font-label-lg text-label-lg uppercase tracking-widest text-accordion-title">Collection</span>
-        <span class="material-symbols-outlined transition-transform group-open:rotate-180 text-primary">expand_more</span>
-      </summary>
-      <div class="mt-4 flex flex-col gap-3">
-        <label class="flex items-center gap-3">
-          <input class="filter-collection w-5 h-5 border-outline-variant text-primary focus:ring-primary rounded-none" type="checkbox" value="heritage-muse"/>
-          <span class="font-body-md text-charcoal">Pearl Collection</span>
-        </label>
-        <label class="flex items-center gap-3">
-          <input class="filter-collection w-5 h-5 border-outline-variant text-primary focus:ring-primary rounded-none" type="checkbox" value="everyday-elegance"/>
-          <span class="font-body-md text-charcoal">Minimal Collection</span>
-        </label>
-        <label class="flex items-center gap-3">
-          <input class="filter-collection w-5 h-5 border-outline-variant text-primary focus:ring-primary rounded-none" type="checkbox" value="after-dark"/>
-          <span class="font-body-md text-charcoal">Korean Collection</span>
-        </label>
-      </div>
-    </details>
-    <!-- Accordion: Price -->
-    <details class="group py-4 border-b border-outline-variant">
-      <summary class="flex justify-between items-center list-none cursor-pointer">
-        <span class="font-label-lg text-label-lg uppercase tracking-widest text-accordion-title">Price Range</span>
-        <span class="material-symbols-outlined transition-transform group-open:rotate-180 text-primary">expand_more</span>
-      </summary>
-      <div class="mt-4 flex flex-col gap-3">
-        <label class="flex items-center gap-3">
-          <input class="filter-price w-5 h-5 border-outline-variant text-primary focus:ring-primary rounded-none" type="checkbox" value="under500"/>
-          <span class="font-body-md text-charcoal">Under ₹499</span>
-        </label>
-        <label class="flex items-center gap-3">
-          <input class="filter-price w-5 h-5 border-outline-variant text-primary focus:ring-primary rounded-none" type="checkbox" value="500-1499"/>
-          <span class="font-body-md text-charcoal">₹500 - ₹1499</span>
-        </label>
-        <label class="flex items-center gap-3">
-          <input class="filter-price w-5 h-5 border-outline-variant text-primary focus:ring-primary rounded-none" type="checkbox" value="above1500"/>
-          <span class="font-body-md text-charcoal">Above ₹1500</span>
-        </label>
-      </div>
-    </details>
-  </div>
-  <div class="p-margin-horizontal py-6 border-t border-outline-variant safe-area-bottom">
-    <button class="w-full h-touch-target-min bg-primary text-on-primary font-label-lg text-label-lg uppercase tracking-widest luxury-shadow" onclick="closeModal('filter-modal')">Done</button>
-  </div>
+<div class="flex items-center justify-between p-margin-horizontal h-[64px] border-b border-outline-variant">
+<h2 class="font-label-lg text-label-lg uppercase tracking-widest text-deep-rose">Filters</h2>
+<button class="material-symbols-outlined text-menu-text" onclick="closeModal('filter-modal')">close</button>
+</div>
+<div class="flex-1 overflow-y-auto p-margin-horizontal space-y-4">
+<!-- Accordion: Product -->
+<details class="group py-4 border-b border-outline-variant" open="">
+<summary class="flex justify-between items-center list-none cursor-pointer">
+<span class="font-label-lg text-label-lg uppercase tracking-widest text-accordion-title">Product Type</span>
+<span class="material-symbols-outlined transition-transform group-open:rotate-180 text-primary">expand_more</span>
+</summary>
+<div class="mt-4 grid grid-cols-2 gap-3">
+<label class="flex items-center gap-3">
+<input class="filter-type w-5 h-5 border-outline-variant text-primary focus:ring-primary rounded-none" type="checkbox" value="drop"/>
+<span class="font-body-md text-charcoal">Drop</span>
+</label>
+<label class="flex items-center gap-3">
+<input class="filter-type w-5 h-5 border-outline-variant text-primary focus:ring-primary rounded-none" type="checkbox" value="stud"/>
+<span class="font-body-md text-charcoal">Stud</span>
+</label>
+<label class="flex items-center gap-3">
+<input class="filter-type w-5 h-5 border-outline-variant text-primary focus:ring-primary rounded-none" type="checkbox" value="hoop"/>
+<span class="font-body-md text-charcoal">Hoop</span>
+</label>
+<label class="flex items-center gap-3">
+<input class="filter-type w-5 h-5 border-outline-variant text-primary focus:ring-primary rounded-none" type="checkbox" value="statement"/>
+<span class="font-body-md text-charcoal">Statement</span>
+</label>
+</div>
+</details>
+<!-- Accordion: Collection -->
+<details class="group py-4 border-b border-outline-variant">
+<summary class="flex justify-between items-center list-none cursor-pointer">
+<span class="font-label-lg text-label-lg uppercase tracking-widest text-accordion-title">Collection</span>
+<span class="material-symbols-outlined transition-transform group-open:rotate-180 text-primary">expand_more</span>
+</summary>
+<div class="mt-4 flex flex-col gap-3">
+<label class="flex items-center gap-3">
+<input class="filter-collection w-5 h-5 border-outline-variant text-primary focus:ring-primary rounded-none" type="checkbox" value="heritage-muse"/>
+<span class="font-body-md text-charcoal">Pearl Collection</span>
+</label>
+<label class="flex items-center gap-3">
+<input class="filter-collection w-5 h-5 border-outline-variant text-primary focus:ring-primary rounded-none" type="checkbox" value="everyday-elegance"/>
+<span class="font-body-md text-charcoal">Minimal Collection</span>
+</label>
+<label class="flex items-center gap-3">
+<input class="filter-collection w-5 h-5 border-outline-variant text-primary focus:ring-primary rounded-none" type="checkbox" value="after-dark"/>
+<span class="font-body-md text-charcoal">Korean Collection</span>
+</label>
+</div>
+</details>
+<!-- Accordion: Price -->
+<details class="group py-4 border-b border-outline-variant">
+<summary class="flex justify-between items-center list-none cursor-pointer">
+<span class="font-label-lg text-label-lg uppercase tracking-widest text-accordion-title">Price Range</span>
+<span class="material-symbols-outlined transition-transform group-open:rotate-180 text-primary">expand_more</span>
+</summary>
+<div class="mt-4 flex flex-col gap-3">
+<label class="flex items-center gap-3">
+<input class="filter-price w-5 h-5 border-outline-variant text-primary focus:ring-primary rounded-none" type="checkbox" value="under500"/>
+<span class="font-body-md text-charcoal">Under ₹499</span>
+</label>
+<label class="flex items-center gap-3">
+<input class="filter-price w-5 h-5 border-outline-variant text-primary focus:ring-primary rounded-none" type="checkbox" value="500-1499"/>
+<span class="font-body-md text-charcoal">₹500 - ₹1499</span>
+</label>
+<label class="flex items-center gap-3">
+<input class="filter-price w-5 h-5 border-outline-variant text-primary focus:ring-primary rounded-none" type="checkbox" value="above1500"/>
+<span class="font-body-md text-charcoal">Above ₹1500</span>
+</label>
+</div>
+</details>
+</div>
+<div class="p-margin-horizontal py-6 border-t border-outline-variant safe-area-bottom">
+<button class="w-full h-touch-target-min bg-primary text-on-primary font-label-lg text-label-lg uppercase tracking-widest luxury-shadow" onclick="closeModal('filter-modal')">Done</button>
+</div>
 </div>
 <!-- Sort Modal -->
 <div class="fixed inset-0 z-[100] bg-black/40 opacity-0 pointer-events-none modal-overlay" id="sort-modal-overlay" onclick="closeModal('sort-modal')"></div>
 <div class="fixed bottom-0 left-0 w-full bg-background z-[110] modal-content translate-y-full rounded-t-xl overflow-hidden" id="sort-modal">
-  <div class="p-margin-horizontal pt-8 flex flex-col gap-2">
-    <h2 class="font-label-lg text-label-lg uppercase tracking-widest text-center mb-4 text-deep-rose">Sort By</h2>
-    <button class="sort-option h-12 flex items-center justify-center font-body-md border-b border-outline-variant text-charcoal hover:bg-soft-blush transition-colors is-active" data-sort="bestsellers">Best Sellers</button>
-    <button class="sort-option h-12 flex items-center justify-center font-body-md border-b border-outline-variant text-charcoal hover:bg-soft-blush transition-colors" data-sort="newest">Newest First</button>
-    <button class="sort-option h-12 flex items-center justify-center font-body-md border-b border-outline-variant text-charcoal hover:bg-soft-blush transition-colors" data-sort="popularity">Popularity</button>
-    <button class="sort-option h-12 flex items-center justify-center font-body-md border-b border-outline-variant text-charcoal hover:bg-soft-blush transition-colors" data-sort="low-high">Price: Low to High</button>
-    <button class="sort-option h-12 flex items-center justify-center font-body-md mb-8 text-charcoal hover:bg-soft-blush transition-colors" data-sort="high-low">Price: High to Low</button>
-  </div>
-  <div class="p-margin-horizontal py-6 border-t border-outline-variant safe-area-bottom">
-    <button class="w-full h-touch-target-min bg-primary text-on-primary font-label-lg text-label-lg uppercase tracking-widest luxury-shadow" onclick="closeModal('sort-modal')">Done</button>
-  </div>
+<div class="p-margin-horizontal pt-8 flex flex-col gap-2">
+<h2 class="font-label-lg text-label-lg uppercase tracking-widest text-center mb-4 text-deep-rose">Sort By</h2>
+<button class="sort-option h-12 flex items-center justify-center font-body-md border-b border-outline-variant text-charcoal hover:bg-soft-blush transition-colors is-active" data-sort="bestsellers">Best Sellers</button>
+<button class="sort-option h-12 flex items-center justify-center font-body-md border-b border-outline-variant text-charcoal hover:bg-soft-blush transition-colors" data-sort="newest">Newest First</button>
+<button class="sort-option h-12 flex items-center justify-center font-body-md border-b border-outline-variant text-charcoal hover:bg-soft-blush transition-colors" data-sort="popularity">Popularity</button>
+<button class="sort-option h-12 flex items-center justify-center font-body-md border-b border-outline-variant text-charcoal hover:bg-soft-blush transition-colors" data-sort="low-high">Price: Low to High</button>
+<button class="sort-option h-12 flex items-center justify-center font-body-md mb-8 text-charcoal hover:bg-soft-blush transition-colors" data-sort="high-low">Price: High to Low</button>
 </div>
-<div class="cc-toast" id="ccToast" role="status" aria-live="polite"></div>
-
+<div class="p-margin-horizontal py-6 border-t border-outline-variant safe-area-bottom">
+<button class="w-full h-touch-target-min bg-primary text-on-primary font-label-lg text-label-lg uppercase tracking-widest luxury-shadow" onclick="closeModal('sort-modal')">Done</button>
+</div>
+</div>
+<div aria-live="polite" class="cc-toast" id="ccToast" role="status"></div>
 <!-- Backend Integration -->
 <script type="module">
   import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -639,7 +623,7 @@
   updateCartCount();
   window.addEventListener("storage", updateCartCount);
 </script>
-  <script src="cc-material-icons.js" defer></script>
-    <script src="cc-global-header.js" defer></script>
+<script defer="" src="cc-material-icons.js"></script>
+<script defer="" src="cc-global-header.js"></script>
 </body>
 </html>

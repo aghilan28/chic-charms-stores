@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" class="light">
+
+<html class="light" lang="en">
 <head>
-  <meta charset="utf-8" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0..1,0&display=swap" rel="stylesheet">
+<meta charset="utf-8"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0..1,0&amp;display=swap" rel="stylesheet"/>
 <style>
 /* ── FOUC Guard: prevent icon-text flash on mobile ── */
 .material-symbols-outlined{
@@ -28,16 +29,14 @@ document.documentElement.classList.add('cc-loading');
   setTimeout(ready,1200);
 })();
 </script>
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="description" content="Review your order – Chic Charms" />
-  <title>Chic Charms | Order Review</title>
-
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  
-  <style>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<meta content="Review your order – Chic Charms" name="description"/>
+<title>Chic Charms | Order Review</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Jost:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<style>
     /* ── Design Tokens ─────────────────────────────────────────── */
     :root {
       --bg:        #fff8f7;
@@ -566,197 +565,172 @@ document.documentElement.classList.add('cc-loading');
     /* ── Coupon section hidden by default ──────────────────────── */
     #campusBenefitSection { display: none; }
   </style>
-  <link rel="stylesheet" href="cc-material-icons.css" />
-    <link rel="stylesheet" href="cc-global-header.css" />
-</head>
+<link href="cc-material-icons.css" rel="stylesheet"/>
+<link href="cc-global-header.css" rel="stylesheet"/>
+</link></link></link></head>
 <body>
-
 <!-- ═══════════════════════ DESKTOP FALLBACK ═══════════════════════ -->
 <div class="desktop-fallback">
-  <div class="desktop-fallback-box">
-    <h1>Desktop checkout is unchanged</h1>
-    <p>This approved order review experience is built for mobile screens.<br>
+<div class="desktop-fallback-box">
+<h1>Desktop checkout is unchanged</h1>
+<p>This approved order review experience is built for mobile screens.<br/>
        Please use the standard desktop checkout flow.</p>
-    <a href="checkout.html">Open desktop checkout →</a>
-  </div>
+<a href="checkout.html">Open desktop checkout →</a>
 </div>
-
+</div>
 <!-- ═══════════════════════ MOBILE SHELL ═══════════════════════════ -->
 <div class="mobile-shell">
-
-  <!-- Loading overlay -->
-  <div class="loading-overlay" id="loadingOverlay">
-    <div style="display:flex;flex-direction:column;align-items:center;gap:16px;">
-      <div class="loading-spinner"></div>
-      <span id="loaderLabel" style="font-size:13px;font-weight:600;color:var(--primary);
+<!-- Loading overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+<div style="display:flex;flex-direction:column;align-items:center;gap:16px;">
+<div class="loading-spinner"></div>
+<span id="loaderLabel" style="font-size:13px;font-weight:600;color:var(--primary);
             letter-spacing:.06em;text-transform:uppercase;opacity:.8;"></span>
-    </div>
-  </div>
+</div>
+</div>
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+<!-- Announcement Bar -->
+<div class="announce">FREE SHIPPING ON ₹399+</div>
+<!-- Top App Bar -->
 
-  <!-- Toast -->
-  <div class="toast" id="toast"></div>
-
-  <!-- Announcement Bar -->
-  <div class="announce">FREE SHIPPING ON ₹399+</div>
-
-  <!-- Top App Bar -->
-  <header class="topbar">
-    <button class="topbar-back" id="backBtn" aria-label="Go back">
-      <span class="material-symbols-outlined">arrow_back</span>
-    </button>
-    <a href="index.html" class="topbar-brand" aria-label="ChicCharms home">ChicCharms</a>
-    <span class="topbar-secure">Secure&nbsp;Payment</span>
-  </header>
-
-  <!-- Progress Steps -->
-  <div class="steps" aria-hidden="true">
-    <div class="step active"></div>
-    <div class="step active"></div>
-    <div class="step active"></div>
-  </div>
-
-  <!-- Main Content -->
-  <main class="wrap">
-    <p class="eyebrow">Checkout · Step 3</p>
-    <h1 class="page-title">Review Your Order</h1>
-    <p class="page-sub">Please review your order details before proceeding to payment.</p>
-
-    <!-- ① Empty state (hidden until JS confirms cart is empty) -->
-    <div id="emptyState" class="card empty-state" style="display:none;">
-      <p>Your cart is empty.</p>
-      <a href="index.html#bestsellers">Browse best sellers →</a>
-    </div>
-
-    <!-- ② Order Items Card -->
-    <section class="card" id="itemsCard">
-      <div class="card-header">
-        <h2 class="card-title">Your Selection</h2>
-        <span class="card-badge" id="itemCount">—</span>
-      </div>
-      <div id="itemsList">
-        <!-- JS fills this -->
-        <div class="item-row">
-          <div class="item-thumb skeleton" style="width:96px;height:112px;"></div>
-          <div class="item-info">
-            <div class="skeleton" style="height:14px;width:70%;margin-bottom:8px;"></div>
-            <div class="skeleton" style="height:12px;width:40%;margin-bottom:8px;"></div>
-            <div class="skeleton" style="height:14px;width:30%;"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ③ Delivery Card
+<!-- Progress Steps -->
+<div aria-hidden="true" class="steps">
+<div class="step active"></div>
+<div class="step active"></div>
+<div class="step active"></div>
+</div>
+<!-- Main Content -->
+<main class="wrap">
+<p class="eyebrow">Checkout · Step 3</p>
+<h1 class="page-title">Review Your Order</h1>
+<p class="page-sub">Please review your order details before proceeding to payment.</p>
+<!-- ① Empty state (hidden until JS confirms cart is empty) -->
+<div class="card empty-state" id="emptyState" style="display:none;">
+<p>Your cart is empty.</p>
+<a href="index.html#bestsellers">Browse best sellers →</a>
+</div>
+<!-- ② Order Items Card -->
+<section class="card" id="itemsCard">
+<div class="card-header">
+<h2 class="card-title">Your Selection</h2>
+<span class="card-badge" id="itemCount">—</span>
+</div>
+<div id="itemsList">
+<!-- JS fills this -->
+<div class="item-row">
+<div class="item-thumb skeleton" style="width:96px;height:112px;"></div>
+<div class="item-info">
+<div class="skeleton" style="height:14px;width:70%;margin-bottom:8px;"></div>
+<div class="skeleton" style="height:12px;width:40%;margin-bottom:8px;"></div>
+<div class="skeleton" style="height:14px;width:30%;"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- ③ Delivery Card
          NON-COUPON user → read-only address summary (filled on delivery-information.html)
          COUPON user     → campus delivery notice (no manual address needed)          -->
-    <section class="card" id="deliveryCard">
-      <div class="card-header">
-        <h2 class="card-title" id="deliveryCardTitle">Delivery Address</h2>
-        <!-- Edit button shown only for non-coupon users -->
-        <button class="btn-edit" id="editAddressBtn" style="display:none;">Edit</button>
-      </div>
-      <div id="deliveryInfo">
-        <!-- skeleton shown while JS hydrates -->
-        <div class="skeleton" style="height:14px;width:55%;margin-bottom:8px;"></div>
-        <div class="skeleton" style="height:42px;width:80%;margin-bottom:8px;"></div>
-        <div class="skeleton" style="height:13px;width:45%;"></div>
-      </div>
-    </section>
-
-    <!-- ④ Campus Benefit Card — CONDITIONAL: only shown when coupon applied -->
-    <section class="card campus-card" id="campusBenefitSection" aria-live="polite">
-      <div style="display:flex;align-items:flex-start;gap:14px;">
-        <div class="campus-icon-wrap">
-          <span class="material-symbols-outlined fill-icon">school</span>
-        </div>
-        <div class="campus-body">
-          <p class="campus-label">
+<section class="card" id="deliveryCard">
+<div class="card-header">
+<h2 class="card-title" id="deliveryCardTitle">Delivery Address</h2>
+<!-- Edit button shown only for non-coupon users -->
+<button class="btn-edit" id="editAddressBtn" style="display:none;">Edit</button>
+</div>
+<div id="deliveryInfo">
+<!-- skeleton shown while JS hydrates -->
+<div class="skeleton" style="height:14px;width:55%;margin-bottom:8px;"></div>
+<div class="skeleton" style="height:42px;width:80%;margin-bottom:8px;"></div>
+<div class="skeleton" style="height:13px;width:45%;"></div>
+</div>
+</section>
+<!-- ④ Campus Benefit Card — CONDITIONAL: only shown when coupon applied -->
+<section aria-live="polite" class="card campus-card" id="campusBenefitSection">
+<div style="display:flex;align-items:flex-start;gap:14px;">
+<div class="campus-icon-wrap">
+<span class="material-symbols-outlined fill-icon">school</span>
+</div>
+<div class="campus-body">
+<p class="campus-label">
             Campus Benefit Applied
             <span class="campus-code-badge" id="campusCouponBadge"></span>
-          </p>
-          <p class="campus-student" id="campusStudentName"></p>
-          <p class="campus-privilege" id="campusPrivilege"></p>
-          <p class="campus-discount" id="campusDiscountText"></p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ⑤ Payment Method Card -->
-    <section class="card" id="paymentCard">
-      <div class="card-header">
-        <h2 class="card-title">Payment Method</h2>
-      </div>
-      <div id="paymentOptions">
-        <div class="pay-option selected" data-method="upi">
-          <div class="pay-option-icon">
-            <span class="material-symbols-outlined">account_balance_wallet</span>
-          </div>
-          <span class="pay-option-label">UPI (Google Pay / PhonePe)</span>
-          <div class="pay-radio"><div class="pay-radio-dot"></div></div>
-        </div>
-        <div class="pay-option" data-method="credit_card">
-          <div class="pay-option-icon">
-            <span class="material-symbols-outlined">credit_card</span>
-          </div>
-          <span class="pay-option-label">Credit Card</span>
-          <div class="pay-radio"><div class="pay-radio-dot"></div></div>
-        </div>
-        <div class="pay-option" data-method="debit_card">
-          <div class="pay-option-icon">
-            <span class="material-symbols-outlined">payments</span>
-          </div>
-          <span class="pay-option-label">Debit Card</span>
-          <div class="pay-radio"><div class="pay-radio-dot"></div></div>
-        </div>
-        <div class="pay-option" data-method="net_banking">
-          <div class="pay-option-icon">
-            <span class="material-symbols-outlined">account_balance</span>
-          </div>
-          <span class="pay-option-label">Net Banking</span>
-          <div class="pay-radio"><div class="pay-radio-dot"></div></div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ⑥ Payment Summary Card -->
-    <section class="card" id="summaryCard">
-      <div class="card-header" style="margin-bottom:0;padding-bottom:0;border-bottom:0;">
-        <h2 class="card-title">Payment Summary</h2>
-      </div>
-      <div id="summaryRows" style="margin-top:16px;">
-        <div class="summary-row">
-          <span class="skeleton" style="height:13px;width:55%;"></span>
-          <span class="skeleton" style="height:13px;width:25%;"></span>
-        </div>
-        <div class="summary-row">
-          <span class="skeleton" style="height:13px;width:40%;"></span>
-          <span class="skeleton" style="height:13px;width:20%;"></span>
-        </div>
-        <div class="summary-row summary-total" style="border-top:1px solid rgba(215,193,197,.5);margin-top:8px;">
-          <span class="skeleton" style="height:18px;width:45%;"></span>
-          <span class="skeleton" style="height:18px;width:30%;"></span>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- Sticky Footer -->
-  <nav class="footer-bar" aria-label="Proceed to payment">
-    <div>
-      <p class="footer-total-label">Total Amount</p>
-      <p class="footer-total-amount" id="footerTotal">₹—</p>
-    </div>
-    <button class="btn-pay" id="payBtn" disabled>
-      <span class="btn-pay-text">Proceed to Payment</span>
-      <span class="material-symbols-outlined" style="font-size:18px;">arrow_forward</span>
-    </button>
-  </nav>
-
+</p>
+<p class="campus-student" id="campusStudentName"></p>
+<p class="campus-privilege" id="campusPrivilege"></p>
+<p class="campus-discount" id="campusDiscountText"></p>
+</div>
+</div>
+</section>
+<!-- ⑤ Payment Method Card -->
+<section class="card" id="paymentCard">
+<div class="card-header">
+<h2 class="card-title">Payment Method</h2>
+</div>
+<div id="paymentOptions">
+<div class="pay-option selected" data-method="upi">
+<div class="pay-option-icon">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+</div>
+<span class="pay-option-label">UPI (Google Pay / PhonePe)</span>
+<div class="pay-radio"><div class="pay-radio-dot"></div></div>
+</div>
+<div class="pay-option" data-method="credit_card">
+<div class="pay-option-icon">
+<span class="material-symbols-outlined">credit_card</span>
+</div>
+<span class="pay-option-label">Credit Card</span>
+<div class="pay-radio"><div class="pay-radio-dot"></div></div>
+</div>
+<div class="pay-option" data-method="debit_card">
+<div class="pay-option-icon">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<span class="pay-option-label">Debit Card</span>
+<div class="pay-radio"><div class="pay-radio-dot"></div></div>
+</div>
+<div class="pay-option" data-method="net_banking">
+<div class="pay-option-icon">
+<span class="material-symbols-outlined">account_balance</span>
+</div>
+<span class="pay-option-label">Net Banking</span>
+<div class="pay-radio"><div class="pay-radio-dot"></div></div>
+</div>
+</div>
+</section>
+<!-- ⑥ Payment Summary Card -->
+<section class="card" id="summaryCard">
+<div class="card-header" style="margin-bottom:0;padding-bottom:0;border-bottom:0;">
+<h2 class="card-title">Payment Summary</h2>
+</div>
+<div id="summaryRows" style="margin-top:16px;">
+<div class="summary-row">
+<span class="skeleton" style="height:13px;width:55%;"></span>
+<span class="skeleton" style="height:13px;width:25%;"></span>
+</div>
+<div class="summary-row">
+<span class="skeleton" style="height:13px;width:40%;"></span>
+<span class="skeleton" style="height:13px;width:20%;"></span>
+</div>
+<div class="summary-row summary-total" style="border-top:1px solid rgba(215,193,197,.5);margin-top:8px;">
+<span class="skeleton" style="height:18px;width:45%;"></span>
+<span class="skeleton" style="height:18px;width:30%;"></span>
+</div>
+</div>
+</section>
+</main>
+<!-- Sticky Footer -->
+<nav aria-label="Proceed to payment" class="footer-bar">
+<div>
+<p class="footer-total-label">Total Amount</p>
+<p class="footer-total-amount" id="footerTotal">₹—</p>
+</div>
+<button class="btn-pay" disabled="" id="payBtn">
+<span class="btn-pay-text">Proceed to Payment</span>
+<span class="material-symbols-outlined" style="font-size:18px;">arrow_forward</span>
+</button>
+</nav>
 </div><!-- /mobile-shell -->
-
 <!-- ═══════════════════════ SCRIPTS ════════════════════════════════ -->
-
 <!--
   ┌──────────────────────────────────────────────────────────────────┐
   │  RAZORPAY CHECKOUT SCRIPT — official Razorpay JS SDK             │
@@ -764,10 +738,8 @@ document.documentElement.classList.add('cc-loading');
   └──────────────────────────────────────────────────────────────────┘
 -->
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
 <!-- coupon-session.js provides window.ChicCoupon -->
 <script src="coupon-session.js"></script>
-
 <script>
 (function () {
   'use strict';
@@ -1348,8 +1320,6 @@ document.documentElement.classList.add('cc-loading');
 
 })();
 </script>
-
-
 <script type="module">
     import { auth } from "./auth.js";
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -1361,8 +1331,7 @@ document.documentElement.classList.add('cc-loading');
       }
     });
 </script>
-  <script src="cc-material-icons.js" defer></script>
-    <script src="cc-global-header.js" defer></script>
+<script defer="" src="cc-material-icons.js"></script>
+<script defer="" src="cc-global-header.js"></script>
 </body>
-
 </html>

@@ -1,20 +1,17 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="My Account - Chic Charms" />
-    <title>My Account - Chic Charms</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles.css" />
-    <link rel="stylesheet" href="admin-nav.css" />
+<!DOCTYPE html>
 
-    <style>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="My Account - Chic Charms" name="description"/>
+<title>My Account - Chic Charms</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Jost:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="styles.css" rel="stylesheet"/>
+<link href="admin-nav.css" rel="stylesheet"/>
+<style>
       /* ========================================
        ACCOUNT PAGE
     ======================================== */
@@ -863,278 +860,185 @@
         }
       }
     </style>
-    <link rel="stylesheet" href="final-mobile-stabilization.css" media="(max-width: 768px)" />
-    <link rel="stylesheet" href="phase6-polish.css" media="(max-width: 767px)" />
-  <link rel="stylesheet" href="phase5-mobile-conversion.css" media="(max-width: 767px)" />
-  <link rel="stylesheet" href="mobile-comprehensive.css" media="(max-width: 1024px)" />
-  <link rel="stylesheet" href="cc-material-icons.css" />
-    <link rel="stylesheet" href="cc-global-header.css" />
+<link href="final-mobile-stabilization.css" media="(max-width: 768px)" rel="stylesheet"/>
+<link href="phase6-polish.css" media="(max-width: 767px)" rel="stylesheet"/>
+<link href="phase5-mobile-conversion.css" media="(max-width: 767px)" rel="stylesheet"/>
+<link href="mobile-comprehensive.css" media="(max-width: 1024px)" rel="stylesheet"/>
+<link href="cc-material-icons.css" rel="stylesheet"/>
+<link href="cc-global-header.css" rel="stylesheet"/>
 </head>
-  <link rel="stylesheet" href="cc-bottom-nav.css" />
-  <body>
-    <!-- Auth overlay -->
-    <div class="auth-overlay" id="authOverlay">
-      <div class="spinner-ring"></div>
-    </div>
+<link href="cc-bottom-nav.css" rel="stylesheet"/>
+<body>
+<!-- Auth overlay -->
+<div class="auth-overlay" id="authOverlay">
+<div class="spinner-ring"></div>
+</div>
+<!-- Toast -->
+<div class="acc-toast" id="toast"></div>
+<!-- NAVBAR -->
 
-    <!-- Toast -->
-    <div class="acc-toast" id="toast"></div>
-
-    <!-- NAVBAR -->
-    <header class="navbar" id="navbar">
-      <div class="nav-inner container">
-        <a href="index.html" class="logo" style="color:#8e4559 !important" aria-label="Chic Charms home"
-          >Chic<span>Charms</span></a>
-        <nav class="nav-links" id="navLinks" aria-label="Main navigation">
-          <a href="index.html#categories">Shop</a>
-          <a href="index.html#bestsellers">Best Sellers</a>
-          <a href="index.html#why-us">About</a>
-          <a href="cart.html" class="nav-cart-link"><span>Cart</span></a>
-        </nav>
-        <div class="nav-actions" id="navActions">
-          <!-- injected by JS -->
-        </div>
-      </div>
-    </header>
-
-    <!-- ACCOUNT PAGE -->
-    <main class="acc-page">
-      <div class="acc-container">
-        <!-- Sidebar -->
-        <aside class="acc-sidebar">
-          <div class="acc-profile-card">
-            <div class="acc-avatar" id="accAvatar">U</div>
-            <div class="acc-displayname" id="accDisplayName">-</div>
-            <div class="acc-email-small" id="accEmailLabel">-</div>
-            <div class="acc-since" id="accSince">Member since -</div>
-          </div>
-          <nav class="acc-nav">
-            <button class="acc-nav-btn active" data-tab="profile" type="button">
+<!-- ACCOUNT PAGE -->
+<main class="acc-page">
+<div class="acc-container">
+<!-- Sidebar -->
+<aside class="acc-sidebar">
+<div class="acc-profile-card">
+<div class="acc-avatar" id="accAvatar">U</div>
+<div class="acc-displayname" id="accDisplayName">-</div>
+<div class="acc-email-small" id="accEmailLabel">-</div>
+<div class="acc-since" id="accSince">Member since -</div>
+</div>
+<nav class="acc-nav">
+<button class="acc-nav-btn active" data-tab="profile" type="button">
               Profile
             </button>
-            <button class="acc-nav-btn" data-tab="orders" type="button">
+<button class="acc-nav-btn" data-tab="orders" type="button">
               My Orders
             </button>
-            <button class="acc-nav-btn" data-tab="addresses" type="button">
+<button class="acc-nav-btn" data-tab="addresses" type="button">
               Addresses
             </button>
-            <button
-              class="acc-nav-btn logout-btn"
-              id="sidebarLogout"
-              type="button"
-            >
+<button class="acc-nav-btn logout-btn" id="sidebarLogout" type="button">
               Logout
             </button>
-          </nav>
-
-          <!-- Operational access - shown only for verified admins -->
-          <div
-            class="acc-admin-section"
-            id="accAdminSection"
-            aria-hidden="true"
-          >
-            <div class="acc-admin-card">
-              <div class="acc-admin-card-head">
-                <span class="acc-admin-card-head-icon" aria-hidden="true"
-                  ></span
-                >
-                <span class="acc-admin-card-head-label">Operations</span>
-              </div>
-              <div class="acc-admin-links">
-                <a
-                  href="admin.html"
-                  class="acc-admin-link"
-                  aria-label="Operations Panel"
-                >
-                  <span class="acc-admin-link-icon" aria-hidden="true"></span>
+</nav>
+<!-- Operational access - shown only for verified admins -->
+<div aria-hidden="true" class="acc-admin-section" id="accAdminSection">
+<div class="acc-admin-card">
+<div class="acc-admin-card-head">
+<span aria-hidden="true" class="acc-admin-card-head-icon"></span>
+<span class="acc-admin-card-head-label">Operations</span>
+</div>
+<div class="acc-admin-links">
+<a aria-label="Operations Panel" class="acc-admin-link" href="admin.html">
+<span aria-hidden="true" class="acc-admin-link-icon"></span>
                   Operations Panel
                 </a>
-                <a
-                  href="admin-orders.html"
-                  class="acc-admin-link"
-                  aria-label="Order Fulfillment"
-                >
-                  <span class="acc-admin-link-icon" aria-hidden="true"></span>
+<a aria-label="Order Fulfillment" class="acc-admin-link" href="admin-orders.html">
+<span aria-hidden="true" class="acc-admin-link-icon"></span>
                   Fulfillment
                 </a>
-              </div>
-            </div>
-          </div>
-        </aside>
-
-        <!-- Main -->
-        <div class="acc-main">
-          <!-- PROFILE TAB -->
-          <section class="acc-panel active" id="tab-profile">
-            <div class="panel-head">
-              <h1 class="panel-title">
+</div>
+</div>
+</div>
+</aside>
+<!-- Main -->
+<div class="acc-main">
+<!-- PROFILE TAB -->
+<section class="acc-panel active" id="tab-profile">
+<div class="panel-head">
+<h1 class="panel-title">
                 Hello, <em id="greetName">there</em>
-              </h1>
-              <p class="panel-sub">Welcome back to your Chic Charms account</p>
-            </div>
-
-            <div class="stat-grid">
-              <div class="stat-box">
-                <div class="stat-num" id="statOrders">-</div>
-                <div class="stat-label">Orders</div>
-              </div>
-              <div class="stat-box">
-                <div class="stat-num" id="statAddrs">-</div>
-                <div class="stat-label">Addresses</div>
-              </div>
-              <div class="stat-box">
-                <div class="stat-num" id="statSpend">-</div>
-                <div class="stat-label">Total Spent</div>
-              </div>
-            </div>
-
-            <div class="acc-card">
-              <div class="info-row">
-                <span class="info-label">Email</span>
-                <span class="info-val" id="infoEmail">-</span>
-              </div>
-              <div class="info-row">
-                <span class="info-label">User ID</span>
-                <span
-                  class="info-val"
-                  id="infoUid"
-                  style="font-size: 0.73rem; color: var(--muted)"
-                  >-</span
-                >
-              </div>
-              <div class="info-row">
-                <span class="info-label">Member since</span>
-                <span class="info-val" id="infoSince">-</span>
-              </div>
-              <div class="info-row">
-                <span class="info-label">Status</span>
-                <span class="info-val" style="color: #2e7d32">Active</span>
-              </div>
-            </div>
-
-            <!-- -- Contact info (from users/{uid}) -- -->
-            <div class="acc-card">
-              <p
-                style="
+</h1>
+<p class="panel-sub">Welcome back to your Chic Charms account</p>
+</div>
+<div class="stat-grid">
+<div class="stat-box">
+<div class="stat-num" id="statOrders">-</div>
+<div class="stat-label">Orders</div>
+</div>
+<div class="stat-box">
+<div class="stat-num" id="statAddrs">-</div>
+<div class="stat-label">Addresses</div>
+</div>
+<div class="stat-box">
+<div class="stat-num" id="statSpend">-</div>
+<div class="stat-label">Total Spent</div>
+</div>
+</div>
+<div class="acc-card">
+<div class="info-row">
+<span class="info-label">Email</span>
+<span class="info-val" id="infoEmail">-</span>
+</div>
+<div class="info-row">
+<span class="info-label">User ID</span>
+<span class="info-val" id="infoUid" style="font-size: 0.73rem; color: var(--muted)">-</span>
+</div>
+<div class="info-row">
+<span class="info-label">Member since</span>
+<span class="info-val" id="infoSince">-</span>
+</div>
+<div class="info-row">
+<span class="info-label">Status</span>
+<span class="info-val" style="color: #2e7d32">Active</span>
+</div>
+</div>
+<!-- -- Contact info (from users/{uid}) -- -->
+<div class="acc-card">
+<p style="
                   font-size: 0.84rem;
                   color: var(--muted);
                   margin-bottom: 12px;
                   font-weight: 600;
-                "
-              >
+                ">
                 Contact &amp; Delivery Info
               </p>
-              <div class="info-row">
-                <span class="info-label">Name</span>
-                <span class="info-val" id="profileName">-</span>
-              </div>
-              <div class="info-row">
-                <span class="info-label">Phone</span>
-                <span class="info-val" id="profilePhone">-</span>
-              </div>
-              <div class="info-row">
-                <span class="info-label">Address</span>
-                <span
-                  class="info-val"
-                  id="accountAddress"
-                  style="max-width: 260px; text-align: right; line-height: 1.5"
-                  >-</span
-                >
-              </div>
-              <div style="margin-top: 14px">
-                <button
-                  class="btn-ghost"
-                  id="toggleEditProfileBtn"
-                  type="button"
-                >
+<div class="info-row">
+<span class="info-label">Name</span>
+<span class="info-val" id="profileName">-</span>
+</div>
+<div class="info-row">
+<span class="info-label">Phone</span>
+<span class="info-val" id="profilePhone">-</span>
+</div>
+<div class="info-row">
+<span class="info-label">Address</span>
+<span class="info-val" id="accountAddress" style="max-width: 260px; text-align: right; line-height: 1.5">-</span>
+</div>
+<div style="margin-top: 14px">
+<button class="btn-ghost" id="toggleEditProfileBtn" type="button">
                    Edit Info
                 </button>
-              </div>
-
-              <!-- Edit profile form (hidden by default) -->
-              <div
-                id="editProfileForm"
-                style="
+</div>
+<!-- Edit profile form (hidden by default) -->
+<div id="editProfileForm" style="
                   display: none;
                   margin-top: 18px;
                   border-top: 1px solid var(--border);
                   padding-top: 18px;
-                "
-              >
-                <div style="display: flex; flex-direction: column; gap: 12px">
-                  <div class="fg">
-                    <label for="editProfileName">Full Name</label>
-                    <input
-                      type="text"
-                      id="editProfileName"
-                      placeholder="Priya Sharma"
-                      maxlength="80"
-                      autocomplete="name"
-                    />
-                  </div>
-                  <div class="fg">
-                    <label for="editProfilePhone">Phone Number</label>
-                    <input
-                      type="tel"
-                      id="editProfilePhone"
-                      placeholder="9876543210"
-                      maxlength="10"
-                      autocomplete="tel"
-                    />
-                  </div>
-                  <div class="fg">
-                    <label for="editProfileAddress">Delivery Address</label>
-                    <input
-                      type="text"
-                      id="editProfileAddress"
-                      placeholder="Flat / Street, City, Pincode"
-                      maxlength="300"
-                      autocomplete="street-address"
-                    />
-                  </div>
-                </div>
-                <div class="form-acts" style="margin-top: 14px">
-                  <button class="btn-prime" id="saveProfileBtn" type="button">
+                ">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<div class="fg">
+<label for="editProfileName">Full Name</label>
+<input autocomplete="name" id="editProfileName" maxlength="80" placeholder="Priya Sharma" type="text"/>
+</div>
+<div class="fg">
+<label for="editProfilePhone">Phone Number</label>
+<input autocomplete="tel" id="editProfilePhone" maxlength="10" placeholder="9876543210" type="tel"/>
+</div>
+<div class="fg">
+<label for="editProfileAddress">Delivery Address</label>
+<input autocomplete="street-address" id="editProfileAddress" maxlength="300" placeholder="Flat / Street, City, Pincode" type="text"/>
+</div>
+</div>
+<div class="form-acts" style="margin-top: 14px">
+<button class="btn-prime" id="saveProfileBtn" type="button">
                     Save Changes
                   </button>
-                  <button
-                    class="btn-ghost"
-                    id="cancelEditProfileBtn"
-                    type="button"
-                  >
+<button class="btn-ghost" id="cancelEditProfileBtn" type="button">
                     Cancel
                   </button>
-                </div>
-                <div class="acc-msg" id="editProfileMsg"></div>
-              </div>
-            </div>
-
-            <div class="acc-card">
-              <p
-                style="
+</div>
+<div class="acc-msg" id="editProfileMsg"></div>
+</div>
+</div>
+<div class="acc-card">
+<p style="
                   font-size: 0.84rem;
                   color: var(--muted);
                   margin-bottom: 12px;
                   font-weight: 600;
-                "
-              >
+                ">
                 Edit Display Name
               </p>
-              <div
-                style="
+<div style="
                   display: flex;
                   gap: 10px;
                   align-items: center;
                   flex-wrap: wrap;
-                "
-              >
-                <input
-                  type="text"
-                  id="editNameInput"
-                  placeholder="Your name"
-                  maxlength="12"
-                  aria-describedby="editNameMsg"
-                  style="
+                ">
+<input aria-describedby="editNameMsg" id="editNameInput" maxlength="12" placeholder="Your name" style="
                     flex: 1;
                     padding: 10px 14px;
                     border: 1.5px solid var(--border);
@@ -1142,146 +1046,114 @@
                     font-family: var(--font-body);
                     font-size: 0.9rem;
                     outline: none;
-                  "
-                />
-                <button class="btn-prime" id="saveNameBtn" type="button">
+                  " type="text"/>
+<button class="btn-prime" id="saveNameBtn" type="button">
                   Save Name
                 </button>
-              </div>
-              <div class="acc-msg" id="editNameMsg"></div>
-            </div>
-
-            <div class="acc-card">
-              <p
-                style="
+</div>
+<div class="acc-msg" id="editNameMsg"></div>
+</div>
+<div class="acc-card">
+<p style="
                   font-size: 0.84rem;
                   color: var(--muted);
                   margin-bottom: 14px;
-                "
-              >
+                ">
                 Change your password via email reset:
               </p>
-              <button class="btn-prime" id="pwResetBtn" type="button">
+<button class="btn-prime" id="pwResetBtn" type="button">
                 Send Password Reset
               </button>
-              <div class="acc-msg" id="pwResetMsg"></div>
-            </div>
-          </section>
-
-          <!-- ORDERS TAB -->
-          <section class="acc-panel" id="tab-orders">
-            <div class="panel-head">
-              <h2 class="panel-title">My <em>Orders</em></h2>
-              <p class="panel-sub">Your complete purchase history</p>
-            </div>
-            <div id="ordersWrap">
-              <div class="acc-card">
-                <div class="skel skel-h" style="width: 40%"></div>
-                <div class="skel skel-h" style="width: 75%"></div>
-                <div class="skel skel-h" style="width: 55%"></div>
-              </div>
-            </div>
-          </section>
-
-          <!-- ADDRESSES TAB -->
-          <section class="acc-panel" id="tab-addresses">
-            <div class="panel-head">
-              <h2 class="panel-title">My <em>Addresses</em></h2>
-              <p class="panel-sub">Saved for faster checkout</p>
-            </div>
-
-            <button class="add-addr-toggle" id="addAddrToggle" type="button">
+<div class="acc-msg" id="pwResetMsg"></div>
+</div>
+</section>
+<!-- ORDERS TAB -->
+<section class="acc-panel" id="tab-orders">
+<div class="panel-head">
+<h2 class="panel-title">My <em>Orders</em></h2>
+<p class="panel-sub">Your complete purchase history</p>
+</div>
+<div id="ordersWrap">
+<div class="acc-card">
+<div class="skel skel-h" style="width: 40%"></div>
+<div class="skel skel-h" style="width: 75%"></div>
+<div class="skel skel-h" style="width: 55%"></div>
+</div>
+</div>
+</section>
+<!-- ADDRESSES TAB -->
+<section class="acc-panel" id="tab-addresses">
+<div class="panel-head">
+<h2 class="panel-title">My <em>Addresses</em></h2>
+<p class="panel-sub">Saved for faster checkout</p>
+</div>
+<button class="add-addr-toggle" id="addAddrToggle" type="button">
               + Add new address
             </button>
-
-            <div class="addr-form-wrap" id="addrFormWrap">
-              <div class="addr-form-title">" New Address</div>
-              <div class="acc-msg" id="addrMsg"></div>
-              <div class="fg2">
-                <div class="fg">
-                  <label for="addrName">Full Name *</label>
-                  <input
-                    type="text"
-                    id="addrName"
-                    placeholder="Priya Sharma"
-                    autocomplete="name"
-                  />
-                </div>
-                <div class="fg">
-                  <label for="addrPhone">Phone *</label>
-                  <input
-                    type="tel"
-                    id="addrPhone"
-                    placeholder="9876543210"
-                    maxlength="10"
-                  />
-                </div>
-                <div class="fg fg-full">
-                  <label for="addrStreet">Street / Locality *</label>
-                  <input
-                    type="text"
-                    id="addrStreet"
-                    placeholder="Flat 4, Rose Apartments, MG Road"
-                    autocomplete="street-address"
-                  />
-                </div>
-                <div class="fg">
-                  <label for="addrCity">City *</label>
-                  <input type="text" id="addrCity" placeholder="Chennai" />
-                </div>
-                <div class="fg">
-                  <label for="addrPin">Pincode *</label>
-                  <input
-                    type="text"
-                    id="addrPin"
-                    placeholder="600001"
-                    maxlength="6"
-                  />
-                </div>
-              </div>
-              <label class="check-row">
-                <input type="checkbox" id="addrDefault" /> Set as default
+<div class="addr-form-wrap" id="addrFormWrap">
+<div class="addr-form-title">" New Address</div>
+<div class="acc-msg" id="addrMsg"></div>
+<div class="fg2">
+<div class="fg">
+<label for="addrName">Full Name *</label>
+<input autocomplete="name" id="addrName" placeholder="Priya Sharma" type="text"/>
+</div>
+<div class="fg">
+<label for="addrPhone">Phone *</label>
+<input id="addrPhone" maxlength="10" placeholder="9876543210" type="tel"/>
+</div>
+<div class="fg fg-full">
+<label for="addrStreet">Street / Locality *</label>
+<input autocomplete="street-address" id="addrStreet" placeholder="Flat 4, Rose Apartments, MG Road" type="text"/>
+</div>
+<div class="fg">
+<label for="addrCity">City *</label>
+<input id="addrCity" placeholder="Chennai" type="text"/>
+</div>
+<div class="fg">
+<label for="addrPin">Pincode *</label>
+<input id="addrPin" maxlength="6" placeholder="600001" type="text"/>
+</div>
+</div>
+<label class="check-row">
+<input id="addrDefault" type="checkbox"/> Set as default
                 address
               </label>
-              <div class="form-acts">
-                <button class="btn-prime" id="saveAddrBtn" type="button">
+<div class="form-acts">
+<button class="btn-prime" id="saveAddrBtn" type="button">
                   Save Address
                 </button>
-                <button class="btn-ghost" id="cancelAddrBtn" type="button">
+<button class="btn-ghost" id="cancelAddrBtn" type="button">
                   Cancel
                 </button>
-              </div>
-            </div>
-
-            <div id="addrsWrap">
-              <div class="acc-card">
-                <div class="skel skel-h" style="width: 55%"></div>
-                <div class="skel skel-h" style="width: 80%"></div>
-              </div>
-            </div>
-          </section>
-        </div>
-        <!-- /acc-main -->
-      </div>
-      <!-- /acc-container -->
-    </main>
-
-    <!-- FOOTER -->
-    <footer class="footer">
-      <div class="container footer-inner">
-        <div class="footer-brand">
-          <p class="logo" style="color:#8e4559 !important">ChicCharms</p>
-          <p class="footer-tagline">Your glow-up starts here.</p>
-        </div>
-        <nav class="footer-links">
-          <a href="#">About Us</a><a href="#">FAQs</a> <a href="#">Shipping</a
-          ><a href="#">Returns</a><a href="#">Contact</a>
-        </nav>
-      </div>
-      <p class="footer-copy">&copy; 2025 ChicCharms. Made in India.</p>
-    </footer>
-
-    <script type="module">
+</div>
+</div>
+<div id="addrsWrap">
+<div class="acc-card">
+<div class="skel skel-h" style="width: 55%"></div>
+<div class="skel skel-h" style="width: 80%"></div>
+</div>
+</div>
+</section>
+</div>
+<!-- /acc-main -->
+</div>
+<!-- /acc-container -->
+</main>
+<!-- FOOTER -->
+<footer class="footer">
+<div class="container footer-inner">
+<div class="footer-brand">
+<p class="logo" style="color:#8e4559 !important">ChicCharms</p>
+<p class="footer-tagline">Your glow-up starts here.</p>
+</div>
+<nav class="footer-links">
+<a href="#">About Us</a><a href="#">FAQs</a> <a href="#">Shipping</a><a href="#">Returns</a><a href="#">Contact</a>
+</nav>
+</div>
+<p class="footer-copy">© 2025 ChicCharms. Made in India.</p>
+</footer>
+<script type="module">
       /* ============================================================
        account.html - Dashboard logic
        Single Firebase import from auth.js
@@ -2100,10 +1972,10 @@
         btn.textContent = "Save Address";
       });
     </script>
-    <script src="final-mobile-stabilization.js" defer></script>
-  <script src="cc-bottom-nav.js" defer></script>
-  <script src="mobile-app.js" defer></script>
-  <script src="cc-material-icons.js" defer></script>
-    <script src="cc-global-header.js" defer></script>
+<script defer="" src="final-mobile-stabilization.js"></script>
+<script defer="" src="cc-bottom-nav.js"></script>
+<script defer="" src="mobile-app.js"></script>
+<script defer="" src="cc-material-icons.js"></script>
+<script defer="" src="cc-global-header.js"></script>
 </body>
 </html>

@@ -1,16 +1,17 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Your Wishlist • Chic Charms</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="wishlist.css" />
-  <link rel="stylesheet" href="cc-bottom-nav.css" />
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Your Wishlist • Chic Charms</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&amp;family=Jost:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="styles.css" rel="stylesheet">
+<link href="wishlist.css" rel="stylesheet">
+<link href="cc-bottom-nav.css" rel="stylesheet">
+<style>
     body { background: #fff8f7; }
     .mobile-shell { max-width: 440px; margin: 0 auto; min-height: 100dvh; background: #fff8f7; }
     header { 
@@ -30,45 +31,31 @@
       border-radius: 50%; display: flex; align-items: center; justify-content: center; 
     }
   </style>
-  <link rel="stylesheet" href="cc-material-icons.css" />
-    <link rel="stylesheet" href="cc-global-header.css" />
-</head>
+<link href="cc-material-icons.css" rel="stylesheet"/>
+<link href="cc-global-header.css" rel="stylesheet"/>
+</link></link></link></head>
 <body>
-  <div class="mobile-shell">
-    <header>
-      <a href="javascript:history.back()" class="back-btn" aria-label="Go back">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-      </a>
-      <h1>Wishlist <span id="wishlist-header-count" class="count"></span></h1>
-      <a href="cart.html" class="cart-btn" aria-label="View bag">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-        <span class="cart-count wishlist-count" style="display:none">0</span>
-      </a>
-    </header>
+<div class="mobile-shell">
 
-    <main class="wishlist-page">
-      <!-- Empty State -->
-      <div id="wishlist-empty-state" class="wishlist-empty" style="display:none">
-        <div class="wishlist-empty-icon">❤️</div>
-        <h2>Your Wishlist is Empty</h2>
-        <p>Save your favourite jewellery to purchase later. They will appear here so you can find them easily.</p>
-        <a href="index.html" class="wishlist-continue-btn">Continue Shopping</a>
-      </div>
-
-      <!-- Wishlist Grid -->
-      <div id="wishlist-grid" class="wishlist-grid">
-        <!-- Wishlist items will be injected here -->
-      </div>
-    </main>
-  </div>
-
-  <div id="cartToast" class="cart-toast"></div>
-
-  <script src="script.js"></script>
-  <script src="wishlist-system.js"></script>
-  <script src="cc-bottom-nav.js" defer></script>
-  
-  <script>
+<main class="wishlist-page">
+<!-- Empty State -->
+<div class="wishlist-empty" id="wishlist-empty-state" style="display:none">
+<div class="wishlist-empty-icon">❤️</div>
+<h2>Your Wishlist is Empty</h2>
+<p>Save your favourite jewellery to purchase later. They will appear here so you can find them easily.</p>
+<a class="wishlist-continue-btn" href="index.html">Continue Shopping</a>
+</div>
+<!-- Wishlist Grid -->
+<div class="wishlist-grid" id="wishlist-grid">
+<!-- Wishlist items will be injected here -->
+</div>
+</main>
+</div>
+<div class="cart-toast" id="cartToast"></div>
+<script src="script.js"></script>
+<script src="wishlist-system.js"></script>
+<script defer="" src="cc-bottom-nav.js"></script>
+<script>
     // Wishlist Page Logic
     (function() {
       function renderWishlist() {
@@ -117,7 +104,7 @@
       window.addEventListener('wishlistUpdated', renderWishlist);
     })();
   </script>
-  <script src="cc-material-icons.js" defer></script>
-    <script src="cc-global-header.js" defer></script>
+<script defer="" src="cc-material-icons.js"></script>
+<script defer="" src="cc-global-header.js"></script>
 </body>
 </html>

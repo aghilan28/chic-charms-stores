@@ -1,18 +1,17 @@
 <!DOCTYPE html>
+
 <html class="light" lang="en">
 <head>
 <meta charset="utf-8"/>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
 <title>Search • Chic Charms</title>
-
-<meta name="description" content="Search Chic Charms premium Indian jewellery – pearls, hoops, studs, Korean edits."/>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="wishlist.css" />
+<meta content="Search Chic Charms premium Indian jewellery – pearls, hoops, studs, Korean edits." name="description"/>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&amp;family=Jost:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="wishlist.css" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
 <script>
   tailwind.config = {
@@ -283,130 +282,98 @@
   }
   .recent-chip button { background: none; border: 0; padding: 0; color: #857276; cursor: pointer; line-height: 1; }
 </style>
-  <link rel="stylesheet" href="cc-bottom-nav.css" />
-  <link rel="stylesheet" href="cc-material-icons.css" />
-    <link rel="stylesheet" href="cc-global-header.css" />
-</head>
+<link href="cc-bottom-nav.css" rel="stylesheet"/>
+<link href="cc-material-icons.css" rel="stylesheet"/>
+<link href="cc-global-header.css" rel="stylesheet"/>
+</link></link></head>
 <body class="bg-background text-on-surface font-ui">
-
 <div class="mobile-shell">
-  <div class="desktop-hint">Search – Mobile UI · Chic Charms · 390×844 optimized</div>
+<div class="desktop-hint">Search – Mobile UI · Chic Charms · 390×844 optimized</div>
+<!-- Announcement -->
+<div class="h-[40px] bg-brand-rose flex items-center justify-center">
+<p class="text-[11px] font-ui font-semibold text-white tracking-[0.18em] uppercase">Free shipping on ₹399+</p>
+</div>
+<!-- Header -->
 
-  <!-- Announcement -->
-  <div class="h-[40px] bg-brand-rose flex items-center justify-center">
-    <p class="text-[11px] font-ui font-semibold text-white tracking-[0.18em] uppercase">Free shipping on ₹399+</p>
-  </div>
-
-  <!-- Header -->
-  <header class="sticky top-0 z-50 h-[68px] bg-surface/85 backdrop-blur-md flex items-center px-5 border-b border-outline-variant/40" style="backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);">
-    <button id="menuBtn" class="flex items-center justify-center p-2 -ml-2 text-on-surface" aria-label="Menu">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-    </button>
-    <h1 class="absolute left-1/2 -translate-x-1/2 font-display whitespace-nowrap" style="font-family:'Playfair Display',Georgia,serif;font-weight:500;font-size:clamp(2.05rem,5.2vw,2.6rem);letter-spacing:-0.01em;color:#8e4559;line-height:1;text-transform:none;">ChicCharms</h1>
-    <div class="ml-auto">
-      <a href="shop.html" class="flex items-center justify-center p-2 -mr-2 text-on-surface" aria-label="Close search">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </a>
-    </div>
-  </header>
-
-  <main class="pb-[140px]">
-    <!-- Search Input -->
-    <section class="px-5 pt-8 pb-4 stagger-in">
-      <div class="relative">
-        <input id="searchInput"
-          class="search-underline-input"
-          type="search"
-          placeholder="Search for earrings, collections and styles"
-          autocomplete="off"
-          enterkeyhint="search"
-          autofocus />
-        <button id="searchGoBtn" class="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-outline hover:text-primary" aria-label="Search">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        </button>
-        <div class="absolute bottom-0 left-0 w-0 h-[1.5px] bg-primary transition-all duration-500" id="searchFocusBar"></div>
-
-        <!-- Live suggestions -->
-        <div id="suggestBox" class="suggest-box" role="listbox" aria-label="Search suggestions"></div>
-      </div>
-      <p class="text-[12px] text-on-surface-variant mt-3">Press Enter to see results · try “pearl”, “hoops”, “korean”</p>
-    </section>
-
-    <!-- Recent Searches -->
-    <section class="px-5 py-3 stagger-in" id="recentWrap" style="display:none">
-      <div class="flex items-center justify-between mb-2">
-        <span class="text-[11px] uppercase tracking-widest text-outline font-semibold">Recent</span>
-        <button id="clearRecentBtn" class="text-[11px] text-primary font-medium">Clear</button>
-      </div>
-      <div id="recentList" class="flex flex-wrap gap-2"></div>
-    </section>
-
-    <!-- Popular Searches -->
-    <section class="px-5 py-7 stagger-in">
-      <h2 class="font-display text-[22px] text-on-surface mb-4">Popular Searches</h2>
-      <div id="popularChips" class="flex flex-wrap gap-2.5">
-        <!-- injected -->
-      </div>
-    </section>
-
-    <!-- Shop By Category -->
-    <section class="px-5 py-7 stagger-in">
-      <h2 class="font-display text-[22px] text-on-surface mb-4">Shop By Category</h2>
-      <div class="grid grid-cols-2 gap-3" id="categoryGrid">
-        <!-- injected -->
-      </div>
-    </section>
-
-    <!-- Trending Now -->
-    <section class="py-7 stagger-in overflow-hidden">
-      <div class="px-5 flex items-center justify-between mb-4">
-        <h2 class="font-display text-[22px] text-on-surface">Trending Now</h2>
-        <a href="shop.html?sort=bestseller" class="text-[12px] font-semibold text-primary tracking-wider uppercase">View all</a>
-      </div>
-      <div id="trendingRow" class="flex overflow-x-auto hide-scrollbar snap-x snap-mandatory gap-3 px-5" style="scroll-padding-inline:20px;">
-        <!-- JS fills -->
-        <div id="trendingSkeleton" class="flex gap-3">
-          <div class="trend-card"><div class="trend-media bg-surface-container animate-pulse"></div><div class="h-3 bg-surface-container rounded w-2/3 mb-2"></div><div class="h-4 bg-surface-container rounded w-1/2"></div></div>
-          <div class="trend-card"><div class="trend-media bg-surface-container animate-pulse"></div><div class="h-3 bg-surface-container rounded w-2/3 mb-2"></div><div class="h-4 bg-surface-container rounded w-1/2"></div></div>
-        </div>
-      </div>
-      <p id="trendingStatus" class="px-5 text-sm text-on-surface-variant mt-3" style="display:none;"></p>
-    </section>
-
-    <!-- SEO footer block -->
-    
+<main class="pb-[140px]">
+<!-- Search Input -->
+<section class="px-5 pt-8 pb-4 stagger-in">
+<div class="relative">
+<input autocomplete="off" autofocus="" class="search-underline-input" enterkeyhint="search" id="searchInput" placeholder="Search for earrings, collections and styles" type="search"/>
+<button aria-label="Search" class="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-outline hover:text-primary" id="searchGoBtn">
+<svg aria-hidden="true" fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-width="2" viewbox="0 0 24 24" width="22"><circle cx="11" cy="11" r="8"></circle><line x1="21" x2="16.65" y1="21" y2="16.65"></line></svg>
+</button>
+<div class="absolute bottom-0 left-0 w-0 h-[1.5px] bg-primary transition-all duration-500" id="searchFocusBar"></div>
+<!-- Live suggestions -->
+<div aria-label="Search suggestions" class="suggest-box" id="suggestBox" role="listbox"></div>
+</div>
+<p class="text-[12px] text-on-surface-variant mt-3">Press Enter to see results · try “pearl”, “hoops”, “korean”</p>
+</section>
+<!-- Recent Searches -->
+<section class="px-5 py-3 stagger-in" id="recentWrap" style="display:none">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[11px] uppercase tracking-widest text-outline font-semibold">Recent</span>
+<button class="text-[11px] text-primary font-medium" id="clearRecentBtn">Clear</button>
+</div>
+<div class="flex flex-wrap gap-2" id="recentList"></div>
+</section>
+<!-- Popular Searches -->
+<section class="px-5 py-7 stagger-in">
+<h2 class="font-display text-[22px] text-on-surface mb-4">Popular Searches</h2>
+<div class="flex flex-wrap gap-2.5" id="popularChips">
+<!-- injected -->
+</div>
+</section>
+<!-- Shop By Category -->
+<section class="px-5 py-7 stagger-in">
+<h2 class="font-display text-[22px] text-on-surface mb-4">Shop By Category</h2>
+<div class="grid grid-cols-2 gap-3" id="categoryGrid">
+<!-- injected -->
+</div>
+</section>
+<!-- Trending Now -->
+<section class="py-7 stagger-in overflow-hidden">
+<div class="px-5 flex items-center justify-between mb-4">
+<h2 class="font-display text-[22px] text-on-surface">Trending Now</h2>
+<a class="text-[12px] font-semibold text-primary tracking-wider uppercase" href="shop.html?sort=bestseller">View all</a>
+</div>
+<div class="flex overflow-x-auto hide-scrollbar snap-x snap-mandatory gap-3 px-5" id="trendingRow" style="scroll-padding-inline:20px;">
+<!-- JS fills -->
+<div class="flex gap-3" id="trendingSkeleton">
+<div class="trend-card"><div class="trend-media bg-surface-container animate-pulse"></div><div class="h-3 bg-surface-container rounded w-2/3 mb-2"></div><div class="h-4 bg-surface-container rounded w-1/2"></div></div>
+<div class="trend-card"><div class="trend-media bg-surface-container animate-pulse"></div><div class="h-3 bg-surface-container rounded w-2/3 mb-2"></div><div class="h-4 bg-surface-container rounded w-1/2"></div></div>
+</div>
+</div>
+<p class="px-5 text-sm text-on-surface-variant mt-3" id="trendingStatus" style="display:none;"></p>
+</section>
+<!-- SEO footer block -->
 <!-- Chic Charms – Unified Site Footer -->
 <footer class="cc-site-footer" style="border-top:1px solid #d7c1c5; background:#fff8f7; padding:32px 20px 110px; margin-top:24px;">
-  <p style="font-family:Jost,sans-serif;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:#8e4559;margin:0 0 8px">Chic Charms</p>
-  <p style="font-family:Jost,sans-serif;font-size:14px;line-height:1.6;color:#534346;margin:0 0 16px;max-width:34ch">Fast mobile discovery for daily wear, gifting, and soft statement earrings. COD available · Ships in 24h · Skin-friendly finish.</p>
-  <nav style="display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:#857276">
-    <a href="about.html" style="color:inherit;text-decoration:none">About</a>
-    <a href="shipping.html" style="color:inherit;text-decoration:none">Shipping</a>
-    <a href="returns.html" style="color:inherit;text-decoration:none">Returns</a>
-    <a href="contact.html" style="color:inherit;text-decoration:none">Contact</a>
-    <a href="privacy.html" style="color:inherit;text-decoration:none">Privacy</a>
-    <a href="terms.html" style="color:inherit;text-decoration:none">Terms</a>
-  </nav>
-  <p style="font-family:Jost,sans-serif;font-size:11px;color:#857276;margin:16px 0 0">© <span class="cc-year"></span> Chic Charms. All rights reserved.</p>
+<p style="font-family:Jost,sans-serif;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:#8e4559;margin:0 0 8px">Chic Charms</p>
+<p style="font-family:Jost,sans-serif;font-size:14px;line-height:1.6;color:#534346;margin:0 0 16px;max-width:34ch">Fast mobile discovery for daily wear, gifting, and soft statement earrings. COD available · Ships in 24h · Skin-friendly finish.</p>
+<nav style="display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:#857276">
+<a href="about.html" style="color:inherit;text-decoration:none">About</a>
+<a href="shipping.html" style="color:inherit;text-decoration:none">Shipping</a>
+<a href="returns.html" style="color:inherit;text-decoration:none">Returns</a>
+<a href="contact.html" style="color:inherit;text-decoration:none">Contact</a>
+<a href="privacy.html" style="color:inherit;text-decoration:none">Privacy</a>
+<a href="terms.html" style="color:inherit;text-decoration:none">Terms</a>
+</nav>
+<p style="font-family:Jost,sans-serif;font-size:11px;color:#857276;margin:16px 0 0">© <span class="cc-year"></span> Chic Charms. All rights reserved.</p>
 </footer>
 <script>document.querySelectorAll('.cc-year').forEach(el=>el.textContent=new Date().getFullYear())</script>
 <!-- /Unified Footer -->
-
 </main>
-
-  <!-- Bottom Nav – matches shop.html -->
-    <!-- Bottom Nav – Chic Charms Unified -->
+<!-- Bottom Nav – matches shop.html -->
+<!-- Bottom Nav – Chic Charms Unified -->
 </div>
-
 <!-- Cart toast – compatible with script.js -->
-<div id="cartToast" role="status" aria-live="polite"></div>
-
+<div aria-live="polite" id="cartToast" role="status"></div>
 <!-- Shared category backend utils -->
 <script src="category-utils.js"></script>
 <script src="wishlist-system.js"></script>
 <!-- Main site script – gives you addToCartWithId, cart toast, etc. -->
-<script src="script.js" defer></script>
-
+<script defer="" src="script.js"></script>
 <script>
 /* ============================================================
    Chic Charms – Search Discovery (Mobile)
@@ -666,7 +633,6 @@ function escAttr(s){ return escHtml(s).replace(/"/g,'&quot;'); }
 
 })();
 </script>
-
 <script>
 // Chic Charms – Global Nav Link Sanitizer (fixes rejected shop / wishlist redirects)
 (function(){
@@ -690,9 +656,8 @@ function escAttr(s){ return escHtml(s).replace(/"/g,'&quot;'); }
   new MutationObserver(fix).observe(document.documentElement,{childList:true,subtree:true});
 })();
 </script>
-
-  <script src="cc-bottom-nav.js" defer></script>
-  <script src="cc-material-icons.js" defer></script>
-    <script src="cc-global-header.js" defer></script>
+<script defer="" src="cc-bottom-nav.js"></script>
+<script defer="" src="cc-material-icons.js"></script>
+<script defer="" src="cc-global-header.js"></script>
 </body>
 </html>

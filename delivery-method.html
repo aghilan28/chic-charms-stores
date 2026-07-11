@@ -125,8 +125,8 @@
       min-height: max(884px, 100dvh);
     }
   </style>
-    <link rel="stylesheet" href="cc-material-icons.css" />
-    <link rel="stylesheet" href="cc-global-header.css" />
+<link href="cc-material-icons.css" rel="stylesheet"/>
+<link href="cc-global-header.css" rel="stylesheet"/>
 </head>
 <body class="bg-background text-on-surface font-body-md selection:bg-primary-fixed">
 <!-- Announcement Bar -->
@@ -134,14 +134,7 @@
 <p class="text-white font-label-sm text-[12px] tracking-[0.2em] font-semibold">FREE SHIPPING ON ₹399+</p>
 </div>
 <!-- Header System -->
-<header class="fixed top-[40px] left-0 w-full h-[80px] bg-surface flex items-center px-safe-margin z-50">
-<button class="flex items-center justify-center p-2 hover:opacity-60 transition-opacity active:scale-95 duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]">
-<span class="material-symbols-outlined text-primary text-[28px]">arrow_back</span>
-</button>
-<div class="absolute left-1/2 -translate-x-1/2">
-<a href="index.html" class="font-display-md text-display-md font-bold tracking-widest text-primary" aria-label="ChicCharms home" style="text-decoration:none;">ChicCharms</a>
-</div>
-</header>
+
 <main class="pt-[140px] pb-32 px-safe-margin max-w-lg mx-auto">
 <!-- Progress Indicator -->
 <div class="mb-stack-lg">
@@ -203,14 +196,14 @@
             </p>
 </div>
 <!-- Campus Coupon Validation -->
-<section class="coupon-panel" aria-labelledby="couponTitle">
+<section aria-labelledby="couponTitle" class="coupon-panel">
 <h3 id="couponTitle">Campus Coupon</h3>
 <p>Enter your CIT campus coupon. Apply validates with the backend only; navigation happens only when you tap Continue.</p>
 <div class="coupon-form">
-<input class="coupon-input" id="couponInput" placeholder="CIT2026A1" maxlength="9" inputmode="text" autocomplete="off" />
+<input autocomplete="off" class="coupon-input" id="couponInput" inputmode="text" maxlength="9" placeholder="CIT2026A1"/>
 <button class="coupon-apply" id="applyCouponBtn" type="button">Apply</button>
 </div>
-<div class="coupon-message" id="couponMessage" role="status" aria-live="polite"></div>
+<div aria-live="polite" class="coupon-message" id="couponMessage" role="status"></div>
 </section>
 </main>
 <!-- Footer Action -->
@@ -327,6 +320,6 @@
 
         restoreCouponState();
     </script>
-  <script src="cc-material-icons.js" defer></script>
-    <script src="cc-global-header.js" defer></script>
+<script defer="" src="cc-material-icons.js"></script>
+<script defer="" src="cc-global-header.js"></script>
 </body></html>
