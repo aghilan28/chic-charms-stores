@@ -22,6 +22,7 @@
 
   <!-- Mobile Product Styles -->
   <link rel="stylesheet" href="mobile-product.css" />
+  <link rel="stylesheet" href="wishlist.css" />
 
   <style>
     /* Material Symbols sizing — do not override visibility */
@@ -491,6 +492,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="wishlist-system.js"></script>
 <script src="script.js"></script>
 
 <script>
@@ -1021,19 +1023,28 @@ window.handleAddToCart = function() {
 
 // ── Wishlist ──
 function checkWishlist() {
-  const w = getWishlist();
-  const inW = w.some(i => i.id === _currentDocId);
+  const inW = window.CCWishlist && window.CCWishlist.has(_currentDocId);
   const fab = document.getElementById('wishlistFab');
-  if (fab) fab.classList.toggle('wishlisted', inW);
+  if (fab) {
+    fab.classList.toggle('wishlisted', inW);
+    fab.classList.toggle('active', inW);
+    const svg = fab.querySelector('svg path');
+    if (svg) svg.setAttribute('fill', inW ? 'currentColor' : 'none');
+  }
 }
 
 window.toggleWishlist = function() {
-  if (!_currentDocId) return;
-  const w = getWishlist();
-  const idx = w.findIndex(i => i.id === _currentDocId);
-  if (idx > -1) { w.splice(idx, 1); showToast('Removed from wishlist'); }
-  else { w.push({ id: _currentDocId, name: _currentProduct?.name || '', price: _currentProduct?.price || 0, image: _currentProduct?.images?.productImage || '' }); showToast('Added to wishlist!'); }
-  saveWishlist(w);
+  if (!_currentDocId || !window.CCWishlist) return;
+  
+  const product = {
+    id: _currentDocId,
+    name: _currentProduct?.name || '',
+    price: _currentProduct?.price || 0,
+    image: _currentProduct?.images?.productImage || _currentProduct?.image || '',
+    category: _currentProduct?.category || ''
+  };
+  
+  window.CCWishlist.toggle(product);
   checkWishlist();
 };
 
@@ -1301,48 +1312,11 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) upda
   }
 </style>
 <script>
-// Chic Charms – unified wishlist helper
-(function(){
-  const WISH_KEY='cc_wishlist';
-  window.CCWish = {
-    get(){ try{return JSON.parse(localStorage.getItem(WISH_KEY)||'[]')}catch(e){return []}},
-    set(a){ localStorage.setItem(WISH_KEY, JSON.stringify(a))},
-    has(id){ return CCWish.get().includes(String(id))},
-    toggle(id){
-      id=String(id); let w=CCWish.get();
-      if(w.includes(id)) w=w.filter(x=>x!==id); else w.push(id);
-      CCWish.set(w); return w.includes(id);
-    }
-  };
-  // Wishlist nav → if empty, go to shop, else wishlist.html
-  document.addEventListener('click', function(e){
-    const a = e.target.closest('a[href="wishlist.html"]');
-    if(!a) return;
-    if(CCWish.get().length===0){
-      e.preventDefault();
-      location.href='shop.html?filter=wishlist-empty';
-    }
-  }, true);
-})();
-</script>
-
-
-<script>
 // Chic Charms – Global Nav Link Sanitizer (fixes rejected shop / wishlist redirects)
 (function(){
   function fix(){
     document.querySelectorAll('a[href]').forEach(a=>{
       let h = a.getAttribute('href')||'';
-      // wishlist icons
-      if(a.getAttribute('aria-label')==='Wishlist' || /favorite|wishlist/i.test(a.textContent) && h.includes('bestsellers')){
-        a.setAttribute('href','wishlist.html');
-      }
-      // Generic #bestsellers shop CTAs -> shop.html
-      if(h==='#bestsellers' || h==='index.html#bestsellers'){
-        // if it's clearly a wishlist heart icon, send to wishlist.html, else shop
-        const isWish = a.closest('[aria-label*="Wishlist"]') || a.querySelector('svg path[d*="20.8 4.6"]');
-        a.setAttribute('href', isWish ? 'wishlist.html' : 'shop.html');
-      }
       // stray mobile-home / old shop
       if(h.includes('mobile-home.html')) a.setAttribute('href','index.html');
       // menu nav items
@@ -1352,6 +1326,7 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) upda
       if(txt==='reviews'){ if(h.startsWith('#')) a.setAttribute('href','index.html#testimonials'); }
       if(txt==='cart' && !h.includes('cart.html')) a.setAttribute('href','cart.html');
       if(txt==='search' && !h.includes('search.html')) a.setAttribute('href','search.html');
+      if(txt==='wishlist' && !h.includes('wishlist.html')) a.setAttribute('href','wishlist.html');
     });
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',fix);

@@ -56,7 +56,10 @@
   }
 
   function iconWishlist() {
-    return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+    return '<div class="nav-icon-wrapper" style="position:relative">' +
+           '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>' +
+           '<span class="wishlist-count" style="position:absolute;top:-5px;right:-8px;background:#8e4559;color:white;font-size:9px;min-width:14px;height:14px;border-radius:50%;display:none;align-items:center;justify-content:center;font-family:sans-serif;font-weight:600">0</span>' +
+           '</div>';
   }
 
   function iconBag() {
@@ -149,6 +152,11 @@
 
     // Activate correct tab
     activateTab();
+
+    // Sync wishlist UI if the system is loaded
+    if (window.CCWishlist && window.CCWishlist.syncUI) {
+      window.CCWishlist.syncUI();
+    }
   }
 
   /* ── Tear down (for viewport change to desktop) ───────────────── */

@@ -12,6 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="wishlist.css" />
 <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
 <script>
   tailwind.config = {
@@ -400,6 +401,7 @@
 
 <!-- Shared category backend utils -->
 <script src="category-utils.js"></script>
+<script src="wishlist-system.js"></script>
 <!-- Main site script – gives you addToCartWithId, cart toast, etc. -->
 <script src="script.js" defer></script>
 
@@ -568,14 +570,26 @@ function renderTrending(products){
     return;
   }
   document.getElementById('trendingSkeleton')?.remove();
-  trendingRow.innerHTML = products.map(p => `
+  trendingRow.innerHTML = products.map(p => {
+    const isWishlisted = window.CCWishlist && window.CCWishlist.has(p.id);
+    const heartClass = isWishlisted ? 'active' : '';
+    const imgUrl = productImageUrl(p);
+    
+    return `
     <div class="trend-card">
       <div class="trend-media">
         <a href="product.html?id=${encodeURIComponent(p.id)}">
-          <img src="${escAttr(productImageUrl(p))}" alt="${escAttr(p.name)}" loading="lazy">
+          <img src="${escAttr(imgUrl)}" alt="${escAttr(p.name)}" loading="lazy">
         </a>
-        <button class="wish-btn" data-wish="${escAttr(p.id)}" aria-label="Add to wishlist">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <button class="product-heart-btn ${heartClass}" 
+                data-wishlist-action="toggle" 
+                data-wishlist-id="${escAttr(p.id)}" 
+                data-wishlist-name="${escAttr(p.name)}" 
+                data-wishlist-price="${escAttr(p.price)}" 
+                data-wishlist-image="${escAttr(imgUrl)}" 
+                data-wishlist-category="${escAttr(p.category || 'Jewellery')}" 
+                aria-label="Wishlist">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
         </button>
       </div>
       <p class="text-[11px] uppercase tracking-widest text-primary font-semibold mb-1">Trending</p>
@@ -583,29 +597,10 @@ function renderTrending(products){
       <p class="text-[14px] text-on-surface-variant mb-2">${inr(p.price)}</p>
       <button class="w-full py-[9px] rounded-full bg-[#241316] text-[#fffaf6] text-[11px] font-semibold tracking-widest uppercase" data-add="${escAttr(p.id)}" data-name="${escAttr(p.name)}" data-price="${escAttr(p.price)}">Add to bag</button>
     </div>
-  `).join('');
+  `;
+  }).join('');
 
-  // Wishlist toggle
-  const WISH_KEY='cc_wishlist';
-  const getWish = ()=> { try{return JSON.parse(localStorage.getItem(WISH_KEY)||'[]')}catch(e){return []}};
-  const setWish = (a)=> localStorage.setItem(WISH_KEY, JSON.stringify(a));
-  function syncWishUI(){
-    const w = getWish();
-    trendingRow.querySelectorAll('[data-wish]').forEach(btn=>{
-      btn.classList.toggle('liked', w.includes(btn.dataset.wish));
-    });
-  }
-  syncWishUI();
-  trendingRow.querySelectorAll('[data-wish]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const id = btn.dataset.wish;
-      let w = getWish();
-      if(w.includes(id)) w = w.filter(x=>x!==id); else w.push(id);
-      setWish(w); syncWishUI();
-    });
-  });
-
-  // Add to cart – use your real addToCartWithId if available
+  // Add to cart
   trendingRow.querySelectorAll('[data-add]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const id = btn.dataset.add;
@@ -614,15 +609,7 @@ function renderTrending(products){
       if(window.addToCartWithId){
         window.addToCartWithId(name, price, id);
       } else if(window.addToCart){
-        // script.js addToCart(name, price, productId, cardStock)
         window.addToCart(name, price, id, 99);
-      } else {
-        // Fallback local
-        const cart = JSON.parse(localStorage.getItem('cart')||'[]');
-        const ex = cart.find(i=>i.name===name);
-        if(ex) ex.quantity++; else cart.push({name, price, quantity:1, productId:id});
-        localStorage.setItem('cart', JSON.stringify(cart));
-        showToast(name + ' – Added to cart');
       }
     });
   });
@@ -679,48 +666,11 @@ function escAttr(s){ return escHtml(s).replace(/"/g,'&quot;'); }
 </script>
 
 <script>
-// Chic Charms – unified wishlist helper
-(function(){
-  const WISH_KEY='cc_wishlist';
-  window.CCWish = {
-    get(){ try{return JSON.parse(localStorage.getItem(WISH_KEY)||'[]')}catch(e){return []}},
-    set(a){ localStorage.setItem(WISH_KEY, JSON.stringify(a))},
-    has(id){ return CCWish.get().includes(String(id))},
-    toggle(id){
-      id=String(id); let w=CCWish.get();
-      if(w.includes(id)) w=w.filter(x=>x!==id); else w.push(id);
-      CCWish.set(w); return w.includes(id);
-    }
-  };
-  // Wishlist nav → if empty, go to shop, else wishlist.html
-  document.addEventListener('click', function(e){
-    const a = e.target.closest('a[href="wishlist.html"]');
-    if(!a) return;
-    if(CCWish.get().length===0){
-      e.preventDefault();
-      location.href='shop.html?filter=wishlist-empty';
-    }
-  }, true);
-})();
-</script>
-
-
-<script>
 // Chic Charms – Global Nav Link Sanitizer (fixes rejected shop / wishlist redirects)
 (function(){
   function fix(){
     document.querySelectorAll('a[href]').forEach(a=>{
       let h = a.getAttribute('href')||'';
-      // wishlist icons
-      if(a.getAttribute('aria-label')==='Wishlist' || /favorite|wishlist/i.test(a.textContent) && h.includes('bestsellers')){
-        a.setAttribute('href','wishlist.html');
-      }
-      // Generic #bestsellers shop CTAs -> shop.html
-      if(h==='#bestsellers' || h==='index.html#bestsellers'){
-        // if it's clearly a wishlist heart icon, send to wishlist.html, else shop
-        const isWish = a.closest('[aria-label*="Wishlist"]') || a.querySelector('svg path[d*="20.8 4.6"]');
-        a.setAttribute('href', isWish ? 'wishlist.html' : 'shop.html');
-      }
       // stray mobile-home / old shop
       if(h.includes('mobile-home.html')) a.setAttribute('href','index.html');
       // menu nav items
@@ -730,6 +680,7 @@ function escAttr(s){ return escHtml(s).replace(/"/g,'&quot;'); }
       if(txt==='reviews'){ if(h.startsWith('#')) a.setAttribute('href','index.html#testimonials'); }
       if(txt==='cart' && !h.includes('cart.html')) a.setAttribute('href','cart.html');
       if(txt==='search' && !h.includes('search.html')) a.setAttribute('href','search.html');
+      if(txt==='wishlist' && !h.includes('wishlist.html')) a.setAttribute('href','wishlist.html');
     });
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',fix);

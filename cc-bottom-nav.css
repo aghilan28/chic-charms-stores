@@ -66,6 +66,27 @@
   line-height: 1;
 }
 
+/* --- Wishlist Badge --- */
+.wishlist-count {
+  position: absolute;
+  top: 4px;
+  right: 12px;
+  background: #8e4559;
+  color: white;
+  font-size: 8px;
+  min-width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: sans-serif;
+  font-weight: 700;
+  border: 1.5px solid #fff8f7;
+  pointer-events: none;
+  z-index: 10;
+}
+
 /* --- Body spacing: prevent content overlap --- */
 body.cc-nav-active {
   padding-bottom: calc(78px + env(safe-area-inset-bottom, 0px)) !important;

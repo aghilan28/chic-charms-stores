@@ -34,6 +34,7 @@
     <link rel="stylesheet" href="admin-nav.css" />
     <link rel="stylesheet" href="d9-editorial-refinement.css" />
     <link rel="stylesheet" href="d10-restore.css" />
+    <link rel="stylesheet" href="wishlist.css" />
     <script>
       (function () {
         if (window.__chicLocalImageFallbackReady) return;
@@ -638,10 +639,11 @@
           <a href="search.html" class="mobile-commerce-icon" aria-label="Search">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.8-3.8"></path></svg>
           </a>
-          <a href="wishlist.html" class="mobile-commerce-icon" aria-label="Wishlist">
+          <a href="wishlist.html" class="mobile-commerce-icon relative" aria-label="Wishlist">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M20.8 4.6c-1.8-1.7-4.6-1.6-6.3.2L12 7.3 9.5 4.8C7.8 3 5 2.9 3.2 4.6 1.3 6.4 1.3 9.4 3.1 11.2L12 20l8.9-8.8c1.8-1.8 1.8-4.8-.1-6.6Z" />
             </svg>
+            <span class="wishlist-count absolute -top-1 -right-1 bg-primary text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center" style="display:none">0</span>
           </a>
           <a href="cart.html" class="mobile-commerce-icon mobile-commerce-cart" aria-label="Cart">
             <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -1639,6 +1641,7 @@
       })();
     </script>
     <script src="script.js"></script>
+    <script src="wishlist-system.js"></script>
     <script type="module" src="auth-nav.js"></script>
     <script type="module">
       import {
@@ -1870,6 +1873,9 @@
         const stock = isNaN(_parsed) ? 0 : _parsed;
         const inStock = stock > 0;
 
+        const isWishlisted = window.CCWishlist && window.CCWishlist.has(docId);
+        const heartClass = isWishlisted ? 'active' : '';
+
         console.log(
           "[ChicCharms] buildProductCard:",
           product.name,
@@ -1886,6 +1892,9 @@
         const productUrl = `product.html?id=${docId}&category=${product.categorySlug}`;
         const safeName = product.name.replace(/'/g, "\\'");
         const price = Number(product.price || 0);
+        const productImage = productLocalImage(product);
+        const categoryLabel = categoryDisplayLabel(product.categorySlug);
+
         const oldPrice = Number(
           product.oldPrice ||
             product.compareAtPrice ||
@@ -1924,7 +1933,7 @@
 
         /* ── Category label ── */
         const catLabel = product.categorySlug
-          ? `<p class="lux-product-category">${categoryDisplayLabel(product.categorySlug)}</p>`
+          ? `<p class="lux-product-category">${categoryLabel}</p>`
           : "";
 
         /* ── Description ── */
@@ -1953,11 +1962,21 @@
         return `
           <article class="product-card-lux" data-category="${product.categorySlug}">
             <div class="lux-img-container">
+              <button class="product-heart-btn ${heartClass}" 
+                      data-wishlist-action="toggle" 
+                      data-wishlist-id="${docId}" 
+                      data-wishlist-name="${safeName}" 
+                      data-wishlist-price="${price}" 
+                      data-wishlist-image="${productImage}" 
+                      data-wishlist-category="${categoryLabel}"
+                      aria-label="Wishlist">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+              </button>
               <span class="mobile-product-badge">${commerceBadge}</span>
               ${badgesHTML ? `<div class="lux-badges">${badgesHTML}</div>` : ""}
               <a href="${productUrl}" class="lux-img-link" aria-label="View ${product.name}">
                 <img
-                  src="${productLocalImage(product)}"
+                  src="${productImage}"
                   alt="${product.name}"
                   loading="lazy"
                   onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22260%22%3E%3Crect width=%22200%22 height=%22260%22 fill=%22%23FAF1F4%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2240%22%3E%F0%9F%8C%B8%3C/text%3E%3C/svg%3E'"
@@ -2647,48 +2666,11 @@
 
 
 <script>
-// Chic Charms – unified wishlist helper
-(function(){
-  const WISH_KEY='cc_wishlist';
-  window.CCWish = {
-    get(){ try{return JSON.parse(localStorage.getItem(WISH_KEY)||'[]')}catch(e){return []}},
-    set(a){ localStorage.setItem(WISH_KEY, JSON.stringify(a))},
-    has(id){ return CCWish.get().includes(String(id))},
-    toggle(id){
-      id=String(id); let w=CCWish.get();
-      if(w.includes(id)) w=w.filter(x=>x!==id); else w.push(id);
-      CCWish.set(w); return w.includes(id);
-    }
-  };
-  // Wishlist nav → if empty, go to shop, else wishlist.html
-  document.addEventListener('click', function(e){
-    const a = e.target.closest('a[href="wishlist.html"]');
-    if(!a) return;
-    if(CCWish.get().length===0){
-      e.preventDefault();
-      location.href='shop.html?filter=wishlist-empty';
-    }
-  }, true);
-})();
-</script>
-
-
-<script>
 // Chic Charms – Global Nav Link Sanitizer (fixes rejected shop / wishlist redirects)
 (function(){
   function fix(){
     document.querySelectorAll('a[href]').forEach(a=>{
       let h = a.getAttribute('href')||'';
-      // wishlist icons
-      if(a.getAttribute('aria-label')==='Wishlist' || /favorite|wishlist/i.test(a.textContent) && h.includes('bestsellers')){
-        a.setAttribute('href','wishlist.html');
-      }
-      // Generic #bestsellers shop CTAs -> shop.html
-      if(h==='#bestsellers' || h==='index.html#bestsellers'){
-        // if it's clearly a wishlist heart icon, send to wishlist.html, else shop
-        const isWish = a.closest('[aria-label*="Wishlist"]') || a.querySelector('svg path[d*="20.8 4.6"]');
-        a.setAttribute('href', isWish ? 'wishlist.html' : 'shop.html');
-      }
       // stray mobile-home / old shop
       if(h.includes('mobile-home.html')) a.setAttribute('href','index.html');
       // menu nav items
@@ -2698,6 +2680,7 @@
       if(txt==='reviews'){ if(h.startsWith('#')) a.setAttribute('href','index.html#testimonials'); }
       if(txt==='cart' && !h.includes('cart.html')) a.setAttribute('href','cart.html');
       if(txt==='search' && !h.includes('search.html')) a.setAttribute('href','search.html');
+      if(txt==='wishlist' && !h.includes('wishlist.html')) a.setAttribute('href','wishlist.html');
     });
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',fix);

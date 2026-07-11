@@ -595,6 +595,7 @@
     <link rel="stylesheet" href="phase6-polish.css" media="(max-width: 767px)" />
     <link rel="stylesheet" href="mobile-phase3.css" media="(max-width: 767px)" />
   <link rel="stylesheet" href="mobile-comprehensive.css" media="(max-width: 1024px)" />
+  <link rel="stylesheet" href="wishlist.css" />
   <link rel="stylesheet" href="cc-bottom-nav.css" />
 </head>
   <body>
@@ -610,7 +611,7 @@
       <a class="shop-logo" href="index.html">Chic<span>Charms</span></a>
       <div class="shop-actions">
         <a class="shop-icon" href="search.html" aria-label="Search">⌕</a>
-<a class="shop-icon" href="wishlist.html" aria-label="Wishlist">♡</a>
+<a class="shop-icon relative" href="wishlist.html" aria-label="Wishlist">♡<span class="wishlist-count absolute -top-1 -right-1 bg-brand-rose text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center" style="display:none">0</span></a>
         <a class="shop-icon" href="cart.html" aria-label="Cart">Bag</a>
       </div>
     </header>
@@ -675,6 +676,9 @@
       </select>
 
       <section class="shop-grid" id="shopGrid" aria-label="Shop products"></section>
+
+      <script src="script.js"></script>
+      <script src="wishlist-system.js"></script>
 
       <section class="shop-story">
         <p class="shop-kicker">Styled with intention</p>
@@ -806,9 +810,27 @@
         }
 
         function renderCard(product) {
+          const isWishlisted = window.CCWishlist && window.CCWishlist.has(product.id);
+          const heartClass = isWishlisted ? 'active' : '';
+          const categoryName = label(product.category);
+
           return '<article class="shop-card">' +
-            '<a class="shop-card-media" href="' + productUrl(product) + '"><img src="' + product.img + '" alt="' + product.name + '" loading="lazy" decoding="async"><span class="shop-card-badge">' + product.tag + '</span><span class="shop-card-heart" aria-hidden="true">♡</span><span class="shop-card-quick" aria-hidden="true">+</span></a>' +
-            '<div class="shop-card-body"><small>' + label(product.category) + ' · 4.8 stars</small><a href="' + productUrl(product) + '"><h2>' + product.name + '</h2></a><div class="shop-card-price">Rs.' + product.price + '<span>Rs.' + product.old + '</span></div><button type="button" data-add="' + product.id + '">Add to Cart</button></div>' +
+            '<div class="shop-card-media">' +
+              '<button class="product-heart-btn ' + heartClass + '" ' +
+                      'data-wishlist-action="toggle" ' +
+                      'data-wishlist-id="' + product.id + '" ' +
+                      'data-wishlist-name="' + product.name.replace(/'/g, "\\'") + '" ' +
+                      'data-wishlist-price="' + product.price + '" ' +
+                      'data-wishlist-image="' + product.img + '" ' +
+                      'data-wishlist-category="' + categoryName + '" ' +
+                      'aria-label="Wishlist">' +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>' +
+              '</button>' +
+              '<a href="' + productUrl(product) + '"><img src="' + product.img + '" alt="' + product.name + '" loading="lazy" decoding="async"></a>' +
+              '<span class="shop-card-badge">' + product.tag + '</span>' +
+              '<span class="shop-card-quick" aria-hidden="true">+</span>' +
+            '</div>' +
+            '<div class="shop-card-body"><small>' + categoryName + ' · 4.8 stars</small><a href="' + productUrl(product) + '"><h2>' + product.name + '</h2></a><div class="shop-card-price">Rs.' + product.price + '<span>Rs.' + product.old + '</span></div><button type="button" data-add="' + product.id + '">Add to Cart</button></div>' +
             '</article>';
         }
 
@@ -998,48 +1020,11 @@
     <script src="final-mobile-stabilization.js" defer></script>
   
 <script>
-// Chic Charms – unified wishlist helper
-(function(){
-  const WISH_KEY='cc_wishlist';
-  window.CCWish = {
-    get(){ try{return JSON.parse(localStorage.getItem(WISH_KEY)||'[]')}catch(e){return []}},
-    set(a){ localStorage.setItem(WISH_KEY, JSON.stringify(a))},
-    has(id){ return CCWish.get().includes(String(id))},
-    toggle(id){
-      id=String(id); let w=CCWish.get();
-      if(w.includes(id)) w=w.filter(x=>x!==id); else w.push(id);
-      CCWish.set(w); return w.includes(id);
-    }
-  };
-  // Wishlist nav → if empty, go to shop, else wishlist.html
-  document.addEventListener('click', function(e){
-    const a = e.target.closest('a[href="wishlist.html"]');
-    if(!a) return;
-    if(CCWish.get().length===0){
-      e.preventDefault();
-      location.href='shop.html?filter=wishlist-empty';
-    }
-  }, true);
-})();
-</script>
-
-
-<script>
 // Chic Charms – Global Nav Link Sanitizer (fixes rejected shop / wishlist redirects)
 (function(){
   function fix(){
     document.querySelectorAll('a[href]').forEach(a=>{
       let h = a.getAttribute('href')||'';
-      // wishlist icons
-      if(a.getAttribute('aria-label')==='Wishlist' || /favorite|wishlist/i.test(a.textContent) && h.includes('bestsellers')){
-        a.setAttribute('href','wishlist.html');
-      }
-      // Generic #bestsellers shop CTAs -> shop.html
-      if(h==='#bestsellers' || h==='index.html#bestsellers'){
-        // if it's clearly a wishlist heart icon, send to wishlist.html, else shop
-        const isWish = a.closest('[aria-label*="Wishlist"]') || a.querySelector('svg path[d*="20.8 4.6"]');
-        a.setAttribute('href', isWish ? 'wishlist.html' : 'shop.html');
-      }
       // stray mobile-home / old shop
       if(h.includes('mobile-home.html')) a.setAttribute('href','index.html');
       // menu nav items
@@ -1049,6 +1034,7 @@
       if(txt==='reviews'){ if(h.startsWith('#')) a.setAttribute('href','index.html#testimonials'); }
       if(txt==='cart' && !h.includes('cart.html')) a.setAttribute('href','cart.html');
       if(txt==='search' && !h.includes('search.html')) a.setAttribute('href','search.html');
+      if(txt==='wishlist' && !h.includes('wishlist.html')) a.setAttribute('href','wishlist.html');
     });
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',fix);
