@@ -166,9 +166,6 @@
         </div>
         
         <div class="cc-right-icons">
-          <a href="search.html" aria-label="Search" class="cc-icon-link" style="justify-content: center; margin-right: -8px;">
-            <span class="material-symbols-outlined">search</span>
-          </a>
           <a href="cart.html" aria-label="Cart" class="cc-icon-link" style="justify-content: center;">
             <span class="material-symbols-outlined">shopping_bag</span>
             <span class="cc-cart-badge hidden" id="global-cart-badge" style="display:none;">0</span>
@@ -191,13 +188,7 @@
       document.body.appendChild(wrapper);
     }
 
-    const pageName = window.location.pathname.split('/').pop().toLowerCase();
-    if (pageName === 'category.html' || pageName === 'shop.html') {
-      const searchIcon = wrapper.querySelector('a[aria-label="Search"]');
-      if (searchIcon) searchIcon.remove();
-    }
 
-    
     if (!document.querySelector('link[href*="Material+Symbols+Outlined"]')) {
       const link = document.createElement('link');
       link.rel = 'stylesheet';
