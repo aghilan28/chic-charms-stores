@@ -464,6 +464,22 @@
         }
     </script>
 <style>
+  html, body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+  .mobile-auth-container,
+  .desktop-auth-container {
+    width: 100%;
+    max-width: 100%;
+  }
+  .mobile-auth-container main,
+  .mobile-auth-container footer,
+  .mobile-auth-container header,
+  .mobile-auth-container > div:first-child {
+    max-width: 100vw;
+  }
   @media (min-width: 769px) {
     .mobile-auth-container { display: none !important; }
   }
@@ -477,6 +493,8 @@
     }
   }
 </style>
+  <link rel="stylesheet" href="cc-material-icons.css" />
+  <link rel="stylesheet" href="cc-bottom-nav.css" />
 </head>
 
 <body>
@@ -536,7 +554,7 @@
               <label for="loginPassword">Password</label>
               <div class="pw-wrap">
                 <input type="password" id="loginPassword" placeholder="Enter password" autocomplete="current-password" maxlength="128" />
-                <button type="button" class="pw-toggle" data-target="loginPassword" aria-label="Show password">👁</button>
+                <button type="button" class="pw-toggle" data-target="loginPassword" aria-label="Show password"><span class="material-symbols-outlined">visibility</span></button>
               </div>
             </div>
 
@@ -598,7 +616,7 @@
               <label for="signupPassword">Password</label>
               <div class="pw-wrap">
                 <input type="password" id="signupPassword" placeholder="Min 6 characters" autocomplete="new-password" maxlength="128" />
-                <button type="button" class="pw-toggle" data-target="signupPassword" aria-label="Show password">👁</button>
+                <button type="button" class="pw-toggle" data-target="signupPassword" aria-label="Show password"><span class="material-symbols-outlined">visibility</span></button>
               </div>
               <!-- Password strength indicator -->
               <div class="pw-strength" id="pwStrengthBar">
@@ -611,7 +629,7 @@
               <label for="signupConfirm">Confirm Password</label>
               <div class="pw-wrap">
                 <input type="password" id="signupConfirm" placeholder="Repeat password" autocomplete="new-password" maxlength="128" />
-                <button type="button" class="pw-toggle" data-target="signupConfirm" aria-label="Show password">👁</button>
+                <button type="button" class="pw-toggle" data-target="signupConfirm" aria-label="Show password"><span class="material-symbols-outlined">visibility</span></button>
               </div>
             </div>
 
@@ -709,7 +727,7 @@
 </div>
 <div class="relative">
 <input class="w-full h-14 px-4 bg-white border border-luxury-rose/20 rounded-input font-body-md text-body-md focus:outline-none focus:border-luxury-rose transition-all input-focus-ring" placeholder="••••••••" type="password" id="mobileLoginPassword"/>
-<button class="absolute right-4 top-1/2 -translate-y-1/2 text-[#8F6674]" type="button" id="mobilePwToggle">
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-[#8F6674]" type="button" id="mobilePwToggle" aria-label="Show password">
 <span class="material-symbols-outlined text-[20px]">visibility</span>
 </button>
 </div>
@@ -940,7 +958,8 @@
         const input = document.getElementById(btn.dataset.target);
         const isText = input.type === 'text';
         input.type      = isText ? 'password' : 'text';
-        btn.textContent = isText ? '👁' : '🙈';
+        btn.setAttribute('aria-label', isText ? 'Show password' : 'Hide password');
+        btn.innerHTML = isText ? '<span class="material-symbols-outlined">visibility</span>' : '<span class="material-symbols-outlined">visibility_off</span>';
       });
     });
 
@@ -1187,6 +1206,7 @@
             const input = document.getElementById('mobileLoginPassword');
             const isText = input.type === 'text';
             input.type = isText ? 'password' : 'text';
+            this.setAttribute('aria-label', isText ? 'Show password' : 'Hide password');
             this.innerHTML = isText ? '<span class="material-symbols-outlined text-[20px]">visibility</span>' : '<span class="material-symbols-outlined text-[20px]">visibility_off</span>';
         });
     }
@@ -1250,5 +1270,7 @@
 
   <script src="final-mobile-stabilization.js" defer></script>
   <script src="mobile-app.js" defer></script>
+  <script src="cc-material-icons.js" defer></script>
+  <script src="cc-bottom-nav.js" defer></script>
 </body>
 </html>

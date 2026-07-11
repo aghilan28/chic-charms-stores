@@ -92,6 +92,16 @@ body.cc-nav-active {
   padding-bottom: calc(78px + env(safe-area-inset-bottom, 0px)) !important;
 }
 
+/* Fixed-bottom-nav page safety: keep mobile forms/footers clear of the nav. */
+body.cc-nav-active .mobile-auth-container main,
+body.cc-nav-active main.auth-page {
+  padding-bottom: calc(112px + env(safe-area-inset-bottom, 0px)) !important;
+}
+
+body.cc-nav-active {
+  overflow-x: hidden;
+}
+
 /* --- Desktop: hide bottom nav, remove padding --- */
 @media (min-width: 768px) {
   body.cc-nav-active {

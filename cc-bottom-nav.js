@@ -3,7 +3,7 @@
    Source of truth: product.html cc-bottom-nav (EXACT replica)
    Single reusable component — injected once, shared across all pages.
    
-   Excluded pages: auth, register, admin, checkout, payment, confirmation
+   Excluded pages: register, admin, checkout, payment, confirmation
    ═══════════════════════════════════════════════════════════════════ */
 (function () {
   "use strict";
@@ -14,7 +14,6 @@
 
   /* Pages where the bottom nav should NOT appear */
   var EXCLUDED_PAGES = [
-    "auth.html",
     "register.html",
     "admin.html",
     "admin-orders.html",
