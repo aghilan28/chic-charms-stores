@@ -1,0 +1,49 @@
+diff --git a/chic-charms-mobile-approved.css b/chic-charms-mobile-approved.css
+index 7906f6b..605f0a9 100644
+--- a/chic-charms-mobile-approved.css
++++ b/chic-charms-mobile-approved.css
+@@ -184,13 +184,40 @@ nav.mobile-bottom-nav,
+   column-gap: var(--cc-gap-x); row-gap: var(--cc-gap-y);
+ }
+ .cc-product { position: relative; }
++
++/*
++ * Homepage product-image frame.
++ *
++ * The mobile homepage is rendered by chic-charms-mobile-approved.js and uses
++ * the .cc-product-img structure (not the desktop .lux-img-container structure).
++ * Keep one fixed 4:5 frame, then let object-fit crop every source image to it.
++ */
+ .cc-product-img {
+-  position: relative; aspect-ratio: 1/1;
+-  background: var(--cc-surface); overflow: hidden;
++  position: relative;
++  width: 100%;
++  aspect-ratio: 4 / 5;
++  background: var(--cc-surface);
++  overflow: hidden;
+ }
++
++/* The generated product link must occupy the complete ratio-controlled frame. */
++.cc-product-img > a {
++  position: absolute;
++  inset: 0;
++  display: block;
++  width: 100%;
++  height: 100%;
++  line-height: 0;
++}
++
+ .cc-product-img img {
+-  width: 100%; height: 100%;
+-  object-fit: contain;
++  position: absolute;
++  inset: 0;
++  width: 100%;
++  height: 100%;
++  max-width: none;
++  object-fit: cover;
++  object-position: center top;
+   display: block;
+   transition: transform .45s cubic-bezier(.22,.61,.36,1);
+ }

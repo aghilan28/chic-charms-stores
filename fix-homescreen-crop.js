@@ -1,132 +1,100 @@
 /* ============================================================
-   FIX: Auto-crop images on homescreen - JavaScript Helper
+   FIX: Auto-crop images on homescreen v2.0 - JavaScript Helper
    ============================================================
    
-   This script ensures all product images on the homescreen
-   are properly cropped and contained within their aspect ratio
-   containers.
+   Uses MutationObserver to detect when Firebase loads product
+   cards, then applies the CSS fix by ensuring the container
+   structure is correct. Unlike the old approach, this doesn't
+   set inline styles (CSS handles that via fix-homescreen-crop.css),
+   it just ensures the DOM mutation observer triggers a re-layout.
    ============================================================ */
 
 (function() {
   'use strict';
   
-  // Function to fix image cropping
-  function fixImageCropping() {
-    // Find all product cards on the page
-    const productCards = document.querySelectorAll('.product-card-lux');
+  /**
+   * Forces a layout reflow on all product card image containers.
+   * This ensures the browser recalculates aspect-ratio after
+   * Firebase dynamically inserts new cards.
+   */
+  function forceReflow() {
+    var containers = document.querySelectorAll('.lux-img-container');
+    if (!containers.length) return;
     
-    productCards.forEach(card => {
-      const imgContainer = card.querySelector('.lux-img-container');
-      const img = card.querySelector('.lux-img-container img');
-      const imgLink = card.querySelector('.lux-img-link');
-      
-      if (!imgContainer || !img) return;
-      
-      // Force aspect ratio container
-      imgContainer.style.position = 'relative';
-      imgContainer.style.overflow = 'hidden';
-      imgContainer.style.aspectRatio = '4 / 5';
-      imgContainer.style.width = '100%';
-      imgContainer.style.height = 'auto';
-      imgContainer.style.backgroundColor = '#FAF1F4';
-      
-      // Force image to cover container
-      img.style.width = '100%';
-      img.style.height = '100%';
-      img.style.objectFit = 'cover';
-      img.style.objectPosition = 'center top';
-      img.style.display = 'block';
-      img.style.position = 'absolute';
-      img.style.top = '0';
-      img.style.left = '0';
-      
-      // Make sure image link fills container
-      if (imgLink) {
-        imgLink.style.display = 'block';
-        imgLink.style.width = '100%';
-        imgLink.style.height = '100%';
-        imgLink.style.position = 'absolute';
-        imgLink.style.top = '0';
-        imgLink.style.left = '0';
-        imgLink.style.zIndex = '1';
-      }
-      
-      // Fix badge positioning
-      const badge = card.querySelector('.mobile-product-badge');
-      const badges = card.querySelector('.lux-badges');
-      
-      if (badge) {
-        badge.style.position = 'absolute';
-        badge.style.top = '10px';
-        badge.style.left = '10px';
-        badge.style.zIndex = '6';
-      }
-      
-      if (badges) {
-        badges.style.position = 'absolute';
-        badges.style.top = '10px';
-        badges.style.left = '10px';
-        badges.style.zIndex = '7';
-      }
-    });
+    // Force a style recalculation by toggling a no-op property
+    // This is needed because some browsers don't recalculate
+    // aspect-ratio when content changes dynamically
+    var count = containers.length;
+    for (var i = 0; i < count; i++) {
+      var c = containers[i];
+      // Toggle contain property to force re-layout
+      c.style.contain = '';
+      // Force a micro reflow
+      void c.offsetHeight;
+    }
     
-    console.log('[ChicCharms] Image cropping fix applied to', productCards.length, 'product cards');
+    console.log('[ChicCharms] Crop fix reflow triggered for', count, 'containers');
   }
-  
-  // Function to observe DOM changes and apply fix to new cards
-  function observeProductGrid() {
-    const productContainer = document.getElementById('products-container');
+
+  /**
+   * Observes the product grid for dynamically added cards
+   * and triggers CSS re-calculation.
+   */
+  function observeProductChanges() {
+    var productContainer = document.getElementById('products-container');
     
     if (!productContainer) {
-      console.warn('[ChicCharms] Products container not found');
+      // Retry after a short delay if container not found yet
+      setTimeout(observeProductChanges, 500);
       return;
     }
     
-    // Apply fix immediately
-    fixImageCropping();
+    // Apply fix immediately for any existing cards
+    forceReflow();
     
-    // Create a MutationObserver to watch for new cards being added
-    const observer = new MutationObserver(function(mutations) {
-      let shouldFix = false;
-      
-      mutations.forEach(function(mutation) {
-        if (mutation.addedNodes.length > 0) {
-          shouldFix = true;
+    // Observe for new cards being added
+    var observer = new MutationObserver(function(mutations) {
+      var hasAddedNodes = false;
+      for (var i = 0; i < mutations.length; i++) {
+        if (mutations[i].addedNodes.length > 0) {
+          hasAddedNodes = true;
+          break;
         }
-      });
-      
-      if (shouldFix) {
-        // Small delay to ensure DOM is fully updated
-        setTimeout(fixImageCropping, 100);
+      }
+      if (hasAddedNodes) {
+        // Use requestAnimationFrame to ensure DOM is fully painted
+        requestAnimationFrame(function() {
+          requestAnimationFrame(forceReflow);
+        });
       }
     });
     
-    // Start observing
     observer.observe(productContainer, {
       childList: true,
       subtree: true
     });
     
-    console.log('[ChicCharms] MutationObserver attached to products container');
+    console.log('[ChicCharms] MutationObserver watching products container');
+    
+    // Store observer globally for cleanup
+    window.__chicCropObserver = observer;
   }
   
-  // Apply fix when DOM is ready
+  // Start observation when DOM is ready
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() {
-      observeProductGrid();
-    });
+    document.addEventListener('DOMContentLoaded', observeProductChanges);
   } else {
-    observeProductGrid();
+    observeProductChanges();
   }
   
-  // Also apply fix after Firebase loads products
+  // Also re-fire after full page load (catches late-loading assets)
   window.addEventListener('load', function() {
-    setTimeout(fixImageCropping, 500);
-    setTimeout(fixImageCropping, 1500);
-    setTimeout(fixImageCropping, 3000);
+    setTimeout(forceReflow, 300);
+    setTimeout(forceReflow, 1000);
+    setTimeout(forceReflow, 3000);
   });
   
-  // Expose function globally for manual calls
-  window.fixImageCropping = fixImageCropping;
+  // Expose for manual debugging
+  window.__chicCropReflow = forceReflow;
   
 })();
