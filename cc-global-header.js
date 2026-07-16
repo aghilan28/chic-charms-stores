@@ -1,236 +1,272 @@
-/* ═══════════════════════════════════════════════════════════════════
-   CHIC CHARMS — Global Reusable Header Component
-   ═══════════════════════════════════════════════════════════════════ */
+/* ==========================================================================
+   CHIC CHARMS — Global Header — FIXED v2.0
+   Responsive header that works on BOTH desktop and mobile.
+   Replaces the broken mobile-only injection that destroyed desktop UI.
+
+   - Desktop >=901px : full navbar with centered nav-links, auth actions
+   - Mobile <=900px  : hamburger + centered logo + wishlist/cart icons
+   - Handles drawer, scroll shadow, cart badge, and cleanup of legacy elements
+   ========================================================================== */
 (function () {
   'use strict';
 
-  function injectHeader() {
-    document.querySelectorAll('header, .navbar, .ccap-header').forEach(el => el.remove());
-    document.querySelectorAll('.announcement-bar, .ccap-announcement').forEach(el => el.remove());
+  const ANNOUNCEMENT_TEXT = 'Free Shipping Across India';
+
+  function getCurrentPage() {
+    const path = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+    return path === '' ? 'index.html' : path;
+  }
+
+  function getCartCount() {
+    try {
+      const raw = localStorage.getItem('cart') || localStorage.getItem('cc_cart') || '[]';
+      const cart = JSON.parse(raw);
+      if (!Array.isArray(cart)) return 0;
+      return cart.reduce((s, it) => s + (Number(it.quantity) || Number(it.qty) || 1), 0);
+    } catch (e) { return 0; }
+  }
+
+  function updateCartBadges() {
+    const count = getCartCount();
+    document.querySelectorAll('.mobile-cart-count, #global-cart-badge, .ma-header-cart .mobile-cart-count').forEach(badge => {
+      if (count > 0) {
+        badge.textContent = count > 9 ? '9+' : String(count);
+        badge.hidden = false;
+        badge.style.display = 'flex';
+        badge.removeAttribute('hidden');
+      } else {
+        badge.textContent = '';
+        badge.hidden = true;
+        badge.style.display = 'none';
+      }
+    });
+  }
+
+  // Cleanup legacy injections — remove only old duplicated wrappers, not the one we are about to create
+  function cleanupLegacy() {
+    // Remove any previous wrapper we injected earlier (to avoid duplicates on SPA navigation)
+    document.querySelectorAll('#cc-global-header-wrapper').forEach(el => {
+      // Keep the first one if we are mid-reinject? We'll remove all and re-add.
+      el.remove();
+    });
+
+    // Remove other competing header systems that might hide content
+    document.querySelectorAll('header.navbar, .navbar, header.ccap-header, .cc-app-header, .lux-mobile-header, .mobile-header, .d7-mobile-header').forEach(el => {
+      // Only remove if it's NOT inside our wrapper (which we already removed) — safe to remove all outside
+      if (!el.closest('#cc-global-header-wrapper')) {
+        el.remove();
+      }
+    });
+
+    // Remove duplicate announcement bars
+    document.querySelectorAll('.announcement-bar, .shop-announcement, .cc-final-announcement, #ccFinalAnnouncement, .ccap-announcement').forEach(el => {
+      // These legacy bars are replaced by our single bar
+      el.remove();
+    });
+
+    // Remove any div that contains the broken sticky tailwind class from previous injection
     document.querySelectorAll('div').forEach(el => {
       if (el.className && typeof el.className === 'string' && el.className.includes('sticky top-0 z-[60] bg-primary')) {
         el.remove();
       }
     });
 
-    const headerCSS = `
-      :root {
-        --cc-brand-pink: #B5657A;
-        --cc-header-bg: #FFF9F7;
-        --cc-header-border: rgba(181, 101, 122, 0.12);
-        --cc-text-rose: #9F4C67;
-      }
-      
-      #cc-global-header-wrapper {
-        position: relative;
-        width: 100%;
-        z-index: 1000;
-        font-family: 'Inter', sans-serif;
-      }
-      
-      #cc-announcement-bar {
-        position: sticky;
-        top: 0;
-        z-index: 60;
-        background-color: var(--cc-brand-pink);
-        color: #ffffff;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      
-      #cc-announcement-bar span {
-        font-size: 11px;
-        letter-spacing: 0.12em;
-        font-weight: 600;
-        text-transform: uppercase;
-      }
-      
-      #cc-main-header {
-        position: sticky;
-        top: 40px;
-        z-index: 50;
-        background-color: var(--cc-header-bg);
-        border-bottom: 1px solid var(--cc-header-border);
-        height: 80px;
-        padding: 0 16px;
-        display: grid;
-        grid-template-columns: auto 1fr auto;
-        align-items: center;
-        width: 100%;
-        box-sizing: border-box;
-      }
-      
-      #cc-main-header button,
-      #cc-main-header a {
-        background: none;
-        border: none;
-        padding: 0;
-        cursor: pointer;
-        text-decoration: none;
-      }
-      
-      #cc-main-header .cc-menu-btn {
-        grid-column: 1;
-        grid-row: 1;
-        width: 44px;
-        height: 44px;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-      }
-      
-      #cc-main-header .cc-menu-btn span {
-        color: var(--cc-text-rose);
-      }
-      
-      #cc-main-header .cc-logo-container {
-        grid-column: 1 / -1;
-        grid-row: 1;
-        justify-self: center;
-        display: flex;
-        align-items: center;
-        pointer-events: none; /* allow clicks to pass through if they overlap icons */
-      }
-      
-      #cc-main-header .cc-logo {
-        pointer-events: auto; /* make the link clickable */
-        font-family: 'Playfair Display', Georgia, serif;
-        font-weight: 500;
-        font-size: clamp(2.05rem, 5.2vw, 2.6rem);
-        letter-spacing: -0.01em;
-        color: var(--cc-brand-pink);
-        line-height: 1;
-        margin: 0;
-        white-space: nowrap;
-      }
-      
-      #cc-main-header .cc-right-icons {
-        grid-column: 3;
-        grid-row: 1;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        gap: 8px;
-      }
-      
-      #cc-main-header .cc-icon-link {
-        width: 44px;
-        height: 44px;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        position: relative;
-      }
-      
-      #cc-main-header .cc-icon-link span.material-symbols-outlined {
-        color: var(--cc-text-rose);
-      }
-      
-      #cc-main-header .cc-cart-badge {
-        position: absolute;
-        top: 2px;
-        right: 0px;
-        background-color: var(--cc-text-rose);
-        color: white;
-        font-size: 10px;
-        font-weight: bold;
-        width: 18px;
-        height: 18px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        line-height: 1;
-      }
-      
-      @media (min-width: 768px) {
-        #cc-main-header {
-          padding: 0 40px;
-        }
-      }
-    `;
+    // Clean stray mobile rails that may block scroll
+    document.querySelectorAll('.mobile-commerce-rails, .cc-mobile-brand, .cc-loading-screen').forEach(el => el.remove());
+  }
 
-    const html = `
-      <div id="cc-announcement-bar">
-        <span>Free Shipping Across India</span>
-      </div>
-      <header id="cc-main-header">
-        <button aria-label="Menu" class="cc-menu-btn" onclick="if(typeof toggleDrawer === 'function') { toggleDrawer(true); } else { document.body.classList.toggle('d7-menu-open'); }">
-          <span class="material-symbols-outlined">menu</span>
-        </button>
-        
-        <div class="cc-logo-container">
-          <a href="index.html" class="cc-logo">ChicCharms</a>
-        </div>
-        
-        <div class="cc-right-icons">
-          <a href="cart.html" aria-label="Cart" class="cc-icon-link" style="justify-content: center;">
-            <span class="material-symbols-outlined">shopping_bag</span>
-            <span class="cc-cart-badge hidden" id="global-cart-badge" style="display:none;">0</span>
-          </a>
+  function buildHeaderHTML() {
+    const page = getCurrentPage();
+    const isActive = (href) => {
+      if (href === 'index.html' && (page === 'index.html' || page === '')) return 'active';
+      if (page === href) return 'active';
+      return '';
+    };
+
+    // Icons as inline SVG — no external font dependency
+    const iconHeart = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6c-1.8-1.7-4.6-1.6-6.3.2L12 7.3 9.5 4.8C7.8 3 5 2.9 3.2 4.6 1.3 6.4 1.3 9.4 3.1 11.2L12 20l8.9-8.8c1.8-1.8 1.8-4.8-.1-6.6Z"/></svg>`;
+    const iconCart = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4H6Z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></svg>`;
+
+    return `
+      <div id="cc-announcement-bar"><span>${ANNOUNCEMENT_TEXT}</span></div>
+      <header class="navbar" id="navbar" role="banner">
+        <div class="nav-inner container">
+          <button type="button" class="mobile-commerce-menu" id="mobileCommerceMenu" aria-expanded="false" aria-label="Open menu">
+            <span></span><span></span><span></span>
+          </button>
+
+          <a href="index.html" class="logo" aria-label="Chic Charms home">Chic<span>Charms</span></a>
+
+          <div class="mobile-commerce-actions" aria-label="Mobile shopping actions">
+            <a href="wishlist.html" class="mobile-commerce-icon" aria-label="Wishlist">${iconHeart}<span class="wishlist-count mobile-cart-count" style="display:none"></span></a>
+            <a href="cart.html" class="mobile-commerce-icon mobile-commerce-cart" aria-label="Cart">${iconCart}<span class="mobile-cart-count" hidden></span></a>
+          </div>
+
+          <nav class="nav-links" id="navLinks" aria-label="Main navigation">
+            <a href="shop.html" class="${isActive('shop.html')}">Shop</a>
+            <a href="shop.html?filter=bestseller" class="${page.includes('shop') ? '' : ''}">Best Sellers</a>
+            <a href="about.html" class="${isActive('about.html')}" id="navAboutLink">About</a>
+            <a href="index.html#testimonials" class="">Reviews</a>
+            <a href="cart.html" class="${isActive('cart.html')}">Cart</a>
+          </nav>
+
+          <div class="nav-actions" id="navActions" aria-label="Account actions">
+            <!-- Auth state injected by auth-nav.js -->
+          </div>
         </div>
       </header>
+      <div class="ma-drawer-backdrop" aria-hidden="true"></div>
     `;
+  }
 
-    const style = document.createElement('style');
-    style.innerHTML = headerCSS;
-    document.head.appendChild(style);
+  function wireHeader() {
+    const hamburger = document.getElementById('mobileCommerceMenu');
+    const navLinks = document.getElementById('navLinks');
+    const backdrop = document.querySelector('.ma-drawer-backdrop');
+    const navbar = document.getElementById('navbar');
+
+    if (!hamburger || !navLinks) return;
+
+    function openDrawer() {
+      navLinks.classList.add('open');
+      hamburger.setAttribute('aria-expanded', 'true');
+      document.body.classList.add('ma-drawer-open');
+      document.body.classList.add('d7-menu-open'); // for legacy CSS compatibility
+    }
+
+    function closeDrawer() {
+      navLinks.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      document.body.classList.remove('ma-drawer-open');
+      document.body.classList.remove('d7-menu-open');
+    }
+
+    window.__ccCloseDrawer = closeDrawer;
+
+    hamburger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (navLinks.classList.contains('open')) closeDrawer();
+      else openDrawer();
+    });
+
+    if (backdrop) {
+      backdrop.addEventListener('click', closeDrawer);
+    }
+
+    // Close on link click
+    navLinks.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', function () {
+        // Delay slightly for navigation
+        setTimeout(closeDrawer, 80);
+      });
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeDrawer();
+    });
+
+    // Close when clicking outside navbar + drawer
+    document.addEventListener('click', function (e) {
+      if (!navLinks.classList.contains('open')) return;
+      if (navbar && navbar.contains(e.target)) return;
+      if (backdrop && backdrop === e.target) return;
+      // If click is inside open drawer, don't close unless link
+      if (navLinks.contains(e.target)) return;
+      closeDrawer();
+    });
+
+    // Scroll shadow
+    let ticking = false;
+    function onScroll() {
+      if (!ticking) {
+        window.requestAnimationFrame(function () {
+          if (navbar) {
+            navbar.classList.toggle('scrolled', window.scrollY > 12);
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  function injectHeader() {
+    cleanupLegacy();
 
     const wrapper = document.createElement('div');
     wrapper.id = 'cc-global-header-wrapper';
-    wrapper.innerHTML = html;
-    
+    wrapper.innerHTML = buildHeaderHTML();
+
+    // Insert at very top of body
     if (document.body.firstChild) {
       document.body.insertBefore(wrapper, document.body.firstChild);
     } else {
       document.body.appendChild(wrapper);
     }
 
+    wireHeader();
+    updateCartBadges();
 
-    if (!document.querySelector('link[href*="Material+Symbols+Outlined"]')) {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap';
-      document.head.appendChild(link);
-    }
-    if (!document.querySelector('link[href*="Playfair+Display"]')) {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = 'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@100..900&display=swap';
-      document.head.appendChild(link);
-    }
-  }
+    // Keep badge in sync
+    window.addEventListener('storage', updateCartBadges);
+    window.addEventListener('cartUpdated', updateCartBadges);
+    // Also poll slightly for same-tab updates (cart added without storage event)
+    setInterval(updateCartBadges, 1200);
 
-  function wireCartBadge() {
-    function updateCount() {
-      let count = 0;
-      try {
-        const cart = JSON.parse(localStorage.getItem('cart') || localStorage.getItem('cc_cart') || '[]');
-        count = cart.reduce((sum, item) => sum + (Number(item.quantity) || Number(item.qty) || 1), 0);
-      } catch (e) {}
-      
-      const badge = document.getElementById('global-cart-badge');
-      if (badge) {
-        if (count > 0) {
-          badge.textContent = count > 9 ? '9+' : String(count);
-          badge.style.display = 'flex';
-        } else {
-          badge.style.display = 'none';
-        }
+    // Re-expose global toggle for compatibility with previous approved mobile UI
+    window.toggleDrawer = function (open) {
+      const nav = document.getElementById('navLinks');
+      const btn = document.getElementById('mobileCommerceMenu');
+      if (!nav || !btn) return;
+      if (open) {
+        nav.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+        document.body.classList.add('ma-drawer-open');
+      } else {
+        nav.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('ma-drawer-open');
+        document.body.classList.remove('d7-menu-open');
       }
-    }
-
-    updateCount();
-    window.addEventListener('storage', updateCount);
-    window.addEventListener('cartUpdated', updateCount);
-    setInterval(updateCount, 1500);
+    };
   }
 
   function boot() {
+    // If DOM not ready, wait
+    if (!document.body) {
+      setTimeout(boot, 30);
+      return;
+    }
     injectHeader();
-    wireCartBadge();
+
+    // Also observe for third-party scripts trying to re-inject header and clean after
+    const observer = new MutationObserver(function (mutations) {
+      // If we detect another header injected after ours, clean and re-ensure ours is top
+      let shouldReinject = false;
+      for (const m of mutations) {
+        for (const node of m.addedNodes) {
+          if (node.nodeType === 1) {
+            if (node.matches && (node.matches('header.navbar') || node.matches('.announcement-bar'))) {
+              if (!node.closest('#cc-global-header-wrapper')) {
+                shouldReinject = true;
+              }
+            }
+          }
+        }
+      }
+      if (shouldReinject) {
+        // Debounce
+        clearTimeout(window.__ccReinjectTimer);
+        window.__ccReinjectTimer = setTimeout(function () {
+          const existing = document.getElementById('cc-global-header-wrapper');
+          if (!existing) injectHeader();
+        }, 100);
+      }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
   }
 
   if (document.readyState === 'loading') {

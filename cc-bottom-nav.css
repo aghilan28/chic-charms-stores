@@ -1,18 +1,15 @@
-/* ═══════════════════════════════════════════════════════════════════
-   CHIC CHARMS — Global Bottom Navigation Stylesheet
-   Single shared stylesheet — do not duplicate the navigation per page.
-   ═══════════════════════════════════════════════════════════════════ */
+/* ==========================================================================
+   CHIC CHARMS — Bottom Navigation — FIXED v2.0
+   Single instance bottom nav — mobile only, hidden on desktop.
+   ========================================================================== */
 
 :root {
-  /* Shared geometry contract used by product-sticky-cta.css. */
   --cc-safe-area-bottom: env(safe-area-inset-bottom, 0px);
   --cc-bottom-nav-height: 72px;
-  --cc-bottom-nav-total-height: calc(
-    var(--cc-bottom-nav-height) + var(--cc-safe-area-bottom)
-  );
+  --cc-bottom-nav-total-height: calc(var(--cc-bottom-nav-height) + var(--cc-safe-area-bottom));
 }
 
-/* --- Chic Charms Unified Bottom Nav --- */
+/* Bottom nav container */
 .cc-bottom-nav {
   position: fixed;
   left: 50%;
@@ -34,6 +31,7 @@
   -webkit-backdrop-filter: blur(12px);
   border-top: 1px solid rgba(215, 193, 197, 0.5);
   box-shadow: 0 -2px 16px rgba(78, 45, 38, 0.06);
+  /* Hidden by default — JS will show on mobile via CSS media, but ensure not flash on desktop */
 }
 
 .cc-bottom-nav a {
@@ -43,12 +41,12 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
+  gap: 3px;
   box-sizing: border-box;
   min-width: 0;
   max-width: 80px;
   min-height: 44px;
-  padding: 6px 2px;
+  padding: 6px 4px;
   color: #534346;
   text-decoration: none;
   border-radius: 999px;
@@ -62,7 +60,7 @@
 
 .cc-bottom-nav a:active {
   color: #8e4559;
-  background: rgba(171, 93, 113, 0.06);
+  background: rgba(171, 93, 113, 0.08);
 }
 
 .cc-bottom-nav a.active,
@@ -75,49 +73,69 @@
   width: 22px;
   height: 22px;
   flex-shrink: 0;
+  stroke-width: 1.8;
 }
 
 .cc-bottom-nav a span {
   max-width: 100%;
   line-height: 1;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* --- Wishlist Badge --- */
+/* Wishlist / Cart badge */
+.cc-bottom-nav .wishlist-count,
+.cc-bottom-nav .mobile-cart-count,
 .wishlist-count {
   position: absolute;
-  top: 4px;
-  right: 12px;
+  top: 2px;
+  right: 10px;
   z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
   min-width: 14px;
   height: 14px;
+  padding: 0 3px;
   border: 1.5px solid #fff8f7;
   border-radius: 50%;
   background: #8e4559;
-  color: white;
+  color: #fff;
   font-family: sans-serif;
   font-size: 8px;
   font-weight: 700;
+  line-height: 1;
   pointer-events: none;
 }
 
-/* --- Body spacing: prevent content overlap on standard pages --- */
-body.cc-nav-active {
-  box-sizing: border-box;
-  padding-bottom: var(--cc-bottom-nav-total-height) !important;
-  overflow-x: hidden;
+.cc-bottom-nav .wishlist-count:empty,
+.cc-bottom-nav .mobile-cart-count:empty,
+.cc-bottom-nav .wishlist-count[hidden],
+.cc-bottom-nav .mobile-cart-count[hidden] {
+  display: none !important;
 }
 
-/* Fixed-bottom-nav page safety: keep mobile forms/footers clear of the nav. */
-body.cc-nav-active .mobile-auth-container main,
-body.cc-nav-active main.auth-page {
-  padding-bottom: calc(112px + var(--cc-safe-area-bottom)) !important;
+/* Body padding — ONLY on mobile */
+@media (max-width: 768px) {
+  body.cc-nav-active {
+    box-sizing: border-box;
+    padding-bottom: var(--cc-bottom-nav-total-height) !important;
+    overflow-x: hidden;
+  }
+
+  /* Keep auth pages clear */
+  body.cc-nav-active .mobile-auth-container main,
+  body.cc-nav-active main.auth-page {
+    padding-bottom: calc(112px + var(--cc-safe-area-bottom)) !important;
+  }
+
+  .cc-bottom-nav {
+    display: flex !important;
+  }
 }
 
-/* --- Desktop: hide bottom nav, remove global nav padding --- */
+/* Desktop: hide bottom nav, remove padding */
 @media (min-width: 769px) {
   body.cc-nav-active {
     padding-bottom: 0 !important;
@@ -126,4 +144,18 @@ body.cc-nav-active main.auth-page {
   .cc-bottom-nav {
     display: none !important;
   }
+}
+
+/* Ensure bottom nav doesn't interfere with product sticky CTA */
+@media (max-width: 768px) {
+  body.cc-nav-active .product-sticky-cta {
+    bottom: var(--cc-bottom-nav-total-height) !important;
+  }
+}
+
+/* Extra safety — if JS injects multiple navs, hide duplicates */
+.cc-bottom-nav ~ .cc-bottom-nav,
+.cc-bottom-nav ~ nav.mobile-bottom-nav,
+nav.mobile-bottom-nav ~ .cc-bottom-nav {
+  display: none !important;
 }
