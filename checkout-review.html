@@ -754,15 +754,28 @@ document.documentElement.classList.add('cc-loading');
                  This key is safe to be in frontend code.
                  NEVER put TOKEN_2 (key secret) here.
      ═══════════════════════════════════════════════════════════════ */
-  const RAZORPAY_KEY_ID = 'TOKEN_1';  // ← REPLACE with your Key ID
+  let RAZORPAY_KEY_ID = '';
 
-  /*
-     TOKEN_3  →  YOUR_FIREBASE_FUNCTIONS_BASE_URL
-                 Format: https://asia-south1-YOUR_PROJECT_ID.cloudfunctions.net
-                 Example: https://asia-south1-chic-charms-store.cloudfunctions.net
-                 Find it in: Firebase Console → Functions → your deployed functions
-  */
-  const FUNCTIONS_BASE  = 'TOKEN_3'; // ← REPLACE with your Cloud Functions base URL
+  /* Determine Cloud Functions base URL dynamically (local emulator vs production) */
+  const FUNCTIONS_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://127.0.0.1:5001/chic-charms-store/asia-south1'
+    : 'https://asia-south1-chic-charms-store.cloudfunctions.net';
+
+  /* Fetch public Razorpay Key ID from the backend config endpoint */
+  async function fetchConfig() {
+    try {
+      const resp = await fetch(`${FUNCTIONS_BASE}/razorpayConfig`);
+      if (resp.ok) {
+        const data = await resp.json();
+        RAZORPAY_KEY_ID = data.keyId;
+        console.log('[Checkout] Razorpay Key ID loaded successfully.');
+      } else {
+        console.error('[Checkout] Failed to load Razorpay config from backend.');
+      }
+    } catch (err) {
+      console.error('[Checkout] Error fetching Razorpay configuration:', err);
+    }
+  }
 
   /* ─── Helpers ───────────────────────────────────────────────── */
   const $ = id => document.getElementById(id);
@@ -1199,6 +1212,16 @@ document.documentElement.classList.add('cc-loading');
     /* Step 1 — validate */
     if (!validateSession(cart, delivery, coupon)) return;
 
+    if (!RAZORPAY_KEY_ID) {
+      showLoader('Initializing payment gateway…');
+      await fetchConfig();
+      hideLoader();
+      if (!RAZORPAY_KEY_ID) {
+        showToast('Failed to initialize payment gateway. Please try again.');
+        return;
+      }
+    }
+
     setPayBtnState(true, 'Creating Order…');
     showLoader('Creating your order…');
 
@@ -1294,6 +1317,9 @@ document.documentElement.classList.add('cc-loading');
     let coupon = getCoupon();
     render(cart, coupon, delivery);
     initPayBtn(cart);
+
+    // Fetch Razorpay config
+    await fetchConfig();
 
     /* Async Firestore re-validation */
     if (window.ChicCoupon && typeof window.ChicCoupon.fetchSession === 'function') {

@@ -23,11 +23,13 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   sendPasswordResetEmail,
+  connectAuthEmulator,
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   getFirestore,
   doc,
   getDoc,
+  connectFirestoreEmulator,
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 /* ── Firebase config (one place, one truth) ── */

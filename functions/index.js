@@ -29,8 +29,8 @@ const CAMPUS_DISCOUNT = 50;
  * └─────────────────────────────────────────────────────────────┘
  */
 const razorpay = new Razorpay({
-  key_id:     'TOKEN_1',   // ← REPLACE: your Razorpay Key ID
-  key_secret: 'TOKEN_2',  // ← REPLACE: your Razorpay Key Secret
+  key_id:     process.env.RAZORPAY_KEY_ID || 'TOKEN_1',
+  key_secret: process.env.RAZORPAY_KEY_SECRET || 'TOKEN_2',
 });
 
 /* ── CORS helper ──────────────────────────────────────────────────── */
@@ -174,16 +174,30 @@ exports.createOrder = onRequest({ region: 'asia-south1' }, async (req, res) => {
 
     /* ── Create Razorpay order (amount in paise) ── */
     const amountPaise = Math.round(Number(total) * 100);
-    const rzpOrder = await razorpay.orders.create({
-      amount:   amountPaise,
-      currency: 'INR',
-      receipt:  genOrderRef(),
-      notes: {
-        customerName:  customerInfo?.fullName  || '',
-        customerPhone: customerInfo?.phone     || '',
-        paymentMethod: paymentMethod           || '',
-      },
-    });
+    if (amountPaise < 100) {
+      return res.status(400).json({ error: 'Amount must be at least 100 paise (₹1.00)' });
+    }
+
+    let rzpOrder;
+    try {
+      rzpOrder = await razorpay.orders.create({
+        amount:   amountPaise,
+        currency: 'INR',
+        receipt:  genOrderRef(),
+        notes: {
+          customerName:  customerInfo?.fullName  || '',
+          customerPhone: customerInfo?.phone     || '',
+          paymentMethod: paymentMethod           || '',
+        },
+      });
+    } catch (rzpErr) {
+      console.error('[createOrder] Razorpay API call failed:', rzpErr);
+      const status = rzpErr.statusCode || rzpErr.status || 500;
+      if (status === 401) {
+        return res.status(401).json({ error: 'Razorpay authentication failed. Please check backend keys.' });
+      }
+      return res.status(500).json({ error: rzpErr.description || rzpErr.message || 'Razorpay order creation failed.' });
+    }
 
     /* ── Write pending order to Firestore ── */
     const orderRef  = db.collection('orders').doc();
@@ -269,7 +283,7 @@ exports.verifyPayment = onRequest({ region: 'asia-south1' }, async (req, res) =>
      * The signature is: HMAC_SHA256( razorpay_order_id + "|" + razorpay_payment_id )
      */
     const expectedSignature = crypto
-      .createHmac('sha256', 'TOKEN_2')  // ← SAME secret as above — will auto-match when you fill TOKEN_2
+      .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET || 'TOKEN_2')  // ← SAME secret as above — will auto-match when you fill TOKEN_2
       .update(`${razorpay_order_id}|${razorpay_payment_id}`)
       .digest('hex');
 
@@ -302,4 +316,15 @@ exports.verifyPayment = onRequest({ region: 'asia-south1' }, async (req, res) =>
     console.error('[verifyPayment] failed', err);
     return res.status(500).json({ success: false, error: 'Payment verification error. Please contact support.' });
   }
+});
+
+/* ─────────────────────────────────────────────────────────────────── */
+/*  5. RAZORPAY CONFIG  →  GET /razorpayConfig                         */
+/*     Returns the public key ID dynamically.                          */
+/* ─────────────────────────────────────────────────────────────────── */
+exports.razorpayConfig = onRequest({ region: 'asia-south1' }, async (req, res) => {
+  setCors(res);
+  if (req.method === 'OPTIONS') return res.status(204).send('');
+  if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
+  return res.status(200).json({ keyId: process.env.RAZORPAY_KEY_ID || '' });
 });

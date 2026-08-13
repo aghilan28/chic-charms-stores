@@ -333,12 +333,32 @@ window.RazorpayDemo = {
    * Opens Razorpay popup in test mode.
    * @param {Object} opts - { amount (INR, no paise), name, phone, address, onSuccess, onFailure }
    */
-  open: function (opts) {
+  open: async function (opts) {
     const config  = window.RAZORPAY_DEMO_CONFIG;
     const amount  = opts.amount; // in INR — we convert to paise below
 
     if (typeof Razorpay === 'undefined') {
       showToast('Payment gateway is loading. Please try again in a moment.', 'error');
+      return;
+    }
+
+    if (!config.keyId || config.keyId === 'rzp_test_xxxxxxxxxxxx') {
+      try {
+        const FUNCTIONS_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+          ? 'http://127.0.0.1:5001/chic-charms-store/asia-south1'
+          : 'https://asia-south1-chic-charms-store.cloudfunctions.net';
+        const resp = await fetch(`${FUNCTIONS_BASE}/razorpayConfig`);
+        if (resp.ok) {
+          const data = await resp.json();
+          config.keyId = data.keyId;
+        }
+      } catch (err) {
+        console.error('[RazorpayDemo] On-demand key fetch failed:', err);
+      }
+    }
+
+    if (!config.keyId || config.keyId === 'rzp_test_xxxxxxxxxxxx') {
+      showToast('Payment gateway credentials not loaded. Please try again.', 'error');
       return;
     }
 
@@ -410,10 +430,27 @@ window.RazorpayDemo = {
 /* ============================================================
    AUTO-INIT: Enhance checkout page on DOM ready
    ============================================================ */
-function rzpDemoInit() {
+async function rzpDemoInit() {
   if (!document.querySelector('.checkout-page')) return;
   injectDemoBanner();
   injectTrustSection();
+
+  try {
+    const config = window.RAZORPAY_DEMO_CONFIG;
+    if (!config.keyId || config.keyId === 'rzp_test_xxxxxxxxxxxx') {
+      const FUNCTIONS_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? 'http://127.0.0.1:5001/chic-charms-store/asia-south1'
+        : 'https://asia-south1-chic-charms-store.cloudfunctions.net';
+      const resp = await fetch(`${FUNCTIONS_BASE}/razorpayConfig`);
+      if (resp.ok) {
+        const data = await resp.json();
+        config.keyId = data.keyId;
+        console.log('[RazorpayDemo] Loaded key ID successfully.');
+      }
+    }
+  } catch (err) {
+    console.error('[RazorpayDemo] Failed to load key ID:', err);
+  }
 }
 
 if (document.readyState === 'loading') {
