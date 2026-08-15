@@ -383,20 +383,6 @@
 
 <!-- Global Header is injected by cc-global-header.js (identical to Home Page) -->
 
-<!-- Drawer -->
-<div id="drawerOverlay" class="fixed inset-0 bg-[#2F2A2A]/50 z-[100] hidden opacity-0 transition-opacity duration-300"></div>
-<aside id="drawer" class="fixed top-0 left-0 w-[280px] h-full bg-surface z-[110] transform -translate-x-full transition-transform duration-300">
-  <div class="p-6">
-    <div class="flex justify-between items-center mb-12">
-      <a href="index.html" class="font-display-lg text-[20px] tracking-[0.1em] text-primary">CHIC CHARMS</a>
-      <button id="drawerClose" aria-label="Close menu">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-    <nav id="drawerNav" class="flex flex-col gap-5 text-[14px]"></nav>
-  </div>
-</aside>
-
 <main class="pb-0 md:pb-[140px]">
   <!-- Loading -->
   <div id="loadingState" class="px-margin_mobile">
@@ -1603,29 +1589,7 @@ function syncMobilePDP() {
   updateActionPillsState();
 }
 
-// ── Drawer ──
-let drawer, drawerOverlay;
-function closeDrawerFn() {
-  if (!drawer || !drawerOverlay) return;
-  drawer.classList.add('-translate-x-full');
-  drawerOverlay.classList.add('opacity-0');
-  setTimeout(() => { drawerOverlay.classList.add('hidden'); document.body.style.overflow = ''; document.body.style.position = ''; }, 300);
-}
-document.addEventListener('DOMContentLoaded', () => {
-  drawer = document.getElementById('drawer');
-  drawerOverlay = document.getElementById('drawerOverlay');
-  const menuBtn = document.getElementById('mobileCommerceMenu');
-  const drawerClose = document.getElementById('drawerClose');
-  if (menuBtn) menuBtn.addEventListener('click', () => {
-    if (!drawer || !drawerOverlay) return;
-    drawer.classList.remove('-translate-x-full');
-    drawerOverlay.classList.remove('hidden');
-    setTimeout(() => drawerOverlay.classList.remove('opacity-0'), 10);
-    document.body.style.overflow = 'hidden';
-  });
-  if (drawerClose) drawerClose.addEventListener('click', closeDrawerFn);
-  if (drawerOverlay) drawerOverlay.addEventListener('click', closeDrawerFn);
-});
+
 
 // ── Firebase load ──
 async function loadProduct() {
@@ -1894,12 +1858,7 @@ function renderSiteConfig() {
   const fyMobile = document.getElementById('footerYearMobile');
   if (fyMobile) fyMobile.textContent = new Date().getFullYear();
 
-  // Drawer nav
-  const navItems = SITE_CONFIG.navigation.map(n => `<a href="${n.href}" class="font-jost text-on-surface hover:text-primary transition-colors">${n.label}</a>`);
-  navItems.push('<div class="border-t border-outline-variant pt-5 mt-5"><a href="account.html" class="font-jost text-on-surface hover:text-primary transition-colors">My Account</a></div>');
-  navItems.push('<a href="about.html" class="font-jost text-on-surface-variant text-[13px] hover:text-primary transition-colors">About Us</a>');
-  navItems.push('<a href="contact.html" class="font-jost text-on-surface-variant text-[13px] hover:text-primary transition-colors">Contact</a>');
-  document.getElementById('drawerNav').innerHTML = navItems.join('');
+
 }
 
 // ── Init ──
@@ -1946,29 +1905,7 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) upda
 })();
 </script>
 
-<script>
-// Override drawer nav – Chic Charms proper links
-document.addEventListener('DOMContentLoaded', function(){
-  const nav = document.getElementById('drawerNav');
-  if(nav){
-    nav.innerHTML = `
-      <a href="index.html" style="font-family:Jost,sans-serif;font-weight:500">Shop All</a>
-      <a href="search.html" style="font-family:Jost,sans-serif;font-weight:500">Search</a>
-      <a href="index.html?filter=new" style="font-family:Jost,sans-serif;font-weight:500">New Arrivals</a>
-      <a href="index.html?filter=bestseller" style="font-family:Jost,sans-serif;font-weight:500">Best Sellers</a>
-      <a href="wishlist.html" style="font-family:Jost,sans-serif;font-weight:500">Wishlist</a>
-      <a href="cart.html" style="font-family:Jost,sans-serif;font-weight:500">Cart</a>
-      <a href="account.html" style="font-family:Jost,sans-serif;font-weight:500">Account</a>
-      <hr style="border:0;border-top:1px solid #e1d8d7;margin:8px 0">
-      <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
-      <a href="shipping.html">Shipping</a>
-      <a href="returns.html">Returns</a>
-    `;
-    nav.querySelectorAll('a').forEach(a=>{a.style.cssText+=';padding:8px 0;color:#1f1a1b;text-decoration:none;display:block'});
-  }
-});
-</script>
+
 
   <script src="cc-global-header.js" defer></script>
   <script src="cc-bottom-nav.js" defer></script>
