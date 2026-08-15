@@ -14,14 +14,9 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9L12 2l9 7v11a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9Z"/></svg>
         <span>Home</span>
       </a>
-      <a href="shop.html" data-nav="shop" aria-label="Shop">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6"/><path d="M20 20l-3.5-3.5"/><path d="M8 11h6"/></svg>
-        <span>Shop</span>
-      </a>
-      <a href="wishlist.html" data-nav="wishlist" aria-label="Wishlist" style="position:relative">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6c-1.8-1.7-4.6-1.6-6.3.2L12 7.3 9.5 4.8C7.8 3 5 2.9 3.2 4.6 1.3 6.4 1.3 9.4 3.1 11.2L12 20l8.9-8.8c1.8-1.8 1.8-4.8-.1-6.6Z"/></svg>
-        <span>Wishlist</span>
-        <span class="wishlist-count" hidden></span>
+      <a href="search.html" data-nav="explore" aria-label="Explore">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg>
+        <span>Explore</span>
       </a>
       <a href="account.html" data-nav="account" aria-label="Account">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg>
@@ -49,8 +44,8 @@
       let active = false;
       if (href === page) active = true;
       else if (page === 'index.html' && href === 'index.html') active = true;
-      else if (href === 'shop.html' && (page === 'shop.html' || page.includes('category') || page.includes('search'))) active = true;
-      else if (href === 'wishlist.html' && page === 'wishlist.html') active = true;
+      else if (href === 'index.html' && page.includes('category')) active = true;
+      else if (href === 'search.html' && page.includes('search')) active = true;
       else if (href === 'account.html' && (page === 'account.html' || page === 'auth.html' || page === 'register.html')) active = true;
       else if (href === 'cart.html' && (page === 'cart.html' || page.includes('checkout') || page === 'confirmation.html')) active = true;
 

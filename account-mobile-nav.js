@@ -18,8 +18,7 @@
 
   const items = [
     ["index.html", "Home", "home"],
-    ["shop.html", "Shop", "shop"],
-    ["search.html", "Search", "search"],
+    ["search.html", "Explore", "search"],
     ["account.html", "Account", "account"],
     ["cart.html", "Cart", "cart"]
   ];

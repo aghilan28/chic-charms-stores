@@ -290,7 +290,7 @@
         collectionCard("Modern Romance", "Pearls, bows, and softer shine", "modern-romance", "images/style-modern-romance.jpg") +
         collectionCard("After Dark", "Statement sparkle without weight", "after-dark", "images/style-after-dark.png") +
       '</div></section>',
-      '<footer class="cc-final-footer"><div class="cc-final-footer-brand">ChicCharms</div><p class="cc-final-copy">Trendy Indian accessories, COD, fast shipping, and weekly viral drops.</p><nav aria-label="Footer links"><a href="about.html">About</a><a href="shop.html">Shop</a><a href="shipping.html">Shipping</a><a href="returns.html">Returns</a><a href="contact.html">Contact</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="faq.html">FAQ</a></nav></footer>'
+      '<footer class="cc-final-footer"><div class="cc-final-footer-brand">ChicCharms</div><p class="cc-final-copy">Trendy Indian accessories, COD, fast shipping, and weekly viral drops.</p><nav aria-label="Footer links"><a href="about.html">About</a><a href="index.html">Shop</a><a href="shipping.html">Shipping</a><a href="returns.html">Returns</a><a href="contact.html">Contact</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="faq.html">FAQ</a></nav></footer>'
     ].join("");
 
     var main = $("main");
@@ -367,10 +367,9 @@
     nav.setAttribute("aria-label", "Mobile bottom navigation");
     nav.innerHTML =
       '<a class="mobile-bottom-tab' + active(["index.html", ""]) + '" href="index.html" aria-label="Home">' + icon("home") + '<span>Home</span></a>' +
-      '<a class="mobile-bottom-tab' + active(["shop.html"]) + '" href="index.html#bestsellers" data-bottom-category aria-label="Categories">' + icon("shop") + '<span>Shop</span></a>' +
-      '<button class="mobile-bottom-tab cc-app-nav-button" type="button" data-final-search aria-label="Search">' + icon("search") + '<span>Search</span></button>' +
-      '<a class="mobile-bottom-tab" href="index.html#bestsellers" aria-label="Wishlist">' + icon("heart") + '<span>Wishlist</span></a>' +
-      '<a class="mobile-bottom-tab' + active(["account.html", "auth.html"]) + '" href="account.html" aria-label="Account">' + icon("account") + '<span>Account</span></a>';
+      '<a class="mobile-bottom-tab' + active(["search.html"]) + '" href="search.html" aria-label="Explore">' + icon("search") + '<span>Explore</span></a>' +
+      '<a class="mobile-bottom-tab' + active(["account.html", "auth.html"]) + '" href="account.html" aria-label="Account">' + icon("account") + '<span>Account</span></a>' +
+      '<a class="mobile-bottom-tab' + active(["cart.html"]) + '" href="cart.html" aria-label="Cart">' + icon("cart") + '<span>Cart</span></a>';
     document.body.appendChild(nav);
     syncCartBadges();
   }

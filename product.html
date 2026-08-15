@@ -453,7 +453,7 @@
     </section>
 
     <!-- Editorial -->
-    <section id="editorialSection" class="relative w-full hidden">
+    <section id="editorialSection" class="relative w-full hidden lg:hidden">
       <div class="aspect-[3/4] w-full bg-surface-container">
         <img id="editorialImage" class="w-full h-full object-cover" alt="" loading="lazy" />
       </div>
@@ -587,9 +587,9 @@ const SITE_CONFIG = {
     { icon: SVG_ICONS.gift, title: "Perfect for Gifting", description: "Beautiful packaging included." }
   ],
   navigation: [
-    { label: "Shop All", href: "shop.html" },
-    { label: "New Arrivals", href: "shop.html?filter=new" },
-    { label: "Best Sellers", href: "shop.html?filter=bestseller" },
+    { label: "Shop All", href: "index.html" },
+    { label: "New Arrivals", href: "index.html#bestsellers" },
+    { label: "Best Sellers", href: "index.html#bestsellers" },
     { label: "Everyday Elegance", href: "category.html?category=everyday-elegance" },
     { label: "Modern Romance", href: "category.html?category=modern-romance" },
     { label: "After Dark", href: "category.html?category=after-dark" },
@@ -598,7 +598,7 @@ const SITE_CONFIG = {
   footerNav: [
     { title: "Quick Links", links: [
       { label: "Our Story", href: "about.html" },
-      { label: "Collections", href: "shop.html" },
+      { label: "Collections", href: "index.html#categories" },
       { label: "Bespoke Design", href: "contact.html" }
     ]},
     { title: "Customer Care", links: [
@@ -1312,7 +1312,8 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) upda
       let h = a.getAttribute('href')||'';
       if(h.includes('mobile-home.html')) a.setAttribute('href','index.html');
       const txt = (a.textContent||'').trim().toLowerCase();
-      if(txt==='shop' || txt==='best sellers' || txt==='best sellers'){ if(h.startsWith('#')) a.setAttribute('href','shop.html'); }
+      if(txt==='shop') { if(h.startsWith('#') || h === 'shop.html') a.setAttribute('href','index.html'); }
+      if(txt==='best sellers') { if(h.startsWith('#') || h === 'shop.html') a.setAttribute('href','index.html#bestsellers'); }
       if(txt==='about'){ if(h.startsWith('#')) a.setAttribute('href','about.html'); }
       if(txt==='reviews'){ if(h.startsWith('#')) a.setAttribute('href','index.html#testimonials'); }
       if(txt==='cart' && !h.includes('cart.html')) a.setAttribute('href','cart.html');

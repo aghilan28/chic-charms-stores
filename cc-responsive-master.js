@@ -119,7 +119,7 @@
   function fixImageCrop() {
     // Lightweight version of homescreen crop fix — only runs on relevant pages
     const page = getPageName();
-    if (page !== 'index.html' && page !== '' && page !== 'shop.html' && page !== 'category.html') return;
+    if (page !== 'index.html' && page !== '' && page !== 'category.html') return;
 
     const cards = document.querySelectorAll('.product-card-lux, .lux-product-card, .cc-product');
     cards.forEach(card => {

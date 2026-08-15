@@ -332,7 +332,7 @@
 <section class="py-7 stagger-in overflow-hidden">
 <div class="px-5 flex items-center justify-between mb-4">
 <h2 class="font-display text-[22px] text-on-surface">Trending Now</h2>
-<a class="text-[12px] font-semibold text-primary tracking-wider uppercase" href="shop.html?sort=bestseller">View all</a>
+<a class="text-[12px] font-semibold text-primary tracking-wider uppercase" href="index.html#bestsellers">View all</a>
 </div>
 <div class="flex overflow-x-auto hide-scrollbar snap-x snap-mandatory gap-3 px-5" id="trendingRow" style="scroll-padding-inline:20px;">
 <!-- JS fills -->
@@ -617,12 +617,15 @@ async function loadTrending(){
 loadTrending();
 
 // Menu button – open your existing nav if present, else go home
-document.getElementById('menuBtn').addEventListener('click', ()=>{
-  const navLinks = document.getElementById('navLinks');
-  const hamburger = document.getElementById('hamburger');
-  if(navLinks && hamburger){ hamburger.click(); }
-  else { window.location.href = 'index.html'; }
-});
+var menuBtn = document.getElementById('menuBtn');
+if (menuBtn) {
+  menuBtn.addEventListener('click', ()=>{
+    const navLinks = document.getElementById('navLinks');
+    const hamburger = document.getElementById('mobileCommerceMenu') || document.getElementById('hamburger');
+    if(navLinks && hamburger){ hamburger.click(); }
+    else { window.location.href = 'index.html'; }
+  });
+}
 
 // helpers
 function escHtml(s){ return String(s).replace(/[&<>"']/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m])); }
@@ -640,7 +643,8 @@ function escAttr(s){ return escHtml(s).replace(/"/g,'&quot;'); }
       if(h.includes('mobile-home.html')) a.setAttribute('href','index.html');
       // menu nav items
       const txt = (a.textContent||'').trim().toLowerCase();
-      if(txt==='shop' || txt==='best sellers' || txt==='best sellers'){ if(h.startsWith('#')) a.setAttribute('href','shop.html'); }
+      if(txt==='shop') { if(h.startsWith('#') || h === 'shop.html') a.setAttribute('href','index.html'); }
+      if(txt==='best sellers') { if(h.startsWith('#') || h === 'shop.html') a.setAttribute('href','index.html#bestsellers'); }
       if(txt==='about'){ if(h.startsWith('#')) a.setAttribute('href','about.html'); }
       if(txt==='reviews'){ if(h.startsWith('#')) a.setAttribute('href','index.html#testimonials'); }
       if(txt==='cart' && !h.includes('cart.html')) a.setAttribute('href','cart.html');

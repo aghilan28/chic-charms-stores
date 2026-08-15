@@ -547,26 +547,10 @@
     var FIREBASE_KEY     = 'AIzaSyA5Bh77_4HE3yQF0hi5ddvbFLZC7rEerxg';
 
     // ── Navbar scroll shadow ──
-    const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', function () {
-      navbar.classList.toggle('scrolled', window.scrollY > 20);
+      const navbar = document.getElementById('navbar');
+      if (navbar) navbar.classList.toggle('scrolled', window.scrollY > 20);
     }, { passive: true });
-
-    // ── Hamburger ──
-    const hamburger = document.getElementById('hamburger');
-    const navLinks  = document.getElementById('navLinks');
-    if (hamburger && navLinks) {
-      hamburger.addEventListener('click', function () {
-        const isOpen = navLinks.classList.toggle('open');
-        hamburger.setAttribute('aria-expanded', isOpen);
-      });
-      document.addEventListener('click', function (e) {
-        if (!navbar.contains(e.target)) {
-          navLinks.classList.remove('open');
-          hamburger.setAttribute('aria-expanded', 'false');
-        }
-      });
-    }
 
     /* ────────────────────────────────────────────────────────────
        CART HELPERS

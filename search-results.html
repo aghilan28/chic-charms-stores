@@ -671,7 +671,7 @@
 
       viewAllBtn.addEventListener('click', function () {
         const query = qInput.value.trim();
-        window.location.href = 'shop.html' + (query ? '?q=' + encodeURIComponent(query) : '');
+        window.location.href = 'search.html' + (query ? '?q=' + encodeURIComponent(query) : '');
       });
 
       init();
@@ -698,7 +698,7 @@
         if (!link) return;
         if (window.CCWish.get().length === 0) {
           event.preventDefault();
-          window.location.href = 'shop.html?filter=wishlist-empty';
+          window.location.href = 'index.html#bestsellers';
         }
       }, true);
     })();
@@ -713,13 +713,12 @@
           }
           if (href === '#bestsellers' || href === 'index.html#bestsellers') {
             const isWish = anchor.closest('[aria-label*="Wishlist"]') || anchor.querySelector('svg path[d*="20.8 4.6"]');
-            anchor.setAttribute('href', isWish ? 'wishlist.html' : 'shop.html');
+            anchor.setAttribute('href', isWish ? 'wishlist.html' : 'index.html#bestsellers');
           }
           if (href.includes('mobile-home.html')) anchor.setAttribute('href', 'index.html');
           const txt = (anchor.textContent || '').trim().toLowerCase();
-          if (txt === 'shop' || txt === 'best sellers') {
-            if (href.startsWith('#')) anchor.setAttribute('href', 'shop.html');
-          }
+          if (txt === 'shop') { if (href.startsWith('#') || href === 'shop.html') anchor.setAttribute('href', 'index.html'); }
+          if (txt === 'best sellers') { if (href.startsWith('#') || href === 'shop.html') anchor.setAttribute('href', 'index.html#bestsellers'); }
           if (txt === 'about' && href.startsWith('#')) anchor.setAttribute('href', 'about.html');
           if (txt === 'reviews' && href.startsWith('#')) anchor.setAttribute('href', 'index.html#testimonials');
           if (txt === 'cart' && !href.includes('cart.html')) anchor.setAttribute('href', 'cart.html');

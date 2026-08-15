@@ -48,8 +48,8 @@
           </a>
         </div>
         <nav class="nav-links" id="navLinks" aria-label="Main navigation">
-          <a href="index.html#categories">Shop</a>
-          <a href="shop.html">Best Sellers</a>
+          <a href="index.html">Shop</a>
+          <a href="index.html#bestsellers">Best Sellers</a>
           <a href="about.html" id="navAboutLink">About</a>
           <a href="index.html#testimonials">Reviews</a>
           <a href="search.html">Search</a>

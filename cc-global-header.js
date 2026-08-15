@@ -85,7 +85,6 @@
 
     // Icons as inline SVG — no external font dependency
     const iconHeart = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6c-1.8-1.7-4.6-1.6-6.3.2L12 7.3 9.5 4.8C7.8 3 5 2.9 3.2 4.6 1.3 6.4 1.3 9.4 3.1 11.2L12 20l8.9-8.8c1.8-1.8 1.8-4.8-.1-6.6Z"/></svg>`;
-    const iconCart = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4H6Z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></svg>`;
 
     return `
       <div id="cc-announcement-bar"><span>${ANNOUNCEMENT_TEXT}</span></div>
@@ -99,14 +98,15 @@
 
           <div class="mobile-commerce-actions" aria-label="Mobile shopping actions">
             <a href="wishlist.html" class="mobile-commerce-icon" aria-label="Wishlist">${iconHeart}<span class="wishlist-count mobile-cart-count" style="display:none"></span></a>
-            <a href="cart.html" class="mobile-commerce-icon mobile-commerce-cart" aria-label="Cart">${iconCart}<span class="mobile-cart-count" hidden></span></a>
           </div>
 
           <nav class="nav-links" id="navLinks" aria-label="Main navigation">
-            <a href="shop.html" class="${isActive('shop.html')}">Shop</a>
-            <a href="shop.html?filter=bestseller" class="${page.includes('shop') ? '' : ''}">Best Sellers</a>
+            <a href="index.html#bestsellers" class="">Best Sellers</a>
+            <a href="category.html?category=everyday-elegance" class="">Everyday Elegance</a>
+            <a href="category.html?category=modern-romance" class="">Modern Romance</a>
+            <a href="category.html?category=after-dark" class="">After Dark</a>
+            <a href="category.html?category=heritage-muse" class="">Heritage Muse</a>
             <a href="about.html" class="${isActive('about.html')}" id="navAboutLink">About</a>
-            <a href="index.html#testimonials" class="">Reviews</a>
             <a href="cart.html" class="${isActive('cart.html')}">Cart</a>
           </nav>
 
@@ -128,6 +128,16 @@
     if (!hamburger || !navLinks) return;
 
     function openDrawer() {
+      const ccDrawer = document.getElementById('ccDrawer');
+      const ccDrawerOverlay = document.getElementById('ccDrawerOverlay');
+      if (ccDrawer && ccDrawerOverlay) {
+        ccDrawer.classList.add('open');
+        ccDrawerOverlay.classList.add('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = 'hidden';
+        return;
+      }
+
       navLinks.classList.add('open');
       hamburger.setAttribute('aria-expanded', 'true');
       document.body.classList.add('ma-drawer-open');
@@ -135,6 +145,16 @@
     }
 
     function closeDrawer() {
+      const ccDrawer = document.getElementById('ccDrawer');
+      const ccDrawerOverlay = document.getElementById('ccDrawerOverlay');
+      if (ccDrawer && ccDrawerOverlay) {
+        ccDrawer.classList.remove('open');
+        ccDrawerOverlay.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+        return;
+      }
+
       navLinks.classList.remove('open');
       hamburger.setAttribute('aria-expanded', 'false');
       document.body.classList.remove('ma-drawer-open');
@@ -145,7 +165,9 @@
 
     hamburger.addEventListener('click', function (e) {
       e.stopPropagation();
-      if (navLinks.classList.contains('open')) closeDrawer();
+      const ccDrawer = document.getElementById('ccDrawer');
+      const isOpen = ccDrawer ? ccDrawer.classList.contains('open') : navLinks.classList.contains('open');
+      if (isOpen) closeDrawer();
       else openDrawer();
     });
 
@@ -200,11 +222,20 @@
     wrapper.id = 'cc-global-header-wrapper';
     wrapper.innerHTML = buildHeaderHTML();
 
-    // Insert at very top of body
-    if (document.body.firstChild) {
-      document.body.insertBefore(wrapper, document.body.firstChild);
+    // Insert inside .mobile-shell if present (e.g. wishlist, search), otherwise top of body
+    const shell = document.querySelector('.mobile-shell');
+    if (shell) {
+      if (shell.firstChild) {
+        shell.insertBefore(wrapper, shell.firstChild);
+      } else {
+        shell.appendChild(wrapper);
+      }
     } else {
-      document.body.appendChild(wrapper);
+      if (document.body.firstChild) {
+        document.body.insertBefore(wrapper, document.body.firstChild);
+      } else {
+        document.body.appendChild(wrapper);
+      }
     }
 
     wireHeader();
@@ -218,8 +249,18 @@
 
     // Re-expose global toggle for compatibility with previous approved mobile UI
     window.toggleDrawer = function (open) {
-      const nav = document.getElementById('navLinks');
+      const ccDrawer = document.getElementById('ccDrawer');
+      const ccDrawerOverlay = document.getElementById('ccDrawerOverlay');
       const btn = document.getElementById('mobileCommerceMenu');
+      if (ccDrawer && ccDrawerOverlay) {
+        ccDrawer.classList.toggle('open', !!open);
+        ccDrawerOverlay.classList.toggle('open', !!open);
+        if (btn) btn.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = open ? 'hidden' : '';
+        return;
+      }
+
+      const nav = document.getElementById('navLinks');
       if (!nav || !btn) return;
       if (open) {
         nav.classList.add('open');

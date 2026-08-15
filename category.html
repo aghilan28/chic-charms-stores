@@ -809,7 +809,7 @@
 <h2>No pieces available yet</h2>
 <p id="emptyMessage">No products are available for this category right now.</p>
 <div class="empty-actions">
-<a class="btn-primary" href="shop.html">Browse Full Shop</a>
+<a class="btn-primary" href="index.html">Browse Full Shop</a>
 <a class="btn-secondary" href="search-results.html">Back to Search Results</a>
 </div>
 </div>
@@ -821,7 +821,7 @@
 </div>
 <h2 class="editorial-title" id="editorialTitle">Curated For Every Occasion</h2>
 <p class="editorial-description" id="editorialDescription">Discover pieces designed to complement your everyday moments and special celebrations. Each charm tells a story of elegance.</p>
-<a class="editorial-cta" href="shop.html" id="editorialCta">Explore Full Edit</a>
+<a class="editorial-cta" href="index.html#categories" id="editorialCta">Explore Full Edit</a>
 </div>
 </section>
 <section class="related-section" id="relatedSection">
@@ -925,17 +925,17 @@
       function closeDrawer() {
         document.body.classList.remove('drawer-open');
       }
-      menuBtn.addEventListener('click', openDrawer);
-      drawerOverlay.addEventListener('click', closeDrawer);
+      if (menuBtn) menuBtn.addEventListener('click', openDrawer);
+      if (drawerOverlay) drawerOverlay.addEventListener('click', closeDrawer);
 
       function setGridMode(mode) {
         const single = mode === 'single';
-        productGrid.classList.toggle('single', single);
-        singleColBtn.classList.toggle('active', single);
-        doubleColBtn.classList.toggle('active', !single);
+        if (productGrid) productGrid.classList.toggle('single', single);
+        if (singleColBtn) singleColBtn.classList.toggle('active', single);
+        if (doubleColBtn) doubleColBtn.classList.toggle('active', !single);
       }
-      singleColBtn.addEventListener('click', function () { setGridMode('single'); });
-      doubleColBtn.addEventListener('click', function () { setGridMode('double'); });
+      if (singleColBtn) singleColBtn.addEventListener('click', function () { setGridMode('single'); });
+      if (doubleColBtn) doubleColBtn.addEventListener('click', function () { setGridMode('double'); });
 
       function toggleFooterAccordion(trigger) {
         const content = trigger.nextElementSibling;
@@ -982,7 +982,7 @@
         editorialImage.alt = category.name + ' editorial image';
         editorialTitle.textContent = 'Curated For Every Occasion';
         editorialDescription.textContent = category.description || ('Discover pieces designed to complement your everyday moments and special celebrations.');
-        editorialCta.href = 'shop.html?category=' + encodeURIComponent(category.slug);
+        editorialCta.href = 'category.html?category=' + encodeURIComponent(category.slug);
       }
 
       function renderDrawer(categories) {
@@ -1124,7 +1124,7 @@
         if (!link) return;
         if (window.CCWish.get().length === 0) {
           event.preventDefault();
-          window.location.href = 'shop.html?filter=wishlist-empty';
+          window.location.href = 'index.html#bestsellers';
         }
       }, true);
     })();
@@ -1139,13 +1139,12 @@
           }
           if (href === '#bestsellers' || href === 'index.html#bestsellers') {
             const isWish = anchor.closest('[aria-label*="Wishlist"]') || anchor.querySelector('svg path[d*="20.8 4.6"]');
-            anchor.setAttribute('href', isWish ? 'wishlist.html' : 'shop.html');
+            anchor.setAttribute('href', isWish ? 'wishlist.html' : 'index.html#bestsellers');
           }
           if (href.includes('mobile-home.html')) anchor.setAttribute('href', 'index.html');
           const txt = (anchor.textContent || '').trim().toLowerCase();
-          if (txt === 'shop' || txt === 'best sellers') {
-            if (href.startsWith('#')) anchor.setAttribute('href', 'shop.html');
-          }
+          if (txt === 'shop') { if (href.startsWith('#') || href === 'shop.html') anchor.setAttribute('href', 'index.html'); }
+          if (txt === 'best sellers') { if (href.startsWith('#') || href === 'shop.html') anchor.setAttribute('href', 'index.html#bestsellers'); }
           if (txt === 'about' && href.startsWith('#')) anchor.setAttribute('href', 'about.html');
           if (txt === 'reviews' && href.startsWith('#')) anchor.setAttribute('href', 'index.html#testimonials');
           if (txt === 'cart' && !href.includes('cart.html')) anchor.setAttribute('href', 'cart.html');

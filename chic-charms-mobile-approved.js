@@ -57,6 +57,8 @@
     drawer.classList.toggle("open", !!open);
     overlay.classList.toggle("open", !!open);
     document.body.style.overflow = open ? "hidden" : "";
+    const btn = document.getElementById('mobileCommerceMenu');
+    if (btn) btn.setAttribute('aria-expanded', 'false');
   }
   window.toggleDrawer = toggleDrawer;
 
