@@ -78,9 +78,9 @@
         </div>
         <nav class="cc-drawer-nav" id="ccDrawerNav">
           <a href="index.html" data-cat="all" class="is-active">Home</a>
-          <a href="index.html?filter=bestseller" data-filter="bestseller">Best Seller</a>
-          <a href="index.html?filter=new" data-filter="new">New Arrivals</a>
-          <a href="index.html?filter=elegant" data-filter="elegant">Elegant Pick</a>
+          <a href="index.html?filter=best-seller" data-filter="best seller">Best Seller</a>
+          <a href="index.html?filter=new-arrival" data-filter="new arrival">New Arrivals</a>
+          <a href="index.html?filter=elegant-pick" data-filter="elegant pick">Elegant Pick</a>
           <a href="index.html?filter=trending" data-filter="trending">Trending</a>
           <a href="about.html">About ChicCharms</a>
           <a href="contact.html">Contact Us</a>

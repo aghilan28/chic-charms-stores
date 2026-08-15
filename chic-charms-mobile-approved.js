@@ -413,13 +413,15 @@
 
   window.filterByTag = function (tag) {
     clearFilters();
-    activeFilters.types = [tag];
+    // Normalize 'best-seller' -> 'best seller'
+    const filterVal = tag.replace('-', ' ');
+    activeFilters.types = [filterVal];
     let label = "Shop";
-    if (tag === "bestseller") label = "Best Seller";
-    else if (tag === "new") label = "New Arrivals";
-    else if (tag === "elegant") label = "Elegant Pick";
-    else if (tag === "trending") label = "Trending";
-    else label = tag.charAt(0).toUpperCase() + tag.slice(1);
+    if (filterVal === "best seller") label = "Best Seller";
+    else if (filterVal === "new arrival") label = "New Arrivals";
+    else if (filterVal === "elegant pick") label = "Elegant Pick";
+    else if (filterVal === "trending") label = "Trending";
+    else label = filterVal.charAt(0).toUpperCase() + filterVal.slice(1);
     updateCrumb(label);
     renderAll();
     toggleDrawer(false);
