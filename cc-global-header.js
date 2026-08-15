@@ -7,6 +7,18 @@
 
   const ANNOUNCEMENT_TEXT = 'Free Shipping Across India';
 
+  // Log out function utilizing dynamic import of auth module
+  window.handleLogout = async function () {
+    try {
+      const { auth, signOut } = await import("./auth.js");
+      await signOut(auth);
+      window.location.href = "auth.html";
+    } catch (err) {
+      console.error("Logout failed:", err);
+      window.location.href = "auth.html";
+    }
+  };
+
   // Define toggleDrawer globally on window using getter/setter to prevent external overrides from breaking layout classes
   let currentToggleDrawer = function (open) {
     const ccDrawer = document.getElementById('ccDrawer');
@@ -65,18 +77,14 @@
           </button>
         </div>
         <nav class="cc-drawer-nav" id="ccDrawerNav">
-          <a href="index.html" data-cat="all" class="is-active">Shop Jewellery</a>
-          <a href="index.html?filter=bestseller" data-filter="bestseller">Best Sellers</a>
-          <a href="index.html?category=everyday-elegance" data-cat="everyday-elegance">Minimal Collection</a>
-          <a href="index.html?category=after-dark" data-cat="after-dark">Korean Collection</a>
-          <a href="index.html?category=after-dark" data-cat="after-dark">Party Collection</a>
-          <a href="index.html?category=heritage-muse" data-cat="heritage-muse">Pearl Collection</a>
-          <a href="index.html?category=heritage-muse" data-cat="heritage-muse">Bridal Collection</a>
-          <a href="index.html?price=under299" data-price="under299" style="color:#B5657A">Under ₹299</a>
-          <a href="cart.html">Cart</a>
-          <a href="account.html">Account</a>
-          <a href="about.html">About Chic Charms</a>
-          <a href="contact.html">Contact</a>
+          <a href="index.html" data-cat="all" class="is-active">Home</a>
+          <a href="index.html?filter=bestseller" data-filter="bestseller">Best Seller</a>
+          <a href="index.html?filter=new" data-filter="new">New Arrivals</a>
+          <a href="index.html?filter=elegant" data-filter="elegant">Elegant Pick</a>
+          <a href="index.html?filter=trending" data-filter="trending">Trending</a>
+          <a href="about.html">About ChicCharms</a>
+          <a href="contact.html">Contact Us</a>
+          <a href="#" onclick="window.handleLogout(); return false;">Log Out</a>
         </nav>
       </div>
     </aside>

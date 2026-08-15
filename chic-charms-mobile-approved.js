@@ -388,7 +388,13 @@
     if (el) el.textContent = label;
     const titleEl = document.getElementById("ccSectionTitle");
     if (titleEl) {
-      titleEl.textContent = label === "Earrings" || label === "Shop" ? "Special For You" : label;
+      const l = String(label || "").trim().toLowerCase();
+      if (l.includes("best seller")) titleEl.textContent = "Best Sellers For You";
+      else if (l.includes("new arrival")) titleEl.textContent = "New Arrivals For You";
+      else if (l.includes("elegant pick")) titleEl.textContent = "Elegant Picks For You";
+      else if (l.includes("trending")) titleEl.textContent = "Trending Picks For You";
+      else if (l === "home" || l === "shop" || l === "earrings" || l === "all" || l === "") titleEl.textContent = "Special For You";
+      else titleEl.textContent = label;
     }
   }
 
@@ -408,7 +414,13 @@
   window.filterByTag = function (tag) {
     clearFilters();
     activeFilters.types = [tag];
-    updateCrumb(tag === "new" ? "New Arrivals" : "Best Sellers");
+    let label = "Shop";
+    if (tag === "bestseller") label = "Best Seller";
+    else if (tag === "new") label = "New Arrivals";
+    else if (tag === "elegant") label = "Elegant Pick";
+    else if (tag === "trending") label = "Trending";
+    else label = tag.charAt(0).toUpperCase() + tag.slice(1);
+    updateCrumb(label);
     renderAll();
     toggleDrawer(false);
     window.scrollTo({ top: 120, behavior: "smooth" });
@@ -516,13 +528,24 @@
     const cat = params.get('category');
     if (filter) {
       activeFilters.types = [filter];
+      let label = "Shop";
+      if (filter === "bestseller") label = "Best Seller";
+      else if (filter === "new") label = "New Arrivals";
+      else if (filter === "elegant") label = "Elegant Pick";
+      else if (filter === "trending") label = "Trending";
+      else label = filter.charAt(0).toUpperCase() + filter.slice(1);
+      updateCrumb(label);
     }
     if (cat) {
       const slug = normalizeCategory(cat);
-      if (slug) activeFilters.collections = [slug];
+      if (slug) {
+        activeFilters.collections = [slug];
+        updateCrumb(CATEGORY_LABELS[slug] || slug);
+      }
     }
     if (params.get('price') === 'under299') {
       activeFilters.prices = ["under500"];
+      updateCrumb("Under ₹299");
     }
 
     initBackend();
