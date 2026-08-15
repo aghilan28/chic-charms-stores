@@ -448,11 +448,11 @@
 <section aria-label="Cart items" class="ccap-section ccap-hide-when-empty">
 <div class="ccap-items" id="ccapItems"></div>
 </section>
-<section aria-label="Order summary" class="ccap-section ccap-summary ccap-hide-when-empty">
-<div class="ccap-row"><span>Subtotal</span><strong id="ccapSubtotal">₹0</strong></div>
-<div class="ccap-row"><span>Delivery</span><strong class="ccap-delivery-note" id="ccapDeliveryNote">Calculated at checkout</strong></div>
-<div class="ccap-row ccap-total-row"><span>Total</span><strong id="ccapFinalTotal">₹0</strong></div>
+
+<section aria-label="The ChicCharms Promise" class="ccap-promise-banner ccap-hide-when-empty">
+  <img src="images/promise.png" alt="The ChicCharms Promise" class="ccap-promise-img">
 </section>
+
 <section aria-label="Complete the look" class="ccap-look ccap-hide-when-empty">
 <div class="ccap-look-head">
 <h2>Complete The Look</h2>
@@ -462,12 +462,29 @@
 <div class="ccap-reco-loading">Loading pieces from your store…</div>
 </div>
 </section>
-<footer aria-label="Checkout bar" class="ccap-sticky">
-<div>
-<span class="ccap-sticky-label">Total Amount</span>
-<strong class="ccap-sticky-amount" id="ccapStickyTotal">₹0</strong>
+<!-- Mobile Footer (Matches product page footer) -->
+<div class="cc-mobile-footer ccap-hide-when-empty">
+  <div class="logo-wrap">
+    <svg width="48" height="48" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M50 5C25.1 5 5 25.1 5 50C5 74.9 25.1 95 50 95C74.9 95 95 74.9 95 50C95 25.1 74.9 5 50 5ZM50 85C30.7 85 15 69.3 15 50C15 30.7 30.7 15 50 15C69.3 15 85 30.7 85 50C85 69.3 69.3 85 50 85Z" fill="currentColor" opacity="0.1"/>
+      <path d="M50 10C50 10 65 30 50 50C35 70 50 90 50 90C50 90 35 70 50 50C65 30 50 10 50 10Z" fill="none" stroke="#8e4559" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="50" cy="50" r="4" fill="#8e4559"/>
+    </svg>
+  </div>
+  <div class="accordion-list" id="footerAccordionMobile"></div>
+  <div class="copyright-text">
+    © <span id="footerYearMobile">2026</span> CHIC CHARMS. ALL RIGHTS RESERVED.
+  </div>
 </div>
-<button class="ccap-checkout-btn" data-ccap-checkout="" type="button">Proceed To Checkout</button>
+<footer aria-label="Checkout bar" class="ccap-sticky">
+  <div class="ccap-sticky-info">
+    <span class="ccap-sticky-label">Total price</span>
+    <strong class="ccap-sticky-amount" id="ccapStickyTotal">₹0</strong>
+  </div>
+  <button class="ccap-checkout-btn" data-ccap-checkout="" type="button">
+    <span>Checkout</span>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; margin-left:8px; vertical-align:middle;"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1Z"/><path d="M16 8H8"/><path d="M16 12H8"/><path d="M13 16H8"/></svg>
+  </button>
 </footer>
 <div aria-live="polite" class="ccap-toast" id="ccapToast" role="status"></div>
 </div>

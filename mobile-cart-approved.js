@@ -328,7 +328,9 @@
                   '<span aria-live="polite">' + qty + '</span>',
                   '<button type="button" data-ccap-qty="' + index + '" data-delta="1" aria-label="Increase quantity"' + (atStockMax ? ' disabled' : '') + '>+</button>',
                 '</div>',
-                '<button type="button" class="ccap-remove" data-ccap-remove="' + index + '">Remove</button>',
+                '<button type="button" class="ccap-remove" data-ccap-remove="' + index + '" aria-label="Remove item">' +
+                  '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>' +
+                '</button>',
               '</div>',
             '</div>',
           '</article>'
@@ -448,6 +450,70 @@
     installEvents();
     renderApprovedCart();
     hydrateFromBackendOnce();
+    renderMobileFooter();
+  }
+
+  window.toggleMobileFooterAccordion = function(btn) {
+    var item = btn.parentElement;
+    var content = item.querySelector('.accordion-content');
+    var chevron = btn.querySelector('.chevron-icon');
+    var isOpen = item.classList.contains('accordion-open');
+    
+    if (isOpen) {
+      item.classList.remove('accordion-open');
+      content.style.maxHeight = '0px';
+      chevron.style.transform = 'rotate(0deg)';
+    } else {
+      item.classList.add('accordion-open');
+      content.style.maxHeight = content.scrollHeight + 'px';
+      chevron.style.transform = 'rotate(180deg)';
+    }
+  };
+
+  function renderMobileFooter() {
+    var fm = byId("footerAccordionMobile");
+    if (!fm) return;
+
+    var footerNav = [
+      { title: "Quick Links", links: [
+        { label: "Our Story", href: "about.html" },
+        { label: "Collections", href: "index.html#categories" },
+        { label: "Bespoke Design", href: "contact.html" }
+      ]},
+      { title: "Customer Care", links: [
+        { label: "Track Order", href: "contact.html" },
+        { label: "Shipping Policy", href: "shipping.html" },
+        { label: "Returns & Exchanges", href: "returns.html" },
+        { label: "Jewellery Care", href: "faq.html" }
+      ]},
+      { title: "Connect", links: [
+        { label: "Instagram", href: "#" },
+        { label: "Facebook", href: "#" },
+        { label: "Pinterest", href: "#" },
+        { label: "Contact Us", href: "contact.html" }
+      ]}
+    ];
+
+    fm.innerHTML = footerNav.map(function (group) {
+      return [
+        '<div class="accordion-item">',
+          '<button class="accordion-btn" onclick="toggleMobileFooterAccordion(this)">',
+            '<span>' + escapeHTML(group.title) + '</span>',
+            '<svg class="chevron-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8e4559" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>',
+          '</button>',
+          '<div class="accordion-content">',
+            '<ul>',
+              group.links.map(function (l) {
+                return '<li><a href="' + escapeHTML(l.href) + '">' + escapeHTML(l.label) + '</a></li>';
+              }).join(""),
+            '</ul>',
+          '</div>',
+        '</div>'
+      ].join("");
+    }).join("");
+
+    var fyMobile = byId("footerYearMobile");
+    if (fyMobile) fyMobile.textContent = String(new Date().getFullYear());
   }
 
   window.toggleCartWishlist = function(event, id, name, price, image) {
