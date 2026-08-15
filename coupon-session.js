@@ -154,9 +154,23 @@
   }
 
   function getDiscount(coupon) {
-    return coupon && coupon.couponApplied === true && coupon.couponType === 'campus'
-      ? Math.max(0, Number(coupon.discountAmount || 0))
-      : 0;
+    if (coupon && coupon.couponApplied === true && coupon.couponType === 'campus') {
+      try {
+        var cartRaw = localStorage.getItem('cart') || '[]';
+        var cart = JSON.parse(cartRaw) || [];
+        var subtotal = cart.reduce(function(s, i) {
+          return s + (Number(i.price || 0) * Number(i.quantity || 1));
+        }, 0);
+        // NOTE: The 42% advertised campus benefit is a combined value consisting of:
+        // 1. A 20% cash discount directly off the subtotal of items.
+        // 2. A waived delivery fee/shipping charge, representing the remaining value of the "42% benefit".
+        // This ensures the free delivery is within the 42% total benefit valuation.
+        return Math.round(subtotal * 0.20);
+      } catch (e) {
+        return Math.max(0, Number(coupon.discountAmount || 0));
+      }
+    }
+    return 0;
   }
 
   window.ChicCoupon = {

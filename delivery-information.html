@@ -12,7 +12,7 @@
 <style>
     :root{--bg:#fff8f7;--surface:#faf5f2;--surface2:#f6eceb;--card:#fff;--text:#1f1a1b;--muted:#534346;--outline:#d7c1c5;--primary:#8e4559;--primary2:#b5657a;--success:#2f7d4c;--error:#ba1a1a;--shadow:0 10px 32px rgba(47,42,42,.08);}
     *{box-sizing:border-box} html{background:var(--bg)} body{margin:0;min-height:100svh;background:var(--bg);color:var(--text);font-family:Jost,system-ui,-apple-system,Segoe UI,sans-serif;-webkit-font-smoothing:antialiased} button,input,select{font:inherit} button{cursor:pointer} .desktop-fallback{display:none}
-    .announce{position:sticky;top:0;z-index:60;height:40px;background:var(--primary2);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:600;letter-spacing:.15em;text-transform:uppercase}.topbar{position:sticky;top:40px;z-index:50;height:76px;background:rgba(255,248,247,.96);backdrop-filter:blur(14px);border-bottom:1px solid rgba(181,101,122,.12);display:flex;align-items:center;justify-content:space-between;padding:0 20px}.iconbtn{width:42px;height:42px;border:0;border-radius:50%;background:transparent;color:var(--text);display:grid;place-items:center}.brand{position:absolute;left:50%;transform:translateX(-50%);font-family:"Playfair Display",serif;font-size:34px;line-height:1;color:var(--primary);font-weight:600;letter-spacing:-.02em;white-space:nowrap}.secure{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:#8f6674;font-weight:600}.wrap{width:min(100%,800px);margin:0 auto;padding:28px 20px 122px}.intro{margin:0 0 26px}.eyebrow{margin:0 0 8px;color:#8f6674;font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:600}.intro h1{margin:0 0 8px;font-family:"Playfair Display",serif;font-size:36px;line-height:42px;font-weight:500;color:#2f2a2a}.intro p{margin:0;color:#8f6674;line-height:1.55}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:22px 0 28px}.step{height:6px;border-radius:999px;background:#eadadd}.step.is-active{background:var(--primary)}.card{background:var(--surface);border-radius:24px;padding:22px;margin:0 0 18px;border:1px solid rgba(215,193,197,.26);box-shadow:0 1px 0 rgba(255,255,255,.65) inset;animation:rise .55s ease both}.card:nth-of-type(2){animation-delay:.06s}.card:nth-of-type(3){animation-delay:.12s}.card:nth-of-type(4){animation-delay:.18s}@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}.card h2{margin:0 0 18px;font-family:"Playfair Display",serif;font-size:24px;line-height:32px;font-weight:500;color:var(--primary)}.card-title-row{display:flex;align-items:center;gap:10px;margin:0 0 8px}.card-title-row h2{margin:0}.icon{width:28px;height:28px;display:inline-grid;place-items:center;color:var(--primary)}.grid{display:grid;grid-template-columns:1fr;gap:14px}.field{display:flex;flex-direction:column;gap:7px}.field label{padding-left:4px;color:var(--muted);font-size:13px;line-height:18px;letter-spacing:.05em;text-transform:uppercase;font-weight:600}.field input,.field select{width:100%;height:56px;border:1px solid var(--outline);border-radius:14px;background:#fff;color:var(--text);padding:0 15px;outline:0;transition:border-color .18s,box-shadow .18s,background .18s}.field input:focus,.field select:focus{border-color:var(--primary);box-shadow:0 0 0 1px var(--primary)}.field input::placeholder{color:#a89599}.field select{appearance:none;background:#fff url("data:image/svg+xml,%3Csvg width='14' height='8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m1 1 6 6 6-6' stroke='%238E4559' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") right 16px center/14px 8px no-repeat}.muted-note{margin:0 0 18px;color:var(--muted);font-size:15px;line-height:1.55}.segmented{display:flex;padding:4px;background:var(--surface2);border:1px solid rgba(215,193,197,.6);border-radius:999px}.segmented input{position:absolute;opacity:0;pointer-events:none}.segmented label{flex:1;text-align:center;border-radius:999px;padding:12px 6px;color:var(--muted);font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase}.segmented input:checked+label{background:var(--primary);color:#fff}.coupon-row{display:grid;grid-template-columns:1fr;gap:12px}.coupon-row input{height:56px;border:1px solid var(--outline);border-radius:14px;background:#fff;padding:0 15px;text-transform:uppercase}.coupon-row button{height:56px;border:0;border-radius:14px;background:#eae0e0;color:var(--primary);font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}.message{display:none;margin-top:14px;padding:13px 14px;border-radius:14px;font-size:14px;line-height:1.35}.message.show{display:flex;gap:8px}.message.success{background:rgba(47,125,76,.09);color:var(--success);border:1px solid rgba(47,125,76,.22)}.message.error{background:rgba(186,26,26,.08);color:var(--error);border:1px solid rgba(186,26,26,.2)}.summary{display:grid;gap:13px}.sumrow{display:flex;align-items:center;justify-content:space-between;color:var(--muted)}.sumrow strong{color:var(--text);font-weight:600}.sumrow.total{padding-top:13px;border-top:1px solid rgba(215,193,197,.45)}.sumrow.total strong{font-size:18px;color:var(--primary)}.sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:70;padding:12px 20px calc(12px + env(safe-area-inset-bottom));background:rgba(255,248,247,.96);border-top:1px solid rgba(181,101,122,.12);backdrop-filter:blur(14px)}.sticky-inner{max-width:800px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:14px}.cta-copy{display:flex;flex-direction:column;min-width:0}.cta-copy span{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}.cta-copy strong{font-size:13px;color:var(--primary);font-weight:600;white-space:nowrap}.continue{height:54px;min-width:164px;border:0;border-radius:999px;background:var(--primary2);color:#fff;font-size:14px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;box-shadow:var(--shadow);transition:transform .16s,opacity .16s}.continue:active{transform:scale(.97)}.continue:disabled{background:#d7c1c5;box-shadow:none;opacity:.82}.empty{display:none;padding:18px;border-radius:18px;background:#fff;border:1px solid var(--outline);color:var(--muted);line-height:1.5}.empty a{color:var(--primary);font-weight:700}.form-error{display:none;margin:0 0 16px;padding:12px 14px;border-radius:14px;background:rgba(186,26,26,.08);color:var(--error);border:1px solid rgba(186,26,26,.18);font-size:14px}.form-error.show{display:block}.invalid input,.invalid select{border-color:var(--error)!important;box-shadow:0 0 0 1px rgba(186,26,26,.2)}
+    .announce{position:sticky;top:0;z-index:60;height:40px;background:var(--primary2);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:600;letter-spacing:.15em;text-transform:uppercase}.topbar{position:sticky;top:40px;z-index:50;height:76px;background:rgba(255,248,247,.96);backdrop-filter:blur(14px);border-bottom:1px solid rgba(181,101,122,.12);display:flex;align-items:center;justify-content:space-between;padding:0 20px}.iconbtn{width:42px;height:42px;border:0;border-radius:50%;background:transparent;color:var(--text);display:grid;place-items:center}.brand{position:absolute;left:50%;transform:translateX(-50%);font-family:"Playfair Display",serif;font-size:34px;line-height:1;color:var(--primary);font-weight:600;letter-spacing:-.02em;white-space:nowrap}.secure{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:#8f6674;font-weight:600}.wrap{width:min(100%,800px);margin:0 auto;padding:36px 20px 122px}.intro{margin:0 0 26px}.eyebrow{margin:0 0 8px;color:#8f6674;font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:600}.intro h1{margin:0 0 8px;font-family:"Playfair Display",serif;font-size:36px;line-height:42px;font-weight:500;color:#2f2a2a}.intro p{margin:0;color:#8f6674;line-height:1.55}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:22px 0 28px}.step{height:6px;border-radius:999px;background:#eadadd}.step.is-active{background:var(--primary)}.card{background:var(--surface);border-radius:24px;padding:22px;margin:0 0 18px;border:1px solid rgba(215,193,197,.26);box-shadow:0 1px 0 rgba(255,255,255,.65) inset;animation:rise .55s ease both}.card:nth-of-type(2){animation-delay:.06s}.card:nth-of-type(3){animation-delay:.12s}.card:nth-of-type(4){animation-delay:.18s}@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}.card h2{margin:0 0 18px;font-family:"Playfair Display",serif;font-size:24px;line-height:32px;font-weight:500;color:var(--primary)}.card-title-row{display:flex;align-items:center;gap:10px;margin:0 0 8px}.card-title-row h2{margin:0}.icon{width:28px;height:28px;display:inline-grid;place-items:center;color:var(--primary)}.grid{display:grid;grid-template-columns:1fr;gap:14px}.field{display:flex;flex-direction:column;gap:7px}.field label{padding-left:4px;color:var(--muted);font-size:13px;line-height:18px;letter-spacing:.05em;text-transform:uppercase;font-weight:600}.field input,.field select{width:100%;height:56px;border:1px solid var(--outline);border-radius:14px;background:#fff;color:var(--text);padding:0 15px;outline:0;transition:border-color .18s,box-shadow .18s,background .18s}.field input:focus,.field select:focus{border-color:var(--primary);box-shadow:0 0 0 1px var(--primary)}.field input::placeholder{color:#a89599}.field select{appearance:none;background:#fff url("data:image/svg+xml,%3Csvg width='14' height='8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m1 1 6 6 6-6' stroke='%238E4559' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") right 16px center/14px 8px no-repeat}.muted-note{margin:0 0 18px;color:var(--muted);font-size:15px;line-height:1.55}.segmented{display:flex;padding:4px;background:var(--surface2);border:1px solid rgba(215,193,197,.6);border-radius:999px}.segmented input{position:absolute;opacity:0;pointer-events:none}.segmented label{flex:1;text-align:center;border-radius:999px;padding:12px 6px;color:var(--muted);font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase}.segmented input:checked+label{background:var(--primary);color:#fff}.coupon-row{display:grid;grid-template-columns:1fr;gap:12px}.coupon-row input{height:56px;border:1px solid var(--outline);border-radius:14px;background:#fff;padding:0 15px;text-transform:uppercase}.coupon-row button{height:56px;border:0;border-radius:14px;background:#eae0e0;color:var(--primary);font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}.message{display:none;margin-top:14px;padding:13px 14px;border-radius:14px;font-size:14px;line-height:1.35}.message.show{display:flex;gap:8px}.message.success{background:rgba(47,125,76,.09);color:var(--success);border:1px solid rgba(47,125,76,.22)}.message.error{background:rgba(186,26,26,.08);color:var(--error);border:1px solid rgba(186,26,26,.2)}.summary{display:grid;gap:13px}.sumrow{display:flex;align-items:center;justify-content:space-between;color:var(--muted)}.sumrow strong{color:var(--text);font-weight:600}.sumrow.total{padding-top:13px;border-top:1px solid rgba(215,193,197,.45)}.sumrow.total strong{font-size:18px;color:var(--primary)}.sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:70;padding:12px 20px calc(12px + env(safe-area-inset-bottom));background:rgba(255,248,247,.96);border-top:1px solid rgba(181,101,122,.12);backdrop-filter:blur(14px)}.sticky-inner{max-width:800px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:14px}.cta-copy{display:flex;flex-direction:column;min-width:0}.cta-copy span{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}.cta-copy strong{font-size:13px;color:var(--primary);font-weight:600;white-space:nowrap}.continue{height:54px;min-width:164px;border:0;border-radius:999px;background:var(--primary2);color:#fff;font-size:14px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;box-shadow:var(--shadow);transition:transform .16s,opacity .16s}.continue:active{transform:scale(.97)}.continue:disabled{background:#d7c1c5;box-shadow:none;opacity:.82}.empty{display:none;padding:18px;border-radius:18px;background:#fff;border:1px solid var(--outline);color:var(--muted);line-height:1.5}.empty a{color:var(--primary);font-weight:700}.form-error{display:none;margin:0 0 16px;padding:12px 14px;border-radius:14px;background:rgba(186,26,26,.08);color:var(--error);border:1px solid rgba(186,26,26,.18);font-size:14px}.form-error.show{display:block}.invalid input,.invalid select{border-color:var(--error)!important;box-shadow:0 0 0 1px rgba(186,26,26,.2)}
     @media (min-width:769px){body{background:#fff8f7}.mobile-page,.announce,.topbar,.sticky-cta{display:none}.desktop-fallback{min-height:100svh;display:grid;place-items:center;padding:40px}.desktop-card{max-width:560px;background:#faf5f2;border:1px solid #eadadd;border-radius:28px;padding:34px;text-align:center}.desktop-card h1{font-family:"Playfair Display",serif;color:#8e4559;margin:0 0 10px}.desktop-card p{color:#534346;line-height:1.65}.desktop-card a{display:inline-flex;margin-top:14px;height:52px;padding:0 24px;align-items:center;border-radius:999px;background:#b5657a;color:white;text-decoration:none;text-transform:uppercase;letter-spacing:.12em;font-weight:700;font-size:13px}}
   </style>
 <link href="cc-material-icons.css" rel="stylesheet"/>
@@ -21,9 +21,17 @@
 </head>
 <body>
 <div class="desktop-fallback"><section class="desktop-card"><h1>Desktop checkout is unchanged</h1><p>This approved delivery information experience is wired only for mobile screens. Continue using the existing desktop checkout flow.</p><a href="checkout.html">Open desktop checkout</a></section></div>
-<div class="announce">Free shipping on ₹399+</div>
 
 <main class="mobile-page wrap">
+  <!-- Back Link inside content container -->
+  <div style="display:flex; align-items:center; margin-top:24px; margin-bottom:24px;">
+    <a href="shipping-address.html" style="display:inline-flex; align-items:center; gap:6px; color:var(--primary); font-weight:600; font-size:14px; text-decoration:none; transition:opacity 0.2s;" id="pageBackBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px; height:16px; display:inline-block; vertical-align:middle; color:var(--primary);">
+        <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+      </svg>
+      Back to Shipping Address
+    </a>
+  </div>
 <section class="intro"><p class="eyebrow">Checkout step 1</p><h1>Delivery Information</h1><p>Complete your delivery details below. Coupon validation is saved here, but redirection happens only when you tap Continue.</p></section>
 <div aria-label="Checkout progress" class="steps"><span class="step is-active"></span><span class="step"></span><span class="step"></span></div>
 <div class="empty" id="emptyCart">Your cart is empty. <a href="index.html#bestsellers">Browse best sellers</a>.</div>
@@ -31,7 +39,6 @@
 <div class="form-error" id="formError">Please complete all required delivery fields.</div>
 <section class="card"><h2>Contact Information</h2><div class="grid"><div class="field"><label for="fullName">Full Name</label><input autocomplete="name" id="fullName" minlength="2" placeholder="Enter your name" required="" type="text"/></div><div class="field"><label for="phone">Phone Number</label><input autocomplete="tel" id="phone" inputmode="numeric" maxlength="10" pattern="[6-9][0-9]{9}" placeholder="10-digit mobile number" required="" type="tel"/></div><div class="field"><label for="email">Email Address</label><input autocomplete="email" id="email" placeholder="For order updates" required="" type="email"/></div></div></section>
 <section class="card"><h2>Delivery Address</h2><div class="grid"><div class="field"><label for="addressLine1">Address Line 1</label><input id="addressLine1" placeholder="House no, street, area" required="" type="text"/></div><div class="field"><label for="addressLine2">Address Line 2 (Optional)</label><input id="addressLine2" placeholder="Apartment, suite, unit" type="text"/></div><div class="field"><label for="landmark">Landmark (Optional)</label><input id="landmark" placeholder="Near city park" type="text"/></div><div class="field"><label for="city">City</label><input id="city" placeholder="Enter city" required="" type="text"/></div><div class="field"><label for="state">State</label><select id="state" required=""><option value="">Select State</option><option value="Tamil Nadu">Tamil Nadu</option><option value="Karnataka">Karnataka</option><option value="Maharashtra">Maharashtra</option><option value="Delhi">Delhi</option><option value="Kerala">Kerala</option><option value="Andhra Pradesh">Andhra Pradesh</option><option value="Telangana">Telangana</option><option value="Other">Other</option></select></div><div class="field"><label for="pincode">Pincode</label><input id="pincode" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" placeholder="6 digits" required="" type="text"/></div><div class="field"><label for="country">Country</label><input id="country" readonly="" type="text" value="India"/></div><div class="field"><label>Address Type</label><div class="segmented"><input checked="" id="home" name="addressType" type="radio" value="Home"/><label for="home">Home</label><input id="office" name="addressType" type="radio" value="Office"/><label for="office">Office</label><input id="other" name="addressType" type="radio" value="Other"/><label for="other">Other</label></div></div></div></section>
-<section class="card"><div class="card-title-row"><span class="icon">✦</span><h2>Campus Benefit</h2></div><p class="muted-note">Students of CIT can unlock exclusive benefits using a valid campus coupon code.</p><div class="coupon-row"><input autocomplete="off" id="couponCode" placeholder="Enter coupon code" type="text"/><button id="applyCouponBtn" type="button">Apply Coupon</button></div><div class="message success" id="couponSuccess">✓ Campus Benefit Unlocked<br/>Coupon Applied: <strong id="couponSuccessCode"></strong><br/><span id="couponRedirectNote">Redirecting to Campus Verification…</span></div><div class="message error" id="couponError">Invalid coupon code</div></section>
 <section class="card"><h2>Order Summary</h2><div class="summary"><div class="sumrow"><span>Number of items</span><strong id="itemCount">0 Items</strong></div><div class="sumrow"><span>Subtotal</span><strong id="subtotal">₹0</strong></div><div class="sumrow"><span>Shipping</span><strong id="shipping">Calculated at review</strong></div><div class="sumrow total"><span>Estimated Delivery</span><strong>1–3 Days</strong></div></div></section>
 </form>
 </main>
@@ -61,22 +68,24 @@
 
       function showCouponSuccess(coupon){
         activeCoupon=coupon;
-        couponError.classList.remove('show');
-        couponSuccess.classList.add('show');
-        couponSuccessCode.textContent=coupon.couponCode;
-        couponInput.value=coupon.couponCode;
+        if(couponError) couponError.classList.remove('show');
+        if(couponSuccess) couponSuccess.classList.add('show');
+        if(couponSuccessCode) couponSuccessCode.textContent=coupon.couponCode;
+        if(couponInput) couponInput.value=coupon.couponCode;
       }
 
       function hideCouponMessages(){
-        couponSuccess.classList.remove('show');
-        couponError.classList.remove('show');
+        if(couponSuccess) couponSuccess.classList.remove('show');
+        if(couponError) couponError.classList.remove('show');
       }
 
       function showCouponError(message){
         activeCoupon=null;
-        couponSuccess.classList.remove('show');
-        couponError.textContent=message || 'Invalid coupon code';
-        couponError.classList.add('show');
+        if(couponSuccess) couponSuccess.classList.remove('show');
+        if(couponError) {
+          couponError.textContent=message || 'Invalid coupon code';
+          couponError.classList.add('show');
+        }
       }
 
       function writeSession(){
@@ -95,10 +104,28 @@
           updatedAt:new Date().toISOString()
         };
         localStorage.setItem(SESSION_KEY,JSON.stringify(data));
+        
+        // Sync with checkout-review.html's expected cc_delivery key
+        var ccDelivery = {
+          name: val('fullName'),
+          phone: val('phone').replace(/\s/g,''),
+          email: val('email'),
+          address: val('addressLine1') + (val('addressLine2') ? ', ' + val('addressLine2') : '') + (val('landmark') ? ' (near ' + val('landmark') + ')' : ''),
+          city: val('city'),
+          state: val('state'),
+          pincode: val('pincode')
+        };
+        localStorage.setItem('cc_delivery', JSON.stringify(ccDelivery));
+        
         return data;
       }
 
       function restore(){
+        if (sessionStorage.getItem('fromShippingAddress') === 'true') {
+          // Clear any active session address inputs to ensure a clean blank form
+          document.getElementById('deliveryForm').reset();
+          return;
+        }
         var s=readSession();
         if(s){
           var c=s.customerInfo||{},a=s.deliveryAddress||{};
@@ -113,41 +140,43 @@
       function refreshButton(){continueBtn.disabled=!validCore()||!totals().qty}
       function clearInvalid(){document.querySelectorAll('.field.invalid').forEach(function(n){n.classList.remove('invalid')});formError.classList.remove('show')}
 
-      applyCouponBtn.addEventListener('click',async function(){
-        var redirectingAfterCoupon=false;
-        var code=val('couponCode').toUpperCase();
-        couponInput.value=code;
-        hideCouponMessages();
-        applyCouponBtn.disabled=true;
-        applyCouponBtn.textContent='Checking...';
-        try{
-          var result=await window.ChicCoupon.validate(code);
-          if(result && result.valid===true){
-            var stored=window.ChicCoupon.getStoredCoupon();
-            showCouponSuccess(stored || {couponApplied:true,couponCode:result.couponCode,couponType:result.couponType,discountAmount:result.discountAmount});
-            writeSession();
-            applyCouponBtn.textContent='Applied';
-            redirectingAfterCoupon=true;
-            // Redirect only AFTER Firebase backend rules accept and store the coupon session.
-            // This keeps /campus-verification protected while making the coupon flow direct.
-            setTimeout(function(){ window.location.href=route('campus-verification'); }, 650);
-            return;
-          }else{
+      if (applyCouponBtn) {
+        applyCouponBtn.addEventListener('click',async function(){
+          var redirectingAfterCoupon=false;
+          var code=val('couponCode').toUpperCase();
+          couponInput.value=code;
+          hideCouponMessages();
+          applyCouponBtn.disabled=true;
+          applyCouponBtn.textContent='Checking...';
+          try{
+            var result=await window.ChicCoupon.validate(code);
+            if(result && result.valid===true){
+              var stored=window.ChicCoupon.getStoredCoupon();
+              showCouponSuccess(stored || {couponApplied:true,couponCode:result.couponCode,couponType:result.couponType,discountAmount:result.discountAmount});
+              writeSession();
+              applyCouponBtn.textContent='Applied';
+              redirectingAfterCoupon=true;
+              // Redirect only AFTER Firebase backend rules accept and store the coupon session.
+              // This keeps /campus-verification protected while making the coupon flow direct.
+              setTimeout(function(){ window.location.href=route('campus-verification'); }, 650);
+              return;
+            }else{
+              window.ChicCoupon.clearCoupon();
+              showCouponError(result && result.message ? result.message : 'Invalid coupon code');
+            }
+          }catch(e){
             window.ChicCoupon.clearCoupon();
-            showCouponError(result && result.message ? result.message : 'Invalid coupon code');
+            showCouponError('Invalid coupon code');
+          }finally{
+            writeSession();
+            refreshButton();
+            if(!redirectingAfterCoupon){
+              applyCouponBtn.disabled=false;
+              applyCouponBtn.textContent='Apply Coupon';
+            }
           }
-        }catch(e){
-          window.ChicCoupon.clearCoupon();
-          showCouponError('Invalid coupon code');
-        }finally{
-          writeSession();
-          refreshButton();
-          if(!redirectingAfterCoupon){
-            applyCouponBtn.disabled=false;
-            applyCouponBtn.textContent='Apply Coupon';
-          }
-        }
-      });
+        });
+      }
 
       form.addEventListener('input',function(e){
         clearInvalid();
@@ -172,6 +201,77 @@
           var first=document.querySelector('.invalid');if(first)first.scrollIntoView({behavior:'smooth',block:'center'});refreshButton();return;
         }
         writeSession();
+
+        // Save address to Firebase Firestore if logged in
+        if (window.db && window.addDoc && window.collection) {
+          try {
+            var currentUserEmail = null;
+            // Access window.auth (Firebase auth instance)
+            var fbAuth = window.auth || (window.firebase && window.firebase.auth && window.firebase.auth());
+            if (fbAuth && fbAuth.currentUser) {
+              currentUserEmail = fbAuth.currentUser.email;
+            } else {
+              var s = readSession();
+              if (s && s.customerInfo && s.customerInfo.email) {
+                currentUserEmail = s.customerInfo.email;
+              }
+            }
+            
+            if (currentUserEmail) {
+              var streetAddress = val('addressLine1');
+              if (val('addressLine2')) streetAddress += ', ' + val('addressLine2');
+              if (val('landmark')) streetAddress += ' (near ' + val('landmark') + ')';
+              
+              var docData = {
+                userEmail: currentUserEmail,
+                name: val('fullName'),
+                phone: val('phone').replace(/\s/g,''),
+                address: streetAddress,
+                city: val('city'),
+                state: val('state'),
+                pincode: val('pincode'),
+                isDefault: false,
+                createdAt: new Date()
+              };
+              await window.addDoc(window.collection(window.db, 'addresses'), docData);
+            }
+          } catch (err) {
+            console.warn('[delivery-information] Firestore save failed:', err.message);
+          }
+        }
+
+        // Add to saved address list if redirected from shipping-address.html
+        var fromShipping = sessionStorage.getItem('fromShippingAddress') === 'true';
+        if (fromShipping) {
+          try {
+            var saved = JSON.parse(localStorage.getItem('ccSavedAddresses') || '[]');
+            var exists = saved.some(function(addr) {
+              return addr.addressLine1 === val('addressLine1') && addr.pincode === val('pincode');
+            });
+            if (!exists) {
+              var newAddr = {
+                id: 'addr_' + Date.now(),
+                fullName: val('fullName'),
+                phone: val('phone').replace(/\s/g,''),
+                email: val('email'),
+                addressLine1: val('addressLine1'),
+                addressLine2: val('addressLine2') || '',
+                landmark: val('landmark') || '',
+                city: val('city'),
+                state: val('state'),
+                pincode: val('pincode'),
+                addressType: selectedAddressType(),
+                displayText: val('addressLine1') + ', ' + val('city') + ' ' + val('pincode')
+              };
+              saved.push(newAddr);
+              localStorage.setItem('ccSavedAddresses', JSON.stringify(saved));
+            }
+          } catch(e) {}
+          sessionStorage.removeItem('fromShippingAddress');
+          window.location.href = 'shipping-address.html';
+          return;
+        }
+
         var coupon=null;
         try{coupon=await window.ChicCoupon.fetchSession();}catch(e){coupon=null;}
         if(coupon && coupon.couponApplied===true && coupon.couponType==='campus'){
@@ -183,7 +283,17 @@
         }
       });
 
-      document.getElementById('backBtn').addEventListener('click',function(){if(history.length>1)history.back();else window.location.href='cart.html'});
+      var pageBackBtn = document.getElementById('pageBackBtn');
+      if (pageBackBtn) {
+        pageBackBtn.addEventListener('click', function(e){
+          e.preventDefault();
+          if (history.length > 1) {
+            history.back();
+          } else {
+            window.location.href = 'shipping-address.html';
+          }
+        });
+      }
       restore();
       renderSummary();
       refreshButton();
@@ -193,12 +303,17 @@
     })();
   </script>
 <script type="module">
-    import { auth } from "./auth.js";
+    import { auth, db } from "./auth.js";
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    
+    window.db = db;
+    window.collection = collection;
+    window.addDoc = addDoc;
     
     onAuthStateChanged(auth, function(user) {
       if (!user) {
-        sessionStorage.setItem('authRedirect', 'delivery-information.html');
+        sessionStorage.setItem('authRedirect', 'shipping-address.html');
         window.location.href = 'auth.html';
       }
     });

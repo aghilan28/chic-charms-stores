@@ -813,10 +813,10 @@
         }
 
         /* All good — proceed */
-        window.location.href = window.matchMedia('(max-width: 768px)').matches ? 'delivery-information.html' : 'checkout.html';
+        window.location.href = window.matchMedia('(max-width: 768px)').matches ? 'shipping-address.html' : 'checkout.html';
       }).catch(function() {
         /* Network failure — let them through, server will validate */
-        window.location.href = window.matchMedia('(max-width: 768px)').matches ? 'delivery-information.html' : 'checkout.html';
+        window.location.href = window.matchMedia('(max-width: 768px)').matches ? 'shipping-address.html' : 'checkout.html';
       });
     }
 

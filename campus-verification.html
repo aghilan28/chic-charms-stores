@@ -1,51 +1,701 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
-<title>Campus Verification – Chic Charms</title>
-<style>
-    :root{--surface:#fff8f7;--card:#f6eceb;--card2:#fcf1f1;--text:#1f1a1b;--muted:#534346;--line:#d7c1c5;--primary:#8e4559;--on-primary:#fff;--rose2:#ffd9e0;--shadow:0 18px 50px rgba(144,71,91,.12);--head:Georgia,'Times New Roman',serif;--body:'Plus Jakarta Sans','Jost',Arial,sans-serif}
-    *{box-sizing:border-box}body{margin:0;min-height:100dvh;background:var(--surface);color:var(--text);font-family:var(--body);-webkit-tap-highlight-color:transparent}.desktop-note{display:none}.mobile-shell{min-height:100dvh;padding-bottom:104px}.announce{height:40px;display:flex;align-items:center;justify-content:center;background:var(--primary);color:#fff;font-size:12px;font-weight:800;letter-spacing:.16em;position:sticky;top:0;z-index:20}.topbar{height:76px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid var(--line);background:rgba(255,248,247,.96);backdrop-filter:blur(12px);position:sticky;top:40px;z-index:19}.back{width:42px;height:42px;border:0;background:transparent;color:var(--primary);font-size:28px}.brand{font-family:var(--head);font-size:22px;font-weight:700;color:var(--primary);letter-spacing:.14em;position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap}.top-label{font-size:10px;font-weight:800;color:var(--muted);letter-spacing:.04em;max-width:82px;text-align:right;line-height:1.15}.content{padding:44px 20px 0;max-width:520px;margin:auto}.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.18em;color:var(--primary);font-weight:800;margin:0 0 10px}.title{font-family:var(--head);font-size:34px;line-height:1.14;margin:0 0 10px;color:#2f2a2a}.sub{font-size:15px;line-height:1.7;color:var(--muted);margin:0}.success{margin-top:32px;padding:22px;border-radius:24px;background:linear-gradient(135deg,#fdf2f5,#faf5f2);border:1px solid rgba(142,69,89,.14);display:flex;gap:14px;box-shadow:var(--shadow)}.success-icon{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:rgba(142,69,89,.1);color:var(--primary);font-size:24px;flex:0 0 auto}.success h2{margin:0;color:var(--primary);font-size:13px;text-transform:uppercase;letter-spacing:.08em}.success p{margin:7px 0 0;color:var(--muted);font-size:13px;line-height:1.6}.code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:900;color:#2f121e;background:#fff;padding:2px 7px;border-radius:8px;border:1px solid rgba(142,69,89,.16)}.card{margin-top:18px;background:var(--card);border:1px solid rgba(215,193,197,.65);border-radius:24px;padding:22px}.card h3{font-family:var(--head);font-size:22px;margin:0 0 18px}.field{margin-bottom:16px}.field label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.11em;font-weight:800;color:var(--muted);margin:0 0 7px 4px}.field input,.field select{width:100%;height:56px;border:1px solid var(--line);border-radius:14px;background:#fff;color:var(--text);font:500 16px var(--body);padding:0 16px;outline:none}.field input:focus,.field select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(142,69,89,.1)}.readonly{height:56px;border:1px solid var(--line);border-radius:14px;background:rgba(234,224,224,.35);display:flex;align-items:center;padding:0 16px;color:var(--muted);font-weight:600}.hint{display:block;margin:6px 0 0 4px;color:var(--muted);font-size:12px;line-height:1.35}.field input.invalid{border-color:#ba1a1a;box-shadow:0 0 0 3px rgba(186,26,26,.10)}.benefits{list-style:none;margin:0;padding:0;display:grid;gap:16px}.benefits li{display:flex;gap:13px}.bicon{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:#fff;color:var(--primary);font-weight:900;flex:0 0 auto}.benefits strong{display:block;font-size:15px;margin-bottom:3px}.benefits span{font-size:13px;line-height:1.55;color:var(--muted)}.snapshot-row{display:flex;justify-content:space-between;gap:16px;margin:10px 0;color:var(--muted)}.snapshot-row.discount{color:var(--primary);font-weight:800}.snapshot-row.total{border-top:1px solid rgba(215,193,197,.8);padding-top:14px;color:var(--text);font-weight:900}.snapshot-row.total b{font-family:var(--head);font-size:23px}.footer{position:fixed;left:0;right:0;bottom:0;height:86px;padding:14px 20px calc(14px + env(safe-area-inset-bottom));background:rgba(255,248,247,.98);border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:14px;z-index:30}.footer small{display:block;color:var(--muted);margin-top:4px}.footer strong{color:var(--primary);font-size:13px}.cta{height:54px;min-width:176px;border:0;border-radius:14px;background:var(--primary);color:#fff;font-weight:900;font-size:15px;box-shadow:0 12px 28px rgba(142,69,89,.24)}.cta:disabled{opacity:.48}.route-loading{position:fixed;inset:0;background:var(--surface);display:grid;place-items:center;z-index:100;color:var(--primary);font-weight:900}.error{display:none;margin-top:12px;color:#93000a;background:#ffdad6;border-radius:14px;padding:12px;font-size:13px}.error.show{display:block}@media (min-width:769px){.mobile-shell{display:none}.desktop-note{min-height:100vh;display:grid;place-items:center;text-align:center;padding:32px;background:var(--surface)}.desktop-note div{max-width:520px;background:#fff;border:1px solid var(--line);border-radius:24px;padding:34px;box-shadow:var(--shadow)}.desktop-note h1{font-family:var(--head);color:var(--primary)}}
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+  <title>Campus Verification | Chic Charms</title>
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  
+  <!-- Stylesheets -->
+  <link href="styles.css" rel="stylesheet"/>
+  <link href="cc-global-header.css" rel="stylesheet"/>
+  
+  <style>
+    :root {
+      --bg: #fff8f7;
+      --surface: #faf5f2;
+      --surface2: #f6eceb;
+      --card: #fff;
+      --text: #1c1917;
+      --muted: #4e4440;
+      --outline: #d7c1c5;
+      --primary: #8e4559;      /* Deep mauve-rose */
+      --primary-dark: #743044; /* Rich brown-red/deep primary */
+      --accent-rose: #B5657A;  /* Accent rose */
+      --success: #2f7d4c;
+      --error: #ba1a1a;
+      --shadow: 0 10px 32px rgba(47, 42, 42, .06);
+      --font-head: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { background: var(--bg); scroll-behavior: smooth; }
+    body {
+      min-height: 100svh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    button { cursor: pointer; border: none; background: transparent; font-family: inherit; }
+    
+    /* ── Desktop Fallback ── */
+    .desktop-note { display: none; }
+    @media (min-width: 769px) {
+      .desktop-note {
+        min-height: 100svh;
+        display: grid;
+        place-items: center;
+        padding: 40px;
+        background: var(--bg);
+      }
+      .desktop-note div {
+        max-width: 560px;
+        background: var(--surface);
+        border: 1px solid var(--outline);
+        border-radius: 28px;
+        padding: 34px;
+        text-align: center;
+        box-shadow: var(--shadow);
+      }
+      .desktop-note h1 {
+        font-family: var(--font-head);
+        color: var(--primary);
+        margin-bottom: 12px;
+        font-size: 28px;
+      }
+      .desktop-note p {
+        color: var(--muted);
+        line-height: 1.65;
+        margin-bottom: 24px;
+      }
+      .desktop-note a {
+        display: inline-flex;
+        height: 52px;
+        padding: 0 28px;
+        align-items: center;
+        border-radius: 999px;
+        background: var(--accent-rose);
+        color: white;
+        text-decoration: none;
+        text-transform: uppercase;
+        letter-spacing: .12em;
+        font-weight: 700;
+        font-size: 13px;
+        transition: opacity 0.2s;
+      }
+      .desktop-note a:hover { opacity: 0.9; }
+      .mobile-shell { display: none !important; }
+    }
+
+    /* ── Mobile Shell & Spacing ── */
+    .mobile-shell {
+      display: flex;
+      flex-direction: column;
+      min-height: 100svh;
+      padding-bottom: 110px; /* Space for sticky footer */
+    }
+
+    .wrap {
+      width: min(100%, 640px);
+      margin: 0 auto;
+      padding: 36px 20px 28px;
+    }
+
+    .back-link-wrapper {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      margin-top: 24px;   /* Premium space below header */
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 14px;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    
+    .back-link:hover { opacity: 0.8; }
+
+    .intro {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .title {
+      font-family: var(--font-head);
+      font-size: 32px;
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+
+    .sub {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .success {
+      margin-top: 24px;
+      padding: 20px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #fdf2f5, #faf5f2);
+      border: 1px solid rgba(142, 69, 89, 0.15);
+      display: flex;
+      gap: 14px;
+      box-shadow: var(--shadow);
+      align-items: center;
+    }
+
+    .success-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(142, 69, 89, 0.1);
+      color: var(--primary);
+      font-size: 20px;
+      font-weight: bold;
+      flex: 0 0 auto;
+    }
+
+    .success h2 {
+      margin: 0;
+      color: var(--primary);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .success p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-weight: 700;
+      color: #2f121e;
+      background: #fff;
+      padding: 2px 6px;
+      border-radius: 6px;
+      border: 1px solid rgba(142, 69, 89, 0.16);
+    }
+
+    /* ── Form Card ── */
+    .card {
+      margin-top: 24px;
+      background: var(--surface);
+      border: 1px solid rgba(215, 193, 197, 0.5);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 2px 12px rgba(47, 42, 42, 0.02);
+    }
+
+    .card h3 {
+      font-family: var(--font-head);
+      font-size: 22px;
+      font-weight: 500;
+      margin-bottom: 20px;
+      color: var(--primary);
+    }
+
+    .field {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .11em;
+      font-weight: 600;
+      color: var(--muted);
+      padding-left: 4px;
+    }
+
+    .field input, .field select {
+      width: 100%;
+      height: 56px;
+      border: 1px solid var(--outline);
+      border-radius: 14px;
+      background: #fff;
+      color: var(--text);
+      font: 500 15px var(--font-body);
+      padding: 0 16px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .field input:focus, .field select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(142, 69, 89, 0.1);
+    }
+
+    .field select {
+      appearance: none;
+      background: #fff url("data:image/svg+xml,%3Csvg width='14' height='8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m1 1 6 6 6-6' stroke='%238E4559' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") right 16px center/14px 8px no-repeat;
+    }
+
+    /* ── Order Snapshot ── */
+    .snapshot-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 12px 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .snapshot-row.discount {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .snapshot-row.total {
+      border-top: 1px solid rgba(215, 193, 197, 0.6);
+      padding-top: 14px;
+      color: var(--text);
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .snapshot-row.total b {
+      font-family: var(--font-head);
+      font-size: 22px;
+      color: var(--primary-dark);
+    }
+
+    .footer {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 90px;
+      padding: 16px 20px calc(16px + env(safe-area-inset-bottom));
+      background: rgba(255, 248, 247, .98);
+      border-top: 1px solid rgba(181, 101, 122, 0.15);
+      backdrop-filter: blur(14px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 30;
+    }
+
+    .footer-inner-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .footer strong {
+      color: var(--primary);
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .footer small {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .cta {
+      width: 100%;
+      max-width: 640px;
+      height: 54px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--primary-dark);
+      color: #fff;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      box-shadow: 0 6px 20px rgba(116, 48, 68, 0.2);
+      transition: opacity 0.2s, transform 0.1s;
+    }
+
+    .cta:active {
+      transform: scale(0.98);
+    }
+
+    .cta:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .route-loading {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      display: grid;
+      place-items: center;
+      z-index: 100;
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 18px;
+    }
+
+    .error {
+      display: none;
+      margin-top: 12px;
+      color: var(--error);
+      background: #ffdad6;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 13px;
+      border: 1px solid rgba(186, 26, 26, 0.15);
+    }
+
+    .error.show {
+      display: block;
+    }
   </style>
-<link href="cc-material-icons.css" rel="stylesheet"/>
-<link href="cc-global-header.css" rel="stylesheet"/>
-  <link rel="icon" type="image/png" href="favicon.png"/>
 </head>
 <body>
-<div class="route-loading" id="routeLoading">Checking campus benefit…</div>
-<section class="desktop-note"><div><h1>Mobile Campus Verification</h1><p>This campus benefit screen is intentionally enabled for the mobile checkout flow only.</p><p><a href="checkout.html">Continue to checkout</a></p></div></section>
-<section aria-label="Campus verification" class="mobile-shell">
-<div class="announce">FREE SHIPPING ON ₹399+</div>
 
-<main class="content">
-<p class="eyebrow">Verified Coupon</p><h1 class="title">Campus Benefit Verification</h1><p class="sub">Verify your student information to unlock exclusive Chic Charms campus pricing.</p>
-<div class="success"><div class="success-icon">✓</div><div><h2>Campus Benefit Active</h2><p>Coupon: <span class="code" id="couponCodeText">—</span><br/>Your campus discount has been validated by the backend.</p></div></div>
-<div class="card"><h3>Student Verification</h3><form id="verificationForm"><div class="field"><label for="studentName">Student Name</label><input autocomplete="name" id="studentName" placeholder="Enter full name" required=""/></div><div class="field"><label for="department">Department</label><select id="department" required=""><option disabled="" selected="" value="">Select Department</option><option>CSE</option><option>IT</option><option>ECE</option><option>EEE</option><option>MECH</option><option>CIVIL</option><option>AIDS</option><option>CSBS</option><option>OTHER</option></select></div><div class="field"><label for="year">Year of Study</label><select id="year" required=""><option disabled="" selected="" value="">Select Year</option><option value="1">1st Year</option><option value="2">2nd Year</option><option value="3">3rd Year</option><option value="4">4th Year</option></select></div><div class="field"><label for="verifiedPhone">Verified Contact Number</label><input id="verifiedPhone" inputmode="numeric" maxlength="10" placeholder="10-digit mobile number" required="" type="tel"/><span class="hint">Use the same phone number entered on delivery information.</span></div><div class="error" id="formError">Please complete student name, department, year and a valid 10-digit phone number.</div></form></div>
-<div class="card"><h3>Your Campus Benefits</h3><ul class="benefits"><li><span class="bicon">₹</span><span><strong>Exclusive Student Pricing</strong><span>Flat discount applied on top of seasonal sales.</span></span></li><li><span class="bicon">!</span><span><strong>Priority Order Handling</strong><span>Your order skips the queue during peak campus events.</span></span></li><li><span class="bicon">↗</span><span><strong>Next-Day Campus Delivery</strong><span>Delivery directly to campus coordination points.</span></span></li></ul></div>
-<div class="card"><h3>Order Snapshot</h3><div id="snapshotRows"></div></div>
-</main>
-<footer class="footer"><div><strong>Campus Benefit Active</strong><small><span id="couponFooterText">—</span> applied</small></div><button class="cta" disabled="" id="submitBtn">Continue To Review</button></footer>
-</section>
-<script src="coupon-session.js"></script>
-<script>
+  <!-- Route Guard Screen -->
+  <div class="route-loading" id="routeLoading">Checking campus benefit…</div>
+
+  <!-- Desktop Fallback -->
+  <section class="desktop-note">
+    <div>
+      <h1>Mobile Campus Verification</h1>
+      <p>This campus benefit screen is intentionally enabled for the mobile checkout flow only.</p>
+      <p><a href="checkout.html">Continue to checkout</a></p>
+    </div>
+  </section>
+
+  <!-- Mobile View Content -->
+  <section aria-label="Campus verification" class="mobile-shell">
+    
+    <main class="wrap">
+      <!-- Back Link below global header -->
+      <div class="back-link-wrapper">
+        <a href="shipping-address.html" class="back-link" id="pageBackBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px; height:16px; display:inline-block; vertical-align:middle; color:var(--primary);">
+            <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+          </svg>
+          Back to Shipping Address
+        </a>
+      </div>
+
+      <section class="intro">
+        <span class="eyebrow">Verified Coupon</span>
+        <h1 class="title">Campus Benefit Verification</h1>
+        <p class="sub">Verify your student information to unlock exclusive Chic Charms campus pricing.</p>
+      </section>
+
+      <!-- Active Coupon Success Banner -->
+      <div class="success">
+        <div class="success-icon">✓</div>
+        <div>
+          <h2>Campus Benefit Active</h2>
+          <p>Coupon: <span class="code" id="couponCodeText">—</span><br/>Your campus discount has been validated by the backend.</p>
+        </div>
+      </div>
+
+      <!-- Student Verification Form Card -->
+      <div class="card">
+        <!-- Circular Profile Avatar matching the screenshot -->
+        <div style="display:flex; justify-content:center; margin-bottom:28px;">
+          <div style="position:relative; width:92px; height:92px; border-radius:50%; background:#f5e9eb; display:grid; place-items:center; color:var(--primary); box-shadow: 0 4px 12px rgba(142, 69, 89, 0.08);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:44px; height:44px;">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+            <div style="position:absolute; bottom:0; right:0; width:28px; height:28px; border-radius:50%; background:#1c1917; display:grid; place-items:center; color:#fff; border:2px solid #fff; cursor:pointer;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px; height:12px;">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <h3>Fill Your Profile</h3>
+        
+        <form id="verificationForm" novalidate="">
+          <!-- 1. FULL NAME -->
+          <div class="field">
+            <label for="studentName">Full Name</label>
+            <input autocomplete="name" id="studentName" placeholder="Enter full name" required="" type="text"/>
+          </div>
+
+          <!-- 1a. PHONE NUMBER -->
+          <div class="field">
+            <label for="studentPhone">Phone Number</label>
+            <input autocomplete="tel" id="studentPhone" inputmode="numeric" maxlength="10" pattern="[6-9][0-9]{9}" placeholder="10-digit mobile number" required="" type="tel"/>
+          </div>
+
+          <!-- 2. DATE OF BIRTH -->
+          <div class="field">
+            <label for="dob">Date of Birth</label>
+            <input id="dob" required="" type="date"/>
+          </div>
+
+          <!-- 3. YEAR OF STUDY -->
+          <div class="field">
+            <label for="year">Year of Study</label>
+            <select id="year" required="">
+              <option disabled="" selected="" value="">Select Year</option>
+              <option value="1">1st Year</option>
+              <option value="2">2nd Year</option>
+              <option value="3">3rd Year</option>
+              <option value="4">4th Year</option>
+            </select>
+          </div>
+
+          <!-- 4. DEPARTMENT -->
+          <div class="field">
+            <label for="department">Department</label>
+            <select id="department" required="">
+              <option disabled="" selected="" value="">Select Department</option>
+              <option value="CSE">CSE</option>
+              <option value="IT">IT</option>
+              <option value="AIML">AIML</option>
+              <option value="MECH">MECH</option>
+              <option value="Others">Others</option>
+            </select>
+          </div>
+
+          <!-- 4a. ENTER YOUR DEPT (Conditional Option) -->
+          <div class="field" id="otherDeptField" style="display:none;">
+            <label for="otherDept">Enter your Dept.</label>
+            <input id="otherDept" placeholder="Type your department name" type="text"/>
+          </div>
+
+          <!-- 5. HOSTELLER / DAYSCHOLAR -->
+          <div class="field">
+            <label for="studentType">Student Status</label>
+            <select id="studentType" required="">
+              <option disabled="" selected="" value="">Select Status</option>
+              <option value="Hosteller">Hosteller</option>
+              <option value="Day Scholar">Day Scholar</option>
+            </select>
+          </div>
+
+          <div class="error" id="formError">Please fill out all student details before proceeding.</div>
+        </form>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <button class="cta" disabled="" id="submitBtn">Continue To Review</button>
+    </footer>
+  </section>
+
+  <!-- Script logics -->
+  <script src="coupon-session.js"></script>
+  <script>
     const $ = (id) => document.getElementById(id);
-    const form = $('verificationForm'), submitBtn = $('submitBtn');
+    const form = $('verificationForm');
+    const submitBtn = $('submitBtn');
     let activeCoupon = null;
+
     function money(n){ return '₹' + Number(n || 0).toLocaleString('en-IN'); }
     function cart(){ try { return JSON.parse(localStorage.getItem('cart')) || []; } catch(e){ return []; } }
-    function renderSnapshot(){ const items=cart(); const subtotal=items.reduce((s,i)=>s+Number(i.price||0)*Number(i.quantity||1),0); const shipping=subtotal>=399?0:49; const discount=window.ChicCoupon.getDiscount(activeCoupon); const total=Math.max(0,subtotal+shipping-discount); $('snapshotRows').innerHTML='<div class="snapshot-row"><span>'+items.length+' Item'+(items.length===1?'':'s')+' in Bag</span><span>'+money(subtotal)+'</span></div><div class="snapshot-row"><span>Shipping</span><span>'+(shipping===0?'Free':money(shipping))+'</span></div><div class="snapshot-row discount"><span>Campus Discount</span><span>-'+money(discount)+'</span></div><div class="snapshot-row total"><span>Total Payable</span><b>'+money(total)+'</b></div>'; }
-    function getDeliveryPhone(){ try { var s=JSON.parse(localStorage.getItem('ccDeliverySession')||'{}'); return (s.customerInfo && s.customerInfo.phone ? String(s.customerInfo.phone) : '').replace(/\D/g,'').slice(0,10); } catch(e){ return ''; } }
-    function validPhone(){ return /^[6-9]\d{9}$/.test($('verifiedPhone').value.replace(/\D/g,'')); }
-    function validateForm(){ const ok=$('studentName').value.trim().length>2 && $('department').value && $('year').value && validPhone(); submitBtn.disabled=!ok; $('verifiedPhone').classList.toggle('invalid', $('verifiedPhone').value.trim().length>0 && !validPhone()); $('formError').classList.toggle('show', false); }
-    async function protectRoute(){ try { activeCoupon = await window.ChicCoupon.fetchSession(); } catch(e) { activeCoupon = null; } if (!activeCoupon || activeCoupon.couponApplied !== true || activeCoupon.couponType !== 'campus') { window.location.replace('checkout-review.html'); return; } $('couponCodeText').textContent=activeCoupon.couponCode; $('couponFooterText').textContent=activeCoupon.couponCode; var phone=getDeliveryPhone(); if(phone) $('verifiedPhone').value=phone; renderSnapshot(); validateForm(); $('routeLoading').style.display='none'; }
-    ['studentName','department','year','verifiedPhone'].forEach(id=>$(id).addEventListener('input',function(){ if(id==='verifiedPhone') this.value=this.value.replace(/\D/g,'').slice(0,10); validateForm(); })); ['department','year'].forEach(id=>$(id).addEventListener('change',validateForm));
-    $('backBtn').addEventListener('click',()=>history.length>1?history.back():location.href='delivery-method.html');
-    submitBtn.addEventListener('click',()=>{ if(submitBtn.disabled){$('formError').classList.add('show');return;} localStorage.setItem('cc_campus_verification', JSON.stringify({studentName:$('studentName').value.trim(),department:$('department').value,year:$('year').value,verifiedPhone:$('verifiedPhone').value.replace(/\D/g,''),updatedAt:new Date().toISOString()})); location.href='checkout-review.html'; });
+    
+    function renderSnapshot(){ 
+      const el = $('snapshotRows');
+      if (!el) return;
+      const items = cart(); 
+      const subtotal = items.reduce((s,i) => s + Number(i.price||0) * Number(i.quantity||1), 0); 
+      const shipping = 0; // In-campus delivery is always free
+      const discount = window.ChicCoupon.getDiscount(activeCoupon); 
+      const total = Math.max(0, subtotal + shipping - discount); 
+      
+      el.innerHTML = `
+        <div class="snapshot-row">
+          <span>${items.length} Item${items.length === 1 ? '' : 's'} in Bag</span>
+          <span>${money(subtotal)}</span>
+        </div>
+        <div class="snapshot-row">
+          <span>Shipping</span>
+          <span style="color: var(--success); font-weight: 600;">Free</span>
+        </div>
+        <div class="snapshot-row discount">
+          <span>Campus Discount (42% Off)</span>
+          <span>-${money(discount)}</span>
+        </div>
+        <div class="snapshot-row total">
+          <span>Total Payable</span>
+          <b>${money(total)}</b>
+        </div>
+      `; 
+    }
+
+    function validateForm(){ 
+      const isOthers = $('department').value === 'Others';
+      const deptOk = isOthers ? ($('otherDept').value.trim().length > 0) : !!$('department').value;
+      const phoneOk = /^[6-9]\d{9}$/.test($('studentPhone').value.trim().replace(/\s/g,''));
+      
+      const ok = $('studentName').value.trim().length > 2 
+                 && phoneOk
+                 && $('dob').value 
+                 && $('year').value 
+                 && deptOk 
+                 && $('studentType').value;
+                 
+      submitBtn.disabled = !ok; 
+      $('formError').classList.toggle('show', false); 
+    }
+
+    async function protectRoute(){ 
+      try { 
+        activeCoupon = await window.ChicCoupon.fetchSession(); 
+      } catch(e) { 
+        activeCoupon = null; 
+      } 
+      
+      if (!activeCoupon || activeCoupon.couponApplied !== true || activeCoupon.couponType !== 'campus') { 
+        window.location.replace('checkout-review.html'); 
+        return; 
+      } 
+      
+      $('couponCodeText').textContent = activeCoupon.couponCode; 
+      
+      // Pre-fill phone/name from cc_delivery / cc_campus_verification if available
+      try {
+        const saved = JSON.parse(localStorage.getItem('cc_campus_verification') || 'null');
+        if (saved) {
+          if ($('studentName')) $('studentName').value = saved.studentName || '';
+          if ($('studentPhone')) $('studentPhone').value = saved.phone || '';
+          if ($('dob')) $('dob').value = saved.dob || '';
+          if ($('year')) $('year').value = saved.year || '';
+          if (saved.department) {
+            const deptSelect = $('department');
+            const options = Array.from(deptSelect.options).map(o => o.value);
+            if (options.includes(saved.department)) {
+              deptSelect.value = saved.department;
+            } else {
+              deptSelect.value = 'Others';
+              $('otherDeptField').style.display = 'block';
+              $('otherDept').required = true;
+              $('otherDept').value = saved.department;
+            }
+          }
+          if ($('studentType')) $('studentType').value = saved.studentType || '';
+        } else {
+          const ccDelivery = JSON.parse(localStorage.getItem('cc_delivery') || 'null');
+          if (ccDelivery) {
+            if ($('studentName')) $('studentName').value = ccDelivery.name || '';
+            if ($('studentPhone')) $('studentPhone').value = ccDelivery.phone || '';
+          }
+        }
+      } catch (e) {
+        console.warn('Error pre-filling campus verification:', e);
+      }
+      
+      renderSnapshot(); 
+      validateForm(); 
+      $('routeLoading').style.display = 'none'; 
+    }
+
+    // Add input listeners
+    ['studentName', 'studentPhone', 'dob', 'otherDept'].forEach(id => $(id).addEventListener('input', validateForm));
+    ['year', 'studentType'].forEach(id => $(id).addEventListener('change', validateForm));
+
+    // Handle department specific toggle
+    $('department').addEventListener('change', function() {
+      if (this.value === 'Others') {
+        $('otherDeptField').style.display = 'block';
+        $('otherDept').required = true;
+      } else {
+        $('otherDeptField').style.display = 'none';
+        $('otherDept').required = false;
+        $('otherDept').value = '';
+      }
+      validateForm();
+    });
+
+    $('pageBackBtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      if (history.length > 1) {
+        history.back();
+      } else {
+        window.location.href = 'shipping-address.html';
+      }
+    });
+
+    submitBtn.addEventListener('click', () => { 
+      if (submitBtn.disabled) {
+        $('formError').classList.add('show');
+        return;
+      } 
+      
+      const selectedDept = $('department').value;
+      const finalDept = selectedDept === 'Others' ? $('otherDept').value.trim() : selectedDept;
+      const verifiedPhone = $('studentPhone').value.trim();
+
+      localStorage.setItem('cc_campus_verification', JSON.stringify({
+        studentName: $('studentName').value.trim(),
+        dob: $('dob').value,
+        department: finalDept,
+        year: $('year').value,
+        studentType: $('studentType').value,
+        phone: verifiedPhone,
+        updatedAt: new Date().toISOString()
+      })); 
+
+      // Sync with cc_delivery for order tracking & processing in checkout-review.html
+      let ccDelivery = {};
+      try {
+        ccDelivery = JSON.parse(localStorage.getItem('cc_delivery') || '{}') || {};
+      } catch (e) {
+        ccDelivery = {};
+      }
+      ccDelivery.name = $('studentName').value.trim();
+      ccDelivery.phone = verifiedPhone;
+      ccDelivery.dept = finalDept;
+      ccDelivery.year = $('year').value;
+      // For campus delivery, address/city/state/pincode are preset to campus defaults if not present
+      ccDelivery.address = ccDelivery.address || 'CIT Campus Drop-off';
+      ccDelivery.city = ccDelivery.city || 'Chennai';
+      ccDelivery.state = ccDelivery.state || 'Tamil Nadu';
+      ccDelivery.pincode = ccDelivery.pincode || '600069';
+      localStorage.setItem('cc_delivery', JSON.stringify(ccDelivery));
+      
+      location.href = 'checkout-review.html'; 
+    });
+
     protectRoute();
   </script>
-<script defer="" src="cc-material-icons.js"></script>
-<script defer="" src="cc-global-header.js"></script>
+
+  <!-- Global Header and Icon scripts -->
+  <script defer src="cc-global-header.js"></script>
 </body>
 </html>

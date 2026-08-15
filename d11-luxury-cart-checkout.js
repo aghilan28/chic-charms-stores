@@ -114,7 +114,7 @@
         if (typeof window.handleCheckout === "function") {
           window.handleCheckout();
         } else {
-          window.location.href = IS_MOBILE() ? "delivery-information.html" : "checkout.html";
+          window.location.href = IS_MOBILE() ? "shipping-address.html" : "checkout.html";
         }
       });
     }
@@ -558,11 +558,11 @@
       if (!items || items.length === 0) return;
     } catch (e) { return; }
 
-    if (document.querySelector("link[rel='prefetch'][href='delivery-information.html']")) return;
+    if (document.querySelector("link[rel='prefetch'][href='shipping-address.html']")) return;
 
     const link = document.createElement("link");
     link.rel = "prefetch";
-    link.href = IS_MOBILE() ? "delivery-information.html" : "checkout.html";
+    link.href = IS_MOBILE() ? "shipping-address.html" : "checkout.html";
     document.head.appendChild(link);
   }
 

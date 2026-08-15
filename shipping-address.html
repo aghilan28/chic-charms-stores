@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+  <meta content="Shipping Address Selection – Chic Charms mobile checkout" name="description"/>
+  <title>Shipping Address | Chic Charms</title>
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  
+  <!-- Stylesheets -->
+  <link href="styles.css" rel="stylesheet"/>
+  <link href="cc-global-header.css" rel="stylesheet"/>
+  
+  <style>
+    :root {
+      --bg: #fff8f7;
+      --surface: #faf5f2;
+      --surface2: #f6eceb;
+      --card: #fff;
+      --text: #1c1917;
+      --muted: #4e4440;
+      --outline: #d7c1c5;
+      --primary: #8e4559;      /* Deep mauve-rose */
+      --primary-dark: #743044; /* Rich brown-red/deep primary */
+      --accent-rose: #B5657A;  /* Accent rose */
+      --shadow: 0 10px 32px rgba(47, 42, 42, .06);
+      --font-head: 'Playfair Display', Georgia, serif;
+      --font-body: 'Jost', system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { background: var(--bg); scroll-behavior: smooth; }
+    body {
+      min-height: 100svh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    button { cursor: pointer; border: none; background: transparent; font-family: inherit; }
+    
+    /* ── Desktop Fallback ── */
+    .desktop-fallback { display: none; }
+    @media (min-width: 769px) {
+      .desktop-fallback {
+        min-height: 100svh;
+        display: grid;
+        place-items: center;
+        padding: 40px;
+        background: var(--bg);
+      }
+      .desktop-card {
+        max-width: 560px;
+        background: var(--surface);
+        border: 1px solid var(--outline);
+        border-radius: 28px;
+        padding: 34px;
+        text-align: center;
+        box-shadow: var(--shadow);
+      }
+      .desktop-card h1 {
+        font-family: var(--font-head);
+        color: var(--primary);
+        margin-bottom: 12px;
+        font-size: 28px;
+      }
+      .desktop-card p {
+        color: var(--muted);
+        line-height: 1.65;
+        margin-bottom: 24px;
+      }
+      .desktop-card a {
+        display: inline-flex;
+        height: 52px;
+        padding: 0 28px;
+        align-items: center;
+        border-radius: 999px;
+        background: var(--accent-rose);
+        color: white;
+        text-decoration: none;
+        text-transform: uppercase;
+        letter-spacing: .12em;
+        font-weight: 700;
+        font-size: 13px;
+        transition: opacity 0.2s;
+      }
+      .desktop-card a:hover { opacity: 0.9; }
+      .mobile-shell { display: none !important; }
+    }
+
+    /* ── Mobile Shell & Navigation ── */
+    .mobile-shell {
+      display: flex;
+      flex-direction: column;
+      min-height: 100svh;
+      padding-bottom: 110px; /* Space for sticky footer */
+    }
+
+    .wrap {
+      width: min(100%, 640px);
+      margin: 0 auto;
+      padding: 36px 20px 28px;
+    }
+
+    .back-link-wrapper {
+      display: flex;
+      align-items: center;
+      margin-top: 24px;   /* Premium space below header */
+      margin-bottom: 24px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 14px;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    
+    .back-link:hover { opacity: 0.8; }
+
+    .title-area {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .title-area h2 {
+      font-family: var(--font-head);
+      font-size: 28px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .title-area p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* ── Address Cards & List ── */
+    .address-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .address-card {
+      background: var(--card);
+      border: 1px solid var(--outline);
+      border-radius: 20px;
+      padding: 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      cursor: pointer;
+      position: relative;
+      transition: border-color 0.25s, box-shadow 0.25s, transform 0.15s;
+      box-shadow: 0 2px 8px rgba(47, 42, 42, .02);
+    }
+
+    .address-card:hover {
+      border-color: var(--accent-rose);
+      box-shadow: 0 4px 16px rgba(181, 101, 122, 0.08);
+    }
+
+    .address-card.selected {
+      border-color: var(--primary);
+      background-color: var(--surface);
+      box-shadow: 0 6px 20px rgba(142, 69, 89, 0.08);
+    }
+
+    .address-card:active {
+      transform: scale(0.985);
+    }
+
+    .address-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--surface2);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
+    .address-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .address-info h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .address-info p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* Custom Radio Button matching screenshot & colors */
+    .custom-radio {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2px solid var(--outline);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      transition: border-color 0.2s;
+      margin-top: 2px;
+    }
+
+    .address-card.selected .custom-radio {
+      border-color: var(--primary);
+    }
+
+    .radio-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--primary-dark);
+      transform: scale(0);
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .address-card.selected .radio-dot {
+      transform: scale(1);
+    }
+
+    /* Add new shipping address card (dotted/dashed) */
+    .add-address-btn {
+      background: var(--surface);
+      border: 2px dashed rgba(142, 69, 89, 0.3);
+      border-radius: 20px;
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 14px;
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    }
+
+    .add-address-btn:hover {
+      background: var(--surface2);
+      border-color: var(--primary);
+    }
+
+    .add-address-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* ── Bottom Sticky Footer ── */
+    .footer-action {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 40;
+      background: rgba(255, 248, 247, .98);
+      border-top: 1px solid rgba(181, 101, 122, .12);
+      backdrop-filter: blur(14px);
+      padding: 16px 20px calc(16px + env(safe-area-inset-bottom));
+    }
+
+    .footer-inner {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .apply-btn {
+      width: 100%;
+      height: 54px;
+      background: var(--primary-dark);
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border-radius: 999px;
+      box-shadow: 0 4px 16px rgba(116, 48, 68, 0.25);
+      transition: background 0.2s, transform 0.1s, opacity 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .apply-btn:active {
+      transform: scale(0.98);
+    }
+
+    .apply-btn:disabled {
+      background: var(--outline);
+      color: var(--muted);
+      cursor: not-allowed;
+      box-shadow: none;
+      opacity: 0.7;
+    }
+
+    /* ── Coupon Celebration Modal (Overlay) ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(28, 25, 23, 0.45);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .coupon-modal {
+      background: var(--surface);
+      border-radius: 28px;
+      width: 100%;
+      max-width: 400px;
+      padding: 32px 24px;
+      text-align: center;
+      border: 1px solid var(--outline);
+      box-shadow: 0 20px 60px rgba(47, 42, 42, 0.15);
+      transform: scale(0.9);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .modal-overlay.open .coupon-modal {
+      transform: scale(1);
+    }
+
+    /* Decorative Coupon Border details */
+    .coupon-modal::before, .coupon-modal::after {
+      content: '';
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(28, 25, 23, 0.45);
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+    }
+    .coupon-modal::before { left: -12px; }
+    .coupon-modal::after { right: -12px; }
+
+    .coupon-glow {
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(181, 101, 122, 0.15) 0%, transparent 70%);
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .coupon-card {
+      border: 2px dashed var(--accent-rose);
+      border-radius: 20px;
+      padding: 24px 16px;
+      background: var(--card);
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .coupon-icon {
+      font-size: 52px;
+      margin-bottom: 12px;
+      display: inline-block;
+      animation: float 2.5s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .coupon-congratulations {
+      font-family: var(--font-head);
+      font-size: 24px;
+      font-style: italic;
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .coupon-text {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .claim-btn {
+      width: 100%;
+      height: 52px;
+      background: var(--primary);
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(142, 69, 89, 0.2);
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .claim-btn:active {
+      transform: scale(0.98);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Desktop Fallback Screen -->
+  <div class="desktop-fallback">
+    <section class="desktop-card">
+      <h1>Desktop checkout is unchanged</h1>
+      <p>This shipping address selection is built exclusively for mobile screen sizes. Please use the standard desktop checkout experience.</p>
+      <a href="checkout.html">Open Desktop Checkout</a>
+    </section>
+  </div>
+
+  <!-- Mobile Screen Shell -->
+  <div class="mobile-shell">
+    <!-- Header is dynamically injected by cc-global-header.js -->
+
+    <main class="wrap">
+      <!-- Back Link inside content container with inline SVG to ensure visual rendering -->
+      <div class="back-link-wrapper">
+        <a href="cart.html" class="back-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px; height:16px; display:inline-block; vertical-align:middle; color:var(--primary);">
+            <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+          </svg>
+          Back to Cart
+        </a>
+      </div>
+
+      <section class="title-area">
+        <h2>Shipping Address</h2>
+        <p>Select your delivery method or select a saved address to proceed to checkout review.</p>
+      </section>
+
+      <!-- Address options list -->
+      <section class="address-list" id="addressContainer">
+        <div style="text-align:center; padding:32px 16px; color:var(--muted); font-size:14px;">
+          Loading your saved addresses...
+        </div>
+      </section>
+    </main>
+
+    <!-- Bottom Apply Button -->
+    <nav class="footer-action" aria-label="Apply selection">
+      <div class="footer-inner">
+        <button class="apply-btn" id="applyBtn" disabled>Apply</button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Coupon celebration modal -->
+  <div class="modal-overlay" id="couponModalOverlay">
+    <div class="coupon-modal">
+      <div class="coupon-glow"></div>
+      <div class="coupon-card">
+        <span class="coupon-icon">✨🎟️✨</span>
+        <h3 class="coupon-congratulations">Congratulations!</h3>
+        <p class="coupon-text">You got an <strong>in-campus discount</strong> on your order! Verify your student profile to claim this benefit.</p>
+      </div>
+      <button class="claim-btn" id="claimBtn">Claim Discount</button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="coupon-session.js"></script>
+  <script>
+    // Global scope definitions for address render
+    (function() {
+      'use strict';
+      
+      const SESSION_KEY = 'ccDeliverySession';
+      let selectedId = null;
+      let selectedAddrObject = null;
+      let availableAddresses = [];
+
+      // SVG Icon helpers to bypass web font download dependency
+      const SVG_ICONS = {
+        school: `<svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:22px; height:22px;"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg>`,
+        home: `<svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:22px; height:22px;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+        office: `<svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:22px; height:22px;"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>`,
+        location: `<svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:22px; height:22px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`
+      };
+
+      function getActiveAddress() {
+        try {
+          const session = JSON.parse(localStorage.getItem(SESSION_KEY));
+          if (session && session.deliveryAddress) {
+            return session;
+          }
+        } catch(e) {}
+        return null;
+      }
+
+      window.renderAddresses = function(firestoreAddresses) {
+        let allAddresses = firestoreAddresses || [];
+
+        // 1. Fetch from active session if exists
+        try {
+          const session = JSON.parse(localStorage.getItem(SESSION_KEY));
+          if (session && session.deliveryAddress && session.couponType !== 'campus') {
+            const exists = allAddresses.some(addr => 
+              (addr.address || addr.addressLine1) === session.deliveryAddress.addressLine1 &&
+              addr.pincode === session.deliveryAddress.pincode
+            );
+            if (!exists) {
+              allAddresses.push({
+                id: 'addr_session',
+                name: session.customerInfo?.fullName || 'Priya Sharma',
+                phone: session.customerInfo?.phone || '9876543210',
+                userEmail: session.customerInfo?.email || 'priya@example.com',
+                address: session.deliveryAddress.addressLine1 + (session.deliveryAddress.addressLine2 ? ', ' + session.deliveryAddress.addressLine2 : '') + (session.deliveryAddress.landmark ? ' (near ' + session.deliveryAddress.landmark + ')' : ''),
+                city: session.deliveryAddress.city || '',
+                state: session.deliveryAddress.state || 'Tamil Nadu',
+                pincode: session.deliveryAddress.pincode || '',
+                addressType: session.deliveryAddress.addressType || 'Home'
+              });
+            }
+          }
+        } catch(e) {}
+
+        availableAddresses = allAddresses;
+        const container = document.getElementById('addressContainer');
+        container.innerHTML = '';
+
+        // 1. In-Campus Option (Uses inline school SVG icon)
+        const inCampusCard = document.createElement('div');
+        inCampusCard.className = 'address-card';
+        inCampusCard.id = 'addr_incampus';
+        inCampusCard.onclick = () => selectOption('addr_incampus');
+        inCampusCard.innerHTML = `
+          <div class="address-icon">
+            ${SVG_ICONS.school}
+          </div>
+          <div class="address-info">
+            <h3>In-Campus Delivery</h3>
+            <p>Collect your order from designated pickup locations inside CIT / CITAR campus (Free Delivery).</p>
+          </div>
+          <div class="custom-radio">
+            <div class="radio-dot"></div>
+          </div>
+        `;
+        container.appendChild(inCampusCard);
+
+        // 2. Saved Addresses list (Uses inline SVGs)
+        if (availableAddresses.length > 0) {
+          availableAddresses.forEach(addr => {
+            const card = document.createElement('div');
+            card.className = 'address-card';
+            card.id = addr.id;
+            card.onclick = () => selectOption(addr.id, addr);
+            
+            // Choose inline SVG icon
+            const type = (addr.addressType || 'Home').toLowerCase();
+            let iconSvg = SVG_ICONS.home;
+            if (type.includes('office') || type.includes('work')) iconSvg = SVG_ICONS.office;
+            else if (!type.includes('home')) iconSvg = SVG_ICONS.location;
+
+            const street = addr.address || addr.addressLine1 || '';
+            const city = addr.city || '';
+            const pin = addr.pincode || '';
+
+            card.innerHTML = `
+              <div class="address-icon">
+                ${iconSvg}
+              </div>
+              <div class="address-info">
+                <h3>${addr.addressType || 'Home'}</h3>
+                <p>${street}, ${city} ${pin}</p>
+              </div>
+              <div class="custom-radio">
+                <div class="radio-dot"></div>
+              </div>
+            `;
+            container.appendChild(card);
+          });
+        }
+
+        // 3. Add New Address Card
+        const addCard = document.createElement('button');
+        addCard.className = 'add-address-btn';
+        addCard.type = 'button';
+        addCard.style.width = '100%';
+        addCard.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px; height:16px; color:var(--primary); margin-right:6px; display:inline-block; vertical-align:middle;">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Add New Shipping Address
+        `;
+        addCard.onclick = () => {
+          sessionStorage.setItem('fromShippingAddress', 'true');
+          window.location.href = 'delivery-information.html';
+        };
+        container.appendChild(addCard);
+
+        // Pre-select active session if matched
+        const active = getActiveAddress();
+        if (active) {
+          if (active.couponType === 'campus') {
+            selectOption('addr_incampus');
+          } else {
+            // Find matched card
+            const match = availableAddresses.find(addr => 
+              (addr.address || addr.addressLine1) === active.deliveryAddress.addressLine1 &&
+              addr.pincode === active.deliveryAddress.pincode
+            );
+            if (match) {
+              selectOption(match.id, match);
+            }
+          }
+        }
+      };
+
+      function selectOption(id, addrObj) {
+        document.querySelectorAll('.address-card').forEach(el => {
+          el.classList.remove('selected');
+        });
+        const activeCard = document.getElementById(id);
+        if (activeCard) {
+          activeCard.classList.add('selected');
+        }
+        selectedId = id;
+        selectedAddrObject = addrObj || null;
+        document.getElementById('applyBtn').disabled = false;
+        
+        if (window.navigator && window.navigator.vibrate) window.navigator.vibrate(5);
+      }
+
+      function handleApply() {
+        if (!selectedId) return;
+
+        if (selectedId === 'addr_incampus') {
+          // Write campus coupon/benefit to localStorage
+          const campusSession = {
+            couponApplied: true,
+            couponCode: 'CAMPUS',
+            couponType: 'campus',
+            discountAmount: 50,
+            customerInfo: { fullName: 'Student', phone: '9876543210', email: 'student@cit.edu' },
+            deliveryAddress: {
+              addressLine1: 'CIT Campus Pickup Point',
+              addressLine2: 'Designated Delivery Area',
+              city: 'Chennai',
+              state: 'Tamil Nadu',
+              pincode: '600069',
+              country: 'India',
+              addressType: 'Other'
+            },
+            updatedAt: new Date().toISOString()
+          };
+          
+          localStorage.setItem(SESSION_KEY, JSON.stringify(campusSession));
+          localStorage.setItem('cc_delivery_type', 'in_campus');
+          
+          // Write checkout delivery matching checkout-review.html
+          const ccDelivery = {
+            name: 'Student',
+            phone: '9876543210',
+            email: 'student@cit.edu',
+            address: 'CIT Campus Pickup Point, Designated Delivery Area',
+            city: 'Chennai',
+            state: 'Tamil Nadu',
+            pincode: '600069'
+          };
+          localStorage.setItem('cc_delivery', JSON.stringify(ccDelivery));
+
+          // Set window coupon session if window.ChicCoupon exists
+          if (window.ChicCoupon && window.ChicCoupon.storeCoupon) {
+            window.ChicCoupon.storeCoupon({
+              couponApplied: true,
+              couponCode: 'CAMPUS',
+              couponType: 'campus',
+              discountAmount: 50
+            });
+          }
+
+          // Open Congratulations Modal
+          document.getElementById('couponModalOverlay').classList.add('open');
+        } else if (selectedAddrObject) {
+          // Save selected saved address
+          const streetAddress = selectedAddrObject.address || selectedAddrObject.addressLine1 || '';
+          
+          const regularSession = {
+            couponApplied: false,
+            couponCode: '',
+            couponType: null,
+            discountAmount: 0,
+            customerInfo: {
+              fullName: selectedAddrObject.name || 'Priya Sharma',
+              phone: selectedAddrObject.phone || '9876543210',
+              email: selectedAddrObject.userEmail || 'priya@example.com'
+            },
+            deliveryAddress: {
+              addressLine1: streetAddress,
+              addressLine2: '',
+              landmark: '',
+              city: selectedAddrObject.city || '',
+              state: selectedAddrObject.state || 'Tamil Nadu',
+              pincode: selectedAddrObject.pincode || '',
+              country: 'India',
+              addressType: selectedAddrObject.addressType || 'Home'
+            },
+            updatedAt: new Date().toISOString()
+          };
+          localStorage.setItem(SESSION_KEY, JSON.stringify(regularSession));
+          localStorage.setItem('cc_delivery_type', 'off_campus');
+
+          // Sync with checkout-review's expected cc_delivery key
+          const ccDelivery = {
+            name: selectedAddrObject.name || 'Priya Sharma',
+            phone: selectedAddrObject.phone || '9876543210',
+            email: selectedAddrObject.userEmail || 'priya@example.com',
+            address: streetAddress,
+            city: selectedAddrObject.city || '',
+            state: selectedAddrObject.state || 'Tamil Nadu',
+            pincode: selectedAddrObject.pincode || ''
+          };
+          localStorage.setItem('cc_delivery', JSON.stringify(ccDelivery));
+
+          // Clear campus coupon if there was one
+          if (window.ChicCoupon && window.ChicCoupon.clearCoupon) {
+            window.ChicCoupon.clearCoupon();
+          }
+
+          // Proceed to review
+          window.location.href = 'checkout-review.html';
+        }
+      }
+
+      document.getElementById('applyBtn').addEventListener('click', handleApply);
+      document.getElementById('claimBtn').addEventListener('click', function() {
+        window.location.href = 'campus-verification.html';
+      });
+
+    })();
+  </script>
+
+  <!-- Firebase connection scripts -->
+  <script type="module">
+    import { auth, db } from "./auth.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { collection, query, where, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    onAuthStateChanged(auth, async function(user) {
+      if (!user) {
+        sessionStorage.setItem('authRedirect', 'shipping-address.html');
+        window.location.href = 'auth.html';
+        return;
+      }
+      
+      const addresses = [];
+
+      // WIPE local storage ccSavedAddresses to clear cached dummy mock addresses on initial run
+      if (localStorage.getItem('ccSavedAddresses')) {
+        localStorage.removeItem('ccSavedAddresses');
+      }
+
+      // 1. Fetch user's profile address from users/{uid} (the "user tab" details)
+      try {
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          if (userData && userData.address) {
+            addresses.push({
+              id: 'addr_profile',
+              name: userData.name || user.displayName || 'Priya Sharma',
+              phone: userData.phone || '9876543210',
+              userEmail: user.email,
+              address: userData.address,
+              city: userData.city || 'Chennai',
+              state: userData.state || 'Tamil Nadu',
+              pincode: userData.pincode || '600001',
+              addressType: 'Home'
+            });
+          }
+        }
+      } catch (err) {
+        console.warn('Error fetching user profile doc:', err);
+      }
+
+      // 2. Fetch additional saved addresses from Firestore "addresses" collection
+      try {
+        const q = query(collection(db, 'addresses'), where('userEmail', '==', user.email));
+        const snap = await getDocs(q);
+        snap.forEach(doc => {
+          const data = doc.data();
+          // Avoid duplicate with profile address
+          const exists = addresses.some(addr => 
+            (addr.address || addr.addressLine1) === data.address && 
+            addr.pincode === data.pincode
+          );
+          if (!exists) {
+            addresses.push({ id: doc.id, ...data });
+          }
+        });
+      } catch (err) {
+        console.error('Error fetching addresses from Firestore:', err);
+      }
+      
+      window.renderAddresses(addresses);
+    });
+  </script>
+
+  <!-- Global Header Scripts -->
+  <script defer src="cc-global-header.js"></script>
+</body>
+</html>

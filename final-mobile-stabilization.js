@@ -591,7 +591,7 @@
       /* Trust strip */
       '<div class="cc-app-cart-trust" style="padding:8px 16px;flex:0 0 auto;"><span>Secure checkout</span><span>COD available</span><span>7-day returns</span></div>',
       /* Checkout button — sticky footer */
-      '<a class="cc-app-checkout" href="delivery-information.html"><span>Checkout</span><strong>Rs.' + subtotal + '</strong></a>'
+      '<a class="cc-app-checkout" href="shipping-address.html"><span>Checkout</span><strong>Rs.' + subtotal + '</strong></a>'
     ].join("");
   }
 

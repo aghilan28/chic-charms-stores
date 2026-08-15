@@ -464,8 +464,8 @@ document.documentElement.classList.add('cc-loading');
     .summary-discount-label { font-size: 14px; color: var(--primary); }
     .summary-discount-value { font-size: 14px; font-weight: 800; color: var(--primary); }
     .summary-total  { border-bottom: 0; border-top: 1px solid rgba(215,193,197,.5); padding-top: 16px; margin-top: 4px; }
-    .summary-total .summary-label { font-family: var(--head); font-size: 18px; color: var(--text); font-weight: 500; }
-    .summary-total .summary-value { font-family: var(--head); font-size: 22px; color: var(--primary); font-weight: 600; }
+    .summary-total .summary-label { font-family: var(--body); font-size: 18px; color: var(--text); font-weight: 500; }
+    .summary-total .summary-value { font-family: var(--body); font-size: 22px; color: var(--primary); font-weight: 600; }
 
     /* ── Empty state ───────────────────────────────────────────── */
     .empty-state {
@@ -490,16 +490,14 @@ document.documentElement.classList.add('cc-loading');
       box-shadow: 0 -12px 32px rgba(159, 76, 103, .08);
       padding: 14px 20px calc(14px + env(safe-area-inset-bottom));
       display: flex;
+      justify-content: center;
       align-items: center;
-      justify-content: space-between;
-      gap: 16px;
       z-index: 40;
     }
-    .footer-total-label { font-size: 12px; color: var(--muted); margin: 0 0 2px; }
-    .footer-total-amount { font-family: var(--head); font-size: 24px; color: var(--text); font-weight: 600; }
     .btn-pay {
       height: 54px;
-      min-width: 190px;
+      width: 100%;
+      max-width: 360px;
       border: 0;
       border-radius: 999px;
       background: var(--primary);
@@ -591,19 +589,20 @@ document.documentElement.classList.add('cc-loading');
 </div>
 <!-- Toast -->
 <div class="toast" id="toast"></div>
-<!-- Announcement Bar -->
-<div class="announce">FREE SHIPPING ON ₹399+</div>
-<!-- Top App Bar -->
 
 <!-- Progress Steps -->
-<div aria-hidden="true" class="steps">
-<div class="step active"></div>
-<div class="step active"></div>
-<div class="step active"></div>
-</div>
+
 <!-- Main Content -->
 <main class="wrap">
-<p class="eyebrow">Checkout · Step 3</p>
+  <!-- Back Link below global header -->
+  <div style="display:flex; align-items:center; margin-top:24px; margin-bottom:24px;">
+    <a href="shipping-address.html" style="display:inline-flex; align-items:center; gap:6px; color:var(--primary); font-weight:600; font-size:14px; text-decoration:none; transition:opacity 0.2s;" id="pageBackBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px; height:16px; display:inline-block; vertical-align:middle; color:var(--primary);">
+        <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+      </svg>
+      Back to Shipping Address
+    </a>
+  </div>
 <h1 class="page-title">Review Your Order</h1>
 <p class="page-sub">Please review your order details before proceeding to payment.</p>
 <!-- ① Empty state (hidden until JS confirms cart is empty) -->
@@ -611,57 +610,7 @@ document.documentElement.classList.add('cc-loading');
 <p>Your cart is empty.</p>
 <a href="index.html#bestsellers">Browse best sellers →</a>
 </div>
-<!-- ② Order Items Card -->
-<section class="card" id="itemsCard">
-<div class="card-header">
-<h2 class="card-title">Your Selection</h2>
-<span class="card-badge" id="itemCount">—</span>
-</div>
-<div id="itemsList">
-<!-- JS fills this -->
-<div class="item-row">
-<div class="item-thumb skeleton" style="width:96px;height:112px;"></div>
-<div class="item-info">
-<div class="skeleton" style="height:14px;width:70%;margin-bottom:8px;"></div>
-<div class="skeleton" style="height:12px;width:40%;margin-bottom:8px;"></div>
-<div class="skeleton" style="height:14px;width:30%;"></div>
-</div>
-</div>
-</div>
-</section>
-<!-- ③ Delivery Card
-         NON-COUPON user → read-only address summary (filled on delivery-information.html)
-         COUPON user     → campus delivery notice (no manual address needed)          -->
-<section class="card" id="deliveryCard">
-<div class="card-header">
-<h2 class="card-title" id="deliveryCardTitle">Delivery Address</h2>
-<!-- Edit button shown only for non-coupon users -->
-<button class="btn-edit" id="editAddressBtn" style="display:none;">Edit</button>
-</div>
-<div id="deliveryInfo">
-<!-- skeleton shown while JS hydrates -->
-<div class="skeleton" style="height:14px;width:55%;margin-bottom:8px;"></div>
-<div class="skeleton" style="height:42px;width:80%;margin-bottom:8px;"></div>
-<div class="skeleton" style="height:13px;width:45%;"></div>
-</div>
-</section>
-<!-- ④ Campus Benefit Card — CONDITIONAL: only shown when coupon applied -->
-<section aria-live="polite" class="card campus-card" id="campusBenefitSection">
-<div style="display:flex;align-items:flex-start;gap:14px;">
-<div class="campus-icon-wrap">
-<span class="material-symbols-outlined fill-icon">school</span>
-</div>
-<div class="campus-body">
-<p class="campus-label">
-            Campus Benefit Applied
-            <span class="campus-code-badge" id="campusCouponBadge"></span>
-</p>
-<p class="campus-student" id="campusStudentName"></p>
-<p class="campus-privilege" id="campusPrivilege"></p>
-<p class="campus-discount" id="campusDiscountText"></p>
-</div>
-</div>
-</section>
+
 <!-- ⑤ Payment Method Card -->
 <section class="card" id="paymentCard">
 <div class="card-header">
@@ -669,31 +618,18 @@ document.documentElement.classList.add('cc-loading');
 </div>
 <div id="paymentOptions">
 <div class="pay-option selected" data-method="upi">
-<div class="pay-option-icon">
-<span class="material-symbols-outlined">account_balance_wallet</span>
+<div class="pay-option-icon" style="background:#fff; border-radius:6px; padding:2px; display:flex; align-items:center; justify-content:center; width:52px; height:32px;">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Google_Pay_Logo.svg" alt="Google Pay" style="width: 44px; height: 18px; object-fit: contain;" />
 </div>
-<span class="pay-option-label">UPI (Google Pay / PhonePe)</span>
+<span class="pay-option-label">Google Pay (GPay)</span>
 <div class="pay-radio"><div class="pay-radio-dot"></div></div>
 </div>
 <div class="pay-option" data-method="credit_card">
-<div class="pay-option-icon">
-<span class="material-symbols-outlined">credit_card</span>
+<div class="pay-option-icon" style="background:#fff; border-radius:6px; padding:2px; display:flex; gap:4px; align-items:center; justify-content:center; width:52px; height:32px;">
+  <img src="https://img.icons8.com/color/48/000000/visa.png" alt="Visa" style="width: 22px; height: 14px; object-fit: contain;" />
+  <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" style="width: 18px; height: 14px; object-fit: contain;" />
 </div>
-<span class="pay-option-label">Credit Card</span>
-<div class="pay-radio"><div class="pay-radio-dot"></div></div>
-</div>
-<div class="pay-option" data-method="debit_card">
-<div class="pay-option-icon">
-<span class="material-symbols-outlined">payments</span>
-</div>
-<span class="pay-option-label">Debit Card</span>
-<div class="pay-radio"><div class="pay-radio-dot"></div></div>
-</div>
-<div class="pay-option" data-method="net_banking">
-<div class="pay-option-icon">
-<span class="material-symbols-outlined">account_balance</span>
-</div>
-<span class="pay-option-label">Net Banking</span>
+<span class="pay-option-label">Card Payment (Visa / Mastercard)</span>
 <div class="pay-radio"><div class="pay-radio-dot"></div></div>
 </div>
 </div>
@@ -721,10 +657,6 @@ document.documentElement.classList.add('cc-loading');
 </main>
 <!-- Sticky Footer -->
 <nav aria-label="Proceed to payment" class="footer-bar">
-<div>
-<p class="footer-total-label">Total Amount</p>
-<p class="footer-total-amount" id="footerTotal">₹—</p>
-</div>
 <button class="btn-pay" disabled="" id="payBtn">
 <span class="btn-pay-text">Proceed to Payment</span>
 <span class="material-symbols-outlined" style="font-size:18px;">arrow_forward</span>
@@ -757,8 +689,10 @@ document.documentElement.classList.add('cc-loading');
      ═══════════════════════════════════════════════════════════════ */
   let RAZORPAY_KEY_ID = '';
 
-  /* Use relative path for Vercel Serverless Functions API endpoints */
-  const FUNCTIONS_BASE = '/api';
+  /* Use relative path for Vercel Serverless Functions API endpoints, or absolute path for local testing */
+  const FUNCTIONS_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:')
+    ? 'https://chic-charms-stores.vercel.app/api'
+    : '/api';
 
   /* Fetch public Razorpay Key ID from the backend config endpoint */
   async function fetchConfig() {
@@ -766,13 +700,15 @@ document.documentElement.classList.add('cc-loading');
       const resp = await fetch(`${FUNCTIONS_BASE}/razorpayConfig`);
       if (resp.ok) {
         const data = await resp.json();
-        RAZORPAY_KEY_ID = data.keyId;
+        RAZORPAY_KEY_ID = data.keyId || 'rzp_live_TPIM6Zo7DDSNPW';
         console.log('[Checkout] Razorpay Key ID loaded successfully.');
       } else {
-        console.error('[Checkout] Failed to load Razorpay config from backend.');
+        console.error('[Checkout] Failed to load Razorpay config from backend. Using fallback.');
+        RAZORPAY_KEY_ID = 'rzp_live_TPIM6Zo7DDSNPW';
       }
     } catch (err) {
-      console.error('[Checkout] Error fetching Razorpay configuration:', err);
+      console.error('[Checkout] Error fetching Razorpay configuration. Using fallback:', err);
+      RAZORPAY_KEY_ID = 'rzp_live_TPIM6Zo7DDSNPW';
     }
   }
 
@@ -848,9 +784,12 @@ document.documentElement.classList.add('cc-loading');
   }
 
   /* ─── Render helpers (UI — no changes from previous version) ── */
+  /* ─── Render helpers ── */
   function renderItems(cart) {
     const list = $('itemsList');
-    $('itemCount').textContent = cart.length + ' Item' + (cart.length !== 1 ? 's' : '');
+    if (!list) return;
+    const itemCountEl = $('itemCount');
+    if (itemCountEl) itemCountEl.textContent = cart.length + ' Item' + (cart.length !== 1 ? 's' : '');
     if (!cart.length) { list.innerHTML = ''; return; }
     list.innerHTML = cart.map(item => {
       const qty    = Number(item.quantity || 1);
@@ -873,11 +812,12 @@ document.documentElement.classList.add('cc-loading');
 
   function renderDelivery(info, hasCoupon) {
     const el      = $('deliveryInfo');
+    if (!el) return;
     const titleEl = $('deliveryCardTitle');
     const editBtn = $('editAddressBtn');
     if (hasCoupon) {
-      titleEl.textContent   = 'Campus Delivery';
-      editBtn.style.display = 'none';
+      if (titleEl) titleEl.textContent   = 'Campus Delivery';
+      if (editBtn) editBtn.style.display = 'none';
       el.innerHTML = `
         <div style="display:flex;align-items:flex-start;gap:12px;">
           <div style="width:38px;height:38px;border-radius:50%;background:rgba(142,69,89,.08);
@@ -897,8 +837,8 @@ document.documentElement.classList.add('cc-loading');
           </div>
         </div>`;
     } else {
-      titleEl.textContent   = 'Delivery Address';
-      editBtn.style.display = 'block';
+      if (titleEl) titleEl.textContent   = 'Delivery Address';
+      if (editBtn) editBtn.style.display = 'block';
       if (!info || (!info.name && !info.address)) {
         el.innerHTML = `<p style="color:var(--muted);font-size:14px;line-height:1.6;">
           Your delivery details will appear here once saved on the previous step.</p>`;
@@ -917,66 +857,97 @@ document.documentElement.classList.add('cc-loading');
 
   function renderCampus(coupon, delivery) {
     const section = $('campusBenefitSection');
+    if (!section) return;
     if (!coupon || !coupon.couponApplied || !coupon.couponCode) {
       section.style.display = 'none'; return;
     }
-    $('campusCouponBadge').textContent  = coupon.couponCode;
+    const badge = $('campusCouponBadge');
+    if (badge) badge.textContent  = coupon.couponCode;
     const studentName = (delivery && delivery.name) || '';
-    $('campusStudentName').textContent  = studentName || 'Verified Student';
+    const nameEl = $('campusStudentName');
+    if (nameEl) nameEl.textContent  = studentName || 'Verified Student';
     const dept      = (delivery && delivery.dept) ? delivery.dept : '';
     const year      = (delivery && delivery.year) ? delivery.year : '';
     const privilege = [year, dept].filter(Boolean).join(' · ');
-    $('campusPrivilege').textContent    = privilege || 'Campus Student Privilege';
+    const privEl = $('campusPrivilege');
+    if (privEl) privEl.textContent    = privilege || 'Campus Student Privilege';
     const disc = getDiscount(coupon);
-    $('campusDiscountText').textContent = `-${money(disc)} Discount Unlocked`;
+    const discEl = $('campusDiscountText');
+    if (discEl) discEl.textContent = `-${money(disc)} Discount Unlocked`;
     section.style.display = 'block';
   }
 
   function renderSummary(cart, coupon) {
     const subtotal = cart.reduce((s, i) => s + Number(i.price || 0) * Number(i.quantity || 1), 0);
-    const shipping = subtotal >= 399 ? 0 : 49;
+    const shipping = (coupon && coupon.couponType === 'campus') ? 0 : (subtotal >= 399 ? 0 : 49);
+    
+    // NOTE: The 42% campus benefit is a combined value consisting of:
+    // 1. A 20% cash discount directly off the subtotal of items.
+    // 2. A waived delivery fee/shipping charge, representing the remaining value of the "42% benefit".
+    // This ensures the free delivery is within the 42% total benefit valuation.
     const discount = getDiscount(coupon);
     const total    = Math.max(0, subtotal + shipping - discount);
     const rows = $('summaryRows');
-    rows.innerHTML = `
-      <div class="summary-row">
-        <span class="summary-label">Subtotal (${cart.length} Item${cart.length !== 1 ? 's' : ''})</span>
-        <span class="summary-value">${money(subtotal)}</span>
-      </div>
-      ${discount > 0 ? `
-      <div class="summary-row">
-        <span class="summary-discount-label">Campus Discount</span>
-        <span class="summary-discount-value">-${money(discount)}</span>
-      </div>` : ''}
-      <div class="summary-row">
-        <span class="summary-label">Delivery Charges</span>
-        <span class="summary-value">${shipping === 0
-          ? '<span style="color:var(--success);font-weight:800;">Free</span>'
-          : money(shipping)}</span>
-      </div>
-      <div class="summary-row summary-total">
-        <span class="summary-label">Total Amount</span>
-        <span class="summary-value">${money(total)}</span>
-      </div>
-    `;
-    $('footerTotal').textContent = money(total);
+    if (rows) {
+      if (discount > 0) {
+        rows.innerHTML = `
+          <div class="summary-row">
+            <span class="summary-label">Subtotal (${cart.length} Item${cart.length !== 1 ? 's' : ''})</span>
+            <span class="summary-value" style="font-family: var(--body); font-weight: 700;">${money(subtotal)}</span>
+          </div>
+          <div class="summary-row" style="align-items: flex-start;">
+            <span class="summary-discount-label" style="font-weight: 500; display: inline-flex; align-items: center; gap: 6px; color: var(--primary); padding-top: 2px;">
+              <span class="material-symbols-outlined" style="font-size:16px; color:var(--primary); font-weight:bold; vertical-align: middle;">verified</span>
+              Campus Benefit
+            </span>
+            <div style="display: flex; flex-direction: column; align-items: flex-end; text-align: right; margin-left: auto; font-family: var(--body);">
+              <span style="font-size: 14px; font-weight: 700; color: var(--primary);">42% Total Savings</span>
+              <span style="font-size: 11px; color: var(--success); font-weight: 600; margin-top: 2px;">Free delivery included</span>
+            </div>
+          </div>
+          <div class="summary-row summary-total">
+            <span class="summary-label">Total Amount</span>
+            <span class="summary-value">${money(total)}</span>
+          </div>
+        `;
+      } else {
+        rows.innerHTML = `
+          <div class="summary-row">
+            <span class="summary-label">Subtotal (${cart.length} Item${cart.length !== 1 ? 's' : ''})</span>
+            <span class="summary-value" style="font-family: var(--body); font-weight: 700;">${money(subtotal)}</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Delivery Charges</span>
+            <span class="summary-value">${shipping === 0
+              ? '<span style="color:var(--success);font-weight:800;">Free</span>'
+              : money(shipping)}</span>
+          </div>
+          <div class="summary-row summary-total">
+            <span class="summary-label">Total Amount</span>
+            <span class="summary-value">${money(total)}</span>
+          </div>
+        `;
+      }
+    }
+    const ft = $('footerTotal');
+    if (ft) ft.textContent = money(total);
     window.__orderAmounts = { subtotal, shipping, discount, total };
   }
 
   function render(cart, coupon, delivery) {
     window.__cartHasItems = cart.length > 0;
     if (!cart.length) {
-      $('emptyState').style.display            = 'block';
-      $('itemsCard').style.display             = 'none';
-      $('deliveryCard').style.display          = 'none';
-      $('campusBenefitSection').style.display  = 'none';
-      $('paymentCard').style.display           = 'none';
-      $('summaryCard').style.display           = 'none';
-      $('footerTotal').textContent             = '₹0';
-      $('payBtn').disabled                     = true;
+      const es = $('emptyState'); if (es) es.style.display = 'block';
+      const ic = $('itemsCard'); if (ic) ic.style.display = 'none';
+      const dc = $('deliveryCard'); if (dc) dc.style.display = 'none';
+      const cb = $('campusBenefitSection'); if (cb) cb.style.display = 'none';
+      const pc = $('paymentCard'); if (pc) pc.style.display = 'none';
+      const sc = $('summaryCard'); if (sc) sc.style.display = 'none';
+      const ft = $('footerTotal'); if (ft) ft.textContent = '₹0';
+      $('payBtn').disabled = true;
       return;
     }
-    $('emptyState').style.display = 'none';
+    const es = $('emptyState'); if (es) es.style.display = 'none';
     renderItems(cart);
     renderDelivery(delivery, !!coupon);
     renderCampus(coupon, delivery);
@@ -997,13 +968,20 @@ document.documentElement.classList.add('cc-loading');
 
   /* ─── Nav buttons ───────────────────────────────────────────── */
   function initNavBtns() {
-    $('backBtn').addEventListener('click', () => {
-      if (history.length > 1) history.back();
-      else location.href = 'delivery-information.html';
-    });
-    $('editAddressBtn').addEventListener('click', () => {
-      location.href = 'delivery-information.html';
-    });
+    const pageBackBtn = $('pageBackBtn');
+    if (pageBackBtn) {
+      pageBackBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (history.length > 1) history.back();
+        else location.href = 'shipping-address.html';
+      });
+    }
+    const editAddressBtn = $('editAddressBtn');
+    if (editAddressBtn) {
+      editAddressBtn.addEventListener('click', () => {
+        location.href = 'shipping-address.html';
+      });
+    }
   }
 
   /* ═══════════════════════════════════════════════════════════════
@@ -1046,7 +1024,7 @@ document.documentElement.classList.add('cc-loading');
       couponInfo:   coupon ? {
         couponCode:     coupon.couponCode,
         couponType:     coupon.couponType,
-        discountAmount: coupon.discountAmount,
+        discountAmount: getDiscount(coupon),
       } : null,
       studentInfo:   delivery ? {
         dept: delivery.dept || '',

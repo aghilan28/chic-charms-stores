@@ -401,7 +401,7 @@
       return;
     }
     if (typeof window.handleCheckout === "function") window.handleCheckout();
-    else window.location.href = "delivery-information.html";
+    else window.location.href = "shipping-address.html";
   }
 
   function installEvents() {
