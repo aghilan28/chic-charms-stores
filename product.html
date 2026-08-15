@@ -1361,10 +1361,16 @@ window.updateActionPillsState = function() {
   if (window.innerWidth >= 768) return;
   if (!_currentProduct) return;
   const cart = getCart();
+  const variants = _currentProduct ? normalizeVariants(_currentProduct) : [];
+  const namedVariants = variants.filter(v => v.color && v.color.toLowerCase() !== 'default');
+  const hasColors = namedVariants.length >= 1;
+  const targetVariant = hasColors ? (_selectedVariantId || '') : (_selectedVariantId || 'Gold Finish');
+  const targetSize = _selectedSize || '';
+
   const idx = cart.findIndex(i => 
-    i.id === _currentDocId && 
-    (i.variant || '') === (_selectedVariantId || '') && 
-    (i.size || '') === (_selectedSize || '')
+    (i.id === _currentDocId || i.productId === _currentDocId) && 
+    (i.variant || '') === targetVariant && 
+    (i.size || '') === targetSize
   );
   
   const defaultBlock = document.getElementById('defaultActionPills');
@@ -1391,10 +1397,16 @@ window.updateActionPillsState = function() {
 window.updateItemQty = function(delta) {
   if (!_currentProduct) return;
   const cart = getCart();
+  const variants = _currentProduct ? normalizeVariants(_currentProduct) : [];
+  const namedVariants = variants.filter(v => v.color && v.color.toLowerCase() !== 'default');
+  const hasColors = namedVariants.length >= 1;
+  const targetVariant = hasColors ? (_selectedVariantId || '') : (_selectedVariantId || 'Gold Finish');
+  const targetSize = _selectedSize || '';
+
   const idx = cart.findIndex(i => 
-    i.id === _currentDocId && 
-    (i.variant || '') === (_selectedVariantId || '') && 
-    (i.size || '') === (_selectedSize || '')
+    (i.id === _currentDocId || i.productId === _currentDocId) && 
+    (i.variant || '') === targetVariant && 
+    (i.size || '') === targetSize
   );
   if (idx > -1) {
     const newQty = (cart[idx].quantity || 1) + delta;
@@ -1404,6 +1416,7 @@ window.updateItemQty = function(delta) {
       cart[idx].quantity = newQty;
     }
     saveCart(cart);
+    window.dispatchEvent(new Event('cartUpdated'));
     updateActionPillsState();
   }
 };
@@ -1894,6 +1907,11 @@ document.addEventListener('DOMContentLoaded', () => {
   renderSiteConfig();
   updateCartBadges();
   loadProduct();
+
+  // Instantly sync the action pills state when the cart updates
+  window.addEventListener('cartUpdated', () => {
+    updateActionPillsState();
+  });
 });
 
 document.addEventListener('visibilitychange', () => { if (!document.hidden) updateCartBadges(); });
