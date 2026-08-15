@@ -334,7 +334,6 @@
     const wl = getWishlist();
     const saved = wl.includes(p.id);
     const name = escapeHtml(p.name);
-    const catLabel = escapeHtml(CATEGORY_LABELS[p.categorySlug] || "Earrings");
     const hasDiscount = p.oldPrice && p.oldPrice > p.price;
     return `
       <div class="cc-product">
@@ -347,7 +346,6 @@
           </button>
         </div>
         <div class="cc-product-info">
-          <span class="cc-product-cat">${catLabel}</span>
           <h3 class="cc-product-name"><a href="${url}">${name}</a></h3>
           <p class="cc-product-price">
             <span class="cc-price-actual">${formatPrice(p.price)}</span>
@@ -482,7 +480,7 @@
             id: doc.id,
             name: raw.name || "Chic Charms Piece",
             price: Number(raw.price || 0),
-            oldPrice: Number(raw.oldPrice || raw.compareAtPrice || raw.mrp || 0),
+            oldPrice: Number(raw.oldPrice || raw.compareAtPrice || raw.mrp || (raw.price ? Math.ceil(Number(raw.price) * 1.28) : 0)),
             description: raw.description || "",
             tag: raw.tag || "",
             rating: raw.rating || 0,

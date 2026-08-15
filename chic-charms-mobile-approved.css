@@ -161,7 +161,7 @@ nav.mobile-bottom-nav,
 .cc-main { padding: 0 var(--cc-mx) 70px; }
 
 /* Breadcrumb */
-.cc-crumb { margin-top: var(--cc-mx); display: flex; flex-direction: column; gap: var(--cc-stack-sm); }
+.cc-crumb { margin-top: 8px; display: flex; flex-direction: column; gap: 0; }
 .cc-crumb-nav {
   display: flex; align-items: center; gap: 8px;
   font-family: 'Inter', sans-serif;
@@ -172,16 +172,14 @@ nav.mobile-bottom-nav,
 .cc-crumb-nav .sep { color: rgba(181,101,122,.25); }
 .cc-crumb-nav strong { color: var(--cc-deep-rose); font-weight: 600; }
 .cc-crumb-count {
-  font-family: 'Inter', sans-serif;
-  font-size: 11px; line-height: 14px; font-weight: 500;
-  color: var(--cc-menu-text); opacity: .6;
+  display: none !important;
 }
 /* Section Header */
 .cc-section-header {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-top: var(--cc-stack-lg);
+  margin-top: var(--cc-stack-md);
   margin-bottom: 2px;
 }
 .cc-section-title {
@@ -286,7 +284,7 @@ nav.mobile-bottom-nav,
 .cc-product-name a:hover { color: var(--cc-deep-rose); }
 .cc-product-price {
   font-family: 'Inter', sans-serif;
-  font-size: 13px; line-height: 18px; font-weight: 700;
+  font-size: 14px; line-height: 18px; font-weight: 700;
   color: var(--cc-charcoal);
   margin-top: 4px;
   display: flex;
@@ -297,12 +295,13 @@ nav.mobile-bottom-nav,
   color: var(--cc-charcoal);
 }
 .cc-product-old-price {
-  font-size: 11px;
-  color: var(--cc-menu-text);
+  font-size: 12px;
+  color: #857276;
   text-decoration: line-through;
-  text-decoration-color: var(--cc-primary);
+  text-decoration-color: var(--cc-deep-rose);
+  text-decoration-thickness: 1.5px;
   margin-left: 8px;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 /* --- Editorial Insertion --- */
