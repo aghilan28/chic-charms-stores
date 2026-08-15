@@ -24,6 +24,16 @@ nav.mobile-bottom-nav,
   display: none !important;
 }
 
+body {
+  background-color: #FFF9F7 !important;
+}
+#cc-global-header-wrapper,
+#cc-global-header-wrapper .navbar,
+#cc-global-header-wrapper #navbar {
+  background-color: #FFF9F7 !important;
+  background: #FFF9F7 !important;
+}
+
 /* --- Approved Design Tokens (from code.html tailwind.config) --- */
 .cc-mobile-ui {
   --cc-bg: #FFF9F7;
@@ -161,26 +171,38 @@ nav.mobile-bottom-nav,
 .cc-main { padding: 0 var(--cc-mx) 70px; }
 
 /* Breadcrumb */
-.cc-crumb { margin-top: 8px; display: flex; flex-direction: column; gap: 0; }
+.cc-crumb {
+  margin-top: 16px; /* Space below the header */
+  display: flex;
+  flex-direction: column;
+}
 .cc-crumb-nav {
-  display: flex; align-items: center; gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-family: 'Inter', sans-serif;
-  font-size: 11px; line-height: 14px; font-weight: 500;
-  letter-spacing: 0.05em; text-transform: uppercase;
+  font-size: 11px;
+  line-height: 14px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
   color: var(--cc-menu-text);
 }
-.cc-crumb-nav .sep { color: rgba(181,101,122,.25); }
-.cc-crumb-nav strong { color: var(--cc-deep-rose); font-weight: 600; }
-.cc-crumb-count {
-  display: none !important;
+.cc-crumb-nav .sep {
+  color: rgba(181, 101, 122, 0.25);
 }
+.cc-crumb-nav strong {
+  color: var(--cc-deep-rose);
+  font-weight: 600;
+}
+
 /* Section Header */
 .cc-section-header {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-top: var(--cc-stack-md);
-  margin-bottom: 2px;
+  margin-top: 16px; /* Uniform spacing below the breadcrumb */
+  margin-bottom: 12px; /* Breathing room above the product grid */
 }
 .cc-section-title {
   font-family: 'Playfair Display', Georgia, serif;

@@ -112,7 +112,6 @@
 <main class="cc-main">
   <div class="cc-crumb">
     <nav class="cc-crumb-nav"><a href="index.html">Home</a><span class="sep">|</span><strong id="ccCrumbCat">Earrings</strong></nav>
-    <p class="cc-crumb-count" id="ccResultCount">Loading products…</p>
   </div>
 
   <div class="cc-section-header">
