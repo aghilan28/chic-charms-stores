@@ -756,10 +756,8 @@ document.documentElement.classList.add('cc-loading');
      ═══════════════════════════════════════════════════════════════ */
   let RAZORPAY_KEY_ID = '';
 
-  /* Determine Cloud Functions base URL dynamically (local emulator vs production) */
-  const FUNCTIONS_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://127.0.0.1:5001/chic-charms-store/asia-south1'
-    : 'https://asia-south1-chic-charms-store.cloudfunctions.net';
+  /* Use relative path for Vercel Serverless Functions API endpoints */
+  const FUNCTIONS_BASE = '/api';
 
   /* Fetch public Razorpay Key ID from the backend config endpoint */
   async function fetchConfig() {

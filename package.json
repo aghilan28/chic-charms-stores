@@ -1,0 +1,10 @@
+{
+  "name": "chic-charms-vercel-backend",
+  "version": "1.0.0",
+  "description": "Vercel serverless backend for Chic Charms Razorpay checkout",
+  "main": "api/createOrder.js",
+  "dependencies": {
+    "firebase-admin": "^12.7.0",
+    "razorpay": "^2.9.6"
+  }
+}

@@ -344,9 +344,7 @@ window.RazorpayDemo = {
 
     if (!config.keyId || config.keyId === 'rzp_test_xxxxxxxxxxxx') {
       try {
-        const FUNCTIONS_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-          ? 'http://127.0.0.1:5001/chic-charms-store/asia-south1'
-          : 'https://asia-south1-chic-charms-store.cloudfunctions.net';
+        const FUNCTIONS_BASE = '/api';
         const resp = await fetch(`${FUNCTIONS_BASE}/razorpayConfig`);
         if (resp.ok) {
           const data = await resp.json();
@@ -438,9 +436,7 @@ async function rzpDemoInit() {
   try {
     const config = window.RAZORPAY_DEMO_CONFIG;
     if (!config.keyId || config.keyId === 'rzp_test_xxxxxxxxxxxx') {
-      const FUNCTIONS_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? 'http://127.0.0.1:5001/chic-charms-store/asia-south1'
-        : 'https://asia-south1-chic-charms-store.cloudfunctions.net';
+      const FUNCTIONS_BASE = '/api';
       const resp = await fetch(`${FUNCTIONS_BASE}/razorpayConfig`);
       if (resp.ok) {
         const data = await resp.json();
