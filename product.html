@@ -328,7 +328,7 @@
   <div id="productContent" class="hidden">
 
     <!-- Breadcrumb -->
-    <nav class="px-margin_mobile py-4">
+    <nav class="max-w-7xl mx-auto px-margin_mobile lg:px-8 py-4">
       <ol class="flex items-center gap-2 text-[13px] font-jost text-outline">
         <li><a class="hover:underline" href="index.html">Home</a></li>
         <li><span class="text-outline-variant">|</span></li>
@@ -336,103 +336,114 @@
       </ol>
     </nav>
 
-    <!-- Gallery -->
-    <section class="relative">
-      <div id="galleryContainer" class="flex snap-x snap-mandatory no-scrollbar" style="height:85vw;max-height:618px;"></div>
-      <div class="absolute top-6 right-6 flex flex-col gap-3 z-10">
-        <button id="wishlistFab" class="fab-circle" onclick="toggleWishlist()" aria-label="Wishlist">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        </button>
-        <button class="fab-circle" onclick="shareProduct()" aria-label="Share">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-        </button>
-      </div>
-      <div id="galleryDots" class="gallery-dots"></div>
-    </section>
-
-    <!-- Product Info -->
-    <section class="px-margin_mobile py-stack_gap_md">
-      <h1 id="productName" class="font-headline-lg text-[34px] leading-tight text-on-surface mb-2"></h1>
-
-      <div class="flex items-center justify-between mb-4">
-        <div id="priceBlock"></div>
-        <div id="ratingBlock" class="flex items-center gap-1 text-primary"></div>
+    <!-- Main Responsive Grid Container -->
+    <div class="max-w-7xl mx-auto lg:grid lg:grid-cols-12 lg:gap-16 lg:px-8 items-start">
+      
+      <!-- Left Column: Gallery (Sticky on desktop) -->
+      <div class="lg:col-span-7 lg:sticky lg:top-28">
+        <!-- Gallery -->
+        <section class="relative">
+          <div id="galleryContainer" class="flex snap-x snap-mandatory no-scrollbar h-[85vw] max-h-[618px] lg:h-[600px] lg:max-h-[600px]"></div>
+          <div class="absolute top-6 right-6 flex flex-col gap-3 z-10">
+            <button id="wishlistFab" class="fab-circle" onclick="toggleWishlist()" aria-label="Wishlist">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+            <button class="fab-circle" onclick="shareProduct()" aria-label="Share">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            </button>
+          </div>
+          <div id="galleryDots" class="gallery-dots"></div>
+        </section>
       </div>
 
-      <div id="descriptionBlock" class="text-on-surface-variant leading-relaxed text-[15px]"></div>
+      <!-- Right Column: Details and Purchase Actions -->
+      <div class="lg:col-span-5 mt-6 lg:mt-0">
+        <!-- Product Info -->
+        <section class="px-margin_mobile lg:px-0 py-stack_gap_md lg:py-0">
+          <h1 id="productName" class="font-headline-lg text-[34px] leading-tight text-on-surface mb-2"></h1>
 
-      <!-- Color Selector -->
-      <div id="colorSelector" class="mt-6 hidden">
-        <p class="font-label-caps text-[12px] tracking-widest uppercase mb-3">Color</p>
-        <div id="colorOptions" class="flex flex-wrap gap-3"></div>
+          <div class="flex items-center justify-between mb-4">
+            <div id="priceBlock"></div>
+            <div id="ratingBlock" class="flex items-center gap-1 text-primary"></div>
+          </div>
+
+          <div id="descriptionBlock" class="text-on-surface-variant leading-relaxed text-[15px]"></div>
+
+          <!-- Color Selector -->
+          <div id="colorSelector" class="mt-6 hidden">
+            <p class="font-label-caps text-[12px] tracking-widest uppercase mb-3">Color</p>
+            <div id="colorOptions" class="flex flex-wrap gap-3"></div>
+          </div>
+
+          <!-- Size Selector -->
+          <div id="sizeSelector" class="mt-6 hidden">
+            <p class="font-label-caps text-[12px] tracking-widest uppercase mb-3">Size</p>
+            <div id="sizeOptions" class="flex flex-wrap gap-3"></div>
+          </div>
+
+          <!-- Stock -->
+          <div id="stockStatus" class="mt-4">
+            <span id="stockBadge" class="stock-badge"></span>
+          </div>
+
+          <!-- Trust — uses inline SVGs, NOT material icon font names -->
+          <div id="trustBar" class="mt-8 py-4 border-y border-outline-variant flex justify-between items-center text-[10px] font-label-caps tracking-widest text-on-surface-variant uppercase"></div>
+        </section>
+
+        <!-- Purchase Zone -->
+        <section class="px-margin_mobile lg:px-0 py-6 flex flex-col gap-3">
+          <button id="addToCartBtn" class="w-full h-14 bg-[#B5657A] text-white font-button text-[14px] tracking-widest uppercase active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed" onclick="handleAddToCart()">
+            Add To Cart
+          </button>
+          <button class="w-full h-14 border border-[#B5657A] text-[#B5657A] font-button text-[14px] tracking-widest uppercase active:scale-[0.98] transition-all duration-300" onclick="buyNow()">
+            Buy Now
+          </button>
+        </section>
+
+        <!-- Accordion: Product Details (dynamic) -->
+        <section id="detailsAccordionSection" class="px-margin_mobile lg:px-0 mt-4 hidden">
+          <div class="accordion-item accordion-open border-t border-outline-variant">
+            <button class="w-full py-5 flex justify-between items-center group" onclick="this.parentElement.classList.toggle('accordion-open')">
+              <span class="font-headline-md text-[18px]">Product Details</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+            <div class="accordion-content">
+              <div id="productDetailsContent" class="grid grid-cols-2 gap-y-6 gap-x-3 pb-8"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Accordion: Care Instructions -->
+        <section id="careAccordionSection" class="px-margin_mobile lg:px-0 hidden">
+          <div class="accordion-item border-t border-outline-variant">
+            <button class="w-full py-5 flex justify-between items-center group" onclick="this.parentElement.classList.toggle('accordion-open')">
+              <span class="font-headline-md text-[18px]">Care Instructions</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+            <div class="accordion-content">
+              <div id="careContent" class="pb-8 text-[14px] text-on-surface-variant leading-relaxed"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Accordion: Shipping & Returns -->
+        <section class="px-margin_mobile lg:px-0">
+          <div class="accordion-item border-t border-outline-variant">
+            <button class="w-full py-5 flex justify-between items-center group" onclick="this.parentElement.classList.toggle('accordion-open')">
+              <span class="font-headline-md text-[18px]">Shipping &amp; Returns</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+            <div class="accordion-content">
+              <div id="shippingContent" class="pb-8 text-[14px] text-on-surface-variant leading-relaxed"></div>
+            </div>
+          </div>
+        </section>
       </div>
 
-      <!-- Size Selector -->
-      <div id="sizeSelector" class="mt-6 hidden">
-        <p class="font-label-caps text-[12px] tracking-widest uppercase mb-3">Size</p>
-        <div id="sizeOptions" class="flex flex-wrap gap-3"></div>
-      </div>
-
-      <!-- Stock -->
-      <div id="stockStatus" class="mt-4">
-        <span id="stockBadge" class="stock-badge"></span>
-      </div>
-
-      <!-- Trust — uses inline SVGs, NOT material icon font names -->
-      <div id="trustBar" class="mt-8 py-4 border-y border-outline-variant flex justify-between items-center text-[10px] font-label-caps tracking-widest text-on-surface-variant uppercase"></div>
-    </section>
-
-    <!-- Purchase Zone -->
-    <section class="px-margin_mobile py-6 flex flex-col gap-3">
-      <button id="addToCartBtn" class="w-full h-14 bg-[#B5657A] text-white font-button text-[14px] tracking-widest uppercase active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed" onclick="handleAddToCart()">
-        Add To Cart
-      </button>
-      <button class="w-full h-14 border border-[#B5657A] text-[#B5657A] font-button text-[14px] tracking-widest uppercase active:scale-[0.98] transition-all duration-300" onclick="buyNow()">
-        Buy Now
-      </button>
-    </section>
-
-    <!-- Accordion: Product Details (dynamic) -->
-    <section id="detailsAccordionSection" class="px-margin_mobile mt-4 hidden">
-      <div class="accordion-item accordion-open border-t border-outline-variant">
-        <button class="w-full py-5 flex justify-between items-center group" onclick="this.parentElement.classList.toggle('accordion-open')">
-          <span class="font-headline-md text-[18px]">Product Details</span>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </button>
-        <div class="accordion-content">
-          <div id="productDetailsContent" class="grid grid-cols-2 gap-y-6 gap-x-3 pb-8"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Accordion: Care Instructions -->
-    <section id="careAccordionSection" class="px-margin_mobile hidden">
-      <div class="accordion-item border-t border-outline-variant">
-        <button class="w-full py-5 flex justify-between items-center group" onclick="this.parentElement.classList.toggle('accordion-open')">
-          <span class="font-headline-md text-[18px]">Care Instructions</span>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </button>
-        <div class="accordion-content">
-          <div id="careContent" class="pb-8 text-[14px] text-on-surface-variant leading-relaxed"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Accordion: Shipping & Returns -->
-    <section class="px-margin_mobile">
-      <div class="accordion-item border-t border-outline-variant">
-        <button class="w-full py-5 flex justify-between items-center group" onclick="this.parentElement.classList.toggle('accordion-open')">
-          <span class="font-headline-md text-[18px]">Shipping &amp; Returns</span>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </button>
-        <div class="accordion-content">
-          <div id="shippingContent" class="pb-8 text-[14px] text-on-surface-variant leading-relaxed"></div>
-        </div>
-      </div>
-    </section>
+    </div>
 
     <!-- Gifting -->
-    <section id="giftingSection" class="px-margin_mobile py-section_gap hidden">
+    <section id="giftingSection" class="max-w-7xl mx-auto px-margin_mobile lg:px-8 py-section_gap hidden">
       <div class="bg-[#FAF5F2] p-8 text-center border border-outline-variant/30">
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#8e4559" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12v10H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
         <h3 id="giftingTitle" class="font-headline-md text-[20px] mb-2"></h3>
@@ -453,15 +464,15 @@
     </section>
 
     <!-- Promise — uses inline SVG icons, NOT material-symbols-outlined text -->
-    <section id="promiseSection" class="px-margin_mobile py-section_gap hidden">
+    <section id="promiseSection" class="max-w-7xl mx-auto px-margin_mobile lg:px-8 py-section_gap hidden">
       <h3 class="font-headline-md text-[22px] text-center mb-10">Our Promise</h3>
-      <div id="promiseGrid" class="grid grid-cols-2 gap-x-gutter_mobile gap-y-12"></div>
+      <div id="promiseGrid" class="grid grid-cols-2 lg:grid-cols-4 gap-x-gutter_mobile lg:gap-x-12 gap-y-12"></div>
     </section>
 
     <!-- Related Products -->
-    <section id="relatedSection" class="py-section_gap hidden">
-      <h3 id="relatedTitle" class="font-headline-md text-[24px] px-margin_mobile mb-8"></h3>
-      <div id="relatedProducts" class="flex snap-x snap-mandatory no-scrollbar gap-4 px-margin_mobile" style="overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;"></div>
+    <section id="relatedSection" class="max-w-7xl mx-auto py-section_gap hidden px-margin_mobile lg:px-8">
+      <h3 id="relatedTitle" class="font-headline-md text-[24px] mb-8 lg:px-0"></h3>
+      <div id="relatedProducts" class="flex snap-x snap-mandatory no-scrollbar gap-4 lg:px-0" style="overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;"></div>
     </section>
 
     <!-- Footer -->
