@@ -115,6 +115,11 @@
     <p class="cc-crumb-count" id="ccResultCount">Loading products…</p>
   </div>
 
+  <div class="cc-section-header">
+    <h2 class="cc-section-title" id="ccSectionTitle">Special For You</h2>
+    <a href="#" class="cc-section-link" onclick="filterByCategory('all'); return false;">See All</a>
+  </div>
+
   <div class="cc-grid" id="ccGrid">
     <div class="cc-state">Loading the Chic Charms edit…</div>
   </div>
@@ -329,6 +334,8 @@
     const wl = getWishlist();
     const saved = wl.includes(p.id);
     const name = escapeHtml(p.name);
+    const catLabel = escapeHtml(CATEGORY_LABELS[p.categorySlug] || "Earrings");
+    const hasDiscount = p.oldPrice && p.oldPrice > p.price;
     return `
       <div class="cc-product">
         <div class="cc-product-img">
@@ -340,8 +347,12 @@
           </button>
         </div>
         <div class="cc-product-info">
+          <span class="cc-product-cat">${catLabel}</span>
           <h3 class="cc-product-name"><a href="${url}">${name}</a></h3>
-          <p class="cc-product-price">${formatPrice(p.price)}</p>
+          <p class="cc-product-price">
+            <span class="cc-price-actual">${formatPrice(p.price)}</span>
+            ${hasDiscount ? `<span class="cc-product-old-price">${formatPrice(p.oldPrice)}</span>` : ""}
+          </p>
         </div>
       </div>
     `;
@@ -377,8 +388,9 @@
         if (was) wl = wl.filter(x => x !== id); else wl.push(id);
         saveWishlist(wl);
         btn.classList.toggle("is-saved", !was);
-        const icon = btn.querySelector("span");
-        if (icon) { icon.innerHTML = was ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>' : '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>'; }
+        btn.innerHTML = was
+          ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>'
+          : '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
         btn.setAttribute("aria-label", was ? "Add to wishlist" : "Remove from wishlist");
         showToast(was ? "Removed from wishlist" : "Saved to wishlist");
       });
@@ -402,6 +414,10 @@
   function updateCrumb(label) {
     const el = document.getElementById("ccCrumbCat");
     if (el) el.textContent = label;
+    const titleEl = document.getElementById("ccSectionTitle");
+    if (titleEl) {
+      titleEl.textContent = label === "Earrings" || label === "Shop" ? "Special For You" : label;
+    }
   }
 
   window.filterByCategory = function (slug) {
@@ -466,6 +482,7 @@
             id: doc.id,
             name: raw.name || "Chic Charms Piece",
             price: Number(raw.price || 0),
+            oldPrice: Number(raw.oldPrice || raw.compareAtPrice || raw.mrp || 0),
             description: raw.description || "",
             tag: raw.tag || "",
             rating: raw.rating || 0,

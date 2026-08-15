@@ -213,13 +213,14 @@ service cloud.firestore {
       return d.keys().hasAny(["name", "title"])
         && d.keys().hasAll(["price", "stock", "category", "createdAt"])
         && d.keys().hasOnly([
-          "name", "title", "price", "stock", "category", "image",
+          "name", "title", "price", "oldPrice", "stock", "category", "image",
           "description", "tag", "createdAt", "updatedAt", "outOfStock",
           "pieceType", "pieceCount", "images", "variants", "color",
           "variantProductImage", "variantModelImage", "variantStock"
         ])
         && validProductNameFields()
         && validPriceValue(d.price)
+        && (!("oldPrice" in d) || d.oldPrice == null || validPriceValue(d.oldPrice))
         && validStockValue(d.stock)
         && d.category is string && validProductCategory(d.category)
         && (!("image" in d) || validOptionalUrlValue(d.image))
@@ -237,13 +238,14 @@ service cloud.firestore {
       let changed = request.resource.data.diff(resource.data).affectedKeys();
       return isAdmin()
         && changed.hasOnly([
-          "name", "title", "price", "stock", "category", "image",
+          "name", "title", "price", "oldPrice", "stock", "category", "image",
           "description", "tag", "updatedAt", "outOfStock",
           "pieceType", "pieceCount", "images", "variants", "color",
           "variantProductImage", "variantModelImage", "variantStock"
         ])
         && (!changed.hasAny(["stock"]) || validStockValue(d.stock))
         && (!changed.hasAny(["price"]) || validPriceValue(d.price))
+        && (!changed.hasAny(["oldPrice"]) || d.oldPrice == null || validPriceValue(d.oldPrice))
         && (!changed.hasAny(["name"]) || (d.name is string && d.name.size() > 0 && d.name.size() <= 120))
         && (!changed.hasAny(["title"]) || (d.title is string && d.title.size() > 0 && d.title.size() <= 120))
         && (!changed.hasAny(["category"]) || (d.category is string && validProductCategory(d.category)))
