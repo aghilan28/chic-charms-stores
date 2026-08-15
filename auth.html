@@ -640,12 +640,10 @@
 <!-- Top AppBar (Sticky) -->
 
 <!-- Main Content Shell -->
-<main class="flex-grow pt-[160px] pb-12 px-margin-mobile">
+<main class="flex-grow pb-12 px-margin-mobile">
+<div class="h-8"></div>
 <!-- Hero Section -->
 <section class="flex flex-col items-center text-center mb-10">
-<div class="mb-6 active:scale-105 transition-transform duration-500">
-<img alt="Chic Charms Monogram" class="w-[48px] h-[48px]" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAYAAACOEfKtAAAEsklEQVR4AeyaT2hcdRDHZ9620Wi01YtEBP8VgyA1Wk+CoBTEza7eoqKt9i37x4paxbM1okep2CLNbprdtNgiVfGQ3S3qperBQ0EbFCkiHhrEW7GaYBOzb5zf4YXfj+62Xeb3Xlsyyw6/mXnv+5vZz5vNPngJQF8iAgpQhA9AASpAIQGhXCdQAQoJCOU6gQpQSEAo1wlUgEICQrlOoAIUEhDK1+IECpG5cgXo8ug7UoB9I3MFCtDl0XekAPtG5goUoMuj70gB9o3MFShAl0ffUSoA92ZfvaaRLz/HdohtrpGrnG3kK9TNLvYJumlMrp4r/1XPV07yOsPrM9Ut5fUX28vH8cQBTmdL2RuC5VMAeJhtO9tmQLgRPL8QcQMC3M/ri7x+sn4YfpnJV7Z6LnPedokCbOTLE0EmaDOwO86rnHACATdFAF/N5MpvJlkqMYD1XOUdAHwbLuMLAQJCfL+Rr+xKqo1EAPJVzyHCbrtpIlgioL1Ewd1hs4q9zNZ083vpTN7sDUAfsS3bWgLYU8+VHrZzvnzvAI8++vIQNzxlN8jxPAY0WmjWdhVa+3+3j12af2lnmb3DZu2VDgVbgOjPWIXAj28xqB8dHx+Ic75W7wAXhzrbAHE4bpAnbwWj6KlwtsY/JHE22bXYmvwZCZ+1qyDAyOK5m8bsnA/fO0C+8nm3MZoM21Mn3Vzy0Y529Vv+Kh+xK1EEWTv24fsHCDjqNBbhfidOMYgIDjjlEB5yYg+Bf4AIN9t9nT42nNpX165rfFrpzJk1NgS4K/Z9rf4BAgzazU3ABN+O2Zn0/OKX02fcarjRjeVREgDlXV1FOyhA4cVSgApQSEAo1wlUgEICQrlO4BULUNjY1SLXCRReKQWoAIUEhHKdQAUoJCCU6wQqQCEBoVwnUAEKCQjlOoEKUEhAKPc+gfwQfcHu6dDj26+34zR985DfrkdA/9ixD98B6GND3uMPttX3ysDgyGqQsrM4uHyfU5Jw3ok9BP4BEvxg94WAJTtO06dMZqdbj064sTzyDxCgbbdFBMWD2ZcesHNp+I1c8REEeMGphdh0Yg+Bd4BDZ677HIBOx70hwrpOEH1xcKx0T5xLem2MlUYJg0+dOkS/LnQGZp2ch8A7wKe//+BfiLBo94aIt0eIc/Vcec/H2eJt9jGf/vQTO0caufIkYXACAW+J9+YfNn64HxVfO7ZvKc75Wr0DNI2F7erX3PRbxl81xGsZ5Bv/ZTLzjR7/H23yq+f3cMw5vSxYF50CxAry1NtyJHg9bB34zs758hMBaJorNKvvAdFuNmZpMpfDqMNVGV51H6+JvBMDaLoNW7V3EeBJIHBubcyxpI3v+X4jpK1hs/phkrUSBWga39GqtWBxaRP/sDzPIA/zRP7E69/mmE8jorM86j/ynlO8jt+5cOu9hdmpbzhO9J04QNN9eHzmXNisHQlb1W08lZt53cCTgd3MnH8h66YxuUKrtpH/bDzIfpnXzx47PrFyoX18HUsFoK9mr8R9FKDwqqx5gEJ+oACFBBWgAhQSEMp1AhWgkIBQrhOoAIUEhHKdQAUoJCCU6wQqQCEBoVwncA0CFH5kv3KdQCFPBagAhQSE8v8BAAD//0c9J0UAAAAGSURBVAMAhth2sE/Oi/0AAAAASUVORK5CYII=" style="width: 48px; height: 48px;"/>
-</div>
 <h1 class="font-headline-lg-mobile text-headline-lg-mobile text-[#2F2A2A] mb-3">Welcome Back</h1>
 <p class="font-body-md text-body-md text-[#8F6674] max-w-[280px] mx-auto">Sign in to access your orders, wishlist and account.</p>
 </section>
@@ -666,7 +664,7 @@
 </div>
 <div class="relative">
 <input class="w-full h-14 px-4 bg-white border border-luxury-rose/20 rounded-input font-body-md text-body-md focus:outline-none focus:border-luxury-rose transition-all input-focus-ring" id="mobileLoginPassword" placeholder="••••••••" type="password"/>
-<button aria-label="Show password" class="absolute right-4 top-1/2 -translate-y-1/2 text-[#8F6674]" id="mobilePwToggle" type="button">
+<button aria-label="Show password" class="absolute right-4 top-1/2 -translate-y-1/2 text-[#8F6674] bg-transparent border-0 p-0 outline-none focus:outline-none shadow-none" id="mobilePwToggle" type="button">
 <span class="material-symbols-outlined text-[20px]">visibility</span>
 </button>
 </div>

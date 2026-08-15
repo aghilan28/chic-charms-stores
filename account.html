@@ -1,1981 +1,1305 @@
 <!DOCTYPE html>
-
-<html lang="en">
+<html class="light" lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<meta content="My Account - Chic Charms" name="description"/>
-<title>My Account - Chic Charms</title>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Jost:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
-<link href="styles.css" rel="stylesheet"/>
-<link href="admin-nav.css" rel="stylesheet"/>
-<style>
-      /* ========================================
-       ACCOUNT PAGE
-    ======================================== */
-      .acc-page {
-        min-height: 100vh;
-        background: var(--cream);
-        padding: 90px 0 80px;
-      }
-      .acc-container {
-        max-width: 1020px;
-        margin: 0 auto;
-        padding: 32px 24px;
-        display: grid;
-        grid-template-columns: 220px 1fr;
-        gap: 28px;
-        align-items: start;
-      }
-
-      /* Auth overlay */
-      .auth-overlay {
-        position: fixed;
-        inset: 0;
-        background: var(--cream);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 999;
-        transition: opacity 0.35s ease;
-      }
-      .auth-overlay.hide {
-        opacity: 0;
-        pointer-events: none;
-      }
-      .spinner-ring {
-        width: 36px;
-        height: 36px;
-        border: 3px solid var(--border);
-        border-top-color: var(--rose);
-        border-radius: 50%;
-        animation: spin 0.8s linear infinite;
-      }
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
-      }
-      @keyframes fadeUp {
-        from {
-          opacity: 0;
-          transform: translateY(14px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      /* Sidebar */
-      .acc-sidebar {
-        position: sticky;
-        top: 100px;
-        animation: fadeUp 0.4s ease both;
-      }
-      .acc-profile-card {
-        background: var(--white);
-        border-radius: var(--radius-lg);
-        padding: 26px 18px;
-        box-shadow: var(--shadow);
-        border: 1px solid var(--border);
-        text-align: center;
-        margin-bottom: 12px;
-      }
-      .acc-avatar {
-        width: 68px;
-        height: 68px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, var(--blush), var(--rose));
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.7rem;
-        font-weight: 700;
-        color: var(--rose-dark);
-        margin: 0 auto 12px;
-        box-shadow: 0 4px 14px rgba(244, 167, 185, 0.4);
-      }
-      .acc-displayname {
-        font-family: var(--font-head);
-        font-size: 1.05rem;
-        font-weight: 600;
-        color: var(--text);
-        margin-bottom: 3px;
-      }
-      .acc-email-small {
-        font-size: 0.73rem;
-        color: var(--muted);
-        word-break: break-all;
-        line-height: 1.4;
-      }
-      .acc-since {
-        font-size: 0.68rem;
-        color: var(--muted);
-        margin-top: 8px;
-        padding-top: 8px;
-        border-top: 1px solid var(--border);
-      }
-
-      /* Sidebar nav */
-      .acc-nav {
-        background: var(--white);
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-        border: 1px solid var(--border);
-        overflow: hidden;
-      }
-      .acc-nav-btn {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        width: 100%;
-        padding: 13px 16px;
-        font-family: var(--font-body);
-        font-size: 0.86rem;
-        font-weight: 500;
-        color: var(--muted);
-        background: none;
-        border: none;
-        border-bottom: 1px solid var(--border);
-        cursor: pointer;
-        transition:
-          background 0.15s,
-          color 0.15s;
-        text-align: left;
-      }
-      .acc-nav-btn:last-child {
-        border-bottom: none;
-      }
-      .acc-nav-btn:hover {
-        background: var(--cream);
-        color: var(--text);
-      }
-      .acc-nav-btn.active {
-        background: var(--blush);
-        color: var(--rose-dark);
-        font-weight: 600;
-      }
-      .acc-nav-btn.logout-btn {
-        color: #c62828;
-      }
-      .acc-nav-btn.logout-btn:hover {
-        background: #fff5f5;
-      }
-
-      /* Main content */
-      .acc-main {
-        min-height: 400px;
-        animation: fadeUp 0.4s 0.1s ease both;
-      }
-      .acc-panel {
-        display: none;
-      }
-      .acc-panel.active {
-        display: block;
-      }
-
-      .panel-head {
-        margin-bottom: 20px;
-      }
-      .panel-title {
-        font-family: var(--font-head);
-        font-size: 1.9rem;
-        font-weight: 600;
-        color: var(--text);
-        line-height: 1.2;
-      }
-      .panel-title em {
-        color: var(--rose-dark);
-        font-style: italic;
-      }
-      .panel-sub {
-        font-size: 0.82rem;
-        color: var(--muted);
-        margin-top: 4px;
-      }
-
-      /* Card */
-      .acc-card {
-        background: var(--white);
-        border-radius: var(--radius-lg);
-        padding: 26px;
-        box-shadow: var(--shadow);
-        border: 1px solid var(--border);
-        margin-bottom: 16px;
-      }
-
-      /* Stats */
-      .stat-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 12px;
-        margin-bottom: 20px;
-      }
-      .stat-box {
-        background: var(--white);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        padding: 18px 12px;
-        text-align: center;
-        box-shadow: var(--shadow);
-      }
-      .stat-num {
-        font-family: var(--font-head);
-        font-size: 1.9rem;
-        font-weight: 600;
-        color: var(--rose-dark);
-        line-height: 1;
-      }
-      .stat-label {
-        font-size: 0.7rem;
-        color: var(--muted);
-        text-transform: uppercase;
-        letter-spacing: 0.07em;
-        margin-top: 4px;
-      }
-
-      /* Info rows */
-      .info-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 11px 0;
-        border-bottom: 1px dashed var(--border);
-        font-size: 0.86rem;
-      }
-      .info-row:last-child {
-        border-bottom: none;
-      }
-      .info-label {
-        color: var(--muted);
-      }
-      .info-val {
-        color: var(--text);
-        font-weight: 500;
-        text-align: right;
-      }
-
-      /* Buttons */
-      .btn-prime {
-        background: var(--rose-dark);
-        color: white;
-        border: none;
-        border-radius: 999px;
-        padding: 11px 24px;
-        font-family: var(--font-body);
-        font-size: 0.88rem;
-        font-weight: 600;
-        cursor: pointer;
-        box-shadow: 0 4px 14px rgba(232, 128, 154, 0.35);
-        transition:
-          background 0.2s,
-          transform 0.15s;
-      }
-      .btn-prime:hover:not(:disabled) {
-        background: #d4607a;
-        transform: translateY(-1px);
-      }
-      .btn-prime:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-      }
-      .btn-ghost {
-        background: none;
-        border: 1.5px solid var(--border);
-        border-radius: 999px;
-        padding: 10px 20px;
-        font-family: var(--font-body);
-        font-size: 0.85rem;
-        font-weight: 500;
-        color: var(--muted);
-        cursor: pointer;
-        transition: all 0.15s;
-      }
-      .btn-ghost:hover {
-        border-color: var(--rose);
-        color: var(--rose-dark);
-      }
-
-      /* Orders */
-      .order-card {
-        background: var(--white);
-        border-radius: var(--radius-lg);
-        border: 1px solid var(--border);
-        box-shadow: var(--shadow);
-        margin-bottom: 14px;
-        overflow: hidden;
-      }
-      .order-head {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        padding: 14px 18px;
-        background: var(--cream);
-        border-bottom: 1px solid var(--border);
-        flex-wrap: wrap;
-        gap: 8px;
-      }
-      .order-id {
-        font-size: 0.7rem;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--muted);
-      }
-      .order-date {
-        font-size: 0.78rem;
-        color: var(--muted);
-        margin-top: 2px;
-      }
-      .order-badge {
-        font-size: 0.66rem;
-        font-weight: 700;
-        letter-spacing: 0.07em;
-        text-transform: uppercase;
-        padding: 4px 10px;
-        border-radius: 999px;
-        background: #e8f5e9;
-        color: #2e7d32;
-      }
-      .order-badge.cod {
-        background: #fff8e1;
-        color: #e65100;
-      }
-      .order-body {
-        padding: 14px 18px;
-      }
-      .order-item {
-        display: flex;
-        justify-content: space-between;
-        font-size: 0.84rem;
-        padding: 5px 0;
-        border-bottom: 1px dashed var(--border);
-        color: var(--text);
-      }
-      .order-item:last-child {
-        border-bottom: none;
-      }
-      .order-item-price {
-        color: var(--rose-dark);
-        font-weight: 600;
-      }
-      .order-foot {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 11px 18px;
-        background: var(--blush);
-        border-top: 1px solid rgba(244, 167, 185, 0.3);
-      }
-      .order-foot-label {
-        font-size: 0.78rem;
-        color: var(--muted);
-      }
-      .order-total {
-        font-family: var(--font-head);
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: var(--rose-dark);
-      }
-
-      .empty-state {
-        text-align: center;
-        padding: 56px 24px;
-      }
-      .empty-icon {
-        font-size: 2.8rem;
-        margin-bottom: 12px;
-      }
-      .empty-state h3 {
-        font-family: var(--font-head);
-        font-size: 1.4rem;
-        color: var(--text);
-        margin-bottom: 6px;
-      }
-      .empty-state p {
-        font-size: 0.85rem;
-        color: var(--muted);
-      }
-
-      /* Addresses */
-      .addr-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 14px;
-        margin-bottom: 20px;
-      }
-      .addr-card {
-        background: var(--white);
-        border-radius: var(--radius);
-        border: 2px solid var(--border);
-        padding: 18px;
-        position: relative;
-        transition: border-color 0.2s;
-      }
-      .addr-card.is-default {
-        border-color: var(--rose-dark);
-        background: var(--blush);
-      }
-      .default-badge {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        font-size: 0.6rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        background: var(--rose-dark);
-        color: white;
-        padding: 3px 8px;
-        border-radius: 999px;
-      }
-      .addr-name {
-        font-weight: 600;
-        font-size: 0.88rem;
-        color: var(--text);
-        margin-bottom: 2px;
-      }
-      .addr-phone {
-        font-size: 0.76rem;
-        color: var(--muted);
-        margin-bottom: 8px;
-      }
-      .addr-text {
-        font-size: 0.81rem;
-        color: var(--text);
-        line-height: 1.5;
-      }
-      .addr-btns {
-        display: flex;
-        gap: 7px;
-        margin-top: 12px;
-        flex-wrap: wrap;
-      }
-      .addr-btn-sm {
-        font-size: 0.7rem;
-        font-weight: 600;
-        padding: 5px 11px;
-        border-radius: 999px;
-        border: 1.5px solid var(--border);
-        background: none;
-        cursor: pointer;
-        transition: all 0.15s;
-        font-family: var(--font-body);
-      }
-      .addr-btn-sm:hover {
-        border-color: var(--rose);
-        color: var(--rose-dark);
-      }
-      .addr-btn-sm.danger:hover {
-        border-color: #e57373;
-        color: #c62828;
-        background: #fff5f5;
-      }
-      .addr-btn-sm.primary {
-        background: var(--rose);
-        color: white;
-        border-color: var(--rose);
-      }
-      .addr-btn-sm.primary:hover {
-        background: var(--rose-dark);
-      }
-
-      /* Add address form */
-      .add-addr-toggle {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 13px 16px;
-        background: var(--white);
-        border: 2px dashed var(--border);
-        border-radius: var(--radius);
-        font-family: var(--font-body);
-        font-size: 0.88rem;
-        font-weight: 600;
-        color: var(--rose-dark);
-        cursor: pointer;
-        transition: all 0.2s;
-        margin-bottom: 18px;
-      }
-      .add-addr-toggle:hover {
-        border-color: var(--rose);
-        background: var(--blush);
-      }
-      .addr-form-wrap {
-        display: none;
-        background: var(--white);
-        border-radius: var(--radius-lg);
-        border: 1px solid var(--border);
-        padding: 22px;
-        margin-bottom: 18px;
-        box-shadow: var(--shadow);
-        animation: fadeUp 0.3s ease both;
-      }
-      .addr-form-wrap.open {
-        display: block;
-      }
-      .addr-form-title {
-        font-family: var(--font-head);
-        font-size: 1.15rem;
-        font-weight: 600;
-        color: var(--text);
-        margin-bottom: 16px;
-        padding-bottom: 11px;
-        border-bottom: 1px solid var(--border);
-      }
-      .fg2 {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-      }
-      .fg-full {
-        grid-column: 1 / -1;
-      }
-      .fg {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-      }
-      .fg label {
-        font-size: 0.7rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: var(--text);
-      }
-      .fg input {
-        padding: 10px 13px;
-        border: 1.5px solid var(--border);
-        border-radius: var(--radius);
-        font-family: var(--font-body);
-        font-size: 0.88rem;
-        color: var(--text);
-        background: var(--white);
-        outline: none;
-        transition:
-          border-color 0.2s,
-          box-shadow 0.2s;
-      }
-      .fg input:focus {
-        border-color: var(--rose);
-        box-shadow: 0 0 0 3px rgba(244, 167, 185, 0.18);
-      }
-      .check-row {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-top: 10px;
-        font-size: 0.84rem;
-        color: var(--text);
-        cursor: pointer;
-      }
-      .check-row input {
-        accent-color: var(--rose-dark);
-        cursor: pointer;
-      }
-      .form-acts {
-        display: flex;
-        gap: 10px;
-        margin-top: 16px;
-      }
-
-      /* Message + toast */
-      .acc-msg {
-        padding: 10px 13px;
-        border-radius: var(--radius);
-        font-size: 0.81rem;
-        font-weight: 500;
-        margin-top: 12px;
-        display: none;
-      }
-      .acc-msg.show {
-        display: block;
-      }
-      .acc-msg.err {
-        background: #fff5f5;
-        border: 1px solid #ffcdd2;
-        color: #c62828;
-      }
-      .acc-msg.ok {
-        background: #e8f5e9;
-        border: 1px solid #a5d6a7;
-        color: #2e7d32;
-      }
-
-      .acc-toast {
-        position: fixed;
-        bottom: 28px;
-        left: 50%;
-        transform: translateX(-50%) translateY(80px);
-        background: var(--text);
-        color: white;
-        padding: 12px 24px;
-        border-radius: 999px;
-        font-size: 0.84rem;
-        font-weight: 500;
-        z-index: 9999;
-        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        white-space: nowrap;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-      }
-      .acc-toast.show {
-        transform: translateX(-50%) translateY(0);
-      }
-
-      /* Skeleton */
-      .skel {
-        background: linear-gradient(
-          90deg,
-          var(--border) 25%,
-          var(--blush) 50%,
-          var(--border) 75%
-        );
-        background-size: 200% 100%;
-        animation: shimmer 1.4s infinite;
-        border-radius: 6px;
-      }
-      @keyframes shimmer {
-        from {
-          background-position: 200% 0;
-        }
-        to {
-          background-position: -200% 0;
-        }
-      }
-      .skel-h {
-        height: 13px;
-        margin-bottom: 9px;
-      }
-
-      /* Operational access section - visible only to verified admins */
-      .acc-admin-section {
-        display: none;
-        margin-top: 12px;
-        opacity: 0;
-        transform: translateY(6px);
-        transition:
-          opacity 0.28s ease,
-          transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
-      }
-      .acc-admin-section.admin-visible {
-        display: block;
-        opacity: 1;
-        transform: translateY(0);
-      }
-      .acc-admin-card {
-        background: var(--white, #fff);
-        border-radius: var(--radius);
-        border: 1px solid var(--border, #f0dde5);
-        overflow: hidden;
-      }
-      .acc-admin-card-head {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 10px 14px 8px;
-        border-bottom: 1px solid var(--border, #f0dde5);
-      }
-      .acc-admin-card-head-icon {
-        font-size: 0.65rem;
-        line-height: 1;
-        background: var(--cream, #faf8f5);
-        color: var(--muted, #9b7b85);
-        width: 20px;
-        height: 20px;
-        border-radius: 5px;
-        border: 1px solid var(--border, #f0dde5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .acc-admin-card-head-label {
-        font-size: 0.65rem;
-        font-weight: 600;
-        letter-spacing: 0.09em;
-        text-transform: uppercase;
-        color: var(--muted, #9b7b85);
-      }
-      .acc-admin-links {
-        padding: 6px 6px;
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-      }
-      .acc-admin-link {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 9px 10px;
-        border-radius: 8px;
-        font-size: 0.82rem;
-        font-weight: 500;
-        color: var(--muted, #9b7b85);
-        text-decoration: none;
-        transition:
-          background 0.15s,
-          color 0.15s;
-      }
-      .acc-admin-link:hover,
-      .acc-admin-link:focus-visible {
-        background: var(--cream, #faf8f5);
-        color: var(--text, #2d2020);
-        outline: none;
-      }
-      .acc-admin-link-icon {
-        font-size: 0.72rem;
-        width: 18px;
-        text-align: center;
-        opacity: 0.5;
-      }
-
-      /* Responsive */
-      @media (max-width: 768px) {
-        .acc-container {
-          grid-template-columns: 1fr;
-          padding: 0;
-          gap: 0;
-        }
-        .acc-sidebar {
-          position: static;
-        }
-        .acc-profile-card {
-          border-radius: 0;
-          border-left: none;
-          border-right: none;
-          border-top: none;
-          box-shadow: none;
-          border-bottom: 1px solid var(--border);
-          padding: 16px 20px;
-          display: flex;
-          align-items: center;
-          gap: 14px;
-          text-align: left;
-          margin-bottom: 0;
-        }
-        .acc-avatar {
-          width: 52px;
-          height: 52px;
-          font-size: 1.3rem;
-          margin: 0;
-          flex-shrink: 0;
-        }
-        .acc-displayname {
-          font-size: 0.95rem;
-          margin-bottom: 2px;
-        }
-        .acc-email-small {
-          font-size: 0.7rem;
-        }
-        .acc-since {
-          font-size: 0.64rem;
-          margin-top: 3px;
-          padding-top: 0;
-          border-top: none;
-        }
-        .acc-nav {
-          display: flex;
-          flex-direction: row;
-          overflow-x: auto;
-          scrollbar-width: none;
-          -webkit-overflow-scrolling: touch;
-          border-radius: 0;
-          border-left: none;
-          border-right: none;
-          border-top: none;
-          box-shadow: none;
-          border-bottom: 1px solid var(--border);
-          padding: 0 8px;
-          gap: 0;
-          background: #fff;
-        }
-        .acc-nav::-webkit-scrollbar { display: none; }
-        .acc-nav-btn {
-          flex: 0 0 auto;
-          width: auto;
-          white-space: nowrap;
-          border-bottom: 2.5px solid transparent;
-          border-right: none;
-          border-radius: 0;
-          padding: 12px 14px;
-          font-size: 0.8rem;
-          min-height: 0;
-          background: transparent;
-          color: var(--muted);
-        }
-        .acc-nav-btn.active {
-          background: transparent;
-          color: var(--rose-dark);
-          border-bottom-color: var(--rose-dark);
-          font-weight: 700;
-        }
-        .acc-nav-btn.logout-btn {
-          margin-left: auto;
-        }
-        .acc-admin-section {
-          margin: 0 16px 8px;
-        }
-        .acc-main {
-          padding: 16px;
-          min-height: auto;
-          animation: none;
-        }
-        .stat-grid {
-          grid-template-columns: 1fr 1fr;
-        }
-        .addr-grid {
-          grid-template-columns: 1fr;
-        }
-        .fg2 {
-          grid-template-columns: 1fr;
-        }
-        .fg-full {
-          grid-column: 1;
-        }
-        .panel-title {
-          font-size: 1.5rem;
-        }
-        .acc-page {
-          padding: calc(58px + 12px) 0 calc(64px + env(safe-area-inset-bottom, 0px) + 16px);
-        }
-        .btn-ghost,
-        .btn-prime {
-          width: 100%;
-          justify-content: center;
-          text-align: center;
-        }
-      }
-      @media (max-width: 480px) {
-        .stat-grid {
-          grid-template-columns: 1fr 1fr;
-        }
-        .stat-num {
-          font-size: 1.5rem;
-        }
-        .acc-card {
-          padding: 18px 16px;
-        }
-      }
-    </style>
-<link href="final-mobile-stabilization.css" media="(max-width: 768px)" rel="stylesheet"/>
-<link href="phase6-polish.css" media="(max-width: 767px)" rel="stylesheet"/>
-<link href="phase5-mobile-conversion.css" media="(max-width: 767px)" rel="stylesheet"/>
-<link href="mobile-comprehensive.css" media="(max-width: 1024px)" rel="stylesheet"/>
-<link href="cc-material-icons.css" rel="stylesheet"/>
-
-</head>
-<link href="cc-bottom-nav.css" rel="stylesheet"/>
-<body>
-<!-- Auth overlay -->
-<div class="auth-overlay" id="authOverlay">
-<div class="spinner-ring"></div>
-</div>
-<!-- Toast -->
-<div class="acc-toast" id="toast"></div>
-<!-- NAVBAR -->
-
-<!-- ACCOUNT PAGE -->
-<main class="acc-page">
-<div class="acc-container">
-<!-- Sidebar -->
-<aside class="acc-sidebar">
-<div class="acc-profile-card">
-<div class="acc-avatar" id="accAvatar">U</div>
-<div class="acc-displayname" id="accDisplayName">-</div>
-<div class="acc-email-small" id="accEmailLabel">-</div>
-<div class="acc-since" id="accSince">Member since -</div>
-</div>
-<nav class="acc-nav">
-<button class="acc-nav-btn active" data-tab="profile" type="button">
-              Profile
-            </button>
-<button class="acc-nav-btn" data-tab="orders" type="button">
-              My Orders
-            </button>
-<button class="acc-nav-btn" data-tab="addresses" type="button">
-              Addresses
-            </button>
-<button class="acc-nav-btn logout-btn" id="sidebarLogout" type="button">
-              Logout
-            </button>
-</nav>
-<!-- Operational access - shown only for verified admins -->
-<div aria-hidden="true" class="acc-admin-section" id="accAdminSection">
-<div class="acc-admin-card">
-<div class="acc-admin-card-head">
-<span aria-hidden="true" class="acc-admin-card-head-icon"></span>
-<span class="acc-admin-card-head-label">Operations</span>
-</div>
-<div class="acc-admin-links">
-<a aria-label="Operations Panel" class="acc-admin-link" href="admin.html">
-<span aria-hidden="true" class="acc-admin-link-icon"></span>
-                  Operations Panel
-                </a>
-<a aria-label="Order Fulfillment" class="acc-admin-link" href="admin-orders.html">
-<span aria-hidden="true" class="acc-admin-link-icon"></span>
-                  Fulfillment
-                </a>
-</div>
-</div>
-</div>
-</aside>
-<!-- Main -->
-<div class="acc-main">
-<!-- PROFILE TAB -->
-<section class="acc-panel active" id="tab-profile">
-<div class="panel-head">
-<h1 class="panel-title">
-                Hello, <em id="greetName">there</em>
-</h1>
-<p class="panel-sub">Welcome back to your Chic Charms account</p>
-</div>
-<div class="stat-grid">
-<div class="stat-box">
-<div class="stat-num" id="statOrders">-</div>
-<div class="stat-label">Orders</div>
-</div>
-<div class="stat-box">
-<div class="stat-num" id="statAddrs">-</div>
-<div class="stat-label">Addresses</div>
-</div>
-<div class="stat-box">
-<div class="stat-num" id="statSpend">-</div>
-<div class="stat-label">Total Spent</div>
-</div>
-</div>
-<div class="acc-card">
-<div class="info-row">
-<span class="info-label">Email</span>
-<span class="info-val" id="infoEmail">-</span>
-</div>
-<div class="info-row">
-<span class="info-label">User ID</span>
-<span class="info-val" id="infoUid" style="font-size: 0.73rem; color: var(--muted)">-</span>
-</div>
-<div class="info-row">
-<span class="info-label">Member since</span>
-<span class="info-val" id="infoSince">-</span>
-</div>
-<div class="info-row">
-<span class="info-label">Status</span>
-<span class="info-val" style="color: #2e7d32">Active</span>
-</div>
-</div>
-<!-- -- Contact info (from users/{uid}) -- -->
-<div class="acc-card">
-<p style="
-                  font-size: 0.84rem;
-                  color: var(--muted);
-                  margin-bottom: 12px;
-                  font-weight: 600;
-                ">
-                Contact &amp; Delivery Info
-              </p>
-<div class="info-row">
-<span class="info-label">Name</span>
-<span class="info-val" id="profileName">-</span>
-</div>
-<div class="info-row">
-<span class="info-label">Phone</span>
-<span class="info-val" id="profilePhone">-</span>
-</div>
-<div class="info-row">
-<span class="info-label">Address</span>
-<span class="info-val" id="accountAddress" style="max-width: 260px; text-align: right; line-height: 1.5">-</span>
-</div>
-<div style="margin-top: 14px">
-<button class="btn-ghost" id="toggleEditProfileBtn" type="button">
-                   Edit Info
-                </button>
-</div>
-<!-- Edit profile form (hidden by default) -->
-<div id="editProfileForm" style="
-                  display: none;
-                  margin-top: 18px;
-                  border-top: 1px solid var(--border);
-                  padding-top: 18px;
-                ">
-<div style="display: flex; flex-direction: column; gap: 12px">
-<div class="fg">
-<label for="editProfileName">Full Name</label>
-<input autocomplete="name" id="editProfileName" maxlength="80" placeholder="Priya Sharma" type="text"/>
-</div>
-<div class="fg">
-<label for="editProfilePhone">Phone Number</label>
-<input autocomplete="tel" id="editProfilePhone" maxlength="10" placeholder="9876543210" type="tel"/>
-</div>
-<div class="fg">
-<label for="editProfileAddress">Delivery Address</label>
-<input autocomplete="street-address" id="editProfileAddress" maxlength="300" placeholder="Flat / Street, City, Pincode" type="text"/>
-</div>
-</div>
-<div class="form-acts" style="margin-top: 14px">
-<button class="btn-prime" id="saveProfileBtn" type="button">
-                    Save Changes
-                  </button>
-<button class="btn-ghost" id="cancelEditProfileBtn" type="button">
-                    Cancel
-                  </button>
-</div>
-<div class="acc-msg" id="editProfileMsg"></div>
-</div>
-</div>
-<div class="acc-card">
-<p style="
-                  font-size: 0.84rem;
-                  color: var(--muted);
-                  margin-bottom: 12px;
-                  font-weight: 600;
-                ">
-                Edit Display Name
-              </p>
-<div style="
-                  display: flex;
-                  gap: 10px;
-                  align-items: center;
-                  flex-wrap: wrap;
-                ">
-<input aria-describedby="editNameMsg" id="editNameInput" maxlength="12" placeholder="Your name" style="
-                    flex: 1;
-                    padding: 10px 14px;
-                    border: 1.5px solid var(--border);
-                    border-radius: var(--radius);
-                    font-family: var(--font-body);
-                    font-size: 0.9rem;
-                    outline: none;
-                  " type="text"/>
-<button class="btn-prime" id="saveNameBtn" type="button">
-                  Save Name
-                </button>
-</div>
-<div class="acc-msg" id="editNameMsg"></div>
-</div>
-<div class="acc-card">
-<p style="
-                  font-size: 0.84rem;
-                  color: var(--muted);
-                  margin-bottom: 14px;
-                ">
-                Change your password via email reset:
-              </p>
-<button class="btn-prime" id="pwResetBtn" type="button">
-                Send Password Reset
-              </button>
-<div class="acc-msg" id="pwResetMsg"></div>
-</div>
-</section>
-<!-- ORDERS TAB -->
-<section class="acc-panel" id="tab-orders">
-<div class="panel-head">
-<h2 class="panel-title">My <em>Orders</em></h2>
-<p class="panel-sub">Your complete purchase history</p>
-</div>
-<div id="ordersWrap">
-<div class="acc-card">
-<div class="skel skel-h" style="width: 40%"></div>
-<div class="skel skel-h" style="width: 75%"></div>
-<div class="skel skel-h" style="width: 55%"></div>
-</div>
-</div>
-</section>
-<!-- ADDRESSES TAB -->
-<section class="acc-panel" id="tab-addresses">
-<div class="panel-head">
-<h2 class="panel-title">My <em>Addresses</em></h2>
-<p class="panel-sub">Saved for faster checkout</p>
-</div>
-<button class="add-addr-toggle" id="addAddrToggle" type="button">
-              + Add new address
-            </button>
-<div class="addr-form-wrap" id="addrFormWrap">
-<div class="addr-form-title">" New Address</div>
-<div class="acc-msg" id="addrMsg"></div>
-<div class="fg2">
-<div class="fg">
-<label for="addrName">Full Name *</label>
-<input autocomplete="name" id="addrName" placeholder="Priya Sharma" type="text"/>
-</div>
-<div class="fg">
-<label for="addrPhone">Phone *</label>
-<input id="addrPhone" maxlength="10" placeholder="9876543210" type="tel"/>
-</div>
-<div class="fg fg-full">
-<label for="addrStreet">Street / Locality *</label>
-<input autocomplete="street-address" id="addrStreet" placeholder="Flat 4, Rose Apartments, MG Road" type="text"/>
-</div>
-<div class="fg">
-<label for="addrCity">City *</label>
-<input id="addrCity" placeholder="Chennai" type="text"/>
-</div>
-<div class="fg">
-<label for="addrPin">Pincode *</label>
-<input id="addrPin" maxlength="6" placeholder="600001" type="text"/>
-</div>
-</div>
-<label class="check-row">
-<input id="addrDefault" type="checkbox"/> Set as default
-                address
-              </label>
-<div class="form-acts">
-<button class="btn-prime" id="saveAddrBtn" type="button">
-                  Save Address
-                </button>
-<button class="btn-ghost" id="cancelAddrBtn" type="button">
-                  Cancel
-                </button>
-</div>
-</div>
-<div id="addrsWrap">
-<div class="acc-card">
-<div class="skel skel-h" style="width: 55%"></div>
-<div class="skel skel-h" style="width: 80%"></div>
-</div>
-</div>
-</section>
-</div>
-<!-- /acc-main -->
-</div>
-<!-- /acc-container -->
-</main>
-<!-- FOOTER -->
-<footer class="footer">
-<div class="container footer-inner">
-<div class="footer-brand">
-<p class="logo" style="color:#8e4559 !important">ChicCharms</p>
-<p class="footer-tagline">Your glow-up starts here.</p>
-</div>
-<nav class="footer-links">
-<a href="#">About Us</a><a href="#">FAQs</a> <a href="#">Shipping</a><a href="#">Returns</a><a href="#">Contact</a>
-</nav>
-</div>
-<p class="footer-copy">© 2025 ChicCharms. Made in India.</p>
-</footer>
-<script type="module">
-      /* ============================================================
-       account.html - Dashboard logic
-       Single Firebase import from auth.js
-    ============================================================ */
-      import {
-        auth,
-        onAuthStateChanged,
-        signOut,
-        updateProfile,
-      } from "./auth.js";
-      import { isAdmin } from "./auth-ui.js";
-      import {
-        getFirestore,
-        collection,
-        query,
-        where,
-        orderBy,
-        getDocs,
-        addDoc,
-        deleteDoc,
-        updateDoc,
-        doc,
-        getDoc,
-        setDoc,
-        serverTimestamp,
-      } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-      import { sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
-      const db = getFirestore();
-      const DISPLAY_NAME_MAX = 12;
-
-      /* ============================================================
-       STATE MANAGEMENT
-       AccountState prepares this page for future account.js extraction.
-    ============================================================ */
-      const AccountState = {
-        user: null,
-        orders: [],
-        addresses: [],
-        profile: {},
-        loaded: {
-          orders: false,
-          addresses: false,
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+  <meta content="My Account - Chic Charms" name="description"/>
+  <title>My Account - Chic Charms</title>
+  
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Jost:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+  
+  <!-- Tailwind CSS Support for Mockup Layout -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "error-container": "#ffdad6",
+            "surface-container-low": "#fcf1f1",
+            "on-surface-variant": "#534346",
+            "on-secondary-fixed-variant": "#772c47",
+            "background": "#fff8f7",
+            "tertiary": "#645a53",
+            "secondary-container": "#ff9bb9",
+            "on-secondary-container": "#7a2f49",
+            "primary-fixed": "#ffd9e0",
+            "on-primary-fixed-variant": "#743044",
+            "surface-variant": "#eae0e0",
+            "inverse-on-surface": "#f9eeee",
+            "on-error-container": "#93000a",
+            "primary-fixed-dim": "#ffb1c3",
+            "surface-container": "#f6eceb",
+            "inverse-primary": "#ffb1c3",
+            "surface-container-highest": "#eae0e0",
+            "secondary-fixed-dim": "#ffb1c6",
+            "outline-variant": "#d7c1c5",
+            "on-primary-container": "#fffbff",
+            "on-background": "#1f1a1b",
+            "tertiary-container": "#7d736b",
+            "outline": "#857276",
+            "on-primary": "#ffffff",
+            "surface-dim": "#e1d8d7",
+            "surface-bright": "#fff8f7",
+            "on-surface": "#1f1a1b",
+            "on-tertiary-fixed": "#211a15",
+            "on-secondary-fixed": "#3f001c",
+            "error": "#ba1a1a",
+            "on-tertiary-container": "#fffbff",
+            "tertiary-fixed": "#eee0d7",
+            "surface": "#fff8f7",
+            "tertiary-fixed-dim": "#d1c4bc",
+            "on-primary-fixed": "#3c0419",
+            "on-tertiary": "#ffffff",
+            "on-tertiary-fixed-variant": "#4e453f",
+            "primary": "#8e4559",
+            "surface-container-high": "#f0e6e5",
+            "primary-container": "#ab5d71",
+            "inverse-surface": "#342f2f",
+            "on-error": "#ffffff",
+            "on-secondary": "#ffffff",
+            "surface-tint": "#90475b",
+            "secondary-fixed": "#ffd9e1",
+            "surface-container-lowest": "#ffffff",
+            "secondary": "#95445e",
+            "brand-accent": "#B5657A",
+            "brand-deep": "#9F4C67",
+            "brand-surface": "#FAF5F2",
+            "brand-border": "#F4E6DD",
+            "brand-charcoal": "#2F2A2A",
+            "brand-muted": "#8F6674"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "container-padding": "20px",
+            "gutter": "16px",
+            "stack-lg": "32px",
+            "stack-md": "16px",
+            "unit": "4px",
+            "stack-sm": "8px"
+          },
+          "fontFamily": {
+            "body-lg": ["Jost"],
+            "headline-lg-mobile": ["Playfair Display"],
+            "display-lg": ["Playfair Display"],
+            "label-lg": ["Jost"],
+            "headline-md": ["Playfair Display"],
+            "body-md": ["Jost"],
+            "headline-lg": ["Playfair Display"],
+            "label-md": ["Jost"]
+          },
+          "fontSize": {
+            "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+            "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+            "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+            "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+            "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+            "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+            "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+            "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.03em", "fontWeight": "500"}]
+          }
         },
-      };
+      },
+    }
+  </script>
 
-      let user = null;
-      let orders = [];
-      let addrs = [];
-      let userProfile = {}; // data from users/{uid}
-      let ordersLoaded = false;
-      let addrsLoaded = false;
+  <style>
+    /* Custom Styling Overrides for Mobile Shell */
+    .mobile-shell {
+      max-width: 440px;
+      margin: 0 auto;
+      min-height: 100dvh;
+      background: #fff8f7;
+      position: relative;
+      box-shadow: 0 8px 48px rgba(47,42,42,0.10);
+    }
+    
+    .auth-overlay {
+      position: fixed;
+      inset: 0;
+      background: #fff8f7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+      transition: opacity 0.35s ease;
+    }
+    .auth-overlay.hide {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .spinner-ring {
+      width: 36px;
+      height: 36px;
+      border: 3px solid #d7c1c5;
+      border-top-color: #8e4559;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
 
-      function syncAccountStateAliases() {
-        AccountState.user = user;
-        AccountState.orders = orders;
-        AccountState.addresses = addrs;
-        AccountState.profile = userProfile;
-        AccountState.loaded.orders = ordersLoaded;
-        AccountState.loaded.addresses = addrsLoaded;
-      }
+    .acc-toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #1f1a1b;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 999px;
+      font-size: 0.84rem;
+      font-weight: 500;
+      z-index: 100000;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      white-space: nowrap;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    }
+    .acc-toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
 
-      /* ============================================================
-       SHARED HELPERS
-       DOM, formatting, toast, messages, and Firestore mapping.
-    ============================================================ */
-      const esc = (s) =>
-        String(s || "")
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;")
-          .replace(/"/g, "&quot;")
-          .replace(/'/g, "&#39;");
-      const normalizeDisplayName = (value) =>
-        String(value || "").replace(/\s+/g, " ").trim();
-      const getHeaderDisplayName = (u) => {
-        const raw = normalizeDisplayName(u?.displayName || u?.email?.split("@")[0] || "");
-        return raw.length > DISPLAY_NAME_MAX
-          ? raw.slice(0, DISPLAY_NAME_MAX) + "..."
-          : raw;
-      };
-      const fmtDate = (d) => {
-        if (!d) return "-";
-        try {
-          return new Date(d).toLocaleDateString("en-IN", {
-            day: "numeric",
-            month: "short",
-            year: "numeric",
-          });
-        } catch {
-          return "-";
-        }
-      };
-      const $ = (id) => document.getElementById(id);
-      const formatINR = (value) =>
-        "Rs." + Number(value || 0).toLocaleString("en-IN");
-      const mapDocs = (snap) =>
-        snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    .skel {
+      background: linear-gradient(90deg, #eae0e0 25%, #fcf1f1 50%, #eae0e0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: 6px;
+    }
+    @keyframes shimmer {
+      from { background-position: 200% 0; }
+      to { background-position: -200% 0; }
+    }
+    .skel-h {
+      height: 13px;
+      margin-bottom: 9px;
+    }
 
-      function toast(msg, dur = 2800) {
-        const el = $("toast");
-        el.textContent = msg;
-        el.classList.add("show");
-        setTimeout(() => el.classList.remove("show"), dur);
-      }
-      function msg(id, type, text) {
-        const el = $(id);
-        el.textContent = text;
-        el.className = "acc-msg show " + (type === "err" ? "err" : "ok");
-      }
-      function clearMsg(id) {
-        $(id).className = "acc-msg";
-      }
+    .acc-msg {
+      padding: 10px 13px;
+      border-radius: 4px;
+      font-size: 0.81rem;
+      font-weight: 500;
+      display: none;
+    }
+    .acc-msg.show {
+      display: block;
+    }
+    .acc-msg.err {
+      background: #fff5f5;
+      border: 1px solid #ffcdd2;
+      color: #c62828;
+    }
+    .acc-msg.ok {
+      background: #e8f5e9;
+      border: 1px solid #a5d6a7;
+      color: #2e7d32;
+    }
 
-      /* -- Navbar -- */
-      const navbar = $("navbar");
-      window.addEventListener(
-        "scroll",
-        () => navbar.classList.toggle("scrolled", window.scrollY > 20),
-        { passive: true },
-      );
+    #accAdminSection.admin-visible {
+      display: block !important;
+    }
 
-      function buildNav(u) {
-        const nav = $("navActions");
-        if (!nav) return;
-        const displayName = u ? getHeaderDisplayName(u) : "";
-        const safeEmail = u ? esc(u.email) : "";
-        const safeName = esc(displayName);
-        nav.innerHTML = u
-          ? `<span class="nav-welcome" title="${safeEmail}"><span class="nav-welcome-text">${safeName}</span></span>
-           <a href="account.html" class="btn btn-nav btn-account">My Account</a>
-           <button type="button" class="btn btn-nav btn-logout" id="navLogoutBtn">Logout</button>
-           <button type="button" class="hamburger" id="hamburger" aria-expanded="false"><span></span><span></span><span></span></button>`
-          : `<a href="auth.html" class="btn btn-nav">Login</a>
-           <button type="button" class="hamburger" id="hamburger" aria-expanded="false"><span></span><span></span><span></span></button>`;
-        const h = $("hamburger"),
-          nl = $("navLinks");
-        if (h && nl) {
-          h.addEventListener("click", () => {
-            const o = nl.classList.toggle("open");
-            h.setAttribute("aria-expanded", o);
-          });
-        }
-        const navLogout = $("navLogoutBtn");
-        if (navLogout) {
-          navLogout.addEventListener("click", async () => {
-            await signOut(auth);
-            localStorage.removeItem("userEmail");
-            localStorage.removeItem("userId");
-            window.location.href = "index.html";
-          });
-        }
-      }
+    .glass-header {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .premium-shadow {
+      box-shadow: 0 10px 30px -15px rgba(142, 69, 89, 0.1);
+    }
+    .soft-gradient {
+      background: linear-gradient(135deg, #FDF2F5 0%, #FAF5F2 100%);
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
 
-      /* -- Tab switching -- */
-      document.querySelectorAll(".acc-nav-btn[data-tab]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          document
-            .querySelectorAll(".acc-nav-btn")
-            .forEach((b) => b.classList.remove("active"));
-          document
-            .querySelectorAll(".acc-panel")
-            .forEach((p) => p.classList.remove("active"));
-          btn.classList.add("active");
-          $("tab-" + btn.dataset.tab).classList.add("active");
-          if (btn.dataset.tab === "orders") {
-            if (!ordersLoaded) loadOrders();
-            else renderOrders();
-          }
-          if (btn.dataset.tab === "addresses") {
-            if (!addrsLoaded) loadAddrs();
-            else renderAddrs();
-          }
+  <!-- Project Header & Navigation Stylesheets -->
+  <link href="cc-material-icons.css" rel="stylesheet"/>
+  <link href="cc-bottom-nav.css" rel="stylesheet"/>
+  <link href="cc-global-header.css" rel="stylesheet"/>
+  <link href="styles.css" rel="stylesheet"/>
+</head>
+<body class="bg-[#FAF6F4] font-body-md text-on-background">
+
+  <!-- Loading Authentication Overlay -->
+  <div class="auth-overlay" id="authOverlay">
+    <div class="spinner-ring"></div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div class="acc-toast" id="toast"></div>
+
+  <!-- Centered Luxury Mobile Viewport Shell -->
+  <div class="mobile-shell">
+    
+    <!-- main scroll view container. Padding-top added for fixed header spacing. -->
+    <main class="pb-32">
+      <div class="h-8"></div>
+      
+      <!-- 1. PROFILE HERO CARD -->
+      <section class="px-container-padding pt-6">
+        <div class="soft-gradient rounded-xl p-6 border border-brand-border text-center premium-shadow">
+          <div class="relative w-24 h-24 mx-auto mb-4">
+            <div id="accAvatar" class="w-full h-full flex items-center justify-center rounded-full border-2 border-primary/20 bg-gradient-to-br from-secondary-container to-primary text-3xl font-bold text-white shadow-md">
+              -
+            </div>
+            <div class="absolute bottom-0 right-0 bg-primary text-white p-1.5 rounded-full flex items-center justify-center shadow-md">
+              <span class="material-symbols-outlined text-[14px]">edit</span>
+            </div>
+          </div>
+          <h2 class="font-headline-lg-mobile text-on-background mb-1 text-xl font-bold" id="accDisplayName">-</h2>
+          <p class="font-body-md text-on-surface-variant mb-4 text-xs" id="accEmailLabel">-</p>
+          <div class="inline-flex items-center px-4 py-1.5 bg-white/50 rounded-full border border-brand-border">
+            <span class="material-symbols-outlined text-[16px] mr-2 text-primary">verified</span>
+            <span class="font-label-md text-on-surface-variant text-[11px]">Member since <span id="accSince" class="">-</span></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. STATS ROW -->
+      <section class="px-container-padding pt-5">
+        <div class="grid grid-cols-3 gap-3">
+          <div class="bg-surface p-4 rounded-lg border border-brand-border text-center premium-shadow">
+            <div class="font-headline-md text-primary font-semibold text-xl" id="statOrders">-</div>
+            <div class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mt-1">Orders</div>
+          </div>
+          <div class="bg-surface p-4 rounded-lg border border-brand-border text-center premium-shadow">
+            <div class="font-headline-md text-primary font-semibold text-xl" id="statAddrs">-</div>
+            <div class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mt-1">Addresses</div>
+          </div>
+          <div class="bg-surface p-4 rounded-lg border border-brand-border text-center premium-shadow">
+            <div class="font-headline-md text-primary font-semibold text-xl" id="statSpend">-</div>
+            <div class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mt-1">Total Spent</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. QUICK ACTIONS GRID -->
+      <section class="px-container-padding pt-6">
+        <div class="grid grid-cols-2 gap-4">
+          <a class="bg-surface flex flex-col items-center justify-center p-5 rounded-lg border border-brand-border hover:bg-brand-surface transition-colors active:scale-95 duration-150 premium-shadow" href="#orders-section">
+            <span class="material-symbols-outlined text-primary mb-2 text-3xl">shopping_bag</span>
+            <span class="font-label-lg text-on-background uppercase tracking-wider text-xs font-semibold">Orders</span>
+          </a>
+          <a class="bg-surface flex flex-col items-center justify-center p-5 rounded-lg border border-brand-border hover:bg-brand-surface transition-colors active:scale-95 duration-150 premium-shadow" href="#wishlist-section">
+            <span class="material-symbols-outlined text-primary mb-2 text-3xl">favorite</span>
+            <span class="font-label-lg text-on-background uppercase tracking-wider text-xs font-semibold">Wishlist</span>
+          </a>
+          <a class="bg-surface flex flex-col items-center justify-center p-5 rounded-lg border border-brand-border hover:bg-brand-surface transition-colors active:scale-95 duration-150 premium-shadow" href="#addresses-section">
+            <span class="material-symbols-outlined text-primary mb-2 text-3xl">location_on</span>
+            <span class="font-label-lg text-on-background uppercase tracking-wider text-xs font-semibold">Addresses</span>
+          </a>
+          <a class="bg-surface flex flex-col items-center justify-center p-5 rounded-lg border border-brand-border hover:bg-brand-surface transition-colors active:scale-95 duration-150 premium-shadow" href="#settings-section">
+            <span class="material-symbols-outlined text-primary mb-2 text-3xl">settings</span>
+            <span class="font-label-lg text-on-background uppercase tracking-wider text-xs font-semibold">Settings</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- 4. RECENT ORDERS SECTION -->
+      <section id="orders-section" class="px-container-padding pt-8 scroll-mt-[100px]">
+        <div class="flex justify-between items-end mb-4">
+          <h3 class="font-headline-md text-on-background font-semibold text-lg">Recent Orders</h3>
+        </div>
+        <div class="space-y-4" id="ordersWrap">
+          <!-- skeleton layout on initial load -->
+          <div class="bg-surface p-5 rounded-lg border border-brand-border premium-shadow space-y-2">
+            <div class="skel skel-h w-1/3"></div>
+            <div class="skel skel-h w-2/3"></div>
+            <div class="skel skel-h w-1/2"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. WISHLIST PREVIEW SECTION -->
+      <section id="wishlist-section" class="pt-8 scroll-mt-[100px]">
+        <div class="px-container-padding flex justify-between items-end mb-4">
+          <h3 class="font-headline-md text-on-background font-semibold text-lg">
+            Wishlist <span class="text-on-surface-variant font-body-md text-sm ml-1" id="wishlist-count-label">(0)</span>
+          </h3>
+          <a class="font-label-md text-primary uppercase tracking-widest text-xs font-bold hover:underline" href="wishlist.html">See List</a>
+        </div>
+        
+        <!-- Horizontal scrolling container -->
+        <div class="flex overflow-x-auto gap-4 px-container-padding hide-scrollbar pb-2" id="wishlistWrap">
+          <!-- loaded by script -->
+          <div class="w-full text-center py-6 text-on-surface-variant text-sm bg-surface rounded-lg border border-brand-border">
+            Loading wishlist...
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. SAVED ADDRESSES SECTION -->
+      <section id="addresses-section" class="px-container-padding pt-8 scroll-mt-[100px]">
+        <h3 class="font-headline-md text-on-background font-semibold text-lg mb-4">Saved Addresses</h3>
+        
+        <button class="w-full flex items-center justify-center gap-2 py-3 mb-4 border border-dashed border-primary rounded-lg font-label-lg text-primary uppercase tracking-widest bg-white/50 hover:bg-brand-surface active:scale-95 transition-all text-xs font-bold" id="addAddrToggle" type="button">
+          + Add new address
+        </button>
+
+        <!-- New Address form drawer -->
+        <div class="addr-form-wrap bg-surface p-5 rounded-lg border border-brand-border mb-4 hidden" id="addrFormWrap">
+          <div class="font-label-lg text-primary mb-4 pb-2 border-b border-brand-border uppercase tracking-widest text-xs font-bold">New Address</div>
+          <div class="acc-msg mb-3" id="addrMsg"></div>
+          
+          <div class="space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+              <div class="flex flex-col gap-1">
+                <label class="text-[10px] font-bold uppercase tracking-wider text-on-background" for="addrName">Full Name *</label>
+                <input class="p-3 border border-brand-border rounded bg-white text-sm outline-none focus:border-primary" id="addrName" placeholder="Priya Sharma" type="text"/>
+              </div>
+              <div class="flex flex-col gap-1">
+                <label class="text-[10px] font-bold uppercase tracking-wider text-on-background" for="addrPhone">Phone *</label>
+                <input class="p-3 border border-brand-border rounded bg-white text-sm outline-none focus:border-primary" id="addrPhone" maxlength="10" placeholder="9876543210" type="tel"/>
+              </div>
+            </div>
+            
+            <div class="flex flex-col gap-1">
+              <label class="text-[10px] font-bold uppercase tracking-wider text-on-background" for="addrStreet">Street / Locality *</label>
+              <input class="p-3 border border-brand-border rounded bg-white text-sm outline-none focus:border-primary" id="addrStreet" placeholder="Flat 4, Rose Apartments, MG Road" type="text"/>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4">
+              <div class="flex flex-col gap-1">
+                <label class="text-[10px] font-bold uppercase tracking-wider text-on-background" for="addrCity">City *</label>
+                <input class="p-3 border border-brand-border rounded bg-white text-sm outline-none focus:border-primary" id="addrCity" placeholder="Chennai" type="text"/>
+              </div>
+              <div class="flex flex-col gap-1">
+                <label class="text-[10px] font-bold uppercase tracking-wider text-on-background" for="addrPin">Pincode *</label>
+                <input class="p-3 border border-brand-border rounded bg-white text-sm outline-none focus:border-primary" id="addrPin" maxlength="6" placeholder="600001" type="text"/>
+              </div>
+            </div>
+            
+            <label class="flex items-center gap-2 text-sm text-on-background cursor-pointer">
+              <input class="rounded text-primary focus:ring-primary" id="addrDefault" type="checkbox"/> Set as default address
+            </label>
+            
+            <div class="flex gap-3 pt-2">
+              <button class="flex-1 py-3 bg-primary text-white font-semibold rounded uppercase tracking-wider text-xs active:scale-95 transition-all" id="saveAddrBtn" type="button">
+                Save Address
+              </button>
+              <button class="flex-1 py-3 border border-brand-border text-on-background font-semibold rounded uppercase tracking-wider text-xs active:scale-95 transition-all bg-white" id="cancelAddrBtn" type="button">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-4" id="addrsWrap">
+          <div class="bg-surface p-5 rounded-lg border border-brand-border premium-shadow">
+            <div class="skel skel-h w-2/3"></div>
+            <div class="skel skel-h w-4/5"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. ACCOUNT SETTINGS & PROFILE FIELDS -->
+      <section id="settings-section" class="px-container-padding pt-8 scroll-mt-[100px]">
+        <h3 class="font-headline-md text-on-background font-semibold text-lg mb-4">Account Settings</h3>
+        
+        <div class="bg-surface rounded-lg border border-brand-border overflow-hidden premium-shadow">
+          
+          <!-- Contact Info Details and Toggle -->
+          <div class="p-5 border-b border-brand-border space-y-4">
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="font-label-lg text-on-background font-semibold text-sm">Contact &amp; Delivery Info</p>
+                <p class="text-[11px] text-on-surface-variant mt-0.5">Used as checkout pre-fills</p>
+              </div>
+              <button class="px-3 py-1.5 text-xs font-semibold border border-brand-border rounded bg-white hover:bg-brand-surface" id="toggleEditProfileBtn" type="button">
+                Edit Info
+              </button>
+            </div>
+            
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span class="text-on-surface-variant text-xs">Name</span>
+                <span class="font-medium text-xs" id="profileName">-</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-on-surface-variant text-xs">Phone</span>
+                <span class="font-medium text-xs" id="profilePhone">-</span>
+              </div>
+              <div class="flex justify-between items-start">
+                <span class="text-on-surface-variant text-xs">Address</span>
+                <span class="font-medium text-xs max-w-[200px] text-right leading-relaxed" id="accountAddress">-</span>
+              </div>
+            </div>
+
+            <!-- Toggleable Edit Contact Form -->
+            <div class="pt-4 border-t border-brand-border space-y-3 hidden" id="editProfileForm">
+              <div class="flex flex-col gap-1">
+                <label class="text-[10px] font-bold uppercase tracking-wider text-on-background" for="editProfileName">Full Name</label>
+                <input class="p-2.5 border border-brand-border rounded bg-white text-xs outline-none focus:border-primary" id="editProfileName" maxlength="80" placeholder="Priya Sharma" type="text"/>
+              </div>
+              <div class="flex flex-col gap-1">
+                <label class="text-[10px] font-bold uppercase tracking-wider text-on-background" for="editProfilePhone">Phone Number</label>
+                <input class="p-2.5 border border-brand-border rounded bg-white text-xs outline-none focus:border-primary" id="editProfilePhone" maxlength="10" placeholder="9876543210" type="tel"/>
+              </div>
+              <div class="flex flex-col gap-1">
+                <label class="text-[10px] font-bold uppercase tracking-wider text-on-background" for="editProfileAddress">Delivery Address</label>
+                <input class="p-2.5 border border-brand-border rounded bg-white text-xs outline-none focus:border-primary" id="editProfileAddress" maxlength="300" placeholder="Flat / Street, City, Pincode" type="text"/>
+              </div>
+              <div class="flex gap-2 pt-2">
+                <button class="flex-1 py-2.5 bg-primary text-white font-semibold rounded text-xs uppercase tracking-wider active:scale-95 transition-all" id="saveProfileBtn" type="button">Save Changes</button>
+                <button class="flex-1 py-2.5 border border-brand-border text-on-background font-semibold rounded text-xs uppercase tracking-wider bg-white active:scale-95 transition-all" id="cancelEditProfileBtn" type="button">Cancel</button>
+              </div>
+              <div class="acc-msg mt-2 text-xs" id="editProfileMsg"></div>
+            </div>
+          </div>
+
+          <!-- Edit Display Name -->
+          <div class="p-5 border-b border-brand-border space-y-3">
+            <p class="font-label-lg text-on-background font-semibold text-sm">Display Name</p>
+            <div class="flex gap-2">
+              <input class="flex-1 p-2.5 border border-brand-border rounded bg-white text-xs outline-none focus:border-primary" id="editNameInput" maxlength="12" placeholder="Your name" type="text"/>
+              <button class="px-4 py-2 bg-primary text-white font-semibold rounded text-xs uppercase tracking-wider active:scale-95 transition-all" id="saveNameBtn" type="button">Save</button>
+            </div>
+            <div class="acc-msg mt-2 text-xs" id="editNameMsg"></div>
+          </div>
+
+          <!-- Send Password Reset -->
+          <div class="p-5 border-b border-brand-border space-y-3">
+            <p class="font-label-lg text-on-background font-semibold text-sm">Password &amp; Security</p>
+            <p class="text-xs text-on-surface-variant leading-relaxed">Send a secure password reset link to your email address.</p>
+            <button class="px-4 py-2 border border-primary text-primary font-semibold rounded text-xs uppercase tracking-wider bg-white hover:bg-brand-surface active:scale-95 transition-all" id="pwResetBtn" type="button">
+              Send Password Reset
+            </button>
+            <div class="acc-msg mt-2 text-xs" id="pwResetMsg"></div>
+          </div>
+
+          <!-- System Identifiers -->
+          <div class="p-5 space-y-2 text-sm bg-brand-surface/40">
+            <div class="flex justify-between items-center">
+              <span class="text-on-surface-variant text-[11px]">User ID</span>
+              <span class="font-mono text-[10px] text-on-surface-variant truncate max-w-[180px] select-all" id="infoUid">-</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-on-surface-variant text-[11px]">Registered Email</span>
+              <span class="text-[11px] text-on-surface-variant" id="infoEmail">-</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-on-surface-variant text-[11px]">Member Since</span>
+              <span class="text-[11px] text-on-surface-variant" id="infoSince">-</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. ADMIN DASHBOARD OPERATIONS PANEL (Verifed Admins Only) -->
+      <section class="px-container-padding pt-8 hidden" id="accAdminSection" aria-hidden="true">
+        <h3 class="font-headline-md text-on-background font-semibold text-lg mb-4">Operations</h3>
+        <div class="bg-surface rounded-lg border border-brand-border overflow-hidden premium-shadow">
+          <a class="flex items-center justify-between p-5 border-b border-brand-border active:bg-brand-surface transition-colors" href="admin.html">
+            <div class="flex items-center">
+              <span class="material-symbols-outlined text-brand-muted mr-4">admin_panel_settings</span>
+              <span class="font-label-lg text-on-background text-sm font-semibold">Operations Panel</span>
+            </div>
+            <span class="material-symbols-outlined text-outline text-sm">chevron_right</span>
+          </a>
+          <a class="flex items-center justify-between p-5 active:bg-brand-surface transition-colors" href="admin-orders.html">
+            <div class="flex items-center">
+              <span class="material-symbols-outlined text-brand-muted mr-4">local_shipping</span>
+              <span class="font-label-lg text-on-background text-sm font-semibold">Order Fulfillment</span>
+            </div>
+            <span class="material-symbols-outlined text-outline text-sm">chevron_right</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- 9. LOGOUT BUTTON -->
+      <section class="px-container-padding pt-8 pb-12">
+        <button class="w-full py-4 border border-brand-border rounded-lg font-label-lg text-brand-muted bg-white uppercase tracking-[0.2em] hover:bg-red-50 hover:text-red-700 active:scale-95 transition-all text-xs font-bold premium-shadow" id="sidebarLogout">
+          Sign Out
+        </button>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Firebase Authentication and Database Client Wiring -->
+  <script type="module">
+    import {
+      auth,
+      onAuthStateChanged,
+      signOut,
+      updateProfile,
+    } from "./auth.js";
+    import { isAdmin } from "./auth-ui.js";
+    import {
+      getFirestore,
+      collection,
+      query,
+      where,
+      getDocs,
+      addDoc,
+      deleteDoc,
+      updateDoc,
+      doc,
+      getDoc,
+      setDoc,
+      serverTimestamp,
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    const db = getFirestore();
+    const DISPLAY_NAME_MAX = 12;
+
+    const AccountState = {
+      user: null,
+      orders: [],
+      addresses: [],
+      profile: {},
+      loaded: {
+        orders: false,
+        addresses: false,
+      },
+    };
+
+    let user = null;
+    let orders = [];
+    let addrs = [];
+    let userProfile = {};
+    let ordersLoaded = false;
+    let addrsLoaded = false;
+
+    function syncAccountStateAliases() {
+      AccountState.user = user;
+      AccountState.orders = orders;
+      AccountState.addresses = addrs;
+      AccountState.profile = userProfile;
+      AccountState.loaded.orders = ordersLoaded;
+      AccountState.loaded.addresses = addrsLoaded;
+    }
+
+    const esc = (s) =>
+      String(s || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+
+    const normalizeDisplayName = (value) =>
+      String(value || "").replace(/\s+/g, " ").trim();
+
+    const getHeaderDisplayName = (u) => {
+      const raw = normalizeDisplayName(u?.displayName || u?.email?.split("@")[0] || "");
+      return raw.length > DISPLAY_NAME_MAX
+        ? raw.slice(0, DISPLAY_NAME_MAX) + "..."
+        : raw;
+    };
+
+    const fmtDate = (d) => {
+      if (!d) return "-";
+      try {
+        return new Date(d).toLocaleDateString("en-IN", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
         });
-      });
+      } catch {
+        return "-";
+      }
+    };
 
-      /* -- Logout -- */
-      $("sidebarLogout").addEventListener("click", async () => {
-        await signOut(auth);
-        localStorage.removeItem("userEmail");
-        localStorage.removeItem("userId");
-        window.location.href = "index.html";
-      });
+    const $ = (id) => document.getElementById(id);
+    const formatINR = (value) => "Rs." + Number(value || 0).toLocaleString("en-IN");
+    const mapDocs = (snap) => snap.docs.map((d) => ({ id: d.id, ...d.data() }));
 
-      /* ==============================
-       AUTH GATE
+    function toast(msg, dur = 2800) {
+      const el = $("toast");
+      if (!el) return;
+      el.textContent = msg;
+      el.classList.add("show");
+      setTimeout(() => el.classList.remove("show"), dur);
+    }
+
+    function msg(id, type, text) {
+      const el = $(id);
+      if (!el) return;
+      el.textContent = text;
+      el.className = "acc-msg show " + (type === "err" ? "err" : "ok");
+    }
+
+    function clearMsg(id) {
+      const el = $(id);
+      if (el) el.className = "acc-msg";
+    }
+
+    // Smooth scroll for Quick Actions
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    /* -- Logout Actions -- */
+    const logoutAction = async () => {
+      await signOut(auth);
+      localStorage.removeItem("userEmail");
+      localStorage.removeItem("userId");
+      window.location.href = "index.html";
+    };
+    const logoutBtn = $("sidebarLogout");
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", logoutAction);
+    }
+
+    /* ==============================
+     AUTH GATE
     ============================== */
-      onAuthStateChanged(auth, async (u) => {
-        console.log("[account] Auth:", u?.email || "none");
-        const overlay = $("authOverlay");
+    onAuthStateChanged(auth, async (u) => {
+      console.log("[account] Auth state fired:", u?.email || "none");
+      const overlay = $("authOverlay");
 
-        if (!u) {
+      if (!u) {
+        // Prevent race condition redirect loop: only redirect if no cached credentials exist in localStorage
+        if (!localStorage.getItem('userId')) {
           window.location.href = "auth.html";
+        } else {
+          // If cached credentials exist, wait up to 3 seconds for Firebase Auth to resolve from IndexedDB
+          setTimeout(() => {
+            if (!auth.currentUser) {
+              window.location.href = "auth.html";
+            }
+          }, 3000);
+        }
+        return;
+      }
+
+      user = u;
+      syncAccountStateAliases();
+      
+      if (overlay) {
+        overlay.classList.add("hide");
+        setTimeout(() => overlay.remove(), 400);
+      }
+
+      populateProfile(u);
+      loadUserProfile();
+
+      /* -- Show operational panel for verified admins -- */
+      const adminSection = document.getElementById("accAdminSection");
+      if (adminSection) {
+        const show = await isAdmin(u);
+        adminSection.classList.toggle("admin-visible", show);
+        adminSection.setAttribute("aria-hidden", String(!show));
+      }
+
+      // Load items
+      await loadOrders(false);
+      await loadAddrs(false);
+      renderWishlistPreview();
+    });
+
+    /* ==============================
+     LOAD USER PROFILE (users/{uid})
+    ============================== */
+    async function loadUserProfile() {
+      try {
+        const currentUser = auth.currentUser;
+        const userSnap = await getDoc(doc(db, "users", currentUser.uid));
+        console.log("[ACCOUNT PAGE USER DATA]", userSnap.data());
+        const userData = userSnap.data();
+        if (userSnap.exists()) {
+          userProfile = userData;
+        }
+        syncAccountStateAliases();
+        renderProfileData();
+      } catch (e) {
+        console.warn("[account] Could not load user profile doc:", e.message);
+        syncAccountStateAliases();
+        renderProfileData();
+      }
+    }
+
+    function renderProfileData() {
+      const name = userProfile.name || "";
+      const phone = userProfile.phone || "";
+      const address = userProfile.address || "";
+      const pincode = userProfile.pincode || "";
+
+      const nameEl = $("profileName");
+      const phoneEl = $("profilePhone");
+      const addressEl = document.getElementById("accountAddress");
+      if (nameEl) nameEl.textContent = name || "-";
+      if (phoneEl) phoneEl.textContent = phone || "-";
+      if (addressEl) addressEl.textContent = address || "No address saved";
+
+      if (!addrsLoaded || addrs.length === 0) {
+        $("statAddrs").textContent = address ? "1" : "0";
+      }
+
+      if (addrsLoaded && addrs.length === 0) {
+        renderAddrs();
+      }
+
+      // Pre-fill edit form fields
+      const enEl = $("editProfileName");
+      const epEl = $("editProfilePhone");
+      const eaEl = $("editProfileAddress");
+      if (enEl && !enEl.value) enEl.value = name;
+      if (epEl && !epEl.value) epEl.value = phone;
+      if (eaEl && !eaEl.value) eaEl.value = address;
+    }
+
+    /* ==============================
+     PROFILE METADATA AND EDITING
+    ============================== */
+    function populateProfile(u) {
+      const email = u.email || "-";
+      const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : s);
+      const since = u.metadata?.creationTime ? fmtDate(u.metadata.creationTime) : "-";
+      const firstName = u.displayName ? u.displayName : email.split("@")[0].replace(/[._]/g, " ").split(" ")[0];
+      const initial = firstName[0].toUpperCase();
+
+      if ($("accAvatar")) $("accAvatar").textContent = initial;
+      if ($("accDisplayName")) $("accDisplayName").textContent = cap(firstName);
+      if ($("accEmailLabel")) $("accEmailLabel").textContent = email;
+      if ($("accSince")) $("accSince").textContent = since;
+      if ($("greetName")) $("greetName").textContent = cap(firstName);
+      if ($("infoEmail")) $("infoEmail").textContent = email;
+      if ($("infoUid")) $("infoUid").textContent = u.uid;
+      if ($("infoSince")) $("infoSince").textContent = since;
+      
+      const nameInput = $("editNameInput");
+      if (nameInput) nameInput.value = normalizeDisplayName(u.displayName || "");
+    }
+
+    function validateDisplayName(showSuccess = false) {
+      const input = $("editNameInput");
+      if (!input) return "";
+      const normalized = normalizeDisplayName(input.value);
+
+      if (!normalized) {
+        msg("editNameMsg", "err", "Please enter a display name.");
+        return "";
+      }
+
+      if (normalized.length > DISPLAY_NAME_MAX) {
+        msg("editNameMsg", "err", "Display name must be " + DISPLAY_NAME_MAX + " characters or fewer.");
+        return "";
+      }
+
+      if (input.value !== normalized) input.value = normalized;
+      if (showSuccess) clearMsg("editNameMsg");
+      return normalized;
+    }
+
+    const editNameInput = $("editNameInput");
+    if (editNameInput) {
+      editNameInput.addEventListener("input", () => {
+        const compact = editNameInput.value.replace(/\s{2,}/g, " ");
+        if (editNameInput.value !== compact) editNameInput.value = compact;
+
+        const normalized = normalizeDisplayName(editNameInput.value);
+        if (!normalized) {
+          clearMsg("editNameMsg");
           return;
         }
 
-        user = u;
-        syncAccountStateAliases();
-        overlay.classList.add("hide");
-        setTimeout(() => overlay.remove(), 400);
-
-        buildNav(u);
-        populateProfile(u);
-        loadUserProfile(); // fetch name/phone/address from users/{uid}
-
-        /* -- Show operational section for verified admins -- */
-        const adminSection = document.getElementById("accAdminSection");
-        if (adminSection) {
-          const show = isAdmin(u);
-          adminSection.classList.toggle("admin-visible", show);
-          adminSection.setAttribute("aria-hidden", String(!show));
+        if (normalized.length >= DISPLAY_NAME_MAX) {
+          msg("editNameMsg", "ok", normalized.length + "/" + DISPLAY_NAME_MAX + " characters");
+        } else {
+          clearMsg("editNameMsg");
         }
-
-        // Prefetch orders for stat count (silent)
-        await loadOrders(true);
-        // Also prefetch address count
-        await loadAddrs(true);
       });
 
-      /* ==============================
-       LOAD USER PROFILE from Firestore users/{uid}
-    ============================== */
-      async function loadUserProfile() {
-        try {
-          const currentUser = auth.currentUser;
-          const userSnap = await getDoc(doc(db, "users", currentUser.uid));
-          console.log("[ACCOUNT PAGE USER DATA]", userSnap.data());
-          const userData = userSnap.data();
-          if (userSnap.exists()) {
-            userProfile = userData;
-          }
-          syncAccountStateAliases();
-          // Always render - shows fallback values even if doc is missing
-          renderProfileData();
-        } catch (e) {
-          console.warn("[account] Could not load user profile doc:", e.message);
-          syncAccountStateAliases();
-          renderProfileData();
-        }
+      editNameInput.addEventListener("blur", () => {
+        editNameInput.value = normalizeDisplayName(editNameInput.value);
+      });
+    }
+
+    $("saveNameBtn").addEventListener("click", async () => {
+      const newName = validateDisplayName();
+      if (!newName) return;
+      
+      const btn = $("saveNameBtn");
+      btn.disabled = true;
+      btn.textContent = "Saving...";
+      try {
+        await updateProfile(auth.currentUser, { displayName: newName });
+        localStorage.setItem("userName", newName);
+        populateProfile(auth.currentUser);
+        msg("editNameMsg", "ok", "Name updated to " + newName);
+      } catch (e) {
+        msg("editNameMsg", "err", e.message);
       }
+      btn.disabled = false;
+      btn.textContent = "Save";
+    });
 
-      /* Renders Firestore-sourced contact info into the profile panel */
-      function renderProfileData() {
-        const name = userProfile.name || "";
-        const phone = userProfile.phone || "";
-        const address = userProfile.address || "";
-        const pincode = userProfile.pincode || "";
-
-        const nameEl = $("profileName");
-        const phoneEl = $("profilePhone");
-        const addressEl = document.getElementById("accountAddress");
-        if (nameEl) nameEl.textContent = name || "-";
-        if (phoneEl) phoneEl.textContent = phone || "-";
-        if (addressEl) addressEl.textContent = address || "No address saved";
-
-        // Sync address count stat from userProfile if addresses collection is empty
-        if (!addrsLoaded || addrs.length === 0) {
-          $("statAddrs").textContent = address ? "1" : "0";
-        }
-
-        // Re-render Addresses tab if already loaded but showing empty
-        if (addrsLoaded && addrs.length === 0) {
-          renderAddrs();
-        }
-
-        // Pre-fill edit form
+    /* -- Toggle edit contact form -- */
+    $("toggleEditProfileBtn").addEventListener("click", () => {
+      const form = $("editProfileForm");
+      const isHidden = form.classList.contains("hidden");
+      
+      if (isHidden) {
+        form.classList.remove("hidden");
+        $("toggleEditProfileBtn").textContent = "Cancel";
+        
         const enEl = $("editProfileName");
         const epEl = $("editProfilePhone");
         const eaEl = $("editProfileAddress");
-        if (enEl && !enEl.value) enEl.value = name;
-        if (epEl && !epEl.value) epEl.value = phone;
-        if (eaEl && !eaEl.value) eaEl.value = address;
-      }
-
-      /* ==============================
-       PROFILE
-    ============================== */
-      function populateProfile(u) {
-        const email = u.email || "-";
-        const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : s);
-        const since = u.metadata?.creationTime
-          ? fmtDate(u.metadata.creationTime)
-          : "-";
-        // Use Firebase displayName if set, else derive from email
-        const firstName = u.displayName
-          ? u.displayName
-          : email.split("@")[0].replace(/[._]/g, " ").split(" ")[0];
-        const initial = firstName[0].toUpperCase();
-
-        $("accAvatar").textContent = initial;
-        $("accDisplayName").textContent = cap(firstName);
-        $("accEmailLabel").textContent = email;
-        $("accSince").textContent = "Member since " + since;
-        $("greetName").textContent = cap(firstName);
-        $("infoEmail").textContent = email;
-        $("infoUid").textContent = u.uid;
-        $("infoSince").textContent = since;
-        // Populate name edit input
-        const nameInput = $("editNameInput");
-        if (nameInput) nameInput.value = normalizeDisplayName(u.displayName || "");
-      }
-
-      function validateDisplayName(showSuccess = false) {
-        const input = $("editNameInput");
-        if (!input) return "";
-        const normalized = normalizeDisplayName(input.value);
-
-        if (!normalized) {
-          msg("editNameMsg", "err", "Please enter a display name.");
-          return "";
-        }
-
-        if (normalized.length > DISPLAY_NAME_MAX) {
-          msg(
-            "editNameMsg",
-            "err",
-            "Display name must be " + DISPLAY_NAME_MAX + " characters or fewer.",
-          );
-          return "";
-        }
-
-        if (input.value !== normalized) input.value = normalized;
-        if (showSuccess) clearMsg("editNameMsg");
-        return normalized;
-      }
-
-      const editNameInput = $("editNameInput");
-      if (editNameInput) {
-        editNameInput.addEventListener("input", () => {
-          const compact = editNameInput.value.replace(/\s{2,}/g, " ");
-          if (editNameInput.value !== compact) editNameInput.value = compact;
-
-          const normalized = normalizeDisplayName(editNameInput.value);
-          if (!normalized) {
-            clearMsg("editNameMsg");
-            return;
-          }
-
-          if (normalized.length >= DISPLAY_NAME_MAX) {
-            msg(
-              "editNameMsg",
-              "ok",
-              normalized.length + "/" + DISPLAY_NAME_MAX + " characters",
-            );
-          } else {
-            clearMsg("editNameMsg");
-          }
-        });
-
-        editNameInput.addEventListener("blur", () => {
-          editNameInput.value = normalizeDisplayName(editNameInput.value);
-        });
-      }
-
-      /* Save display name */
-      $("saveNameBtn").addEventListener("click", async () => {
-        const newName = validateDisplayName();
-        if (!newName) {
-          return;
-        }
-        const btn = $("saveNameBtn");
-        btn.disabled = true;
-        btn.textContent = "Saving...";
-        try {
-          await updateProfile(auth.currentUser, { displayName: newName });
-          localStorage.setItem("userName", newName);
-          populateProfile(auth.currentUser);
-          buildNav(auth.currentUser);
-          msg("editNameMsg", "ok", "Name updated to " + newName);
-        } catch (e) {
-          msg("editNameMsg", "err", e.message);
-        }
-        btn.disabled = false;
-        btn.textContent = "Save Name";
-      });
-
-      /* -- Edit Profile (name / phone / address -> users/{uid}) -- */
-      $("toggleEditProfileBtn").addEventListener("click", () => {
-        const form = $("editProfileForm");
-        const isOpen = form.style.display === "block";
-        form.style.display = isOpen ? "none" : "block";
-        $("toggleEditProfileBtn").textContent = isOpen
-          ? "Edit Info"
-          : "Cancel Edit";
-        if (!isOpen) {
-          // Pre-fill with latest values
-          const enEl = $("editProfileName");
-          const epEl = $("editProfilePhone");
-          const eaEl = $("editProfileAddress");
-          if (enEl) enEl.value = userProfile.name || "";
-          if (epEl) epEl.value = userProfile.phone || "";
-          if (eaEl) eaEl.value = userProfile.address || "";
-          clearMsg("editProfileMsg");
-          setTimeout(() => {
-            if ($("editProfileName")) $("editProfileName").focus();
-          }, 50);
-        }
-      });
-
-      $("cancelEditProfileBtn").addEventListener("click", () => {
-        $("editProfileForm").style.display = "none";
+        if (enEl) enEl.value = userProfile.name || "";
+        if (epEl) epEl.value = userProfile.phone || "";
+        if (eaEl) eaEl.value = userProfile.address || "";
+        clearMsg("editProfileMsg");
+        setTimeout(() => { if ($("editProfileName")) $("editProfileName").focus(); }, 50);
+      } else {
+        form.classList.add("hidden");
         $("toggleEditProfileBtn").textContent = "Edit Info";
         clearMsg("editProfileMsg");
-      });
+      }
+    });
 
-      $("saveProfileBtn").addEventListener("click", async () => {
-        const name = ($("editProfileName").value || "").trim();
-        const phone = ($("editProfilePhone").value || "").trim();
-        const address = ($("editProfileAddress").value || "").trim();
+    $("cancelEditProfileBtn").addEventListener("click", () => {
+      $("editProfileForm").classList.add("hidden");
+      $("toggleEditProfileBtn").textContent = "Edit Info";
+      clearMsg("editProfileMsg");
+    });
 
-        if (!name) {
-          msg("editProfileMsg", "err", "Please enter your name.");
-          return;
-        }
+    $("saveProfileBtn").addEventListener("click", async () => {
+      const name = ($("editProfileName").value || "").trim();
+      const phone = ($("editProfilePhone").value || "").trim();
+      const address = ($("editProfileAddress").value || "").trim();
 
-        const btn = $("saveProfileBtn");
-        btn.disabled = true;
-        btn.textContent = "Saving...";
-
-        try {
-          await setDoc(
-            doc(db, "users", user.uid),
-            {
-              name,
-              phone,
-              address,
-              email: user.email,
-            },
-            { merge: true },
-          );
-
-          // Update local cache and re-render
-          userProfile = {
-            ...userProfile,
-            name,
-            phone,
-            address,
-            email: user.email,
-          };
-          syncAccountStateAliases();
-          renderProfileData();
-
-          $("editProfileForm").style.display = "none";
-          $("toggleEditProfileBtn").textContent = "Edit Info";
-          clearMsg("editProfileMsg");
-          toast("Profile updated!");
-        } catch (e) {
-          msg("editProfileMsg", "err", e.message);
-        }
-        btn.disabled = false;
-        btn.textContent = "Save Changes";
-      });
-
-      /* Password reset */
-      $("pwResetBtn").addEventListener("click", async () => {
-        const btn = $("pwResetBtn");
-        btn.disabled = true;
-        btn.textContent = "Sending...";
-        try {
-          await sendPasswordResetEmail(auth, user.email);
-          msg("pwResetMsg", "ok", "Reset email sent to " + user.email);
-        } catch (e) {
-          msg("pwResetMsg", "err", e.message);
-        }
-        btn.disabled = false;
-        btn.textContent = "Send Password Reset";
-      });
-
-      /* ==============================
-       ORDERS
-    ============================== */
-      /* Sort orders client-side (avoids requiring a Firestore composite index) */
-      function sortOrdersDesc(arr) {
-        return arr.slice().sort(function (a, b) {
-          const ta = a.createdAt?.toMillis
-            ? a.createdAt.toMillis()
-            : a.createdAt
-              ? new Date(a.createdAt).getTime()
-              : 0;
-          const tb = b.createdAt?.toMillis
-            ? b.createdAt.toMillis()
-            : b.createdAt
-              ? new Date(b.createdAt).getTime()
-              : 0;
-          return tb - ta;
-        });
+      if (!name) {
+        msg("editProfileMsg", "err", "Please enter your name.");
+        return;
       }
 
-      async function loadOrders(silent = false) {
-        if (!silent) {
-          $("ordersWrap").innerHTML = `<div class="acc-card">
-          <div class="skel skel-h" style="width:40%"></div>
-          <div class="skel skel-h" style="width:75%"></div>
-          <div class="skel skel-h" style="width:55%"></div>
-        </div>`;
-        }
+      const btn = $("saveProfileBtn");
+      btn.disabled = true;
+      btn.textContent = "Saving...";
 
-        console.log("[account] Loading orders for uid:", user.uid);
-
-        /* Strategy 1: query by userId (NO orderBy - avoids composite index requirement) */
-        try {
-          const q = query(
-            collection(db, "orders"),
-            where("userId", "==", user.uid),
-          );
-          const snap = await getDocs(q);
-          orders = sortOrdersDesc(mapDocs(snap));
-          console.log(
-            "[account]  Orders loaded by userId:",
-            orders.length,
-            "orders",
-          );
-        } catch (err) {
-          console.warn(
-            "[account] userId query failed, trying userEmail fallback:",
-            err.message,
-          );
-
-          /* Strategy 2: fall back to userEmail (for orders saved before userId was added) */
-          try {
-            const q2 = query(
-              collection(db, "orders"),
-              where("userEmail", "==", user.email),
-            );
-            const snap2 = await getDocs(q2);
-            orders = sortOrdersDesc(mapDocs(snap2));
-            console.log(
-              "[account]  Orders loaded by userEmail (fallback):",
-              orders.length,
-              "orders",
-            );
-          } catch (err2) {
-            console.error(
-              "[account]  Both order queries failed:",
-              err2.message,
-            );
-            orders = [];
-            if (!silent) {
-              $("ordersWrap").innerHTML =
-                `<div class="acc-card" style="color:#c62828;font-size:0.85rem;">
-               Could not load orders. Please refresh the page or contact support.
-            </div>`;
-            }
-          }
-        }
-
-        ordersLoaded = true;
-        syncAccountStateAliases();
-
-        updateOrderStats();
-
-        if (!silent) renderOrders();
-      }
-
-      function updateOrderStats() {
-        const spend = orders.reduce(
-          (s, o) => s + Number(o.totalAmount || o.total || 0),
-          0,
+      try {
+        await setDoc(
+          doc(db, "users", user.uid),
+          { name, phone, address, email: user.email },
+          { merge: true }
         );
-        $("statOrders").textContent = orders.length;
-        $("statSpend").textContent = orders.length ? formatINR(spend) : "Rs.0";
-      }
 
-      function renderOrders() {
-        const wrap = $("ordersWrap");
-        if (!orders.length) {
-          wrap.innerHTML = `<div class="empty-state">
-          <div class="empty-icon"></div>
-          <h3>No orders yet</h3>
-          <p>Your orders will appear here after checkout.</p>
-          <a href="index.html#bestsellers" class="btn-prime" style="display:inline-block;margin-top:16px;text-decoration:none;">Shop Now</a>
-        </div>`;
-          return;
-        }
-
-        wrap.innerHTML = orders.map(renderOrderCardHTML).join("");
-      }
-
-      function renderOrderCardHTML(order) {
-        const date =
-          order.date ||
-          (order.createdAt?.toDate ? fmtDate(order.createdAt.toDate()) : "-");
-        const items = order.items || [];
-        const isCod = order.paymentMethod !== "razorpay";
-        const total = order.totalAmount || order.total || 0;
-        const status = order.status || "Placed";
-
-        return `<div class="order-card">
-        <div class="order-head">
-          <div>
-            <div class="order-id">Order #${esc(order.id?.slice(-8) || "-")}</div>
-            <div class="order-date">${esc(date)}</div>
-            ${order.address ? `<div style="font-size:0.75rem;color:var(--muted);margin-top:2px">${esc(order.address)}</div>` : ""}
-          </div>
-          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;">
-            <span class="order-badge ${isCod ? "cod" : ""}">${isCod ? "COD" : "Paid"}</span>
-            <span style="font-size:0.65rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;padding:3px 9px;border-radius:999px;background:#e3f2fd;color:#1565c0;">${esc(status)}</span>
-          </div>
-        </div>
-        <div class="order-body">
-          ${
-            items.length
-              ? items
-                  .map(
-                    (it) => `<div class="order-item">
-                <span>${esc(it.name)}${it.quantity > 1 ? " x" + it.quantity : ""}</span>
-                <span class="order-item-price">${formatINR(it.price)}</span>
-              </div>`,
-                  )
-                  .join("")
-              : '<div class="order-item" style="color:var(--muted)">-</div>'
-          }
-        </div>
-        <div class="order-foot">
-          <span class="order-foot-label">Order Total</span>
-          <span class="order-total">${formatINR(total)}</span>
-        </div>
-      </div>`;
-      }
-
-      /* ==============================
-       ADDRESSES
-    ============================== */
-      async function loadAddrs(silent = false) {
-        if (!silent) {
-          $("addrsWrap").innerHTML = `<div class="acc-card">
-          <div class="skel skel-h" style="width:55%"></div>
-          <div class="skel skel-h" style="width:80%"></div>
-        </div>`;
-        }
-
-        try {
-          const q = query(
-            collection(db, "addresses"),
-            where("userEmail", "==", user.email),
-          );
-          const snap = await getDocs(q);
-          addrs = mapDocs(snap);
-        } catch (err) {
-          console.error("[account] Address load error:", err.message);
-          addrs = [];
-        }
-
-        addrsLoaded = true;
+        userProfile = { ...userProfile, name, phone, address, email: user.email };
         syncAccountStateAliases();
-        // Use collection count if non-zero, otherwise fall back to userProfile.address
-        $("statAddrs").textContent =
-          addrs.length > 0 ? addrs.length : userProfile.address ? "1" : "0";
-        if (!silent) renderAddrs();
+        renderProfileData();
+
+        $("editProfileForm").classList.add("hidden");
+        $("toggleEditProfileBtn").textContent = "Edit Info";
+        clearMsg("editProfileMsg");
+        toast("Profile updated!");
+      } catch (e) {
+        msg("editProfileMsg", "err", e.message);
+      }
+      btn.disabled = false;
+      btn.textContent = "Save Changes";
+    });
+
+    /* -- Password reset trigger -- */
+    $("pwResetBtn").addEventListener("click", async () => {
+      const btn = $("pwResetBtn");
+      btn.disabled = true;
+      btn.textContent = "Sending...";
+      try {
+        await sendPasswordResetEmail(auth, user.email);
+        msg("pwResetMsg", "ok", "Reset email sent to " + user.email);
+      } catch (e) {
+        msg("pwResetMsg", "err", e.message);
+      }
+      btn.disabled = false;
+      btn.textContent = "Send Password Reset";
+    });
+
+    /* ==============================
+     ORDERS HYDRATION
+    ============================== */
+    function sortOrdersDesc(arr) {
+      return arr.slice().sort(function (a, b) {
+        const ta = a.createdAt?.toMillis ? a.createdAt.toMillis() : a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const tb = b.createdAt?.toMillis ? b.createdAt.toMillis() : b.createdAt ? new Date(b.createdAt).getTime() : 0;
+        return tb - ta;
+      });
+    }
+
+    async function loadOrders(silent = false) {
+      if (!silent) {
+        $("ordersWrap").innerHTML = `
+          <div class="bg-surface p-5 rounded-lg border border-brand-border premium-shadow space-y-2">
+            <div class="skel skel-h w-1/3"></div>
+            <div class="skel skel-h w-2/3"></div>
+            <div class="skel skel-h w-1/2"></div>
+          </div>
+        `;
       }
 
-      function renderAddrs() {
-        const wrap = $("addrsWrap");
+      try {
+        const q = query(collection(db, "orders"), where("userId", "==", user.uid));
+        const snap = await getDocs(q);
+        orders = sortOrdersDesc(mapDocs(snap));
+      } catch (err) {
+        console.warn("[account] userId query failed, trying userEmail fallback:", err.message);
+        try {
+          const q2 = query(collection(db, "orders"), where("userEmail", "==", user.email));
+          const snap2 = await getDocs(q2);
+          orders = sortOrdersDesc(mapDocs(snap2));
+        } catch (err2) {
+          console.error("[account] Both order queries failed:", err2.message);
+          orders = [];
+          if (!silent) {
+            $("ordersWrap").innerHTML = `
+              <div class="w-full text-center py-6 text-red-700 text-sm bg-red-50 rounded-lg border border-red-200">
+                Could not load orders. Please refresh the page or contact support.
+              </div>
+            `;
+          }
+        }
+      }
 
-        // If no addresses from dedicated collection, fall back to userProfile data
-        if (!addrs.length) {
-          const { name, phone, address, pincode } = userProfile;
-          if (address) {
-            wrap.innerHTML = `<div class="addr-grid">
-            <div class="addr-card is-default">
-              <span class="default-badge">Default</span>
-              <div class="addr-name">${esc(name || "-")}</div>
-              <div class="addr-phone">${esc(phone || "-")}</div>
-              <div class="addr-text">${esc(address)}${pincode ? " - " + esc(pincode) : ""}</div>
+      ordersLoaded = true;
+      syncAccountStateAliases();
+      updateOrderStats();
+      if (!silent) renderOrders();
+    }
+
+    function updateOrderStats() {
+      const spend = orders.reduce((s, o) => s + Number(o.totalAmount || o.total || 0), 0);
+      
+      let spendText = "Rs.0";
+      if (spend > 0) {
+        if (spend >= 1000) {
+          const kVal = spend / 1000;
+          const formatted = kVal.toFixed(1).replace(/\.0$/, "");
+          spendText = `Rs.${formatted}k`;
+        } else {
+          spendText = `Rs.${spend}`;
+        }
+      }
+      
+      $("statOrders").textContent = orders.length;
+      $("statSpend").textContent = spendText;
+    }
+
+    function renderOrders() {
+      const wrap = $("ordersWrap");
+      if (!wrap) return;
+
+      if (!orders.length) {
+        wrap.innerHTML = `
+          <div class="w-full text-center py-8 text-on-surface-variant text-sm bg-surface rounded-lg border border-brand-border space-y-3">
+            <p>No orders yet</p>
+            <a href="index.html#bestsellers" class="inline-block px-4 py-2 bg-primary text-white text-xs font-semibold rounded uppercase tracking-wider">Shop Now</a>
+          </div>
+        `;
+        return;
+      }
+      wrap.innerHTML = orders.map(renderOrderCardHTML).join("");
+    }
+
+    function renderOrderCardHTML(order) {
+      const date = order.date || (order.createdAt?.toDate ? fmtDate(order.createdAt.toDate()) : "-");
+      const items = order.items || [];
+      const isCod = order.paymentMethod !== "razorpay";
+      const total = order.totalAmount || order.total || 0;
+      const status = order.status || "Placed";
+
+      return `
+        <div class="bg-surface p-5 rounded-lg border border-brand-border premium-shadow space-y-4">
+          <div class="flex justify-between items-start border-b border-brand-border/40 pb-3">
+            <div>
+              <p class="font-label-lg text-on-background font-semibold text-xs">ORDER #${esc(order.id?.slice(-8).toUpperCase() || "-")}</p>
+              <p class="text-[11px] text-on-surface-variant mt-0.5">${esc(date)}</p>
+              ${order.address ? `<p class="text-[10px] text-on-surface-variant mt-1 leading-normal">${esc(order.address)}</p>` : ""}
             </div>
-          </div>`;
-            return;
-          }
-          wrap.innerHTML = `<div class="empty-state" style="padding:36px 24px">
-          <div class="empty-icon"></div>
-          <h3>No saved addresses</h3>
-          <p>Add an address above for quicker checkout.</p>
-        </div>`;
-          return;
-        }
-        wrap.innerHTML = `<div class="addr-grid">${addrs
-          .map(
-            (a) => `
-        <div class="addr-card ${a.isDefault ? "is-default" : ""}">
-          ${a.isDefault ? '<span class="default-badge">Default</span>' : ""}
-          <div class="addr-name">${esc(a.name)}</div>
-          <div class="addr-phone">${esc(a.phone)}</div>
-          <div class="addr-text">${esc(a.address)}, ${esc(a.city)} - ${esc(a.pincode)}</div>
-          <div class="addr-btns">
-            ${!a.isDefault ? `<button class="addr-btn-sm primary" data-setdef="${a.id}" type="button">Set Default</button>` : ""}
-            <button class="addr-btn-sm danger" data-del="${a.id}" type="button">Delete</button>
+            <div class="flex flex-col items-end gap-1.5">
+              <span class="px-2 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase ${isCod ? "bg-amber-100 text-amber-800" : "bg-emerald-100 text-emerald-800"}">
+                ${isCod ? "COD" : "Paid"}
+              </span>
+              <span class="px-2 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase bg-blue-100 text-blue-800">
+                ${esc(status)}
+              </span>
+            </div>
           </div>
-        </div>`,
-          )
-          .join("")}</div>`;
+          <div class="space-y-1.5">
+            ${items.length ? items.map(it => `
+              <div class="flex justify-between text-xs">
+                <span class="text-on-surface-variant">${esc(it.name)}${it.quantity > 1 ? " ×" + it.quantity : ""}</span>
+                <span class="font-semibold text-primary">${formatINR(it.price)}</span>
+              </div>
+            `).join("") : `<p class="text-xs text-on-surface-variant">-</p>`}
+          </div>
+          <div class="flex justify-between items-center border-t border-brand-border/40 pt-3">
+            <span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Order Total</span>
+            <span class="text-sm text-primary font-semibold">${formatINR(total)}</span>
+          </div>
+        </div>
+      `;
+    }
 
-        wrap
-          .querySelectorAll("[data-setdef]")
-          .forEach((btn) =>
-            btn.addEventListener("click", () => setDefault(btn.dataset.setdef)),
-          );
-        wrap
-          .querySelectorAll("[data-del]")
-          .forEach((btn) =>
-            btn.addEventListener("click", () => delAddr(btn.dataset.del)),
-          );
+    /* ==============================
+     ADDRESSES HYDRATION
+    ============================== */
+    async function loadAddrs(silent = false) {
+      if (!silent) {
+        $("addrsWrap").innerHTML = `
+          <div class="bg-surface p-5 rounded-lg border border-brand-border premium-shadow">
+            <div class="skel skel-h w-2/3"></div>
+            <div class="skel skel-h w-4/5"></div>
+          </div>
+        `;
       }
 
-      async function setDefault(id) {
-        try {
-          await Promise.all(
-            addrs.map((a) =>
-              updateDoc(doc(db, "addresses", a.id), { isDefault: a.id === id }),
-            ),
-          );
-          addrs = addrs.map((a) => ({ ...a, isDefault: a.id === id }));
-          syncAccountStateAliases();
-          renderAddrs();
-          toast("Default address updated");
-        } catch (e) {
-          toast(e.message);
+      try {
+        const q = query(collection(db, "addresses"), where("userEmail", "==", user.email));
+        const snap = await getDocs(q);
+        addrs = mapDocs(snap);
+      } catch (err) {
+        console.error("[account] Address load error:", err.message);
+        addrs = [];
+      }
+
+      addrsLoaded = true;
+      syncAccountStateAliases();
+      $("statAddrs").textContent = addrs.length > 0 ? addrs.length : userProfile.address ? "1" : "0";
+      if (!silent) renderAddrs();
+    }
+
+    function renderAddrs() {
+      const wrap = $("addrsWrap");
+      if (!wrap) return;
+
+      if (!addrs.length) {
+        const { name, phone, address, pincode } = userProfile;
+        if (address) {
+          wrap.innerHTML = `
+            <div class="bg-surface p-5 rounded-lg border border-brand-border relative premium-shadow space-y-2">
+              <span class="absolute top-4 right-4 text-[10px] font-bold text-primary uppercase tracking-widest">Default</span>
+              <p class="font-label-lg text-on-background font-semibold text-xs">${esc(name || "-")}</p>
+              <p class="text-[11px] text-on-surface-variant">${esc(phone || "-")}</p>
+              <p class="font-body-md text-on-surface-variant leading-relaxed text-xs">
+                ${esc(address)}${pincode ? " - " + esc(pincode) : ""}
+              </p>
+            </div>
+          `;
+          return;
         }
+        wrap.innerHTML = `
+          <div class="w-full text-center py-6 text-on-surface-variant text-xs bg-surface rounded-lg border border-brand-border">
+            No saved addresses. Add an address above for quicker checkout.
+          </div>
+        `;
+        return;
       }
 
-      async function delAddr(id) {
-        if (!confirm("Delete this address?")) return;
-        try {
-          await deleteDoc(doc(db, "addresses", id));
-          addrs = addrs.filter((a) => a.id !== id);
-          syncAccountStateAliases();
-          $("statAddrs").textContent = addrs.length;
-          renderAddrs();
-          toast("Address removed");
-        } catch (e) {
-          toast(e.message);
-        }
-      }
+      wrap.innerHTML = addrs.map(a => `
+        <div class="bg-surface p-5 rounded-lg border border-brand-border relative premium-shadow space-y-3">
+          ${a.isDefault ? `<span class="absolute top-4 right-4 text-[10px] font-bold text-primary uppercase tracking-widest">Default</span>` : ""}
+          <div>
+            <p class="font-label-lg text-on-background font-semibold text-xs">${esc(a.name)}</p>
+            <p class="text-[11px] text-on-surface-variant mt-0.5">${esc(a.phone)}</p>
+            <p class="font-body-md text-on-surface-variant leading-relaxed text-xs mt-1">
+              ${esc(a.address)}, ${esc(a.city)} - ${esc(a.pincode)}
+            </p>
+          </div>
+          <div class="flex gap-2 pt-2 border-t border-brand-border/40">
+            ${!a.isDefault ? `<button class="px-3 py-1.5 text-[9px] font-bold uppercase tracking-wider border border-primary text-primary rounded bg-white hover:bg-brand-surface" data-setdef="${a.id}" type="button">Set Default</button>` : ""}
+            <button class="px-3 py-1.5 text-[9px] font-bold uppercase tracking-wider border border-red-200 text-red-700 rounded bg-white hover:bg-red-50" data-del="${a.id}" type="button">Delete</button>
+          </div>
+        </div>
+      `).join("");
 
-      /* -- Add address form -- */
-      $("addAddrToggle").addEventListener("click", () => {
-        const open = $("addrFormWrap").classList.toggle("open");
-        $("addAddrToggle").textContent = open
-          ? "Close form"
-          : "Add new address";
-        if (open) setTimeout(() => $("addrName").focus(), 50);
-      });
-      $("cancelAddrBtn").addEventListener("click", () => {
-        $("addrFormWrap").classList.remove("open");
-        $("addAddrToggle").textContent = "Add new address";
+      wrap.querySelectorAll("[data-setdef]").forEach(btn => btn.addEventListener("click", () => setDefault(btn.dataset.setdef)));
+      wrap.querySelectorAll("[data-del]").forEach(btn => btn.addEventListener("click", () => delAddr(btn.dataset.del)));
+    }
+
+    async function setDefault(id) {
+      try {
+        await Promise.all(addrs.map(a => updateDoc(doc(db, "addresses", a.id), { isDefault: a.id === id })));
+        addrs = addrs.map(a => ({ ...a, isDefault: a.id === id }));
+        syncAccountStateAliases();
+        renderAddrs();
+        toast("Default address updated");
+      } catch (e) {
+        toast(e.message);
+      }
+    }
+
+    async function delAddr(id) {
+      if (!confirm("Delete this address?")) return;
+      try {
+        await deleteDoc(doc(db, "addresses", id));
+        addrs = addrs.filter(a => a.id !== id);
+        syncAccountStateAliases();
+        $("statAddrs").textContent = addrs.length;
+        renderAddrs();
+        toast("Address removed");
+      } catch (e) {
+        toast(e.message);
+      }
+    }
+
+    /* -- Toggle Add Address form -- */
+    $("addAddrToggle").addEventListener("click", () => {
+      const form = $("addrFormWrap");
+      const isHidden = form.classList.contains("hidden");
+      if (isHidden) {
+        form.classList.remove("hidden");
+        $("addAddrToggle").textContent = "Close Form";
+        setTimeout(() => $("addrName").focus(), 50);
+      } else {
+        form.classList.add("hidden");
+        $("addAddrToggle").textContent = "+ Add new address";
         resetAddrForm();
-      });
+      }
+    });
 
-      function resetAddrForm() {
-        ["addrName", "addrPhone", "addrStreet", "addrCity", "addrPin"].forEach(
-          (id) => ($(id).value = ""),
-        );
-        $("addrDefault").checked = false;
-        clearMsg("addrMsg");
+    $("cancelAddrBtn").addEventListener("click", () => {
+      $("addrFormWrap").classList.add("hidden");
+      $("addAddrToggle").textContent = "+ Add new address";
+      resetAddrForm();
+    });
+
+    function resetAddrForm() {
+      ["addrName", "addrPhone", "addrStreet", "addrCity", "addrPin"].forEach(id => {
+        const el = $(id);
+        if (el) el.value = "";
+      });
+      $("addrDefault").checked = false;
+      clearMsg("addrMsg");
+    }
+
+    $("saveAddrBtn").addEventListener("click", async () => {
+      const name = $("addrName").value.trim();
+      const phone = $("addrPhone").value.trim();
+      const address = $("addrStreet").value.trim();
+      const city = $("addrCity").value.trim();
+      const pincode = $("addrPin").value.trim();
+      const isDef = $("addrDefault").checked;
+
+      if (!name || !phone || !address || !city || !pincode) {
+        msg("addrMsg", "err", "Please fill in all fields.");
+        return;
+      }
+      if (!/^\d{10}$/.test(phone)) {
+        msg("addrMsg", "err", "Phone must be 10 digits.");
+        return;
+      }
+      if (!/^\d{6}$/.test(pincode)) {
+        msg("addrMsg", "err", "Pincode must be 6 digits.");
+        return;
       }
 
-      $("saveAddrBtn").addEventListener("click", async () => {
-        const name = $("addrName").value.trim();
-        const phone = $("addrPhone").value.trim();
-        const address = $("addrStreet").value.trim();
-        const city = $("addrCity").value.trim();
-        const pincode = $("addrPin").value.trim();
-        const isDef = $("addrDefault").checked;
+      const btn = $("saveAddrBtn");
+      btn.disabled = true;
+      btn.textContent = "Saving...";
 
-        if (!name || !phone || !address || !city || !pincode) {
-          msg("addrMsg", "err", "Please fill in all fields.");
-          return;
+      try {
+        const makeDefault = isDef || addrs.length === 0;
+        if (makeDefault) {
+          await Promise.all(addrs.map(a => updateDoc(doc(db, "addresses", a.id), { isDefault: false })));
+          addrs = addrs.map(a => ({ ...a, isDefault: false }));
         }
-        if (!/^\d{10}$/.test(phone)) {
-          msg("addrMsg", "err", "Phone must be 10 digits.");
-          return;
+        const data = {
+          userEmail: user.email,
+          name,
+          phone,
+          address,
+          city,
+          pincode,
+          isDefault: makeDefault,
+          createdAt: serverTimestamp(),
+        };
+        const ref = await addDoc(collection(db, "addresses"), data);
+        addrs.push({ id: ref.id, ...data });
+        syncAccountStateAliases();
+
+        $("statAddrs").textContent = addrs.length;
+        $("addrFormWrap").classList.add("hidden");
+        $("addAddrToggle").textContent = "+ Add new address";
+        resetAddrForm();
+        renderAddrs();
+        toast("Address saved!");
+      } catch (e) {
+        msg("addrMsg", "err", e.message);
+      }
+
+      btn.disabled = false;
+      btn.textContent = "Save Address";
+    });
+
+    /* ==============================
+     WISHLIST DYNAMIC RENDERING
+    ============================== */
+    function renderWishlistPreview() {
+      const wrap = $("wishlistWrap");
+      const countLabel = $("wishlist-count-label");
+      if (!wrap) return;
+      
+      let wlItems = [];
+      try {
+        if (window.CCWishlist && typeof window.CCWishlist.get === 'function') {
+          wlItems = window.CCWishlist.get();
+        } else {
+          const raw = localStorage.getItem('cc_wishlist') || '[]';
+          wlItems = JSON.parse(raw);
         }
-        if (!/^\d{6}$/.test(pincode)) {
-          msg("addrMsg", "err", "Pincode must be 6 digits.");
-          return;
-        }
+      } catch (e) {
+        console.warn("[account] Wishlist load error:", e);
+      }
 
-        const btn = $("saveAddrBtn");
-        btn.disabled = true;
-        btn.textContent = "Saving...";
+      if (countLabel) {
+        countLabel.textContent = `(${wlItems.length})`;
+      }
 
-        try {
-          const makeDefault = isDef || addrs.length === 0;
-          if (makeDefault) {
-            await Promise.all(
-              addrs.map((a) =>
-                updateDoc(doc(db, "addresses", a.id), { isDefault: false }),
-              ),
-            );
-            addrs = addrs.map((a) => ({ ...a, isDefault: false }));
-          }
-          const data = {
-            userEmail: user.email,
-            name,
-            phone,
-            address,
-            city,
-            pincode,
-            isDefault: makeDefault,
-            createdAt: serverTimestamp(),
-          };
-          const ref = await addDoc(collection(db, "addresses"), data);
-          addrs.push({ id: ref.id, ...data });
-          syncAccountStateAliases();
+      if (!wlItems || wlItems.length === 0) {
+        wrap.innerHTML = `
+          <div class="w-full text-center py-6 text-on-surface-variant text-xs bg-surface rounded-lg border border-brand-border">
+            Your wishlist is empty.
+          </div>
+        `;
+        return;
+      }
 
-          $("statAddrs").textContent = addrs.length;
-          $("addrFormWrap").classList.remove("open");
-          $("addAddrToggle").textContent = "Add new address";
-          resetAddrForm();
-          renderAddrs();
-          toast("Address saved!");
-        } catch (e) {
-          msg("addrMsg", "err", e.message);
-        }
+      wrap.innerHTML = wlItems.map(item => {
+        const imgUrl = item.image || "images/placeholder.jpg";
+        const priceStr = formatINR(item.price);
+        const productUrl = `product.html?id=${item.id}`;
 
-        btn.disabled = false;
-        btn.textContent = "Save Address";
-      });
-    </script>
-<script defer="" src="final-mobile-stabilization.js"></script>
-<script defer="" src="cc-bottom-nav.js"></script>
-<script defer="" src="mobile-app.js"></script>
-<script defer="" src="cc-material-icons.js"></script>
+        return `
+          <div class="min-w-[120px] max-w-[120px] space-y-2">
+            <a href="${productUrl}" class="block aspect-[4/5] bg-surface rounded-lg overflow-hidden border border-brand-border hover:opacity-90 transition-opacity">
+              <img class="w-full h-full object-cover" src="${esc(imgUrl)}" alt="${esc(item.name)}" onerror="this.src='images/placeholder.jpg'">
+            </a>
+            <p class="font-label-md text-on-background truncate font-medium text-xs">${esc(item.name)}</p>
+            <p class="font-label-md text-brand-muted font-semibold text-xs">${priceStr}</p>
+          </div>
+        `;
+      }).join("");
+    }
+  </script>
 
+  <!-- Global Footer & Script Integrations -->
+  <script defer="" src="wishlist.js"></script>
+  <script defer="" src="cc-bottom-nav.js"></script>
+  <script defer="" src="cc-material-icons.js"></script>
+  <script defer="" src="cc-global-header.js"></script>
 </body>
 </html>
