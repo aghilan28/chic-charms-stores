@@ -57,8 +57,10 @@
     drawer.classList.toggle("open", !!open);
     overlay.classList.toggle("open", !!open);
     document.body.style.overflow = open ? "hidden" : "";
+    document.body.classList.toggle('ma-drawer-open', !!open);
+    document.body.classList.toggle('drawer-open', !!open);
     const btn = document.getElementById('mobileCommerceMenu');
-    if (btn) btn.setAttribute('aria-expanded', 'false');
+    if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
   }
   window.toggleDrawer = toggleDrawer;
 
@@ -82,33 +84,6 @@
     ui.className = "cc-mobile-ui";
     ui.setAttribute("aria-label", "Chic Charms Mobile Storefront");
     ui.innerHTML = `
-<div class="cc-drawer-overlay" id="ccDrawerOverlay"></div>
-<aside class="cc-drawer" id="ccDrawer" aria-label="Navigation">
-  <div class="cc-drawer-inner">
-    <div class="cc-drawer-top">
-      <span class="cc-drawer-logo">ChicCharms</span>
-      <button class="cc-drawer-close" id="ccDrawerClose" aria-label="Close"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-    </div>
-    <nav class="cc-drawer-nav" id="ccDrawerNav">
-      <a href="#" data-cat="all" class="is-active">Shop Jewellery</a>
-      <a href="#" data-cat="all">Collections</a>
-      <a href="#" data-cat="all">Curations</a>
-      <a href="#" data-filter="new" class="is-accent">New Arrivals</a>
-      <a href="#" data-filter="bestseller">Best Sellers</a>
-      <a href="#" data-cat="heritage-muse"><em>Pearl Collection</em></a>
-      <a href="#" data-cat="everyday-elegance">Minimal Collection</a>
-      <a href="#" data-cat="after-dark">Korean Collection</a>
-      <a href="#" data-cat="after-dark">Party Collection</a>
-      <a href="#" data-cat="heritage-muse">Bridal Collection</a>
-      <a href="#" data-price="under299" style="color:#B5657A">Under ₹299</a>
-      <a href="#" data-cc-app-cart="true">Cart</a>
-      <a href="account.html">Account</a>
-      <a href="about.html">About Chic Charms</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-  </div>
-</aside>
-
 <main class="cc-main">
   <div class="cc-crumb">
     <nav class="cc-crumb-nav"><a href="index.html">Home</a><span class="sep">|</span><strong id="ccCrumbCat">Earrings</strong></nav>
@@ -506,7 +481,6 @@
     nav.addEventListener("click", (e) => {
       const a = e.target.closest("a[data-cat], a[data-filter], a[data-price]");
       if (!a) return;
-      if (a.getAttribute("href") && !a.getAttribute("href").startsWith("#")) return;
       e.preventDefault();
       nav.querySelectorAll("a").forEach(x => x.classList.remove("is-active"));
       a.classList.add("is-active");

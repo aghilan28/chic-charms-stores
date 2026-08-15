@@ -66,12 +66,13 @@
         </div>
         <nav class="cc-drawer-nav" id="ccDrawerNav">
           <a href="index.html" data-cat="all" class="is-active">Shop Jewellery</a>
-          <a href="index.html#bestsellers" data-filter="bestseller">Best Sellers</a>
-          <a href="category.html?category=everyday-elegance">Minimal Collection</a>
-          <a href="category.html?category=after-dark">Korean Collection</a>
-          <a href="category.html?category=after-dark">Party Collection</a>
-          <a href="category.html?category=heritage-muse">Pearl Collection</a>
-          <a href="category.html?category=heritage-muse">Bridal Collection</a>
+          <a href="index.html?filter=bestseller" data-filter="bestseller">Best Sellers</a>
+          <a href="index.html?category=everyday-elegance" data-cat="everyday-elegance">Minimal Collection</a>
+          <a href="index.html?category=after-dark" data-cat="after-dark">Korean Collection</a>
+          <a href="index.html?category=after-dark" data-cat="after-dark">Party Collection</a>
+          <a href="index.html?category=heritage-muse" data-cat="heritage-muse">Pearl Collection</a>
+          <a href="index.html?category=heritage-muse" data-cat="heritage-muse">Bridal Collection</a>
+          <a href="index.html?price=under299" data-price="under299" style="color:#B5657A">Under ₹299</a>
           <a href="cart.html">Cart</a>
           <a href="account.html">Account</a>
           <a href="about.html">About Chic Charms</a>
@@ -182,6 +183,17 @@
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') window.toggleDrawer(false);
     });
+
+    // Close drawer when clicking any link inside the drawer (important for same-page anchors)
+    const drawerNav = document.getElementById('ccDrawerNav');
+    if (drawerNav) {
+      drawerNav.addEventListener('click', function (e) {
+        const link = e.target.closest('a');
+        if (link) {
+          window.toggleDrawer(false);
+        }
+      });
+    }
 
     // Scroll shadow
     let ticking = false;
