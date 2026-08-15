@@ -148,12 +148,14 @@
     var id = firestoreDocId(doc);
     var name = fieldValue(f.name || f.productName || f.title);
     var price = Number(fieldValue(f.price || f.salePrice || f.mrp)) || 0;
+    var oldPrice = Number(fieldValue(f.oldPrice || f.compareAtPrice || f.mrp)) || 0;
     var stockRaw = fieldValue(f.stock || f.Stock);
     var stock = stockRaw === "" || stockRaw == null ? null : Number(stockRaw);
     return {
       id: id,
       name: name || "Chic Charms Piece",
       price: price,
+      oldPrice: oldPrice,
       stock: isNaN(stock) ? null : stock,
       image: imageFromFields(f),
       category: fieldValue(f.category || f.categorySlug || f.tag) || ""
@@ -204,15 +206,33 @@
     wrap.innerHTML = list.map(function (product) {
       var url = "product.html?id=" + encodeURIComponent(product.id) + (product.category ? "&category=" + encodeURIComponent(product.category) : "");
       var img = product.image && isImage(product.image) ? product.image : fallbackImage(product.name);
+      var saved = window.CCWishlist && window.CCWishlist.has(product.id);
+      var wishIcon = saved
+        ? '<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>'
+        : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+      var oldPriceVal = Number(product.oldPrice || (product.price ? Math.ceil(product.price * 1.28) : 0));
+      var hasDiscount = product.oldPrice && Number(product.oldPrice) > Number(product.price);
+      var priceHTML = '<span>' + formatINR(product.price) + '</span>';
+      if (hasDiscount || oldPriceVal > product.price) {
+        priceHTML += ' <span class="old-price">' + formatINR(oldPriceVal) + '</span>';
+      }
       return [
-        '<a class="ccap-look-card" href="' + escapeHTML(url) + '">',
-          '<div class="ccap-look-image">',
-            '<img src="' + escapeHTML(img) + '" alt="' + escapeHTML(product.name) + '" loading="lazy" decoding="async" onerror="this.src=\'' + fallbackImage(product.name) + '\'">',
-            '<span class="ccap-fav">♡</span>',
+        '<div class="snap-start shrink-0 mobile-related-card" style="width: calc(72vw); scroll-snap-align: start;">',
+          '<div class="img-frame">',
+            '<a href="' + escapeHTML(url) + '">',
+              '<img class="w-full h-full object-cover" src="' + escapeHTML(img) + '" alt="' + escapeHTML(product.name) + '" loading="lazy" decoding="async" onerror="this.src=\'' + fallbackImage(product.name) + '\'">',
+            '</a>',
+            '<button class="wish-btn" onclick="toggleCartWishlist(event, \'' + product.id + '\', \'' + escapeHTML(product.name).replace(/'/g, "\\'") + '\', ' + product.price + ', \'' + escapeHTML(img) + '\')" aria-label="Save ' + escapeHTML(product.name) + ' to wishlist">',
+              wishIcon,
+            '</button>',
           '</div>',
-          '<h3>' + escapeHTML(product.name) + '</h3>',
-          '<p>' + formatINR(product.price) + '</p>',
-        '</a>'
+          '<div class="info">',
+            '<h4 class="name"><a href="' + escapeHTML(url) + '">' + escapeHTML(product.name) + '</a></h4>',
+            '<div class="price-row">',
+              priceHTML,
+            '</div>',
+          '</div>',
+        '</div>'
       ].join("");
     }).join("");
   }
@@ -429,6 +449,21 @@
     renderApprovedCart();
     hydrateFromBackendOnce();
   }
+
+  window.toggleCartWishlist = function(event, id, name, price, image) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (!window.CCWishlist) return;
+    var productObj = { id: id, name: name, price: price, image: image };
+    var active = window.CCWishlist.toggle(productObj);
+    
+    var btn = event.currentTarget;
+    if (btn) {
+      btn.innerHTML = active 
+        ? '<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>'
+        : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+    }
+  };
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();

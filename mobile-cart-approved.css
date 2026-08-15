@@ -371,13 +371,13 @@
 
   .ccap-total-row span,
   .ccap-total-row strong {
-    font-family: "Playfair Display", Georgia, serif;
-    font-size: 24px;
+    font-family: "Plus Jakarta Sans", "Jost", sans-serif;
+    font-size: 22px;
     line-height: 32px;
-    font-weight: 500;
+    font-weight: 700;
   }
 
-  .ccap-look { margin-bottom: 48px; }
+  .ccap-look { margin-bottom: 80px; }
 
   .ccap-look-head {
     padding: 0 24px;
@@ -508,10 +508,10 @@
   .ccap-sticky-amount {
     display: block;
     color: var(--ccap-primary);
-    font-family: "Playfair Display", Georgia, serif;
+    font-family: "Plus Jakarta Sans", "Jost", sans-serif;
     font-size: 24px;
     line-height: 32px;
-    font-weight: 500;
+    font-weight: 700;
   }
 
   .ccap-checkout-btn {
@@ -629,5 +629,137 @@
     .ccap-item { gap: 16px; }
     .ccap-item-image { width: 104px; height: 126px; flex-basis: 104px; }
     .ccap-checkout-btn { padding-left: 14px; padding-right: 14px; font-size: 12px; }
+  }
+
+  /* Related Products Mobile Overrides (Complete The Look section) */
+  .ccap-look {
+    margin-top: 48px !important;
+    border-top: 1px solid #EDE6DD !important;
+    padding-top: 32px !important;
+    margin-bottom: 48px !important;
+  }
+  .ccap-look-scroller {
+    display: flex !important;
+    gap: 16px !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    padding: 0 24px 8px !important;
+  }
+  .ccap-look-scroller::-webkit-scrollbar {
+    display: none !important;
+  }
+  .ccap-look-head {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0 24px !important;
+    margin-bottom: 24px !important; /* Match PDP margin bottom */
+  }
+  .ccap-look-head h2 {
+    margin: 0 !important;
+    font-family: 'Playfair Display', Georgia, serif !important;
+    font-size: 20px !important;
+    line-height: 28px !important;
+    font-weight: 500 !important;
+    color: #1F1A1B !important;
+  }
+  .ccap-look-head svg {
+    display: none !important; /* Hide old generic arrow symbol */
+  }
+
+  .mobile-related-card {
+    text-align: left !important;
+    display: flex !important;
+    flex-direction: column !important;
+    scroll-snap-align: start !important;
+    flex-shrink: 0 !important;
+  }
+  .mobile-related-card .img-frame {
+    border-radius: 16px !important;
+    aspect-ratio: 4/5 !important;
+    position: relative !important;
+    overflow: hidden !important;
+    background: #F6ECEB !important;
+    width: 100% !important;
+  }
+  .mobile-related-card .img-frame a {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  .mobile-related-card .img-frame img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+  }
+  .mobile-related-card .wish-btn {
+    position: absolute !important;
+    top: 10px !important;
+    right: 10px !important;
+    width: 32px !important;
+    height: 32px !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+    border: 1px solid rgba(0,0,0,0.05) !important;
+    color: #B5657A !important;
+    z-index: 2 !important;
+    padding: 0 !important;
+    cursor: pointer !important;
+  }
+  .mobile-related-card .wish-btn svg {
+    width: 16px !important;
+    height: 16px !important;
+    transition: transform 0.15s ease !important;
+    stroke: currentColor !important;
+    fill: none !important;
+  }
+  .mobile-related-card .wish-btn svg[fill="currentColor"] {
+    fill: currentColor !important;
+  }
+  .mobile-related-card .wish-btn:active svg {
+    transform: scale(0.85) !important;
+  }
+  .mobile-related-card .info {
+    margin-top: 10px !important;
+  }
+  .mobile-related-card .name {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-size: 13px !important;
+    line-height: 18px !important;
+    font-weight: 500 !important;
+    color: #1F1A1B !important;
+    margin-bottom: 4px !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+  .mobile-related-card .name a {
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+  .mobile-related-card .price-row {
+    font-family: 'Jost', sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #9F4C67 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+  .mobile-related-card .old-price {
+    font-size: 11px !important;
+    color: #8A8080 !important;
+    text-decoration: line-through !important;
+    text-decoration-color: #8A8080 !important;
+    text-decoration-thickness: 1.5px !important;
+    font-weight: 400 !important;
   }
 }

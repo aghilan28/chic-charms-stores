@@ -359,6 +359,21 @@
     .color-swatch-btn:focus-visible {
       box-shadow: 0 0 0 2.5px #ffffff, 0 0 0 4.5px #8e4559;
     }
+
+    /* Smooth page fade-in upload animation */
+    @keyframes pageUploadFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-fade-in {
+      animation: pageUploadFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+    }
   </style>
   <link rel="icon" type="image/png" href="favicon.png"/>
 </head>
@@ -396,7 +411,7 @@
   </div>
 
   <!-- Product Content -->
-  <div id="productContent" class="hidden">
+  <div id="productContent" class="hidden opacity-0">
     <!-- DESKTOP-ONLY LAYOUT (md and up) -->
     <div class="hidden md:block">
       <!-- Breadcrumb -->
@@ -661,38 +676,6 @@
         </div>
       </div>
 
-      <!-- Sticky Bottom Action Pills -->
-      <div id="mobileActionPills" class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md px-6 py-4 border-t border-[#EDE6DD] z-50 safe-area-bottom">
-        <!-- Default State: Add to Cart / Buy Now -->
-        <div id="defaultActionPills" class="flex gap-4">
-          <button class="flex-1 h-12 rounded-full border-2 border-[#B5657A] text-[#B5657A] flex items-center justify-center gap-2 font-bold text-xs uppercase tracking-wider active:scale-[0.97] transition-all duration-300" onclick="handleAddToCart()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-            Add to Cart
-          </button>
-          <button class="flex-1 h-12 rounded-full bg-[#B5657A] text-white flex items-center justify-center font-bold text-xs uppercase tracking-wider active:scale-[0.97] transition-all duration-300 shadow-md shadow-[#B5657A]/25" onclick="buyNow()">
-            Buy Now
-          </button>
-        </div>
-
-        <!-- Added State: View Cart / Quantity Stepper -->
-        <div id="addedActionPills" class="flex gap-4 hidden">
-          <!-- View Cart outline pill -->
-          <a href="cart.html" class="flex-1 h-12 rounded-full border-2 border-[#B5657A] text-[#B5657A] flex items-center justify-center gap-2 font-bold text-xs uppercase tracking-wider active:scale-[0.97] transition-all duration-300 relative">
-            <div class="relative">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-              <!-- Red Badge overlay -->
-              <span id="addedCartBadge" class="absolute -top-3.5 -right-3 bg-[#EF4444] text-white text-[9px] w-4.5 h-4.5 rounded-full flex items-center justify-center font-bold" style="border: 1.5px solid #ffffff;">1</span>
-            </div>
-            View Cart
-          </a>
-          <!-- Solid Quantity Stepper control -->
-          <div class="flex-1 h-12 rounded-full bg-[#B5657A] text-white flex items-center justify-between px-6 font-bold" style="box-shadow: 0 4px 12px rgba(181, 101, 122, 0.25);">
-            <button class="w-8 h-8 flex items-center justify-center text-lg active:scale-[0.8] transition-transform select-none" onclick="updateItemQty(-1)">−</button>
-            <span id="addedCartQty" class="text-sm tracking-wide">1</span>
-            <button class="w-8 h-8 flex items-center justify-center text-lg active:scale-[0.8] transition-transform select-none" onclick="updateItemQty(1)">+</button>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -712,6 +695,39 @@
   </div>
   <button id="stickyAddBtn" type="button" class="h-12 bg-[#B5657A] text-white font-button text-[12px] tracking-widest uppercase active:scale-95 transition-transform disabled:opacity-50 disabled:cursor-not-allowed" onclick="handleAddToCart()">Add to Cart</button>
 </aside>
+
+<!-- Mobile-only Sticky Action Pills (Root Level) -->
+<div id="mobileActionPills" class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md px-6 py-4 border-t border-[#EDE6DD] z-50 safe-area-bottom block md:hidden">
+  <!-- Default State: Add to Cart / Buy Now -->
+  <div id="defaultActionPills" class="flex gap-4">
+    <button id="mobileBuyNowBtn" class="flex-1 h-12 rounded-full bg-[#B5657A] text-white flex items-center justify-center font-bold text-xs uppercase tracking-wider active:scale-[0.97] transition-all duration-300 shadow-md shadow-[#B5657A]/25 disabled:opacity-50 disabled:pointer-events-none" onclick="buyNow()">
+      Buy Now
+    </button>
+    <button id="mobileAddToCartBtn" class="flex-1 h-12 rounded-full border-2 border-[#B5657A] text-[#B5657A] flex items-center justify-center gap-2 font-bold text-xs uppercase tracking-wider active:scale-[0.97] transition-all duration-300 disabled:opacity-50 disabled:pointer-events-none" onclick="handleAddToCart()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <span id="mobileAddToCartText">Add to Cart</span>
+    </button>
+  </div>
+
+  <!-- Added State: View Cart / Quantity Stepper -->
+  <div id="addedActionPills" class="flex gap-4 hidden" onclick="event.stopPropagation();">
+    <!-- View Cart outline pill -->
+    <a href="cart.html" class="flex-1 h-12 rounded-full border-2 border-[#B5657A] text-[#B5657A] flex items-center justify-center gap-2 font-bold text-xs uppercase tracking-wider active:scale-[0.97] transition-all duration-300 relative">
+      <div class="relative mr-1.5">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <!-- Red Badge overlay -->
+        <span id="addedCartBadge" class="absolute -top-2.5 -right-2 bg-[#B5657A] text-white text-[8px] min-w-[16px] h-4 px-1 rounded-full flex items-center justify-center font-bold" style="border: 1px solid #ffffff; line-height: 1;">1</span>
+      </div>
+      View Cart
+    </a>
+    <!-- Solid Quantity Stepper control -->
+    <div class="flex-1 h-12 rounded-full bg-[#B5657A] text-white flex items-center justify-between px-6 font-bold" style="box-shadow: 0 4px 12px rgba(181, 101, 122, 0.25);" onclick="event.stopPropagation();">
+      <button type="button" class="w-8 h-8 flex items-center justify-center text-lg active:scale-[0.8] transition-transform select-none" onclick="event.stopPropagation(); updateItemQty(-1)">−</button>
+      <span id="addedCartQty" class="text-sm tracking-wide">1</span>
+      <button type="button" class="w-8 h-8 flex items-center justify-center text-lg active:scale-[0.8] transition-transform select-none" onclick="event.stopPropagation(); updateItemQty(1)">+</button>
+    </div>
+  </div>
+</div>
 
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -874,12 +890,14 @@ function isUsableUrl(url) {
 }
 
 function getCart() {
-  try { return JSON.parse(localStorage.getItem('cc_cart') || '[]'); } catch(e) { return []; }
+  try { return JSON.parse(localStorage.getItem('cart') || localStorage.getItem('cc_cart') || '[]'); } catch(e) { return []; }
 }
 
 function saveCart(cart) {
+  localStorage.setItem('cart', JSON.stringify(cart));
   localStorage.setItem('cc_cart', JSON.stringify(cart));
   updateCartBadges();
+  window.dispatchEvent(new Event('cartUpdated'));
 }
 
 function updateCartBadges() {
@@ -1252,16 +1270,40 @@ function renderProduct(product, docId) {
   } else { ss.classList.add('hidden'); }
 
   const sb = document.getElementById('stockBadge');
+  const mAdd = document.getElementById('mobileAddToCartBtn');
+  const mBuy = document.getElementById('mobileBuyNowBtn');
+  const mText = document.getElementById('mobileAddToCartText');
+
   if (inStock) {
     sb.innerHTML = '<span class="dot stock-pulse-dot" style="background:#22c55e;"></span> In Stock';
     sb.className = 'stock-badge text-green-600';
     document.getElementById('addToCartBtn').disabled = false;
     document.getElementById('stickyAddBtn').disabled = false;
+    if (mAdd && mBuy) {
+      mAdd.disabled = false;
+      mAdd.style.opacity = '';
+      mAdd.style.pointerEvents = '';
+      if (mText) mText.textContent = 'Add to Cart';
+      
+      mBuy.disabled = false;
+      mBuy.style.opacity = '';
+      mBuy.style.pointerEvents = '';
+    }
   } else {
     sb.innerHTML = '<span class="dot" style="background:#ef4444;"></span> Out of Stock';
     sb.className = 'stock-badge text-red-600';
     document.getElementById('addToCartBtn').disabled = true;
     document.getElementById('stickyAddBtn').disabled = true;
+    if (mAdd && mBuy) {
+      mAdd.disabled = true;
+      mAdd.style.opacity = '0.5';
+      mAdd.style.pointerEvents = 'none';
+      if (mText) mText.textContent = 'Out of Stock';
+      
+      mBuy.disabled = true;
+      mBuy.style.opacity = '0.5';
+      mBuy.style.pointerEvents = 'none';
+    }
   }
 
   const detailRows = buildDetailRows(product);
@@ -1287,7 +1329,9 @@ function renderProduct(product, docId) {
   syncMobilePDP();
 
   document.getElementById('loadingState').classList.add('hidden');
-  document.getElementById('productContent').classList.remove('hidden');
+  const pc = document.getElementById('productContent');
+  pc.classList.remove('hidden');
+  pc.classList.add('animate-fade-in');
   setProductCtaReady(true);
 }
 
@@ -1298,7 +1342,7 @@ window.handleAddToCart = function() {
   const price = Number(_currentProduct.price) || 0;
   const image = _currentProduct.images?.productImage || _currentProduct.image || '';
   const item = { id: _currentDocId, name: _currentProduct.name, price, image, variant: _selectedVariantId, size: _selectedSize, quantity: 1 };
-  const idx = cart.findIndex(i => i.id === item.id && i.variant === item.variant && i.size === item.size);
+  const idx = cart.findIndex(i => i.id === item.id && (i.variant || '') === (item.variant || '') && (i.size || '') === (item.size || ''));
   if (idx > -1) cart[idx].quantity = (cart[idx].quantity || 1) + 1;
   else cart.push(item);
   saveCart(cart);
@@ -1313,7 +1357,11 @@ window.updateActionPillsState = function() {
   if (window.innerWidth >= 768) return;
   if (!_currentProduct) return;
   const cart = getCart();
-  const idx = cart.findIndex(i => i.id === _currentDocId && i.variant === _selectedVariantId && i.size === _selectedSize);
+  const idx = cart.findIndex(i => 
+    i.id === _currentDocId && 
+    (i.variant || '') === (_selectedVariantId || '') && 
+    (i.size || '') === (_selectedSize || '')
+  );
   
   const defaultBlock = document.getElementById('defaultActionPills');
   const addedBlock = document.getElementById('addedActionPills');
@@ -1339,7 +1387,11 @@ window.updateActionPillsState = function() {
 window.updateItemQty = function(delta) {
   if (!_currentProduct) return;
   const cart = getCart();
-  const idx = cart.findIndex(i => i.id === _currentDocId && i.variant === _selectedVariantId && i.size === _selectedSize);
+  const idx = cart.findIndex(i => 
+    i.id === _currentDocId && 
+    (i.variant || '') === (_selectedVariantId || '') && 
+    (i.size || '') === (_selectedSize || '')
+  );
   if (idx > -1) {
     const newQty = (cart[idx].quantity || 1) + delta;
     if (newQty <= 0) {
