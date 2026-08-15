@@ -36,7 +36,7 @@
   }
 
   /* Critical: hide every old cart/page element on mobile. */
-  body > :not(#ccApprovedCartMobile):not(script):not(style):not(#cc-global-header-wrapper):not(.cc-bottom-nav) {
+  body > :not(#ccApprovedCartMobile):not(script):not(style):not(#cc-global-header-wrapper):not(.cc-bottom-nav):not(#ccDrawer):not(#ccDrawerOverlay) {
     display: none !important;
     visibility: hidden !important;
     pointer-events: none !important;

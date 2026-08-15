@@ -1,16 +1,85 @@
 /* ==========================================================================
-   CHIC CHARMS — Global Header — FIXED v2.0
+   CHIC CHARMS — Global Header — UNIFIED & STABILIZED v6.0
    Responsive header that works on BOTH desktop and mobile.
-   Replaces the broken mobile-only injection that destroyed desktop UI.
-
-   - Desktop >=901px : full navbar with centered nav-links, auth actions
-   - Mobile <=900px  : hamburger + centered logo + wishlist/cart icons
-   - Handles drawer, scroll shadow, cart badge, and cleanup of legacy elements
    ========================================================================== */
 (function () {
   'use strict';
 
   const ANNOUNCEMENT_TEXT = 'Free Shipping Across India';
+
+  // Define toggleDrawer globally on window using getter/setter to prevent external overrides from breaking layout classes
+  let currentToggleDrawer = function (open) {
+    const ccDrawer = document.getElementById('ccDrawer');
+    const ccDrawerOverlay = document.getElementById('ccDrawerOverlay');
+    const btn = document.getElementById('mobileCommerceMenu');
+    
+    document.body.classList.toggle('ma-drawer-open', !!open);
+    document.body.classList.toggle('drawer-open', !!open);
+    document.body.style.overflow = open ? 'hidden' : '';
+    
+    if (ccDrawer) ccDrawer.classList.toggle('open', !!open);
+    if (ccDrawerOverlay) ccDrawerOverlay.classList.toggle('open', !!open);
+    if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  };
+
+  Object.defineProperty(window, 'toggleDrawer', {
+    get: function () {
+      return currentToggleDrawer;
+    },
+    set: function (newVal) {
+      currentToggleDrawer = function (open) {
+        // Run the page's own toggle first (if provided)
+        if (typeof newVal === 'function') {
+          try { newVal(open); } catch (err) { /* ignore page errors */ }
+        }
+
+        // Only sync our header drawer state (avoid forcing body classes for page-specific drawers)
+        const ccDrawer = document.getElementById('ccDrawer');
+        const ccDrawerOverlay = document.getElementById('ccDrawerOverlay');
+        const btn = document.getElementById('mobileCommerceMenu');
+        if (ccDrawer || ccDrawerOverlay) {
+          document.body.classList.toggle('ma-drawer-open', !!open);
+          document.body.classList.toggle('drawer-open', !!open);
+          document.body.style.overflow = open ? 'hidden' : '';
+
+          if (ccDrawer) ccDrawer.classList.toggle('open', !!open);
+          if (ccDrawerOverlay) ccDrawerOverlay.classList.toggle('open', !!open);
+          if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        }
+      };
+    },
+    configurable: true
+  });
+
+  const DRAWER_HTML = `
+    <div class="cc-drawer-overlay" id="ccDrawerOverlay" onclick="window.toggleDrawer(false)"></div>
+    <aside class="cc-drawer" id="ccDrawer" aria-label="Navigation">
+      <div class="cc-drawer-inner">
+        <div class="cc-drawer-top">
+          <span class="cc-drawer-logo">ChicCharms</span>
+          <button class="cc-drawer-close" id="ccDrawerClose" aria-label="Close" onclick="window.toggleDrawer(false)">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+        <nav class="cc-drawer-nav" id="ccDrawerNav">
+          <a href="index.html" data-cat="all" class="is-active">Shop Jewellery</a>
+          <a href="index.html#bestsellers" data-filter="bestseller">Best Sellers</a>
+          <a href="category.html?category=everyday-elegance">Minimal Collection</a>
+          <a href="category.html?category=after-dark">Korean Collection</a>
+          <a href="category.html?category=after-dark">Party Collection</a>
+          <a href="category.html?category=heritage-muse">Pearl Collection</a>
+          <a href="category.html?category=heritage-muse">Bridal Collection</a>
+          <a href="cart.html">Cart</a>
+          <a href="account.html">Account</a>
+          <a href="about.html">About Chic Charms</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+      </div>
+    </aside>
+  `;
 
   function getCurrentPage() {
     const path = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
@@ -42,37 +111,16 @@
     });
   }
 
-  // Cleanup legacy injections — remove only old duplicated wrappers, not the one we are about to create
   function cleanupLegacy() {
-    // Remove any previous wrapper we injected earlier (to avoid duplicates on SPA navigation)
     document.querySelectorAll('#cc-global-header-wrapper').forEach(el => {
-      // Keep the first one if we are mid-reinject? We'll remove all and re-add.
       el.remove();
     });
 
-    // Remove other competing header systems that might hide content
     document.querySelectorAll('header.navbar, .navbar, header.ccap-header, .cc-app-header, .lux-mobile-header, .mobile-header, .d7-mobile-header').forEach(el => {
-      // Only remove if it's NOT inside our wrapper (which we already removed) — safe to remove all outside
       if (!el.closest('#cc-global-header-wrapper')) {
         el.remove();
       }
     });
-
-    // Remove duplicate announcement bars
-    document.querySelectorAll('.announcement-bar, .shop-announcement, .cc-final-announcement, #ccFinalAnnouncement, .ccap-announcement').forEach(el => {
-      // These legacy bars are replaced by our single bar
-      el.remove();
-    });
-
-    // Remove any div that contains the broken sticky tailwind class from previous injection
-    document.querySelectorAll('div').forEach(el => {
-      if (el.className && typeof el.className === 'string' && el.className.includes('sticky top-0 z-[60] bg-primary')) {
-        el.remove();
-      }
-    });
-
-    // Clean stray mobile rails that may block scroll
-    document.querySelectorAll('.mobile-commerce-rails, .cc-mobile-brand, .cc-loading-screen').forEach(el => el.remove());
   }
 
   function buildHeaderHTML() {
@@ -90,7 +138,7 @@
       <div id="cc-announcement-bar"><span>${ANNOUNCEMENT_TEXT}</span></div>
       <header class="navbar" id="navbar" role="banner">
         <div class="nav-inner container">
-          <button type="button" class="mobile-commerce-menu" id="mobileCommerceMenu" aria-expanded="false" aria-label="Open menu">
+          <button type="button" class="mobile-commerce-menu" id="mobileCommerceMenu" aria-expanded="false" aria-label="Open menu" onclick="window.toggleDrawer(true)">
             <span></span><span></span><span></span>
           </button>
 
@@ -100,102 +148,39 @@
             <a href="wishlist.html" class="mobile-commerce-icon" aria-label="Wishlist">${iconHeart}<span class="wishlist-count mobile-cart-count" style="display:none"></span></a>
           </div>
 
-          <nav class="nav-links" id="navLinks" aria-label="Main navigation">
-            <a href="index.html#bestsellers" class="">Best Sellers</a>
-            <a href="category.html?category=everyday-elegance" class="">Everyday Elegance</a>
-            <a href="category.html?category=modern-romance" class="">Modern Romance</a>
-            <a href="category.html?category=after-dark" class="">After Dark</a>
-            <a href="category.html?category=heritage-muse" class="">Heritage Muse</a>
-            <a href="about.html" class="${isActive('about.html')}" id="navAboutLink">About</a>
-            <a href="cart.html" class="${isActive('cart.html')}">Cart</a>
-          </nav>
-
           <div class="nav-actions" id="navActions" aria-label="Account actions">
             <!-- Auth state injected by auth-nav.js -->
           </div>
         </div>
       </header>
-      <div class="ma-drawer-backdrop" aria-hidden="true"></div>
     `;
   }
 
   function wireHeader() {
-    const hamburger = document.getElementById('mobileCommerceMenu');
-    const navLinks = document.getElementById('navLinks');
-    const backdrop = document.querySelector('.ma-drawer-backdrop');
     const navbar = document.getElementById('navbar');
 
-    if (!hamburger || !navLinks) return;
+    // Direct event listener bindings to close button and overlay as backup
+    const closeBtn = document.getElementById('ccDrawerClose');
+    const overlay = document.getElementById('ccDrawerOverlay');
 
-    function openDrawer() {
-      const ccDrawer = document.getElementById('ccDrawer');
-      const ccDrawerOverlay = document.getElementById('ccDrawerOverlay');
-      if (ccDrawer && ccDrawerOverlay) {
-        ccDrawer.classList.add('open');
-        ccDrawerOverlay.classList.add('open');
-        hamburger.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = 'hidden';
-        return;
-      }
-
-      navLinks.classList.add('open');
-      hamburger.setAttribute('aria-expanded', 'true');
-      document.body.classList.add('ma-drawer-open');
-      document.body.classList.add('d7-menu-open'); // for legacy CSS compatibility
-    }
-
-    function closeDrawer() {
-      const ccDrawer = document.getElementById('ccDrawer');
-      const ccDrawerOverlay = document.getElementById('ccDrawerOverlay');
-      if (ccDrawer && ccDrawerOverlay) {
-        ccDrawer.classList.remove('open');
-        ccDrawerOverlay.classList.remove('open');
-        hamburger.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-        return;
-      }
-
-      navLinks.classList.remove('open');
-      hamburger.setAttribute('aria-expanded', 'false');
-      document.body.classList.remove('ma-drawer-open');
-      document.body.classList.remove('d7-menu-open');
-    }
-
-    window.__ccCloseDrawer = closeDrawer;
-
-    hamburger.addEventListener('click', function (e) {
-      e.stopPropagation();
-      const ccDrawer = document.getElementById('ccDrawer');
-      const isOpen = ccDrawer ? ccDrawer.classList.contains('open') : navLinks.classList.contains('open');
-      if (isOpen) closeDrawer();
-      else openDrawer();
-    });
-
-    if (backdrop) {
-      backdrop.addEventListener('click', closeDrawer);
-    }
-
-    // Close on link click
-    navLinks.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', function () {
-        // Delay slightly for navigation
-        setTimeout(closeDrawer, 80);
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        window.toggleDrawer(false);
       });
-    });
+    }
+    if (overlay) {
+      overlay.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        window.toggleDrawer(false);
+      });
+    }
 
     // Close on Escape
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') closeDrawer();
-    });
-
-    // Close when clicking outside navbar + drawer
-    document.addEventListener('click', function (e) {
-      if (!navLinks.classList.contains('open')) return;
-      if (navbar && navbar.contains(e.target)) return;
-      if (backdrop && backdrop === e.target) return;
-      // If click is inside open drawer, don't close unless link
-      if (navLinks.contains(e.target)) return;
-      closeDrawer();
+      if (e.key === 'Escape') window.toggleDrawer(false);
     });
 
     // Scroll shadow
@@ -238,54 +223,36 @@
       }
     }
 
+    // Inject the mobile drawer if not already present
+    if (!document.getElementById('ccDrawer')) {
+      const container = document.querySelector('.mobile-shell') || document.body;
+      const drawerWrap = document.createElement('div');
+      drawerWrap.innerHTML = DRAWER_HTML;
+      while (drawerWrap.firstChild) {
+        container.appendChild(drawerWrap.firstChild);
+      }
+    }
+
     wireHeader();
     updateCartBadges();
+
+    // Ensure mobile/inline drawer close controls are wired (covers mobile-home.html and others)
+    wireCloseControls();
 
     // Keep badge in sync
     window.addEventListener('storage', updateCartBadges);
     window.addEventListener('cartUpdated', updateCartBadges);
-    // Also poll slightly for same-tab updates (cart added without storage event)
     setInterval(updateCartBadges, 1200);
-
-    // Re-expose global toggle for compatibility with previous approved mobile UI
-    window.toggleDrawer = function (open) {
-      const ccDrawer = document.getElementById('ccDrawer');
-      const ccDrawerOverlay = document.getElementById('ccDrawerOverlay');
-      const btn = document.getElementById('mobileCommerceMenu');
-      if (ccDrawer && ccDrawerOverlay) {
-        ccDrawer.classList.toggle('open', !!open);
-        ccDrawerOverlay.classList.toggle('open', !!open);
-        if (btn) btn.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = open ? 'hidden' : '';
-        return;
-      }
-
-      const nav = document.getElementById('navLinks');
-      if (!nav || !btn) return;
-      if (open) {
-        nav.classList.add('open');
-        btn.setAttribute('aria-expanded', 'true');
-        document.body.classList.add('ma-drawer-open');
-      } else {
-        nav.classList.remove('open');
-        btn.setAttribute('aria-expanded', 'false');
-        document.body.classList.remove('ma-drawer-open');
-        document.body.classList.remove('d7-menu-open');
-      }
-    };
   }
 
   function boot() {
-    // If DOM not ready, wait
     if (!document.body) {
       setTimeout(boot, 30);
       return;
     }
     injectHeader();
 
-    // Also observe for third-party scripts trying to re-inject header and clean after
     const observer = new MutationObserver(function (mutations) {
-      // If we detect another header injected after ours, clean and re-ensure ours is top
       let shouldReinject = false;
       for (const m of mutations) {
         for (const node of m.addedNodes) {
@@ -299,7 +266,6 @@
         }
       }
       if (shouldReinject) {
-        // Debounce
         clearTimeout(window.__ccReinjectTimer);
         window.__ccReinjectTimer = setTimeout(function () {
           const existing = document.getElementById('cc-global-header-wrapper');
@@ -310,9 +276,95 @@
     observer.observe(document.body, { childList: true, subtree: true });
   }
 
+  // Attach click handlers to known drawer/overlay close controls across mobile variants
+  function wireCloseControls() {
+    try {
+      const selectors = [
+        '#drawer-overlay',
+        '#drawer',
+        '#drawer-overlay',
+        '.drawer-overlay',
+        '.cc-drawer-overlay',
+        '#ccDrawerOverlay',
+        '.cc-drawer-close',
+        '[data-close-drawer]',
+        '[data-close]',
+        '[onclick*="toggleDrawer(false)"]',
+        '[onclick*="window.toggleDrawer(false)"]',
+        'button[aria-label="Close"]'
+      ];
+
+      const nodes = document.querySelectorAll(selectors.join(','));
+      nodes.forEach(el => {
+        if (el.dataset && el.dataset.ccCloseWired) return;
+        el.addEventListener('click', function () {
+          if (typeof window.toggleDrawer === 'function') {
+            try { window.toggleDrawer(false); return; } catch (err) { console.warn('toggleDrawer failed', err); }
+          }
+          if (typeof toggleDrawer === 'function') {
+            try { toggleDrawer(false); return; } catch (err) { console.warn('toggleDrawer failed', err); }
+          }
+          // Fallback close
+          document.querySelectorAll('.cc-drawer.open, .drawer-content.open, #drawer.open, aside.cc-drawer.open, .ma-drawer.open').forEach(d => d.classList.remove('open'));
+          document.body.classList.remove('ma-drawer-open', 'drawer-open', 'd7-menu-open', 'cc-modal-open', 'lux-drawer-open');
+          document.body.style.overflow = '';
+        });
+        if (el.dataset) el.dataset.ccCloseWired = '1';
+      });
+    } catch (err) {
+      // ignore
+    }
+  }
+
+  // Capture pointerdown early so clicks on SVG children or transformed elements still close drawer
+  document.addEventListener('pointerdown', function (e) {
+    try {
+      const trigger = e.target.closest && e.target.closest('#drawer-overlay, #drawer, #drawer-overlay, .drawer-overlay, .cc-drawer-overlay, .cc-drawer-close, [data-close-drawer], [data-close], [onclick*="toggleDrawer(false)"], [onclick*="window.toggleDrawer(false)"]');
+      if (!trigger) return;
+      // Prevent interfering with other intents (only handle clear close selectors)
+      const closeSelectors = ['.cc-drawer-close', '#ccDrawerOverlay', '.cc-drawer-overlay', '#drawer-overlay', '.drawer-overlay', '[data-close-drawer]', '[data-close]'];
+      const isClose = closeSelectors.some(s => trigger.matches && trigger.matches(s)) || (trigger.getAttribute && String(trigger.getAttribute('onclick') || '').includes('toggleDrawer(false)'));
+      if (!isClose) return;
+
+      if (typeof window.toggleDrawer === 'function') { window.toggleDrawer(false); return; }
+      if (typeof toggleDrawer === 'function') { try { toggleDrawer(false); return; } catch (err) {} }
+      document.querySelectorAll('.cc-drawer.open, .drawer-content.open, #drawer.open, aside.cc-drawer.open, .ma-drawer.open').forEach(d => d.classList.remove('open'));
+      document.body.classList.remove('ma-drawer-open', 'drawer-open', 'd7-menu-open', 'cc-modal-open', 'lux-drawer-open');
+      document.body.style.overflow = '';
+    } catch (err) { /* ignore */ }
+  }, true);
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', boot);
   } else {
     boot();
   }
+
+  // Global delegated handler: ensure any drawer/overlay close controls work across pages
+  document.addEventListener('click', function (e) {
+    try {
+      const trigger = e.target.closest('#drawer-overlay, #drawer, #drawer-overlay, .drawer-overlay, .cc-drawer-overlay, .cc-drawer-close, .modal-overlay, [data-close-drawer], [onclick*="toggleDrawer(false)"], [onclick*="window.toggleDrawer(false)"]');
+      if (!trigger) return;
+
+      // If the clicked element is meant to close a drawer/overlay, attempt to close via known APIs
+      const onclickAttr = trigger && trigger.getAttribute && trigger.getAttribute('onclick');
+      const isCloseIntent = trigger.matches('.cc-drawer-close, .cc-drawer-overlay, #ccDrawerOverlay, #drawer-overlay, .drawer-overlay, .modal-overlay') || (typeof onclickAttr === 'string' && onclickAttr.includes('toggleDrawer(false)'));
+      if (!isCloseIntent) return;
+
+      if (typeof window.toggleDrawer === 'function') {
+        window.toggleDrawer(false);
+        return;
+      }
+      if (typeof toggleDrawer === 'function') {
+        try { toggleDrawer(false); return; } catch (err) { /* ignore */ }
+      }
+
+      // Fallback: close common drawer elements and restore body state
+      document.querySelectorAll('.cc-drawer.open, .drawer-content.open, #drawer.open, aside.cc-drawer.open, .ma-drawer.open').forEach(d => d.classList.remove('open'));
+      document.body.classList.remove('ma-drawer-open', 'drawer-open', 'd7-menu-open', 'cc-modal-open', 'lux-drawer-open');
+      document.body.style.overflow = '';
+    } catch (err) {
+      // no-op
+    }
+  });
 })();

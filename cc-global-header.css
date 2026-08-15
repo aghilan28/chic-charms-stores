@@ -27,10 +27,10 @@
 }
 
 #cc-global-header-wrapper {
-  position: relative;
-  width: 100%;
-  z-index: 1000;
-  display: block;
+  position: relative !important;
+  width: 100% !important;
+  z-index: 99999 !important;
+  display: block !important;
 }
 
 /* Navbar base */
@@ -41,7 +41,7 @@
   left: 0;
   right: 0;
   width: 100% !important;
-  z-index: 999 !important;
+  z-index: 99999 !important;
   background: rgba(250, 248, 245, 0.94) !important;
   backdrop-filter: blur(16px) saturate(1.6) !important;
   -webkit-backdrop-filter: blur(16px) saturate(1.6) !important;
@@ -141,6 +141,8 @@
   grid-column: 1 !important;
   box-sizing: border-box !important;
   transition: border-color 0.2s ease, background-color 0.2s ease;
+  position: relative !important;
+  z-index: 10 !important;
 }
 
 #cc-global-header-wrapper .mobile-commerce-menu:hover {
@@ -175,6 +177,8 @@
   justify-content: flex-end !important;
   gap: 8px !important;
   grid-column: 3 !important;
+  position: relative !important;
+  z-index: 10 !important;
 }
 
 #cc-global-header-wrapper .mobile-commerce-icon,
@@ -249,22 +253,10 @@
   border-bottom: none !important;
   box-shadow: 0 20px 60px rgba(60, 40, 30, 0.10) !important;
   overflow-y: auto !important;
-  z-index: 9999 !important;
+  z-index: 99999 !important;
   align-items: stretch !important;
   box-sizing: border-box !important;
 }
-
-/* If inside .mobile-shell, make drawer align perfectly within it */
-.mobile-shell #cc-global-header-wrapper .navbar .nav-links.open,
-.mobile-shell #cc-global-header-wrapper #navbar .nav-links.open {
-  position: absolute !important;
-  left: 0 !important;
-  right: 0 !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  transform: none !important;
-}
-
 #cc-global-header-wrapper .navbar .nav-links.open a {
   font-size: 0.82rem !important;
   font-weight: 600 !important;
@@ -288,19 +280,10 @@
   position: fixed !important;
   inset: calc(36px + 68px) 0 0 0 !important;
   background: rgba(28, 25, 23, 0.24) !important;
-  z-index: 997 !important;
+  z-index: 99998 !important;
   opacity: 0 !important;
   pointer-events: none !important;
   transition: opacity 0.28s ease !important;
-}
-
-.mobile-shell #cc-global-header-wrapper .ma-drawer-backdrop {
-  position: absolute !important;
-  left: 0 !important;
-  right: 0 !important;
-  width: 100% !important;
-  height: auto !important;
-  bottom: 0 !important;
 }
 
 body.ma-drawer-open #cc-global-header-wrapper .ma-drawer-backdrop,
@@ -384,14 +367,153 @@ main, .shop-shell, .product-shell, .cart-shell, .account-shell {
   padding-top: 0 !important;
 }
 
-/* Global Mobile Drawer Z-Index Stacking Correction */
+/* Hide Main Navbar when Drawer is Open */
 body.ma-drawer-open #cc-global-header-wrapper .navbar,
-body.d7-menu-open #cc-global-header-wrapper .navbar {
-  z-index: 9998 !important;
+body.ma-drawer-open #navbar {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transition: opacity 0.25s ease, visibility 0.25s ease !important;
 }
-body.ma-drawer-open #cc-global-header-wrapper .ma-drawer-backdrop,
-body.d7-menu-open #cc-global-header-wrapper .ma-drawer-backdrop {
-  z-index: 9997 !important;
+
+/* Unified ccDrawer Styles */
+/* Force unified ccDrawer and its overlay to show on pages with child-hiding rules (like cart.html) */
+body > #ccDrawer,
+body > #ccDrawerOverlay,
+#ccDrawer,
+#ccDrawerOverlay {
+  display: block !important;
+}
+
+.cc-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.4);
+  z-index: 100200 !important;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s ease;
+}
+.cc-drawer-overlay.open {
   opacity: 1 !important;
   pointer-events: auto !important;
+}
+
+.cc-drawer {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: 85%;
+  max-width: 400px;
+  background: #FFF9F7 !important;
+  z-index: 100210 !important;
+  transform: translateX(-100%);
+  transition: transform .5s cubic-bezier(0.16,1,0.3,1);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  box-sizing: border-box !important;
+}
+.cc-drawer.open {
+  transform: translateX(0) !important;
+}
+.cc-drawer-inner {
+  padding: 0 24px 96px !important;
+  box-sizing: border-box !important;
+}
+.cc-drawer-top {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  position: sticky !important;
+  top: 0 !important;
+  background: #FFF9F7 !important;
+  z-index: 100220 !important;
+  padding: 24px 0 16px !important;
+  margin-bottom: 24px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+.cc-drawer-logo {
+  font-family: 'Playfair Display', serif !important;
+  font-size: 32px !important;
+  line-height: 1 !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.01em !important;
+  color: #8e4559 !important;
+  text-transform: none !important;
+}
+.cc-drawer-close {
+  background: none !important;
+  border: none !important;
+  color: #2f2727 !important;
+  cursor: pointer !important;
+  padding: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.cc-drawer-close svg {
+  display: block !important;
+  width: 22px !important;
+  height: 22px !important;
+  pointer-events: none !important;
+}
+.cc-drawer-close svg * {
+  pointer-events: none !important;
+}
+.cc-drawer-nav {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+}
+.cc-drawer-nav a {
+  height: 64px !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 16px !important;
+  border-bottom: 1px solid #f6eceb !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12px !important;
+  line-height: 16px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  color: #2f2727 !important;
+  text-decoration: none !important;
+  transition: background .18s !important;
+  box-sizing: border-box !important;
+}
+.cc-drawer-nav a:hover {
+  background: #fcf1f1 !important;
+}
+.cc-drawer-nav a.is-active {
+  color: #8f4559 !important;
+  background: #fcf1f1 !important;
+}
+.cc-drawer-nav a.is-accent {
+  color: #B5657A !important;
+  font-weight: 700 !important;
+}
+
+/* Inside .mobile-shell (Search & Wishlist pages), make drawer align relative to the container */
+.mobile-shell .cc-drawer-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+}
+.mobile-shell .cc-drawer {
+  position: absolute !important;
+  inset: 0 auto 0 0 !important;
+  width: 85% !important;
+  max-width: 400px !important;
+  height: 100% !important;
+}
+
+/* Hide legacy local page drawers so they don't conflict with unified ccDrawer */
+#navDrawer,
+#drawerOverlay,
+.nav-drawer,
+.drawer-overlay {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
