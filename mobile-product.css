@@ -384,3 +384,112 @@ button {
     font-size: 24px !important;
   }
 }
+
+/* ===== NEW MOBILE OVERRIDES ===== */
+@media (max-width: 767px) {
+  /* Hide bottom nav bars & footer */
+  #cc-bottom-nav-wrapper, .mobile-bottom-nav, .cc-bottom-nav, footer {
+    display: none !important;
+  }
+
+  /* Hide old sticky bar */
+  #stickyBar, .cc-product-sticky-cta {
+    display: none !important;
+  }
+
+  /* Remove body padding/margin at bottom to eliminate whitespace */
+  body {
+    padding-bottom: 0 !important;
+    background: #ffffff !important;
+  }
+  main {
+    padding-bottom: 0 !important;
+  }
+
+  /* Custom Tab Button Styles */
+  .cc-tab-btn {
+    border: 1px solid rgba(181, 101, 122, 0.3);
+    color: #8A8080;
+    background: #FDF2F5;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+  }
+  .cc-tab-btn.active {
+    background: #B5657A;
+    color: #ffffff;
+    border-color: #B5657A;
+    box-shadow: 0 2px 8px rgba(181, 101, 122, 0.2);
+  }
+
+  /* Related Products Mobile Overrides */
+  .mobile-related-card {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+  }
+  .mobile-related-card .img-frame {
+    border-radius: 16px;
+    aspect-ratio: 4/5;
+    position: relative;
+    overflow: hidden;
+    background: #F6ECEB;
+  }
+  .mobile-related-card .wish-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border: 1px solid rgba(0,0,0,0.05);
+    color: #B5657A;
+    z-index: 2;
+    padding: 0;
+    cursor: pointer;
+  }
+  .mobile-related-card .wish-btn svg {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.15s ease;
+  }
+  .mobile-related-card .wish-btn:active svg {
+    transform: scale(0.85);
+  }
+  .mobile-related-card .info {
+    margin-top: 10px;
+  }
+  .mobile-related-card .name {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    font-weight: 500;
+    color: #1F1A1B;
+    margin-bottom: 4px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .mobile-related-card .price-row {
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #9F4C67;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .mobile-related-card .old-price {
+    font-size: 11px;
+    color: #8A8080;
+    text-decoration: line-through;
+    text-decoration-color: #8A8080;
+    text-decoration-thickness: 1.5px;
+    font-weight: 400;
+  }
+}

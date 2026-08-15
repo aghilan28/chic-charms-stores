@@ -136,7 +136,7 @@
 </main>
 
 <!-- Chic Charms – Unified Site Footer (Mobile Injection) -->
-<footer class="cc-site-footer" style="border-top:1px solid #d7c1c5; background:#fff8f7; padding:32px 20px 110px; margin-top:24px;">
+<footer class="cc-site-footer" style="border-top:1px solid #d7c1c5; background:#fff8f7; padding:32px 20px 40px; margin-top:24px;">
   <p style="font-family:Jost,sans-serif;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:#8e4559;margin:0 0 8px">Chic Charms</p>
   <p style="font-family:Jost,sans-serif;font-size:14px;line-height:1.6;color:#534346;margin:0 0 16px;max-width:34ch">Fast mobile discovery for daily wear, gifting, and soft statement earrings. COD available · Ships in 24h · Skin-friendly finish.</p>
   <nav style="display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:#857276">

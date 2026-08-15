@@ -290,6 +290,76 @@
   </script>
   <link rel="stylesheet" href="cc-bottom-nav.css" />
   <link rel="stylesheet" href="product-sticky-cta.css" />
+  <style>
+    @media (max-width: 767px) {
+      .cc-bottom-nav, #cc-bottom-nav-wrapper, .mobile-bottom-nav {
+        display: none !important;
+      }
+      body.cc-nav-active {
+        padding-bottom: 0 !important;
+      }
+      body.cc-product-page main,
+      body.cc-product-page.cc-product-cta-ready main {
+        padding-bottom: 0 !important;
+      }
+      #stickyBar.cc-product-sticky-cta {
+        bottom: 0 !important;
+      }
+      #galleryDotsMobile {
+        bottom: 16px !important;
+        z-index: 20 !important;
+      }
+      #galleryDotsMobile .gallery-dot {
+        background: rgba(181, 101, 122, 0.3) !important;
+      }
+      #galleryDotsMobile .gallery-dot.active {
+        background: #B5657A !important;
+      }
+    }
+
+    /* Glowing stock pulse animation */
+    @keyframes stockPulse {
+      0% {
+        transform: scale(0.92);
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+      }
+      70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
+      }
+      100% {
+        transform: scale(0.92);
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+      }
+    }
+    .stock-pulse-dot {
+      animation: stockPulse 2s infinite !important;
+      display: inline-block;
+      border-radius: 50%;
+    }
+
+    /* Color swatch button styling */
+    .color-swatch-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 0;
+      outline: none;
+    }
+    .color-swatch-btn.active {
+      box-shadow: 0 0 0 2.5px #ffffff, 0 0 0 4.5px #8e4559;
+    }
+    .color-swatch-btn:focus-visible {
+      box-shadow: 0 0 0 2.5px #ffffff, 0 0 0 4.5px #8e4559;
+    }
+  </style>
   <link rel="icon" type="image/png" href="favicon.png"/>
 </head>
 <body class="cc-product-page bg-surface text-on-surface font-body-md selection:bg-primary/20">
@@ -312,7 +382,7 @@
   </div>
 </aside>
 
-<main class="pb-[140px]">
+<main class="pb-0 md:pb-[140px]">
   <!-- Loading -->
   <div id="loadingState" class="px-margin_mobile">
     <div class="h-4 w-32 skeleton mb-4"></div>
@@ -327,166 +397,303 @@
 
   <!-- Product Content -->
   <div id="productContent" class="hidden">
+    <!-- DESKTOP-ONLY LAYOUT (md and up) -->
+    <div class="hidden md:block">
+      <!-- Breadcrumb -->
+      <nav class="max-w-7xl mx-auto px-margin_mobile lg:px-8 py-4">
+        <ol class="flex items-center gap-2 text-[13px] font-jost text-outline">
+          <li><a class="hover:underline" href="index.html">Home</a></li>
+          <li><span class="text-outline-variant">|</span></li>
+          <li><span id="breadcrumbCategory" class="font-medium text-on-surface"></span></li>
+        </ol>
+      </nav>
 
-    <!-- Breadcrumb -->
-    <nav class="max-w-7xl mx-auto px-margin_mobile lg:px-8 py-4">
-      <ol class="flex items-center gap-2 text-[13px] font-jost text-outline">
-        <li><a class="hover:underline" href="index.html">Home</a></li>
-        <li><span class="text-outline-variant">|</span></li>
-        <li><span id="breadcrumbCategory" class="font-medium text-on-surface"></span></li>
-      </ol>
-    </nav>
+      <!-- Main Responsive Grid Container -->
+      <div class="max-w-7xl mx-auto lg:grid lg:grid-cols-12 lg:gap-16 lg:px-8 items-start">
+        
+        <!-- Left Column: Gallery (Sticky on desktop) -->
+        <div class="lg:col-span-7 lg:sticky lg:top-28">
+          <!-- Gallery -->
+          <section class="relative">
+            <div id="galleryContainer" class="flex snap-x snap-mandatory no-scrollbar h-[85vw] max-h-[618px] lg:h-[600px] lg:max-h-[600px]"></div>
+            <div class="absolute top-6 right-6 flex flex-col gap-3 z-10">
+              <button id="wishlistFab" class="fab-circle" onclick="toggleWishlist()" aria-label="Wishlist">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              </button>
+              <button class="fab-circle" onclick="shareProduct()" aria-label="Share">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+              </button>
+            </div>
+            <div id="galleryDots" class="gallery-dots"></div>
+          </section>
+        </div>
 
-    <!-- Main Responsive Grid Container -->
-    <div class="max-w-7xl mx-auto lg:grid lg:grid-cols-12 lg:gap-16 lg:px-8 items-start">
-      
-      <!-- Left Column: Gallery (Sticky on desktop) -->
-      <div class="lg:col-span-7 lg:sticky lg:top-28">
-        <!-- Gallery -->
-        <section class="relative">
-          <div id="galleryContainer" class="flex snap-x snap-mandatory no-scrollbar h-[85vw] max-h-[618px] lg:h-[600px] lg:max-h-[600px]"></div>
-          <div class="absolute top-6 right-6 flex flex-col gap-3 z-10">
-            <button id="wishlistFab" class="fab-circle" onclick="toggleWishlist()" aria-label="Wishlist">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <!-- Right Column: Details and Purchase Actions -->
+        <div class="lg:col-span-5 mt-6 lg:mt-0">
+          <!-- Product Info -->
+          <section class="px-margin_mobile lg:px-0 py-stack_gap_md lg:py-0">
+            <h1 id="productName" class="font-headline-lg text-[34px] leading-tight text-on-surface mb-2"></h1>
+
+            <div class="flex items-center justify-between mb-4">
+              <div id="priceBlock"></div>
+              <div id="ratingBlock" class="flex items-center gap-1 text-primary"></div>
+            </div>
+
+            <div id="descriptionBlock" class="text-on-surface-variant leading-relaxed text-[15px]"></div>
+
+            <!-- Color Selector -->
+            <div id="colorSelector" class="mt-6 hidden">
+              <p class="font-label-caps text-[12px] tracking-widest uppercase mb-3">Color</p>
+              <div id="colorOptions" class="flex flex-wrap gap-3"></div>
+            </div>
+
+            <!-- Size Selector -->
+            <div id="sizeSelector" class="mt-6 hidden">
+              <p class="font-label-caps text-[12px] tracking-widest uppercase mb-3">Size</p>
+              <div id="sizeOptions" class="flex flex-wrap gap-3"></div>
+            </div>
+
+            <!-- Stock -->
+            <div id="stockStatus" class="mt-4">
+              <span id="stockBadge" class="stock-badge"></span>
+            </div>
+
+            <!-- Trust — uses inline SVGs, NOT material icon font names -->
+            <div id="trustBar" class="mt-8 py-4 border-y border-outline-variant flex justify-between items-center text-[10px] font-label-caps tracking-widest text-on-surface-variant uppercase"></div>
+          </section>
+
+          <!-- Purchase Zone -->
+          <section class="px-margin_mobile lg:px-0 py-6 flex flex-col gap-3">
+            <button id="addToCartBtn" class="w-full h-14 bg-[#B5657A] text-white font-button text-[14px] tracking-widest uppercase active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed" onclick="handleAddToCart()">
+              Add To Cart
             </button>
-            <button class="fab-circle" onclick="shareProduct()" aria-label="Share">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            <button class="w-full h-14 border border-[#B5657A] text-[#B5657A] font-button text-[14px] tracking-widest uppercase active:scale-[0.98] transition-all duration-300" onclick="buyNow()">
+              Buy Now
             </button>
-          </div>
-          <div id="galleryDots" class="gallery-dots"></div>
-        </section>
+          </section>
+
+          <!-- Accordion: Product Details (dynamic) -->
+          <section id="detailsAccordionSection" class="px-margin_mobile lg:px-0 mt-4 hidden">
+            <div class="accordion-item accordion-open border-t border-outline-variant">
+              <button class="w-full py-5 flex justify-between items-center group" onclick="this.parentElement.classList.toggle('accordion-open')">
+                <span class="font-headline-md text-[18px]">Product Details</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+              <div class="accordion-content">
+                <div id="productDetailsContent" class="grid grid-cols-2 gap-y-6 gap-x-3 pb-8"></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Accordion: Care Instructions -->
+          <section id="careAccordionSection" class="px-margin_mobile lg:px-0 hidden">
+            <div class="accordion-item border-t border-outline-variant">
+              <button class="w-full py-5 flex justify-between items-center group" onclick="this.parentElement.classList.toggle('accordion-open')">
+                <span class="font-headline-md text-[18px]">Care Instructions</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+              <div class="accordion-content">
+                <div id="careContent" class="pb-8 text-[14px] text-on-surface-variant leading-relaxed"></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Accordion: Shipping & Returns -->
+          <section class="px-margin_mobile lg:px-0">
+            <div class="accordion-item border-t border-outline-variant">
+              <button class="w-full py-5 flex justify-between items-center group" onclick="this.parentElement.classList.toggle('accordion-open')">
+                <span class="font-headline-md text-[18px]">Shipping &amp; Returns</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+              <div class="accordion-content">
+                <div id="shippingContent" class="pb-8 text-[14px] text-on-surface-variant leading-relaxed"></div>
+              </div>
+            </div>
+          </section>
+        </div>
+
       </div>
 
-      <!-- Right Column: Details and Purchase Actions -->
-      <div class="lg:col-span-5 mt-6 lg:mt-0">
-        <!-- Product Info -->
-        <section class="px-margin_mobile lg:px-0 py-stack_gap_md lg:py-0">
-          <h1 id="productName" class="font-headline-lg text-[34px] leading-tight text-on-surface mb-2"></h1>
+      <!-- Gifting -->
+      <section id="giftingSection" class="max-w-7xl mx-auto px-margin_mobile lg:px-8 py-section_gap hidden">
+        <div class="bg-[#FAF5F2] p-8 text-center border border-outline-variant/30">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#8e4559" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12v10H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+          <h3 id="giftingTitle" class="font-headline-md text-[20px] mb-2"></h3>
+          <p id="giftingDesc" class="text-on-surface-variant text-[14px] mb-6"></p>
+          <button id="giftingCta" class="font-label-caps text-[11px] tracking-widest text-primary border-b border-primary pb-1 uppercase"></button>
+        </div>
+      </section>
 
-          <div class="flex items-center justify-between mb-4">
-            <div id="priceBlock"></div>
-            <div id="ratingBlock" class="flex items-center gap-1 text-primary"></div>
-          </div>
+      <!-- Editorial -->
+      <section id="editorialSection" class="relative w-full hidden lg:hidden">
+        <div class="absolute inset-0 bg-black/25 z-10"></div>
+        <img id="editorialImage" class="w-full h-full object-cover" alt="" loading="lazy" />
+        <div class="absolute bottom-12 left-6 right-6 z-20">
+          <h2 id="editorialTitle" class="font-display-lg text-white text-[32px] leading-tight mb-4"></h2>
+          <span id="editorialCta" class="text-white font-label-caps text-[12px] tracking-widest uppercase flex items-center gap-2"></span>
+        </div>
+      </section>
 
-          <div id="descriptionBlock" class="text-on-surface-variant leading-relaxed text-[15px]"></div>
+      <!-- Promise -->
+      <section id="promiseSection" class="max-w-7xl mx-auto px-margin_mobile lg:px-8 py-section_gap hidden">
+        <div id="promiseGrid" class="grid grid-cols-2 lg:grid-cols-4 gap-x-gutter_mobile lg:gap-x-12 gap-y-12"></div>
+      </section>
 
-          <!-- Color Selector -->
-          <div id="colorSelector" class="mt-6 hidden">
-            <p class="font-label-caps text-[12px] tracking-widest uppercase mb-3">Color</p>
-            <div id="colorOptions" class="flex flex-wrap gap-3"></div>
-          </div>
+      <!-- Related Section -->
+      <section id="relatedSection" class="max-w-7xl mx-auto py-section_gap hidden px-margin_mobile lg:px-8">
+        <h3 id="relatedTitle" class="font-headline-md text-[24px] mb-8 lg:px-0"></h3>
+        <div id="relatedProducts" class="flex snap-x snap-mandatory no-scrollbar gap-4 lg:px-0" style="overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;"></div>
+      </section>
 
-          <!-- Size Selector -->
-          <div id="sizeSelector" class="mt-6 hidden">
-            <p class="font-label-caps text-[12px] tracking-widest uppercase mb-3">Size</p>
-            <div id="sizeOptions" class="flex flex-wrap gap-3"></div>
-          </div>
-
-          <!-- Stock -->
-          <div id="stockStatus" class="mt-4">
-            <span id="stockBadge" class="stock-badge"></span>
-          </div>
-
-          <!-- Trust — uses inline SVGs, NOT material icon font names -->
-          <div id="trustBar" class="mt-8 py-4 border-y border-outline-variant flex justify-between items-center text-[10px] font-label-caps tracking-widest text-on-surface-variant uppercase"></div>
-        </section>
-
-        <!-- Purchase Zone -->
-        <section class="px-margin_mobile lg:px-0 py-6 flex flex-col gap-3">
-          <button id="addToCartBtn" class="w-full h-14 bg-[#B5657A] text-white font-button text-[14px] tracking-widest uppercase active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed" onclick="handleAddToCart()">
-            Add To Cart
-          </button>
-          <button class="w-full h-14 border border-[#B5657A] text-[#B5657A] font-button text-[14px] tracking-widest uppercase active:scale-[0.98] transition-all duration-300" onclick="buyNow()">
-            Buy Now
-          </button>
-        </section>
-
-        <!-- Accordion: Product Details (dynamic) -->
-        <section id="detailsAccordionSection" class="px-margin_mobile lg:px-0 mt-4 hidden">
-          <div class="accordion-item accordion-open border-t border-outline-variant">
-            <button class="w-full py-5 flex justify-between items-center group" onclick="this.parentElement.classList.toggle('accordion-open')">
-              <span class="font-headline-md text-[18px]">Product Details</span>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            </button>
-            <div class="accordion-content">
-              <div id="productDetailsContent" class="grid grid-cols-2 gap-y-6 gap-x-3 pb-8"></div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Accordion: Care Instructions -->
-        <section id="careAccordionSection" class="px-margin_mobile lg:px-0 hidden">
-          <div class="accordion-item border-t border-outline-variant">
-            <button class="w-full py-5 flex justify-between items-center group" onclick="this.parentElement.classList.toggle('accordion-open')">
-              <span class="font-headline-md text-[18px]">Care Instructions</span>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            </button>
-            <div class="accordion-content">
-              <div id="careContent" class="pb-8 text-[14px] text-on-surface-variant leading-relaxed"></div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Accordion: Shipping & Returns -->
-        <section class="px-margin_mobile lg:px-0">
-          <div class="accordion-item border-t border-outline-variant">
-            <button class="w-full py-5 flex justify-between items-center group" onclick="this.parentElement.classList.toggle('accordion-open')">
-              <span class="font-headline-md text-[18px]">Shipping &amp; Returns</span>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            </button>
-            <div class="accordion-content">
-              <div id="shippingContent" class="pb-8 text-[14px] text-on-surface-variant leading-relaxed"></div>
-            </div>
-          </div>
-        </section>
-      </div>
-
+      <!-- Footer -->
+      <footer class="bg-brand-dark text-brand-ivory px-margin_mobile py-16">
+        <div class="mb-12">
+          <h2 class="font-display-lg text-[24px] tracking-[0.2em] mb-4">CHIC CHARMS</h2>
+          <p id="footerTagline" class="text-[13px] text-brand-ivory/60 leading-relaxed max-w-[280px]"></p>
+        </div>
+        <div id="footerAccordion" class="flex flex-col border-t border-brand-ivory/10"></div>
+        <div class="mt-12 text-[10px] text-brand-ivory/40 tracking-[0.1em] text-center">
+          © <span id="footerYear"></span> CHIC CHARMS. ALL RIGHTS RESERVED.
+        </div>
+      </footer>
     </div>
 
-    <!-- Gifting -->
-    <section id="giftingSection" class="max-w-7xl mx-auto px-margin_mobile lg:px-8 py-section_gap hidden">
-      <div class="bg-[#FAF5F2] p-8 text-center border border-outline-variant/30">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#8e4559" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12v10H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
-        <h3 id="giftingTitle" class="font-headline-md text-[20px] mb-2"></h3>
-        <p id="giftingDesc" class="text-on-surface-variant text-[14px] mb-6"></p>
-        <button id="giftingCta" class="font-label-caps text-[11px] tracking-widest text-primary border-b border-primary pb-1 uppercase"></button>
-      </div>
-    </section>
+    <!-- MOBILE-ONLY LAYOUT (md and down) -->
+    <div class="block md:hidden">
+      <div class="relative bg-surface-dim">
+        <!-- Floating Back Button -->
+        <a href="index.html" class="absolute top-4 left-4 w-10 h-10 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center text-on-surface shadow-sm z-30 active:scale-95 transition-transform" aria-label="Back to home">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </a>
 
-    <!-- Editorial -->
-    <section id="editorialSection" class="relative w-full hidden lg:hidden">
-      <div class="aspect-[3/4] w-full bg-surface-container">
-        <img id="editorialImage" class="w-full h-full object-cover" alt="" loading="lazy" />
+        <!-- Swipable Gallery Slider -->
+        <div id="galleryContainerMobile" class="flex snap-x snap-mandatory overflow-x-auto no-scrollbar w-full h-[100vw] bg-surface-container relative"></div>
+        <div id="galleryDotsMobile" class="gallery-dots"></div>
       </div>
-      <div class="absolute inset-0 editorial-overlay flex flex-col justify-end p-margin_mobile">
-        <h2 id="editorialTitle" class="font-display-lg text-white text-[32px] leading-tight mb-4"></h2>
-        <span id="editorialCta" class="text-white font-label-caps text-[12px] tracking-widest uppercase flex items-center gap-2"></span>
-      </div>
-    </section>
 
-    <!-- Promise — uses inline SVG icons, NOT material-symbols-outlined text -->
-    <section id="promiseSection" class="max-w-7xl mx-auto px-margin_mobile lg:px-8 py-section_gap hidden">
-      <h3 class="font-headline-md text-[22px] text-center mb-10">Our Promise</h3>
-      <div id="promiseGrid" class="grid grid-cols-2 lg:grid-cols-4 gap-x-gutter_mobile lg:gap-x-12 gap-y-12"></div>
-    </section>
+      <!-- Description Card Container -->
+      <div class="bg-white relative px-6 pt-8 pb-0">
+        <!-- Brand / Title / Heart / Price Row -->
+        <div class="flex justify-between items-start mb-6">
+          <div class="flex-1 pr-4">
+            <span id="productCategoryMobile" class="text-xs font-semibold uppercase tracking-wider text-[#8A8080] block mb-1">Earrings</span>
+            <h1 id="productNameMobile" class="font-headline-md text-2xl leading-tight text-on-surface"></h1>
+            <div id="stockStatusMobile" class="mt-2"></div>
+            <!-- Color Selector Mobile -->
+            <div id="colorSelectorMobile" class="mt-4 hidden">
+              <p class="text-xs font-semibold uppercase tracking-wider text-[#8A8080] mb-2" style="font-family: 'Jost', sans-serif;">Color : <span id="selectedColorNameMobile" class="text-on-surface normal-case font-bold"></span></p>
+              <div id="colorOptionsMobile" class="flex flex-wrap gap-4 py-1"></div>
+            </div>
+          </div>
+          <div class="text-right flex flex-col items-end shrink-0">
+            <!-- Floating Heart Button inside rounded-square -->
+            <button id="wishlistFabMobile" class="w-11 h-11 rounded-2xl bg-[#FDF2F5] flex items-center justify-center text-[#B5657A] mb-3 shadow-sm border border-[#B5657A]/10 active:scale-90 transition-transform" onclick="toggleWishlist()" aria-label="Wishlist">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </button>
+            <div class="flex flex-col items-end">
+              <div class="flex items-baseline gap-2">
+                <span id="productOldPriceMobile" class="line-through text-[#8A8080]" style="font-size:14px;text-decoration-thickness:1px;"></span>
+                <span id="productPriceMobile" class="font-bold text-[#9F4C67]" style="font-size:20px;"></span>
+              </div>
+            </div>
+          </div>
+        </div>
 
-    <!-- Related Products -->
-    <section id="relatedSection" class="max-w-7xl mx-auto py-section_gap hidden px-margin_mobile lg:px-8">
-      <h3 id="relatedTitle" class="font-headline-md text-[24px] mb-8 lg:px-0"></h3>
-      <div id="relatedProducts" class="flex snap-x snap-mandatory no-scrollbar gap-4 lg:px-0" style="overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;"></div>
-    </section>
+        <!-- Custom Tabs Navigation -->
+        <div class="flex gap-2 mb-6 overflow-x-auto no-scrollbar py-1">
+          <button class="px-5 py-2 rounded-full text-xs font-semibold cc-tab-btn active" data-tab="desc" onclick="switchMobileTab('desc')">Description</button>
+          <button class="px-5 py-2 rounded-full text-xs font-semibold cc-tab-btn" data-tab="shipping" onclick="switchMobileTab('shipping')">Shipping</button>
+        </div>
 
-    <!-- Footer -->
-    <footer class="bg-brand-dark text-brand-ivory px-margin_mobile py-16">
-      <div class="mb-12">
-        <h2 class="font-display-lg text-[24px] tracking-[0.2em] mb-4">CHIC CHARMS</h2>
-        <p id="footerTagline" class="text-[13px] text-brand-ivory/60 leading-relaxed max-w-[280px]"></p>
+        <!-- Tab Contents -->
+        <div id="tabContentDesc" class="cc-tab-content active text-on-surface-variant leading-relaxed text-[15px] mb-8">
+          <div id="descriptionBlockMobile"></div>
+        </div>
+        <div id="tabContentSpecs" class="cc-tab-content hidden mb-8">
+          <div id="productDetailsContentMobile" class="grid grid-cols-2 gap-y-6 gap-x-3 text-on-surface-variant text-[14px]"></div>
+        </div>
+        <div id="tabContentShipping" class="cc-tab-content hidden mb-8 text-on-surface-variant leading-relaxed text-[14px]">
+          <div id="shippingContentMobile"></div>
+        </div>
+
+
+
+        <!-- Size Selector Mobile -->
+        <div id="sizeSelectorMobile" class="mt-6 hidden">
+          <p class="text-xs font-semibold uppercase tracking-wider text-[#8A8080] mb-3">Size</p>
+          <div id="sizeOptionsMobile" class="flex flex-wrap gap-3"></div>
+        </div>
+
+
+
+        <!-- Brand Story Poster Image Mobile -->
+        <div class="mt-12 -mx-6 overflow-hidden shadow-sm border-y border-[#B5657A]/10">
+          <img src="images/embrace-brand.png" alt="A Celebration of Being" class="w-full h-auto object-cover" />
+        </div>
+
+        <!-- Related Products Section (You May Also Love) Mobile -->
+        <section id="relatedSectionMobile" class="mt-12 border-t border-[#EDE6DD] pt-8 hidden">
+          <h3 id="relatedTitleMobile" class="font-headline-md text-[20px] mb-6 text-on-surface">You May Also Love</h3>
+          <div id="relatedProductsMobile" class="flex snap-x snap-mandatory overflow-x-auto no-scrollbar gap-4" style="overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;"></div>
+        </section>
+ 
+        <!-- Mobile Footer (Matches requested screenshot in light pink palette) -->
+        <div class="cc-mobile-footer mt-12 -mx-6 px-6 pt-12 pb-32 rounded-t-[32px]" style="background: #FDF2F5; color: #8e4559; border-top: 1px solid rgba(181, 101, 122, 0.15); display: block !important;">
+          <!-- Logo / Icon -->
+          <div class="flex justify-center mb-8">
+            <svg width="48" height="48" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M50 5C25.1 5 5 25.1 5 50C5 74.9 25.1 95 50 95C74.9 95 95 74.9 95 50C95 25.1 74.9 5 50 5ZM50 85C30.7 85 15 69.3 15 50C15 30.7 30.7 15 50 15C69.3 15 85 30.7 85 50C85 69.3 69.3 85 50 85Z" fill="currentColor" opacity="0.1"/>
+              <path d="M50 10C50 10 65 30 50 50C35 70 50 90 50 90C50 90 35 70 50 50C65 30 50 10 50 10Z" fill="none" stroke="#8e4559" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="50" cy="50" r="4" fill="#8e4559"/>
+            </svg>
+          </div>
+
+          <!-- Accordions -->
+          <div id="footerAccordionMobile" class="flex flex-col border-t border-[#8e4559]/20"></div>
+
+          <!-- Copyright -->
+          <div class="mt-12 text-[10px] text-[#8e4559]/60 tracking-[0.1em] text-center uppercase">
+            © <span id="footerYearMobile"></span> CHIC CHARMS. ALL RIGHTS RESERVED.
+          </div>
+        </div>
       </div>
-      <div id="footerAccordion" class="flex flex-col border-t border-brand-ivory/10"></div>
-      <div class="mt-12 text-[10px] text-brand-ivory/40 tracking-[0.1em] text-center">
-        © <span id="footerYear"></span> CHIC CHARMS. ALL RIGHTS RESERVED.
+
+      <!-- Sticky Bottom Action Pills -->
+      <div id="mobileActionPills" class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md px-6 py-4 border-t border-[#EDE6DD] z-50 safe-area-bottom">
+        <!-- Default State: Add to Cart / Buy Now -->
+        <div id="defaultActionPills" class="flex gap-4">
+          <button class="flex-1 h-12 rounded-full border-2 border-[#B5657A] text-[#B5657A] flex items-center justify-center gap-2 font-bold text-xs uppercase tracking-wider active:scale-[0.97] transition-all duration-300" onclick="handleAddToCart()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            Add to Cart
+          </button>
+          <button class="flex-1 h-12 rounded-full bg-[#B5657A] text-white flex items-center justify-center font-bold text-xs uppercase tracking-wider active:scale-[0.97] transition-all duration-300 shadow-md shadow-[#B5657A]/25" onclick="buyNow()">
+            Buy Now
+          </button>
+        </div>
+
+        <!-- Added State: View Cart / Quantity Stepper -->
+        <div id="addedActionPills" class="flex gap-4 hidden">
+          <!-- View Cart outline pill -->
+          <a href="cart.html" class="flex-1 h-12 rounded-full border-2 border-[#B5657A] text-[#B5657A] flex items-center justify-center gap-2 font-bold text-xs uppercase tracking-wider active:scale-[0.97] transition-all duration-300 relative">
+            <div class="relative">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+              <!-- Red Badge overlay -->
+              <span id="addedCartBadge" class="absolute -top-3.5 -right-3 bg-[#EF4444] text-white text-[9px] w-4.5 h-4.5 rounded-full flex items-center justify-center font-bold" style="border: 1.5px solid #ffffff;">1</span>
+            </div>
+            View Cart
+          </a>
+          <!-- Solid Quantity Stepper control -->
+          <div class="flex-1 h-12 rounded-full bg-[#B5657A] text-white flex items-center justify-between px-6 font-bold" style="box-shadow: 0 4px 12px rgba(181, 101, 122, 0.25);">
+            <button class="w-8 h-8 flex items-center justify-center text-lg active:scale-[0.8] transition-transform select-none" onclick="updateItemQty(-1)">−</button>
+            <span id="addedCartQty" class="text-sm tracking-wide">1</span>
+            <button class="w-8 h-8 flex items-center justify-center text-lg active:scale-[0.8] transition-transform select-none" onclick="updateItemQty(1)">+</button>
+          </div>
+        </div>
       </div>
-    </footer>
+    </div>
   </div>
 
   <!-- Error State -->
@@ -844,6 +1051,7 @@ window.selectProductVariant = function(id) {
 window.selectProductSize = function(size) {
   _selectedSize = size;
   document.querySelectorAll('.size-option').forEach(btn => btn.classList.toggle('active', btn.dataset.size === size));
+  syncMobilePDP();
 };
 
 window.selectGalleryImage = function(i) {
@@ -851,6 +1059,17 @@ window.selectGalleryImage = function(i) {
   updateGalleryDots();
   const c = document.getElementById('galleryContainer');
   if (c) c.scrollTo({ left: i * c.offsetWidth, behavior: 'smooth' });
+};
+
+window.selectMobileGalleryImage = function(i) {
+  _selectedGalleryIndex = i;
+  const c = document.getElementById('galleryContainerMobile');
+  if (c) c.scrollTo({ left: i * c.offsetWidth, behavior: 'smooth' });
+  const dotsDest = document.getElementById('galleryDotsMobile');
+  if (dotsDest) {
+    const dots = dotsDest.querySelectorAll('.gallery-dot');
+    dots.forEach((d, idx) => d.classList.toggle('active', idx === i));
+  }
 };
 
 function updateGalleryDots() {
@@ -968,13 +1187,59 @@ function renderProduct(product, docId) {
   _selectedGalleryIndex = 0;
   updateGalleryDots();
 
-  const namedVariants = variants.filter(v => v.color && v.color !== 'Default' && v.id !== '__main__');
+  const COLOR_HEX_MAP = {
+    'gold': '#E6C15C',
+    'silver': '#E5E5E5',
+    'rose gold': '#E7B2B2',
+    'white': '#FFFFFF',
+    'black': '#1E1E1E',
+    'emerald': '#097969',
+    'green': '#22C55E',
+    'red': '#EF4444',
+    'blue': '#3B82F6',
+    'pink': '#F472B6',
+    'tan': '#D2B48C',
+    'brown': '#8B4513',
+    'beige': '#F5F5DC',
+    'grey': '#8A8080',
+    'gray': '#8A8080',
+    'yellow': '#FACC15',
+    'purple': '#A855F7',
+    'orange': '#F97316'
+  };
+  function getColorHex(colorName) {
+    if (!colorName) return '#E5E5E5';
+    const c = colorName.trim().toLowerCase();
+    
+    if (c.includes('rose gold') || c.includes('rose-gold')) return '#E7B2B2';
+    if (c.includes('gold')) return '#E6C15C';
+    if (c.includes('silver')) return '#E5E5E5';
+    if (c.includes('emerald')) return '#097969';
+    if (c.includes('aqua')) return '#4DAF9C';
+    if (c.includes('green')) return '#22C55E';
+    if (c.includes('blue')) return '#3B82F6';
+    if (c.includes('red')) return '#EF4444';
+    if (c.includes('pink')) return '#F472B6';
+    if (c.includes('brown')) return '#8B4513';
+    if (c.includes('beige')) return '#F5F5DC';
+    if (c.includes('black')) return '#1E1E1E';
+    if (c.includes('white')) return '#FFFFFF';
+    if (c.includes('grey') || c.includes('gray')) return '#8A8080';
+    if (c.includes('yellow')) return '#FACC15';
+    if (c.includes('purple')) return '#A855F7';
+    if (c.includes('orange')) return '#F97316';
+
+    return COLOR_HEX_MAP[c] || c;
+  }
+
+  const namedVariants = variants.filter(v => v.color && v.color.toLowerCase() !== 'default');
   const cs = document.getElementById('colorSelector');
-  if (namedVariants.length > 1) {
+  if (namedVariants.length >= 1) {
     cs.classList.remove('hidden');
-    document.getElementById('colorOptions').innerHTML = namedVariants.map(v =>
-      `<button class="variant-btn ${v.id === activeVariant?.id ? 'active' : ''}" onclick="selectProductVariant('${v.id}')">${v.color}</button>`
-    ).join('');
+    document.getElementById('colorOptions').innerHTML = namedVariants.map(v => {
+      const hex = getColorHex(v.color);
+      return `<button class="color-swatch-btn ${v.id === activeVariant?.id ? 'active' : ''}" style="background-color: ${hex};" onclick="selectProductVariant('${v.id}')" title="${v.color}"></button>`;
+    }).join('');
   } else { cs.classList.add('hidden'); }
 
   const sizes = activeVariant?.sizes || product.sizes || [];
@@ -988,7 +1253,7 @@ function renderProduct(product, docId) {
 
   const sb = document.getElementById('stockBadge');
   if (inStock) {
-    sb.innerHTML = '<span class="dot" style="background:#22c55e;"></span> In Stock';
+    sb.innerHTML = '<span class="dot stock-pulse-dot" style="background:#22c55e;"></span> In Stock';
     sb.className = 'stock-badge text-green-600';
     document.getElementById('addToCartBtn').disabled = false;
     document.getElementById('stickyAddBtn').disabled = false;
@@ -1019,6 +1284,7 @@ function renderProduct(product, docId) {
   } else { cas.classList.add('hidden'); }
 
   checkWishlist();
+  syncMobilePDP();
 
   document.getElementById('loadingState').classList.add('hidden');
   document.getElementById('productContent').classList.remove('hidden');
@@ -1037,8 +1303,52 @@ window.handleAddToCart = function() {
   else cart.push(item);
   saveCart(cart);
   showToast('Added to cart!');
+  updateActionPillsState();
   if (_currentDocId && _currentDocId !== 'demo-product' && window.addToCartWithId) {
     window.addToCartWithId(_currentProduct.name, price, _currentDocId);
+  }
+};
+
+window.updateActionPillsState = function() {
+  if (window.innerWidth >= 768) return;
+  if (!_currentProduct) return;
+  const cart = getCart();
+  const idx = cart.findIndex(i => i.id === _currentDocId && i.variant === _selectedVariantId && i.size === _selectedSize);
+  
+  const defaultBlock = document.getElementById('defaultActionPills');
+  const addedBlock = document.getElementById('addedActionPills');
+  
+  if (idx > -1) {
+    const qty = cart[idx].quantity || 1;
+    const addedCartBadge = document.getElementById('addedCartBadge');
+    if (addedCartBadge) {
+      const totalCount = cart.reduce((s, i) => s + (Number(i.quantity) || 1), 0);
+      addedCartBadge.textContent = totalCount;
+    }
+    const addedCartQty = document.getElementById('addedCartQty');
+    if (addedCartQty) addedCartQty.textContent = qty;
+    
+    defaultBlock?.classList.add('hidden');
+    addedBlock?.classList.remove('hidden');
+  } else {
+    defaultBlock?.classList.remove('hidden');
+    addedBlock?.classList.add('hidden');
+  }
+};
+
+window.updateItemQty = function(delta) {
+  if (!_currentProduct) return;
+  const cart = getCart();
+  const idx = cart.findIndex(i => i.id === _currentDocId && i.variant === _selectedVariantId && i.size === _selectedSize);
+  if (idx > -1) {
+    const newQty = (cart[idx].quantity || 1) + delta;
+    if (newQty <= 0) {
+      cart.splice(idx, 1);
+    } else {
+      cart[idx].quantity = newQty;
+    }
+    saveCart(cart);
+    updateActionPillsState();
   }
 };
 
@@ -1049,6 +1359,14 @@ function checkWishlist() {
   if (fab) {
     fab.classList.toggle('wishlisted', inW);
     fab.classList.toggle('active', inW);
+  }
+  const fabMobile = document.getElementById('wishlistFabMobile');
+  if (fabMobile) {
+    fabMobile.classList.toggle('wishlisted', inW);
+    fabMobile.classList.toggle('active', inW);
+    fabMobile.innerHTML = inW
+      ? '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>'
+      : '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
   }
 }
 
@@ -1064,6 +1382,157 @@ window.toggleWishlist = function() {
   window.CCWishlist.toggle(product);
   checkWishlist();
 };
+
+// ── Mobile PDP Sync and Tab Controls ──
+window.switchMobileTab = function(tab) {
+  document.querySelectorAll('.cc-tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tab === tab);
+  });
+  document.querySelectorAll('.cc-tab-content').forEach(content => {
+    const targetId = `tabContent${tab.charAt(0).toUpperCase() + tab.slice(1)}`;
+    content.classList.toggle('active', content.id === targetId);
+    content.classList.toggle('hidden', content.id !== targetId);
+  });
+};
+
+window.toggleRelatedWishlist = function(event, id) {
+  event.preventDefault();
+  event.stopPropagation();
+  if (!window.CCWishlist) return;
+  
+  const btn = event.currentTarget;
+  const wasSaved = btn.querySelector('svg').getAttribute('fill') === 'currentColor';
+  
+  const p = { id };
+  window.CCWishlist.toggle(p);
+  
+  const svg = btn.querySelector('svg');
+  if (wasSaved) {
+    svg.setAttribute('fill', 'none');
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+    showToast('Removed from wishlist');
+  } else {
+    svg.setAttribute('fill', 'currentColor');
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+    showToast('Saved to wishlist');
+  }
+  
+  checkWishlist();
+};
+
+function syncMobilePDP() {
+  if (window.innerWidth >= 768) return;
+  if (!_currentProduct) return;
+
+  const variants = normalizeVariants(_currentProduct);
+  const activeVariant = variants.find(v => v.id === _selectedVariantId) || variants[0] || null;
+  const price = Number(activeVariant?.price || _currentProduct.price || 0);
+  const oldPrice = Number(_currentProduct.oldPrice || _currentProduct.compareAtPrice || _currentProduct.mrp || (price ? Math.ceil(price * 1.28) : 0));
+
+  // Category
+  const catEl = document.getElementById('productCategoryMobile');
+  if (catEl) catEl.textContent = _currentProduct.category || CATEGORY_LABELS[_currentProduct.categorySlug] || 'Earrings';
+
+  // Name
+  const nameEl = document.getElementById('productNameMobile');
+  if (nameEl) nameEl.textContent = _currentProduct.name || '';
+
+  const colNameMobile = document.getElementById('selectedColorNameMobile');
+  if (colNameMobile) {
+    colNameMobile.textContent = activeVariant?.color || '';
+  }
+
+  // Prices
+  const priceEl = document.getElementById('productPriceMobile');
+  if (priceEl) priceEl.textContent = formatPrice(price);
+
+  const oldPriceEl = document.getElementById('productOldPriceMobile');
+  if (oldPriceEl) {
+    if (oldPrice > price) {
+      oldPriceEl.textContent = formatPrice(oldPrice);
+      oldPriceEl.style.display = '';
+    } else {
+      oldPriceEl.style.display = 'none';
+    }
+  }
+
+  // Description
+  const descEl = document.getElementById('descriptionBlockMobile');
+  if (descEl) {
+    const desc = _currentProduct.shortDescription || _currentProduct.description || '';
+    descEl.innerHTML = `<p class="text-on-surface-variant leading-relaxed text-[15px]">${desc}</p>`;
+  }
+
+  // Gallery Container Mobile
+  const galDest = document.getElementById('galleryContainerMobile');
+  if (galDest && _galleryImages.length > 0) {
+    galDest.innerHTML = _galleryImages.map((img, i) =>
+      `<div class="snap-center shrink-0 w-full h-full relative flex items-center justify-center bg-gray-50">
+        <img class="w-full h-full object-cover" src="${img.src}" alt="${_currentProduct?.name || ''} - ${img.label}" loading="${i === 0 ? 'eager' : 'lazy'}" />
+      </div>`
+    ).join('');
+
+    const dotsDest = document.getElementById('galleryDotsMobile');
+    if (dotsDest) {
+      dotsDest.innerHTML = _galleryImages.map((_, i) =>
+        `<button class="gallery-dot ${i === _selectedGalleryIndex ? 'active' : ''}" data-dot-idx="${i}" onclick="selectMobileGalleryImage(${i})"></button>`
+      ).join('');
+    }
+
+    if (!galDest._hasScrollListener) {
+      galDest._hasScrollListener = true;
+      let scrollTimeout;
+      galDest.addEventListener('scroll', () => {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+          const w = galDest.offsetWidth;
+          if (w > 0) {
+            const idx = Math.round(galDest.scrollLeft / w);
+            _selectedGalleryIndex = idx;
+            const dots = dotsDest.querySelectorAll('.gallery-dot');
+            dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+          }
+        }, 80);
+      }, { passive: true });
+    }
+  }
+
+  // Tabs syncing (Specs and Shipping)
+  const specsDest = document.getElementById('productDetailsContentMobile');
+  const specsSrc = document.getElementById('productDetailsContent');
+  if (specsDest && specsSrc) specsDest.innerHTML = specsSrc.innerHTML;
+
+  const shipDest = document.getElementById('shippingContentMobile');
+  const shipSrc = document.getElementById('shippingContent');
+  if (shipDest && shipSrc) shipDest.innerHTML = shipSrc.innerHTML;
+
+  // Options Mobile
+  const colSrc = document.getElementById('colorOptions');
+  const colDest = document.getElementById('colorOptionsMobile');
+  const colSel = document.getElementById('colorSelectorMobile');
+  if (colSel && colSrc && colDest) {
+    colSel.classList.toggle('hidden', document.getElementById('colorSelector').classList.contains('hidden'));
+    colDest.innerHTML = colSrc.innerHTML;
+  }
+
+  const sizeSrc = document.getElementById('sizeOptions');
+  const sizeDest = document.getElementById('sizeOptionsMobile');
+  const sizeSel = document.getElementById('sizeSelectorMobile');
+  if (sizeSel && sizeSrc && sizeDest) {
+    sizeSel.classList.toggle('hidden', document.getElementById('sizeSelector').classList.contains('hidden'));
+    sizeDest.innerHTML = sizeSrc.innerHTML;
+  }
+
+  // Stock mobile
+  const stockSrc = document.getElementById('stockBadge');
+  const stockDest = document.getElementById('stockStatusMobile');
+  if (stockSrc && stockDest) {
+    stockDest.innerHTML = stockSrc.outerHTML;
+  }
+
+  // Update sticky bottom switcher state
+  updateActionPillsState();
+}
 
 // ── Drawer ──
 let drawer, drawerOverlay;
@@ -1215,13 +1684,68 @@ async function loadRelatedProducts(currentProductId) {
         </a>`;
       }).join('');
       section.classList.remove('hidden');
+
+      // Render mobile related products
+      const mobileContainer = document.getElementById('relatedProductsMobile');
+      const mobileSection = document.getElementById('relatedSectionMobile');
+      if (mobileContainer && mobileSection) {
+        mobileContainer.innerHTML = related.slice(0, 4).map(p => {
+          const img = p.images?.productImage || p.image || p.imageUrl || '';
+          const pUrl = `product.html?id=${p._id}`;
+          const wl = getWishlist();
+          const saved = wl.includes(p._id);
+          const hasDiscount = p.oldPrice && Number(p.oldPrice) > Number(p.price);
+          const oldPriceVal = Number(p.oldPrice || p.compareAtPrice || p.mrp || (p.price ? Math.ceil(Number(p.price) * 1.28) : 0));
+          return `
+            <div class="snap-start shrink-0 mobile-related-card" style="width: calc(72vw); scroll-snap-align: start;">
+              <div class="img-frame">
+                <a href="${pUrl}">
+                  ${isUsableUrl(img) ? `<img class="w-full h-full object-cover" src="${img}" alt="${p.name || ''}" loading="lazy" />` : `<div class="w-full h-full flex items-center justify-center bg-gray-100">🌸</div>`}
+                </a>
+                <button class="wish-btn" onclick="toggleRelatedWishlist(event, '${p._id}')" data-wish-id="${p._id}">
+                  ${saved 
+                    ? '<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>' 
+                    : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>'}
+                </button>
+              </div>
+              <div class="info">
+                <h4 class="name"><a href="${pUrl}">${p.name || 'Product'}</a></h4>
+                <div class="price-row">
+                  <span>${formatPrice(p.price)}</span>
+                  ${hasDiscount || oldPriceVal > p.price ? `<span class="old-price">${formatPrice(oldPriceVal)}</span>` : ''}
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+        mobileSection.classList.remove('hidden');
+      }
     } else {
       section.classList.add('hidden');
+      const mobileSection = document.getElementById('relatedSectionMobile');
+      if (mobileSection) mobileSection.classList.add('hidden');
     }
   } catch (e) {
     section.classList.add('hidden');
   }
 }
+
+window.toggleMobileFooterAccordion = function(btn) {
+  const item = btn.parentElement;
+  const content = item.querySelector('.accordion-content');
+  const chevron = btn.querySelector('.chevron-icon');
+  const isOpen = item.classList.contains('accordion-open');
+  
+  if (isOpen) {
+    item.classList.remove('accordion-open');
+    content.style.maxHeight = '0px';
+    chevron.style.transform = 'rotate(0deg)';
+  } else {
+    item.classList.add('accordion-open');
+    content.style.maxHeight = content.scrollHeight + 'px';
+    chevron.style.transform = 'rotate(180deg)';
+  }
+};
 
 // ── Render site config (CMS-driven) — ALL icons are inline SVGs, NEVER material font names ──
 function renderSiteConfig() {
@@ -1280,6 +1804,26 @@ function renderSiteConfig() {
       </div>
     </div>`
   ).join('');
+
+  // Mobile Footer Accordion
+  const fm = document.getElementById('footerAccordionMobile');
+  if (fm) {
+    fm.innerHTML = SITE_CONFIG.footerNav.map(group =>
+      `<div class="accordion-item border-b border-[#8e4559]/20">
+        <button class="w-full py-5 flex justify-between items-center text-left" onclick="toggleMobileFooterAccordion(this)">
+          <span class="text-sm font-semibold tracking-wider text-[#8e4559] uppercase" style="font-family: 'Jost', sans-serif;">${group.title}</span>
+          <svg class="chevron-icon transition-transform duration-300" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8e4559" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="accordion-content max-h-0 overflow-hidden transition-all duration-300">
+          <ul class="pb-5 flex flex-col gap-3 text-xs text-[#8e4559]/80">
+            ${group.links.map(l => `<li><a class="hover:underline" href="${l.href}">${l.label}</a></li>`).join('')}
+          </ul>
+        </div>
+      </div>`
+    ).join('');
+  }
+  const fyMobile = document.getElementById('footerYearMobile');
+  if (fyMobile) fyMobile.textContent = new Date().getFullYear();
 
   // Drawer nav
   const navItems = SITE_CONFIG.navigation.map(n => `<a href="${n.href}" class="font-jost text-on-surface hover:text-primary transition-colors">${n.label}</a>`);

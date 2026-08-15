@@ -90,7 +90,8 @@
   .active-drawer { transform: translateX(0) !important; }
   .safe-area-bottom { padding-bottom: env(safe-area-inset-bottom); }
   .luxury-shadow { box-shadow: 0 8px 30px rgba(181, 101, 122, 0.08); }
-  body { min-height: max(884px, 100dvh); }
+  /* Allow natural document height so footer sits at the end of content */
+  body { min-height: 0; }
   .material-symbols-outlined {
     font-family: 'Material Symbols Outlined';
     font-weight: normal; font-style: normal;
@@ -120,6 +121,17 @@
     padding: 48px 24px; font-family: 'Inter', sans-serif;
     color: #6B4A58; background: #FDF2F5;
   }
+
+  /* Override residual bottom spacing so footer sits at document end */
+  html, body { height: auto !important; min-height: 0 !important; }
+  main.px-margin-horizontal { padding-bottom: 0 !important; }
+  footer.cc-site-footer { padding-bottom: 20px !important; margin-bottom: 0 !important; }
+  .cc-bottom-bar, nav.cc-bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 120 !important; }
+  /* Ensure footer always sits at the bottom when content is short */
+  html, body { height: 100% !important; }
+  body { display: flex !important; flex-direction: column !important; }
+  main { flex: 1 0 auto !important; }
+  footer.cc-site-footer { margin-top: auto !important; }
 </style>
 <link href="cc-material-icons.css" rel="stylesheet"/>
 <link href="cc-global-header.css" rel="stylesheet"/>
@@ -157,7 +169,7 @@
 </nav>
 </div>
 </aside>
-<main class="px-margin-horizontal pb-[120px]">
+<main class="px-margin-horizontal pb-[88px]">
 <!-- Breadcrumb & Results -->
 <div class="mt-margin-horizontal flex flex-col gap-2">
 <nav class="flex items-center gap-2 text-menu-text font-label-md text-label-md uppercase tracking-wider">
@@ -626,5 +638,58 @@
 </script>
 <script defer="" src="cc-material-icons.js"></script>
 <script defer="" src="cc-global-header.js"></script>
+<script>
+  // Runtime corrective fixes to remove residual bottom whitespace on mobile pages
+  (function () {
+    function removeExtraBottomSpace() {
+      try {
+        document.documentElement.style.height = 'auto';
+        document.documentElement.style.minHeight = '0';
+        document.body.style.minHeight = '0';
+        document.body.style.paddingBottom = '0';
+        document.body.style.marginBottom = '0';
+        const main = document.querySelector('main');
+        if (main) {
+          main.style.paddingBottom = '0';
+          main.style.minHeight = 'auto';
+        }
+        const footer = document.querySelector('footer.cc-site-footer');
+        if (footer) {
+          footer.style.paddingBottom = '20px';
+          footer.style.marginBottom = '0';
+        }
+
+        // Remove inline or computed min-height:100dvh from elements that force page height
+        document.querySelectorAll('*').forEach(el => {
+          const cs = window.getComputedStyle(el);
+          if (cs && (cs.minHeight === '100dvh' || cs.minHeight === '100vh' || cs.height === '100dvh' || cs.height === '100vh')) {
+            el.style.minHeight = '0';
+            el.style.height = 'auto';
+          }
+        });
+
+        // Ensure bottom bar overlays content
+        const bottomBars = document.querySelectorAll('.cc-bottom-bar, nav.cc-bottom-bar, .cc-bottom-bar');
+        bottomBars.forEach(b => {
+          b.style.position = 'fixed';
+          b.style.bottom = '0';
+          b.style.left = '0';
+          b.style.right = '0';
+          b.style.zIndex = '1200';
+        });
+      } catch (err) {
+        console.warn('bottom-space-fix failed', err);
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', removeExtraBottomSpace);
+    } else {
+      removeExtraBottomSpace();
+    }
+    // Re-run after a short delay in case other scripts modify layout
+    setTimeout(removeExtraBottomSpace, 800);
+  })();
+</script>
 </body>
 </html>

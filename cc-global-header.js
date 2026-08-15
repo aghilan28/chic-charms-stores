@@ -145,7 +145,7 @@
           <a href="index.html" class="logo" aria-label="Chic Charms home">Chic<span>Charms</span></a>
 
           <div class="mobile-commerce-actions" aria-label="Mobile shopping actions">
-            <a href="wishlist.html" class="mobile-commerce-icon" aria-label="Wishlist">${iconHeart}<span class="wishlist-count mobile-cart-count" style="display:none"></span></a>
+            <a href="wishlist.html" class="mobile-commerce-icon" aria-label="Wishlist">${iconHeart}<span class="wishlist-count" style="display:none"></span></a>
           </div>
 
           <div class="nav-actions" id="navActions" aria-label="Account actions">
