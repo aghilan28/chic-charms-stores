@@ -1338,19 +1338,23 @@ function renderProduct(product, docId) {
 // ── Cart ──
 window.handleAddToCart = function() {
   if (!_currentProduct) return;
-  const cart = getCart();
   const price = Number(_currentProduct.price) || 0;
-  const image = _currentProduct.images?.productImage || _currentProduct.image || '';
-  const item = { id: _currentDocId, name: _currentProduct.name, price, image, variant: _selectedVariantId, size: _selectedSize, quantity: 1 };
-  const idx = cart.findIndex(i => i.id === item.id && (i.variant || '') === (item.variant || '') && (i.size || '') === (item.size || ''));
-  if (idx > -1) cart[idx].quantity = (cart[idx].quantity || 1) + 1;
-  else cart.push(item);
-  saveCart(cart);
-  showToast('Added to cart!');
-  updateActionPillsState();
   if (_currentDocId && _currentDocId !== 'demo-product' && window.addToCartWithId) {
-    window.addToCartWithId(_currentProduct.name, price, _currentDocId);
+    window.addToCartWithId(_currentProduct.name, price, _currentDocId, _selectedVariantId, _selectedSize);
+  } else {
+    // Fallback if script.js not fully loaded or demo product
+    const cart = getCart();
+    const image = _currentProduct.images?.productImage || _currentProduct.image || '';
+    const item = { id: _currentDocId || 'demo-product', productId: _currentDocId || 'demo-product', name: _currentProduct.name, price, image, variant: _selectedVariantId, size: _selectedSize, quantity: 1 };
+    const idx = cart.findIndex(i => (i.id === item.id || i.productId === item.id) && (i.variant || '') === (item.variant || '') && (i.size || '') === (item.size || ''));
+    if (idx > -1) cart[idx].quantity = (cart[idx].quantity || 1) + 1;
+    else cart.push(item);
+    saveCart(cart);
+    showToast('Added to cart!');
+    window.dispatchEvent(new Event('cartUpdated'));
   }
+  // Delayed state updates
+  setTimeout(() => { updateActionPillsState(); }, 500);
 };
 
 window.updateActionPillsState = function() {

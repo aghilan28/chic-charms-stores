@@ -142,7 +142,7 @@
      Accepts an optional `cardStock` value that was baked into the button at render time.
      This gives an immediate local guard (no Firestore round-trip needed) so EVERY
      product card uses its OWN stock, never a previous product's value.          */
-  window.addToCart = function (productName, price, productId, cardStock) {
+  window.addToCart = function (productName, price, productId, cardStock, variant, size) {
     /* Local guard: if the card already told us stock == 0, block immediately */
     if (cardStock !== undefined && Number(cardStock) <= 0) {
       alert('Product is out of stock');
@@ -150,27 +150,38 @@
     }
     /* If we have a productId, do a live Firestore check (also re-guards quantity) */
     if (productId) {
-      window.addToCartWithId(productName, price, productId);
+      window.addToCartWithId(productName, price, productId, variant, size);
       return;
     }
-    /* No productId - add directly (stock validated at checkout) */
-    const cart     = JSON.parse(localStorage.getItem('cart')) || [];
-    const existing = cart.find(function (item) { return item.name === productName; });
+    /* No productId - add directly */
+    var cart = JSON.parse(localStorage.getItem('cart')) || [];
+    var existing = cart.find(function (item) {
+      return item.name === productName && 
+             (item.variant || '') === (variant || '') && 
+             (item.size || '') === (size || '');
+    });
     if (existing) {
       existing.quantity += 1;
     } else {
-      cart.push({ name: productName, price: Number(price), quantity: 1 });
+      cart.push({
+        id: null,
+        productId: null,
+        name: productName,
+        price: Number(price),
+        quantity: 1,
+        variant: variant || "Gold Finish",
+        size: size || null
+      });
     }
     localStorage.setItem('cart', JSON.stringify(cart));
+    window.dispatchEvent(new Event('cartUpdated'));
     showCartToast(productName, price, existing);
   };
 
-  /*  addToCartWithId (name + price + productId) 
-     Used by product.html and index.html cards that have a Firestore doc ID.
-     Validates live stock before adding; shows inline message if at limit.
-   */
-  window.addToCartWithId = function (productName, price, productId) {
-    /* Fetch live stock, then decide */
+  window.addToCartWithId = function (productName, price, productId, variant, size) {
+    variant = variant || "Gold Finish";
+    size = size || null;
+
     var FIREBASE_CONFIG = {
       apiKey:    "AIzaSyA5Bh77_4HE3yQF0hi5ddvbFLZC7rEerxg",
       projectId: "chic-charms-store"
@@ -184,31 +195,33 @@
     fetch(firestoreUrl)
       .then(function (res) { return res.json(); })
       .then(function (data) {
-        // P1+P5: Resilient REST stock extraction - mirrors the SDK normalization.
-        // Handles: integerValue (string), doubleValue, stringValue, missing field, wrong case.
         var stockField = data && data.fields
-          ? (data.fields.stock || data.fields.Stock || null)  // P1b: 'Stock' case fallback
+          ? (data.fields.stock || data.fields.Stock || null)
           : null;
         var rawVal  = stockField
           ? (stockField.integerValue ?? stockField.doubleValue ?? stockField.stringValue ?? null)
-          : null; // P1a: missing field -> null, NOT 999 (was wrongly permissive before)
+          : null;
         var parsed  = Number(rawVal ?? 0);
-        var stockVal = isNaN(parsed) ? 0 : parsed;  // P5: NaN failsafe
+        var stockVal = isNaN(parsed) ? 0 : parsed;
 
         console.log('[ChicCharms] addToCartWithId live stock check:', stockVal, 'for', productName);
 
-        /* P6: Hard gate - stock must be > 0 */
         if (stockVal <= 0) {
           alert('Product is out of stock');
           return;
         }
 
-        var cart     = JSON.parse(localStorage.getItem('cart')) || [];
-        var existing = cart.find(function (item) { return item.name === productName; });
-        var currentQty = existing ? existing.quantity : 0;
+        var cart = JSON.parse(localStorage.getItem('cart')) || [];
+        
+        // Sum total quantity of this product in cart to compare against stock limit
+        var currentQtyInCart = cart.reduce(function (sum, item) {
+          if (item.productId === productId || item.id === productId) {
+            return sum + (item.quantity || 1);
+          }
+          return sum;
+        }, 0);
 
-        if (currentQty >= stockVal) {
-          /*  Show generic "out of stock" toast - never reveal stock numbers  */
+        if (currentQtyInCart >= stockVal) {
           var cartToast = document.getElementById('cartToast');
           if (cartToast) {
             if (window._toastTimer) clearTimeout(window._toastTimer);
@@ -221,27 +234,52 @@
           return;
         }
 
-        /* Stock OK - add to cart */
+        var existing = cart.find(function (item) {
+          return (item.productId === productId || item.id === productId) && 
+                 (item.variant || '') === (variant || '') && 
+                 (item.size || '') === (size || '');
+        });
+
         if (existing) {
           existing.quantity += 1;
-          if (!existing.productId) existing.productId = productId;
         } else {
-          cart.push({ name: productName, price: Number(price), quantity: 1, productId: productId });
+          cart.push({
+            id: productId,
+            productId: productId,
+            name: productName,
+            price: Number(price),
+            quantity: 1,
+            variant: variant,
+            size: size
+          });
         }
         localStorage.setItem('cart', JSON.stringify(cart));
+        window.dispatchEvent(new Event('cartUpdated'));
         showCartToast(productName, price, existing);
       })
       .catch(function () {
         /* Network failure - add anyway, checkout will re-validate */
-        var cart     = JSON.parse(localStorage.getItem('cart')) || [];
-        var existing = cart.find(function (item) { return item.name === productName; });
+        var cart = JSON.parse(localStorage.getItem('cart')) || [];
+        var existing = cart.find(function (item) {
+          return (item.productId === productId || item.id === productId) && 
+                 (item.variant || '') === (variant || '') && 
+                 (item.size || '') === (size || '');
+        });
         if (existing) {
           existing.quantity += 1;
-          if (!existing.productId) existing.productId = productId;
         } else {
-          cart.push({ name: productName, price: Number(price), quantity: 1, productId: productId });
+          cart.push({
+            id: productId,
+            productId: productId,
+            name: productName,
+            price: Number(price),
+            quantity: 1,
+            variant: variant,
+            size: size
+          });
         }
         localStorage.setItem('cart', JSON.stringify(cart));
+        window.dispatchEvent(new Event('cartUpdated'));
         showCartToast(productName, price, existing);
       });
   };

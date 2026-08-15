@@ -556,59 +556,101 @@
 
   .ccap-empty {
     display: none;
-    margin: 0 24px 48px;
-    padding: 56px 24px;
-    border: 1px solid var(--ccap-outline-variant);
-    border-radius: 8px;
-    background: linear-gradient(135deg, #fffbff 0%, #fcf1f1 100%);
+    margin: 0;
+    padding: 80px 24px;
+    background: transparent !important;
+    border: none !important;
     text-align: center;
+    box-shadow: none !important;
   }
 
   .ccap-empty.is-visible { display: block; }
 
-  .ccap-empty-symbol {
-    width: 72px;
-    height: 72px;
-    margin: 0 auto 18px;
-    border-radius: 999px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #ffd9e0;
-    color: var(--ccap-primary);
+  .ccap-empty-badge-outer {
+    width: 200px !important;
+    height: 200px !important;
+    margin: 0 auto 32px !important;
+    border-radius: 50% !important;
+    background: rgba(181, 101, 122, 0.04) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    animation: ccapPulse 3s infinite ease-in-out !important;
+  }
+
+  .ccap-empty-badge-middle {
+    width: 160px !important;
+    height: 160px !important;
+    border-radius: 50% !important;
+    background: rgba(181, 101, 122, 0.08) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .ccap-empty-badge-inner {
+    width: 120px !important;
+    height: 120px !important;
+    border-radius: 50% !important;
+    background: rgba(181, 101, 122, 0.14) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .ccap-empty-bag-icon {
+    width: 48px !important;
+    height: 48px !important;
+    color: var(--ccap-approved-rose) !important;
+  }
+
+  @keyframes ccapPulse {
+    0% { transform: scale(1); opacity: 0.95; }
+    50% { transform: scale(1.03); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.95; }
   }
 
   .ccap-empty h2 {
-    margin: 0 0 8px;
-    color: var(--ccap-charcoal);
-    font-family: "Playfair Display", Georgia, serif;
-    font-size: 28px;
-    line-height: 36px;
-    font-weight: 500;
+    margin: 0 0 12px !important;
+    color: #1F1A1B !important;
+    font-family: "Playfair Display", Georgia, serif !important;
+    font-size: 26px !important;
+    line-height: 34px !important;
+    font-weight: 500 !important;
   }
 
   .ccap-empty p {
-    margin: 0 0 24px;
-    color: var(--ccap-muted);
-    font-size: 15px;
-    line-height: 24px;
+    margin: 0 0 32px !important;
+    color: #8A8080 !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-size: 14px !important;
+    line-height: 22px !important;
+    font-weight: 500;
+    max-width: 280px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
 
   .ccap-empty a {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 48px;
-    padding: 14px 20px;
-    border-radius: 8px;
-    background: var(--ccap-approved-rose);
-    color: #fff;
-    text-decoration: none;
-    font-size: 13px;
-    line-height: 20px;
-    font-weight: 800;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 999px !important;
+    background: var(--ccap-approved-rose) !important;
+    color: #fff !important;
+    padding: 12px 32px !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-size: 13px !important;
+    line-height: 20px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em !important;
+    text-transform: uppercase !important;
+    text-decoration: none !important;
+    box-shadow: 0 4px 12px rgba(181, 101, 122, 0.2) !important;
+    transition: transform 0.15s ease, background 0.15s ease !important;
+  }
+  .ccap-empty a:active {
+    transform: scale(0.96) !important;
   }
 
   .ccap-hide-when-empty.is-empty,

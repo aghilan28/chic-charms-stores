@@ -431,6 +431,7 @@
     });
 
     window.addEventListener("storage", renderApprovedCart);
+    window.addEventListener("cartUpdated", renderApprovedCart);
     window.addEventListener("resize", renderApprovedCart, { passive: true });
   }
 

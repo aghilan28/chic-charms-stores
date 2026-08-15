@@ -433,17 +433,21 @@
 <div aria-label="Approved mobile cart" id="ccApprovedCartMobile">
 
 
-<section class="ccap-page-title">
+<section class="ccap-page-title ccap-hide-when-empty">
 <h1>Your Selection</h1>
 <p id="ccapTitleCount">Your cart is ready for a new favourite.</p>
 </section>
 <section aria-live="polite" class="ccap-empty" id="ccapEmpty">
-<div class="ccap-empty-symbol">
-<svg aria-hidden="true" class="ccap-svg" viewbox="0 0 24 24"><path d="M6 8h12l-1 12H7L6 8Z"></path><path d="M9 8a3 3 0 0 1 6 0"></path></svg>
-</div>
-<h2>Your cart is empty</h2>
-<p>Looks like you haven't added anything yet. Find your next glow-up below.</p>
-<a href="index.html#bestsellers">Browse Best Sellers</a>
+  <div class="ccap-empty-badge-outer">
+    <div class="ccap-empty-badge-middle">
+      <div class="ccap-empty-badge-inner">
+        <svg viewBox="0 0 24 24" fill="currentColor" class="ccap-empty-bag-icon" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4H6z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      </div>
+    </div>
+  </div>
+  <h2>Your Cart Is Empty !</h2>
+  <p>Looks like you haven't added anything yet. Find your next glow-up below.</p>
+  <a href="index.html#bestsellers">Browse Best Sellers</a>
 </section>
 <section aria-label="Cart items" class="ccap-section ccap-hide-when-empty">
 <div class="ccap-items" id="ccapItems"></div>
