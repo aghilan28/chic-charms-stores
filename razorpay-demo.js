@@ -344,7 +344,9 @@ window.RazorpayDemo = {
 
     if (!config.keyId || config.keyId === 'rzp_test_xxxxxxxxxxxx') {
       try {
-        const FUNCTIONS_BASE = '/api';
+        const FUNCTIONS_BASE = window.location.hostname.includes('vercel.app')
+          ? '/api'
+          : 'https://chic-charms-stores.vercel.app/api';
         const resp = await fetch(`${FUNCTIONS_BASE}/razorpayConfig`);
         if (resp.ok) {
           const data = await resp.json();
@@ -436,7 +438,9 @@ async function rzpDemoInit() {
   try {
     const config = window.RAZORPAY_DEMO_CONFIG;
     if (!config.keyId || config.keyId === 'rzp_test_xxxxxxxxxxxx') {
-      const FUNCTIONS_BASE = '/api';
+      const FUNCTIONS_BASE = window.location.hostname.includes('vercel.app')
+        ? '/api'
+        : 'https://chic-charms-stores.vercel.app/api';
       const resp = await fetch(`${FUNCTIONS_BASE}/razorpayConfig`);
       if (resp.ok) {
         const data = await resp.json();
