@@ -62,35 +62,38 @@ async function sendTelegramMessage(message) {
 
 function formatOrderMessage(order) {
   const orderRef = escapeHTML(order.orderRef || order.orderId || 'Unknown');
-  const customerName = escapeHTML(order.customerInfo?.fullName || order.deliveryInfo?.name || 'N/A');
+  const customerName = escapeHTML(order.customerInfo?.fullName || order.customerName || order.deliveryInfo?.name || 'N/A');
   
   // Format phone number
-  let phone = order.customerInfo?.phone || order.deliveryInfo?.phone || 'N/A';
+  let phone = order.customerInfo?.phone || order.phone || order.deliveryInfo?.phone || 'N/A';
   if (phone !== 'N/A') {
     phone = escapeHTML(String(phone).replace(/^(\+91|91)/, '').trim());
     phone = `+91 ${phone}`;
   }
 
-  // Format cart items
-  const items = (order.cartItems || []).map(item => {
+  // Format cart items (supports cartItems and items)
+  const rawItems = order.cartItems || order.items || [];
+  const items = rawItems.map(item => {
     const name = escapeHTML(item.name || 'Product');
-    const qty = item.quantity || 1;
+    const qty = item.quantity || item.qty || 1;
     const price = item.price || 0;
     return `• <b>${name}</b>\n  Qty: ${qty} × ₹${price}`;
   }).join('\n\n');
 
-  // Format delivery info
+  // Format delivery info (supports deliveryInfo and address)
   let deliveryStr = 'N/A';
   if (order.couponInfo?.couponType === 'campus') {
     const dept = escapeHTML(order.studentInfo?.dept || '');
     const year = escapeHTML(order.studentInfo?.year || '');
     deliveryStr = `Campus Delivery (CIT)\nStudent: ${customerName}\nDetails: ${[year, dept].filter(Boolean).join(' · ')}`;
-  } else if (order.deliveryInfo) {
-    const addr = escapeHTML(order.deliveryInfo.address || '');
+  } else if (order.deliveryInfo && (order.deliveryInfo.address || order.deliveryInfo.addressLine1)) {
+    const addr = escapeHTML(order.deliveryInfo.address || order.deliveryInfo.addressLine1 || '');
     const city = escapeHTML(order.deliveryInfo.city || '');
     const state = escapeHTML(order.deliveryInfo.state || '');
     const pin = escapeHTML(order.deliveryInfo.pincode || '');
     deliveryStr = `${addr}, ${city}, ${state} - ${pin}`;
+  } else if (order.address) {
+    deliveryStr = escapeHTML(order.address);
   }
 
   // Format order creation time
@@ -119,6 +122,8 @@ function formatOrderMessage(order) {
     paymentMethodStr = `Online (${paymentMethodStr.toUpperCase()})`;
   }
 
+  const totalAmount = order.total || order.totalAmount || 0;
+
   return `✨ <b>CHICCHARMS</b>
 ━━━━━━━━━━━━━━━━━━━━
 
@@ -136,7 +141,7 @@ ${items}
 
 ━━━━━━━━━━━━━━━━━━━━
 
-💰 <b>TOTAL: ₹${order.total || 0}</b>
+💰 <b>TOTAL: ₹${totalAmount}</b>
 
 💳 <b>PAYMENT</b>
 ${paymentMethodStr}

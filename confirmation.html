@@ -241,37 +241,41 @@
 <!-- ░░ CONFIRMATION PAGE ░░ -->
 <main aria-labelledby="confirm-heading" class="confirm-page">
 <div class="confirm-wrap">
-<div class="confirm-card">
-<div aria-hidden="true" class="confirm-icon">🎉</div>
-<span class="confirm-badge">✓ Order Confirmed</span>
-<h1 class="confirm-headline" id="confirm-heading">
-          Order placed<br/><em>successfully!</em>
-</h1>
-<p class="confirm-sub">
-          Thank you for shopping with Chic Charms! 🌸<br/>
-          Your order will be delivered soon. We'll confirm via WhatsApp.
-        </p>
-<!-- Order details (populated by JS) -->
-<div class="confirm-details" id="confirmDetails" style="display:none;">
-<h3>📦 Order Details</h3>
-<div id="confirmDetailRows"></div>
-</div>
-<!-- Items ordered (populated by JS) -->
-<div class="confirm-items" id="confirmItems" style="display:none;">
-<h3>Items in this order</h3>
-<div id="confirmItemRows"></div>
-</div>
-<!-- Delivery estimate -->
-<div class="delivery-estimate">
-<span aria-hidden="true" class="delivery-estimate-icon">🚚</span>
-<p>Estimated delivery: <strong>3–5 business days</strong> across India.<br/>
-             COD — pay when your parcel arrives!</p>
-</div>
-<!-- CTA buttons -->
-<div class="confirm-actions">
-<a class="btn-continue" href="index.html">Continue Shopping →</a>
-<a class="btn-track" href="index.html#bestsellers">Browse More Styles</a>
-</div>
+<div class="confirm-card" style="box-shadow: 0 10px 40px rgba(0,0,0,0.04); border-radius: 28px; padding: 48px 36px; border: 1px solid rgba(0,0,0,0.05);">
+  <!-- Circular outline checkmark matching brand primary burgundy -->
+  <div style="display:flex; justify-content:center; margin-bottom:24px;">
+    <svg width="84" height="84" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="26" cy="26" r="23" stroke="#8e4559" stroke-width="4"/>
+      <path d="M16 26L23 33L37 19" stroke="#8e4559" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  
+  <h1 class="confirm-headline" id="confirm-heading" style="font-size: 26px; font-weight: 700; margin-bottom: 10px; font-family: var(--font-body); letter-spacing: -0.01em;">Order Confirmed !</h1>
+  <p class="confirm-sub" style="font-size: 14px; color: #6b7280; line-height: 1.6; margin-bottom: 24px;">
+    Your order has been placed successfully. <a href="account.html" style="color: #8e4559; font-weight: 600; text-decoration: none; border-bottom: 1.5px solid rgba(142,69,89,0.2); transition: border 0.2s;">Order History</a>
+  </p>
+
+  <!-- Delivery estimate styled in a light grey border card -->
+  <div class="delivery-estimate" style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 16px; padding: 16px 20px; margin-bottom: 28px; display: flex; justify-content: center; align-items: center;">
+    <p style="font-size: 13.5px; color: #4b5563; margin: 0; font-family: var(--font-body); width: 100%; text-align: center;">Get delivery by <strong id="dynamicDeliveryDates" style="color: #111827; font-weight: 700;">Mon, 06 Feb - Thu, 09 Feb</strong></p>
+  </div>
+
+  <!-- Order details (populated by JS) -->
+  <div class="confirm-details" id="confirmDetails" style="display:none; border-radius: 16px; background: #FAF7F5; border: 1px solid rgba(0,0,0,0.02); padding: 20px 22px;">
+    <h3 style="font-family: var(--font-body); font-weight: 700; color: #111827; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 12px; margin-bottom: 12px;">📦 Order Details</h3>
+    <div id="confirmDetailRows"></div>
+  </div>
+
+  <!-- Items ordered (populated by JS) -->
+  <div class="confirm-items" id="confirmItems" style="display:none; border-radius: 16px; border: 1px solid rgba(0,0,0,0.06); padding: 20px 22px;">
+    <h3 style="font-family: var(--font-body); font-weight: 700; color: #111827; border-bottom: 1px solid rgba(0,0,0,0.06); padding-bottom: 12px; margin-bottom: 12px;">Items in this order</h3>
+    <div id="confirmItemRows"></div>
+  </div>
+
+  <!-- CTA buttons -->
+  <div class="confirm-actions" style="margin-top: 32px; display: flex; justify-content: center;">
+    <a class="btn-continue" href="index.html" style="background: #8e4559; color: #fff; border-radius: 14px; padding: 16px 44px; font-weight: 600; font-size: 14.5px; box-shadow: 0 4px 16px rgba(142,69,89,0.22); text-decoration: none; display: inline-flex; align-items: center; justify-content: center; width: 100%; max-w: 280px; transition: all 0.25s ease;">Continue Shopping</a>
+  </div>
 </div>
 </div>
 </main>
@@ -317,6 +321,26 @@
           hamburger.setAttribute('aria-expanded', 'false');
         }
       });
+    }
+
+    // Calculate dynamic delivery estimate (3-5 days from now)
+    try {
+      const today = new Date();
+      const startDelivery = new Date();
+      startDelivery.setDate(today.getDate() + 3);
+      const endDelivery = new Date();
+      endDelivery.setDate(today.getDate() + 5);
+      
+      const options = { weekday: 'short', day: '2-digit', month: 'short' };
+      const startStr = startDelivery.toLocaleDateString('en-IN', options);
+      const endStr = endDelivery.toLocaleDateString('en-IN', options);
+      
+      const dateEl = document.getElementById('dynamicDeliveryDates');
+      if (dateEl) {
+        dateEl.textContent = `${startStr} - ${endStr}`;
+      }
+    } catch (e) {
+      console.error('Error setting delivery dates:', e);
     }
 
     // ── Helpers ──
