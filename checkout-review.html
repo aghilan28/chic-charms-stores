@@ -924,7 +924,30 @@ document.documentElement.classList.add('cc-loading');
 
   function renderSummary(cart, coupon) {
     const subtotal = cart.reduce((s, i) => s + Number(i.price || 0) * Number(i.quantity || 1), 0);
-    const shipping = (coupon && coupon.couponType === 'campus') ? 0 : (subtotal >= 399 ? 0 : 49);
+    // Determine in-campus eligibility from multiple sources (coupon object,
+    // explicit delivery-type flag, or legacy session objects). This makes the
+    // shipped page resilient when different pages write different session
+    // keys (local dev vs deployed backend behavior).
+    let isInCampus = false;
+    try {
+      if (coupon && coupon.couponType === 'campus') isInCampus = true;
+      const dt = localStorage.getItem('cc_delivery_type');
+      if (dt && dt === 'in_campus') isInCampus = true;
+      const alt = localStorage.getItem('ccDeliverySession') || localStorage.getItem('cc_delivery_session') || localStorage.getItem('cc_coupon_state');
+      if (alt) {
+        try {
+          const altObj = JSON.parse(alt);
+          if (altObj && (altObj.couponType === 'campus' || altObj.couponApplied === true || String(altObj.couponCode || '').toUpperCase() === 'CAMPUS')) {
+            isInCampus = true;
+          }
+        } catch (e) { /* ignore parse errors */ }
+      }
+    } catch (e) { /* ignore storage access errors */ }
+
+    // Debug info to help troubleshoot production vs local storage differences
+    try { console.debug('[checkout] coupon:', coupon, 'isInCampus:', isInCampus, 'cc_delivery_type:', localStorage.getItem('cc_delivery_type')); } catch (e) {}
+
+    const shipping = isInCampus ? 0 : (subtotal >= 399 ? 0 : 49);
     
     // NOTE: The 42% campus benefit is a combined value consisting of:
     // 1. A 20% cash discount directly off the subtotal of items.
