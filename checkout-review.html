@@ -1146,8 +1146,6 @@ document.documentElement.classList.add('cc-loading');
           internalOrderId: internalOrderId,
         },
         theme: { color: '#8e4559' },
-        callback_url: `${FUNCTIONS_BASE}/verifyPayment?orderId=${internalOrderId}&redirect_domain=${encodeURIComponent(window.location.origin)}`,
-        redirect:     true,
 
         /* ── Payment success callback ── */
         handler: function (response) {
@@ -1206,64 +1204,132 @@ document.documentElement.classList.add('cc-loading');
     return resp.json(); // { success, orderId }
   }
 
-  // Polling helper for pending orders saved to localStorage
-  async function pollPendingOrder() {
-    try {
-      const pending = localStorage.getItem('cc_pending_order');
-      if (!pending) return;
-      // Query backend order status
-      const resp = await fetch(`${FUNCTIONS_BASE}/orderStatus?orderId=${encodeURIComponent(pending)}`);
-      if (!resp.ok) return;
-      const js = await resp.json();
-      if (js && (js.status === 'paid' || js.paymentStatus === 'success')) {
-        // clear pending and redirect to confirmation
-        try { localStorage.removeItem('cc_pending_order'); } catch (e) {}
-        const dest = window.location.origin + '/confirmation.html?orderId=' + encodeURIComponent(pending);
-        window.location.href = dest;
-      }
-    } catch (e) { /* ignore */ }
-  }
-
-  // Run a stronger poll loop and show a debug panel so mobile QA can see
-  // pending order state if the client lost the Razorpay callback.
-  function debugPanelUpdate(data) {
+  function debugPanelUpdate(data, errorMsg) {
     try {
       let el = document.getElementById('ccDebugPanel');
       if (!el) {
         el = document.createElement('div');
         el.id = 'ccDebugPanel';
-        el.style.cssText = 'position:fixed;left:12px;right:12px;bottom:84px;background:rgba(0,0,0,0.75);color:#fff;padding:8px 12px;border-radius:12px;font-size:12px;z-index:9999;backdrop-filter:blur(6px);max-height:160px;overflow:auto;';
+        el.style.cssText = 'position:fixed;left:12px;right:12px;bottom:84px;background:rgba(0,0,0,0.85);color:#fff;padding:12px;border-radius:16px;font-size:12px;z-index:9999;backdrop-filter:blur(8px);box-shadow:0 8px 32px rgba(0,0,0,0.3);max-height:200px;overflow:auto;font-family:sans-serif;border:1px solid rgba(255,255,255,0.1);';
         document.body.appendChild(el);
       }
       const pending = localStorage.getItem('cc_pending_order');
-      const search = location.search || '';
-      el.innerHTML = `<div style="font-weight:700;margin-bottom:6px;">Debug — Pending Order: ${pending || '<i>none</i>'}</div>` +
-        `<div style="margin-bottom:6px;">URL: ${esc(search)}</div>` +
-        `<details style="color:#eee"><summary style="cursor:pointer">Last poll result (click)</summary><pre style="white-space:pre-wrap;margin-top:8px;color:#dcdcdc">${esc(JSON.stringify(data || {}, null, 2))}</pre></details>`;
+      if (!pending) {
+        el.style.display = 'none';
+        return;
+      }
+      el.style.display = 'block';
+      
+      let statusHtml = '';
+      if (errorMsg) {
+        statusHtml = `<span style="color:#ff6b6b;font-weight:700;">Error: ${esc(errorMsg)}</span>`;
+      } else if (data && (data.paymentStatus === 'failed' || data.status === 'failed')) {
+        statusHtml = `<span style="color:#ff6b6b;font-weight:700;background:rgba(255,107,107,0.15);padding:2px 6px;border-radius:4px;border:1px solid rgba(255,107,107,0.3);">❌ PAYMENT FAILED</span>`;
+      } else if (data && (data.status === 'paid' || data.paymentStatus === 'success')) {
+        statusHtml = `<span style="color:#51cf66;font-weight:700;">🟢 PAID / SUCCESS</span>`;
+      } else {
+        statusHtml = `<span style="color:#ffd43b;font-weight:700;">⏳ Checking Payment Status...</span>`;
+      }
+
+      el.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:6px;">
+          <span style="font-weight:700;color:#ffb1c3;">Pending Order Check</span>
+          <button id="ccManualCheckBtn" style="background:#8e4559;color:#fff;border:0;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;">Check Now</button>
+        </div>
+        <div style="margin-bottom:6px;"><b>Order ID:</b> #${esc(pending)}</div>
+        <div style="margin-bottom:8px;"><b>Status:</b> ${statusHtml}</div>
+        <details style="color:#bbb;font-size:11px;">
+          <summary style="cursor:pointer;outline:none;padding:2px 0;">Last response data (click)</summary>
+          <pre style="white-space:pre-wrap;margin-top:6px;color:#dcdcdc;background:rgba(0,0,0,0.3);padding:6px;border-radius:6px;font-family:monospace;font-size:10px;border:1px solid rgba(255,255,255,0.05);">${esc(JSON.stringify(data || {}, null, 2))}</pre>
+        </details>
+      `;
+
+      const btn = document.getElementById('ccManualCheckBtn');
+      if (btn) {
+        btn.onclick = async () => {
+          btn.disabled = true;
+          btn.textContent = 'Checking...';
+          await runSingleCheck();
+          btn.disabled = false;
+          btn.textContent = 'Check Now';
+        };
+      }
     } catch (e) { /* ignore DOM errors */ }
   }
 
+  let runSingleCheck = async () => {};
+
   (function(){
-    let attempts = 0, maxAttempts = 15;
-    async function loop() {
-      attempts++;
+    let attempts = 0;
+    let timerId = null;
+
+    async function checkStatus() {
+      const pending = localStorage.getItem('cc_pending_order');
+      if (!pending) {
+        debugPanelUpdate(null);
+        return false;
+      }
+      
       try {
-        const pending = localStorage.getItem('cc_pending_order');
-        if (!pending) { debugPanelUpdate({}); return; }
         const resp = await fetch(`${FUNCTIONS_BASE}/orderStatus?orderId=${encodeURIComponent(pending)}`);
-        let js = null;
-        if (resp && resp.ok) js = await resp.json();
+        if (!resp.ok) {
+          throw new Error(`HTTP ${resp.status}`);
+        }
+        const js = await resp.json();
         debugPanelUpdate(js);
+        
         if (js && (js.status === 'paid' || js.paymentStatus === 'success')) {
           try { localStorage.removeItem('cc_pending_order'); } catch (e) {}
           window.location.href = window.location.origin + '/confirmation.html?orderId=' + encodeURIComponent(pending);
-          return;
+          return true;
+        }
+        
+        if (js && (js.paymentStatus === 'failed' || js.status === 'failed')) {
+          return true;
         }
       } catch (e) {
-        debugPanelUpdate({ error: String(e) });
+        debugPanelUpdate(null, String(e.message || e));
       }
-      if (attempts < maxAttempts) setTimeout(loop, 2000);
+      return false;
     }
+
+    runSingleCheck = checkStatus;
+
+    function getNextDelay() {
+      if (attempts < 15) {
+        return 2000;
+      } else if (attempts < 39) {
+        return 5000;
+      } else {
+        return 15000;
+      }
+    }
+
+    async function loop() {
+      const pending = localStorage.getItem('cc_pending_order');
+      if (!pending) {
+        debugPanelUpdate(null);
+        return;
+      }
+      
+      attempts++;
+      const finishedOrPaid = await checkStatus();
+      if (finishedOrPaid) {
+        return;
+      }
+      
+      const delay = getNextDelay();
+      timerId = setTimeout(loop, delay);
+    }
+
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'cc_pending_order' && e.newValue) {
+        attempts = 0;
+        if (timerId) clearTimeout(timerId);
+        loop();
+      }
+    });
+
     setTimeout(loop, 800);
   })();
 
