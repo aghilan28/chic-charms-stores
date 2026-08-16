@@ -180,6 +180,7 @@
     fetchSession: fetchSession,
     getStoredCoupon: getStoredCoupon,
     persistBackendCoupon: persistBackendCoupon,
+    storeCoupon: persistBackendCoupon,
     clearCoupon: clearCoupon,
     getDiscount: getDiscount
   };
