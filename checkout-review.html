@@ -773,8 +773,54 @@ document.documentElement.classList.add('cc-loading');
   }
 
   function getCoupon() {
-    if (!window.ChicCoupon) return null;
-    return window.ChicCoupon.getStoredCoupon();
+    // Prefer the official ChicCoupon API when available
+    if (window.ChicCoupon && window.ChicCoupon.getStoredCoupon) {
+      try {
+        const stored = window.ChicCoupon.getStoredCoupon();
+        if (stored) return stored;
+      } catch (e) { /* fall through to legacy fallbacks */ }
+    }
+
+    // Legacy / fallback detection: some pages write a different session key
+    // (e.g. `ccDeliverySession`) or other variants to localStorage. Support
+    // those shapes so the checkout page correctly treats in-campus orders
+    // as free delivery even if the ChicCoupon API isn't available or failed.
+    try {
+      const altKeys = ['cc_coupon_state', 'ccDeliverySession', 'cc_coupon_session_id', 'cc_delivery_session'];
+      for (const k of altKeys) {
+        const raw = localStorage.getItem(k);
+        if (!raw) continue;
+        let data = null;
+        try { data = JSON.parse(raw); } catch (e) { data = null; }
+        if (!data) continue;
+
+        // Normalized backend-style coupon object
+        if (data.couponApplied === true && (data.couponType === 'campus' || (data.couponCode && String(data.couponCode).toUpperCase() === 'CAMPUS'))) {
+          return {
+            couponApplied: true,
+            couponCode: data.couponCode ? String(data.couponCode).toUpperCase() : 'CAMPUS',
+            couponType: 'campus',
+            discountAmount: Number(data.discountAmount || data.discount || 50) || 50,
+            couponSessionId: data.couponSessionId || null,
+            validatedAt: data.validatedAt || data.updatedAt || new Date().toISOString()
+          };
+        }
+
+        // shipping-address writes a ccDeliverySession object with deliveryAddress
+        if (data.deliveryAddress && data.couponApplied === true) {
+          return {
+            couponApplied: true,
+            couponCode: data.couponCode ? String(data.couponCode).toUpperCase() : 'CAMPUS',
+            couponType: 'campus',
+            discountAmount: Number(data.discountAmount || 50) || 50,
+            couponSessionId: null,
+            validatedAt: data.updatedAt || new Date().toISOString()
+          };
+        }
+      }
+    } catch (e) { /* ignore */ }
+
+    return null;
   }
 
   function getDiscount(coupon) {
