@@ -1115,7 +1115,10 @@ document.documentElement.classList.add('cc-loading');
       const errBody = await resp.json().catch(() => ({}));
       throw new Error(errBody.error || `Server error ${resp.status}`);
     }
-    return resp.json(); // { orderId, razorpayOrderId, amount, currency }
+    const json = await resp.json();
+    // persist pending order id so reloads/redirects can recover
+    try { if (json && json.orderId) localStorage.setItem('cc_pending_order', json.orderId); } catch (e) {}
+    return json; // { orderId, razorpayOrderId, amount, currency }
   }
 
   /* ── Step 3: Open Razorpay modal ────────────────────────────── */
@@ -1198,8 +1201,36 @@ document.documentElement.classList.add('cc-loading');
       const errBody = await resp.json().catch(() => ({}));
       throw new Error(errBody.error || `Verification failed ${resp.status}`);
     }
+    // clear pending order if verification succeeded
+    try { localStorage.removeItem('cc_pending_order'); } catch (e) {}
     return resp.json(); // { success, orderId }
   }
+
+  // Polling helper for pending orders saved to localStorage
+  async function pollPendingOrder() {
+    try {
+      const pending = localStorage.getItem('cc_pending_order');
+      if (!pending) return;
+      // Query backend order status
+      const resp = await fetch(`${FUNCTIONS_BASE}/orderStatus?orderId=${encodeURIComponent(pending)}`);
+      if (!resp.ok) return;
+      const js = await resp.json();
+      if (js && (js.status === 'paid' || js.paymentStatus === 'success')) {
+        // clear pending and redirect to confirmation
+        try { localStorage.removeItem('cc_pending_order'); } catch (e) {}
+        const dest = window.location.origin + '/confirmation.html?orderId=' + encodeURIComponent(pending);
+        window.location.href = dest;
+      }
+    } catch (e) { /* ignore */ }
+  }
+
+  // Run a quick poll on load in case a redirect-based flow completed while
+  // the browser was suspended and the client-side handler was lost.
+  (function(){
+    // attempt immediate check and a short retry after 2s
+    pollPendingOrder();
+    setTimeout(pollPendingOrder, 2000);
+  })();
 
   /* ── Show payment failed UI (stays on page, allows retry) ───── */
   function showPaymentFailed(message, onRetry) {
