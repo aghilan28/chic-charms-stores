@@ -10,7 +10,8 @@ module.exports = async (req, res) => {
     return res.status(200).end();
   }
 
-  if (req.method !== 'POST') {
+  // Accept both POST (client callback) and GET (Razorpay redirect) methods.
+  if (req.method !== 'POST' && req.method !== 'GET') {
     return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
 
@@ -30,11 +31,15 @@ module.exports = async (req, res) => {
     const body = req.body || {};
     const query = req.query || {};
 
+    // Support both POST body and GET query parameters (Razorpay redirect)
     const razorpay_payment_id = body.razorpay_payment_id || query.razorpay_payment_id;
     const razorpay_order_id   = body.razorpay_order_id   || query.razorpay_order_id;
     const razorpay_signature  = body.razorpay_signature  || query.razorpay_signature;
     const orderId             = body.orderId             || query.orderId;
     const redirectDomain      = query.redirect_domain    || body.redirect_domain;
+
+    // Log incoming verification attempts (query/body) for debugging.
+    console.log('[verifyPayment] incoming method=', req.method, 'orderId=', orderId, 'razorpay_order_id=', razorpay_order_id);
 
     function handleResult(statusCode, success, payload) {
       if (redirectDomain) {
