@@ -61,7 +61,7 @@
   function normalizeBackendCoupon(data) {
     if (!data || data.couponApplied !== true || data.couponType !== 'campus') return null;
     var code = String(data.couponCode || '').toUpperCase();
-    if (!/^CIT2026[A-Z0-9]{2}$/.test(code)) return null;
+    if (code !== 'CAMPUS' && !/^CIT2026[A-Z0-9]{2}$/.test(code)) return null;
     if (Number(data.discountAmount || 0) !== 50) return null;
     return {
       couponApplied: true,
