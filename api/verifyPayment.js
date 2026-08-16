@@ -27,26 +27,44 @@ module.exports = async (req, res) => {
     }
     const db = admin.firestore();
 
-    const {
-      razorpay_payment_id,
-      razorpay_order_id,
-      razorpay_signature,
-      orderId,
-    } = req.body || {};
+    const body = req.body || {};
+    const query = req.query || {};
+
+    const razorpay_payment_id = body.razorpay_payment_id || query.razorpay_payment_id;
+    const razorpay_order_id   = body.razorpay_order_id   || query.razorpay_order_id;
+    const razorpay_signature  = body.razorpay_signature  || query.razorpay_signature;
+    const orderId             = body.orderId             || query.orderId;
+    const redirectDomain      = query.redirect_domain    || body.redirect_domain;
+
+    function handleResult(statusCode, success, payload) {
+      if (redirectDomain) {
+        const dest = success 
+          ? `${redirectDomain}/confirmation.html?orderId=${encodeURIComponent(orderId)}`
+          : `${redirectDomain}/checkout-review.html?error=${encodeURIComponent(payload)}`;
+        res.writeHead(302, { Location: dest });
+        return res.end();
+      } else {
+        if (success) {
+          return res.status(statusCode).json({ success: true, orderId: payload });
+        } else {
+          return res.status(statusCode).json({ success: false, error: payload });
+        }
+      }
+    }
 
     if (!razorpay_payment_id || !razorpay_order_id || !razorpay_signature || !orderId) {
-      return res.status(400).json({ success: false, error: 'Missing payment verification fields' });
+      return handleResult(400, false, 'Missing payment verification fields');
     }
 
     const orderRef  = db.collection('orders').doc(orderId);
     const orderSnap = await orderRef.get();
     if (!orderSnap.exists) {
-      return res.status(404).json({ success: false, error: 'Order not found' });
+      return handleResult(404, false, 'Order not found');
     }
     const orderData = orderSnap.data();
 
     if (orderData.status === 'paid') {
-      return res.status(200).json({ success: true, orderId, alreadyVerified: true });
+      return handleResult(200, true, orderId);
     }
 
     const expectedSignature = crypto
@@ -62,7 +80,7 @@ module.exports = async (req, res) => {
         updatedAt:     admin.firestore.FieldValue.serverTimestamp(),
         failureReason: 'Signature verification failed',
       });
-      return res.status(400).json({ success: false, error: 'Payment verification failed. Signature mismatch.' });
+      return handleResult(400, false, 'Payment verification failed. Signature mismatch.');
     }
 
     const updatedFields = {
@@ -95,10 +113,16 @@ module.exports = async (req, res) => {
 
     await orderRef.update(updatedFields);
 
-    return res.status(200).json({ success: true, orderId });
+    return handleResult(200, true, orderId);
 
   } catch (err) {
     console.error('[verifyPayment] failed', err);
+    // Try to safely redirect on fatal catch too
+    const redirectDomain = (req.query && req.query.redirect_domain) || (req.body && req.body.redirect_domain);
+    if (redirectDomain) {
+      res.writeHead(302, { Location: `${redirectDomain}/checkout-review.html?error=Payment+Verification+Error` });
+      return res.end();
+    }
     return res.status(500).json({ success: false, error: 'Payment verification error. Please contact support.' });
   }
 };

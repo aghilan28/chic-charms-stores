@@ -1143,6 +1143,8 @@ document.documentElement.classList.add('cc-loading');
           internalOrderId: internalOrderId,
         },
         theme: { color: '#8e4559' },
+        callback_url: `${FUNCTIONS_BASE}/verifyPayment?orderId=${internalOrderId}&redirect_domain=${encodeURIComponent(window.location.origin)}`,
+        redirect:     true,
 
         /* ── Payment success callback ── */
         handler: function (response) {
