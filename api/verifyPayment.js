@@ -65,7 +65,7 @@ module.exports = async (req, res) => {
       return res.status(400).json({ success: false, error: 'Payment verification failed. Signature mismatch.' });
     }
 
-    await orderRef.update({
+    const updatedFields = {
       status:           'paid',
       paymentStatus:    'success',
       razorpayPaymentId: razorpay_payment_id,
@@ -73,7 +73,27 @@ module.exports = async (req, res) => {
       transactionId:    razorpay_payment_id,
       paidAt:           admin.firestore.FieldValue.serverTimestamp(),
       updatedAt:        admin.firestore.FieldValue.serverTimestamp(),
-    });
+    };
+
+    if (!orderData.telegram_notification_sent) {
+      try {
+        const { sendTelegramMessage, formatOrderMessage } = require('./telegram');
+        console.log(`[Telegram] Sending order notification for ${orderData.orderRef || orderId}`);
+        const fullOrder = { ...orderData, ...updatedFields, orderId };
+        const msg = formatOrderMessage(fullOrder);
+        const result = await sendTelegramMessage(msg);
+        if (result.success) {
+          updatedFields.telegram_notification_sent = true;
+          console.log(`[Telegram] Notification sent successfully for ${orderData.orderRef || orderId}`);
+        } else {
+          console.error(`[Telegram] Failed to send notification for ${orderData.orderRef || orderId}:`, result.error);
+        }
+      } catch (tgErr) {
+        console.error(`[Telegram] Error sending notification for ${orderData.orderRef || orderId}:`, tgErr);
+      }
+    }
+
+    await orderRef.update(updatedFields);
 
     return res.status(200).json({ success: true, orderId });
 

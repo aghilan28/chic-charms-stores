@@ -5,6 +5,7 @@
    ============================================================ */
 
 const { onRequest } = require('firebase-functions/v2/https');
+const { onDocumentWritten } = require('firebase-functions/v2/firestore');
 const admin         = require('firebase-admin');
 const Razorpay      = require('razorpay');
 const crypto        = require('crypto');
@@ -300,7 +301,7 @@ exports.verifyPayment = onRequest({ region: 'asia-south1' }, async (req, res) =>
     }
 
     /* ── Signature valid: mark order as paid ── */
-    await orderRef.update({
+    const updatedFields = {
       status:           'paid',
       paymentStatus:    'success',
       razorpayPaymentId: razorpay_payment_id,
@@ -308,7 +309,27 @@ exports.verifyPayment = onRequest({ region: 'asia-south1' }, async (req, res) =>
       transactionId:    razorpay_payment_id,
       paidAt:           admin.firestore.FieldValue.serverTimestamp(),
       updatedAt:        admin.firestore.FieldValue.serverTimestamp(),
-    });
+    };
+
+    if (!orderData.telegram_notification_sent) {
+      try {
+        const { sendTelegramMessage, formatOrderMessage } = require('./telegram');
+        console.log(`[Telegram] Sending order notification for ${orderData.orderRef || orderId}`);
+        const fullOrder = { ...orderData, ...updatedFields, orderId };
+        const msg = formatOrderMessage(fullOrder);
+        const result = await sendTelegramMessage(msg);
+        if (result.success) {
+          updatedFields.telegram_notification_sent = true;
+          console.log(`[Telegram] Notification sent successfully for ${orderData.orderRef || orderId}`);
+        } else {
+          console.error(`[Telegram] Failed to send notification for ${orderData.orderRef || orderId}:`, result.error);
+        }
+      } catch (tgErr) {
+        console.error(`[Telegram] Error sending notification for ${orderData.orderRef || orderId}:`, tgErr);
+      }
+    }
+
+    await orderRef.update(updatedFields);
 
     return res.status(200).json({ success: true, orderId });
 
@@ -327,4 +348,46 @@ exports.razorpayConfig = onRequest({ region: 'asia-south1' }, async (req, res) =
   if (req.method === 'OPTIONS') return res.status(204).send('');
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
   return res.status(200).json({ keyId: process.env.RAZORPAY_KEY_ID || '' });
+});
+
+/* ─────────────────────────────────────────────────────────────────── */
+/*  6. FIRESTORE ORDER TRIGGER                                        */
+/*     Triggers on order creation/update to notify admin via Telegram */
+/* ─────────────────────────────────────────────────────────────────── */
+exports.onOrderWritten = onDocumentWritten({
+  region: 'asia-south1',
+  document: 'orders/{orderId}'
+}, async (event) => {
+  const snapshot = event.data;
+  if (!snapshot) return null;
+
+  const orderData = snapshot.after.data();
+  if (!orderData) return null;
+
+  const orderId = event.params.orderId;
+  const status = orderData.status;
+
+  if ((status === 'paid' || status === 'Placed') && !orderData.telegram_notification_sent) {
+    try {
+      const { sendTelegramMessage, formatOrderMessage } = require('./telegram');
+      console.log(`[Telegram Trigger] Sending order notification for ${orderData.orderRef || orderId}`);
+      
+      const fullOrder = { ...orderData, orderId };
+      const msg = formatOrderMessage(fullOrder);
+      const result = await sendTelegramMessage(msg);
+      
+      if (result.success) {
+        console.log(`[Telegram Trigger] Notification sent successfully for ${orderData.orderRef || orderId}`);
+        await snapshot.after.ref.update({
+          telegram_notification_sent: true,
+          updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        });
+      } else {
+        console.error(`[Telegram Trigger] Failed to send notification for ${orderData.orderRef || orderId}:`, result.error);
+      }
+    } catch (tgErr) {
+      console.error(`[Telegram Trigger] Error sending notification for ${orderData.orderRef || orderId}:`, tgErr);
+    }
+  }
+  return null;
 });
