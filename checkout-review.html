@@ -1224,12 +1224,47 @@ document.documentElement.classList.add('cc-loading');
     } catch (e) { /* ignore */ }
   }
 
-  // Run a quick poll on load in case a redirect-based flow completed while
-  // the browser was suspended and the client-side handler was lost.
+  // Run a stronger poll loop and show a debug panel so mobile QA can see
+  // pending order state if the client lost the Razorpay callback.
+  function debugPanelUpdate(data) {
+    try {
+      let el = document.getElementById('ccDebugPanel');
+      if (!el) {
+        el = document.createElement('div');
+        el.id = 'ccDebugPanel';
+        el.style.cssText = 'position:fixed;left:12px;right:12px;bottom:84px;background:rgba(0,0,0,0.75);color:#fff;padding:8px 12px;border-radius:12px;font-size:12px;z-index:9999;backdrop-filter:blur(6px);max-height:160px;overflow:auto;';
+        document.body.appendChild(el);
+      }
+      const pending = localStorage.getItem('cc_pending_order');
+      const search = location.search || '';
+      el.innerHTML = `<div style="font-weight:700;margin-bottom:6px;">Debug — Pending Order: ${pending || '<i>none</i>'}</div>` +
+        `<div style="margin-bottom:6px;">URL: ${esc(search)}</div>` +
+        `<details style="color:#eee"><summary style="cursor:pointer">Last poll result (click)</summary><pre style="white-space:pre-wrap;margin-top:8px;color:#dcdcdc">${esc(JSON.stringify(data || {}, null, 2))}</pre></details>`;
+    } catch (e) { /* ignore DOM errors */ }
+  }
+
   (function(){
-    // attempt immediate check and a short retry after 2s
-    pollPendingOrder();
-    setTimeout(pollPendingOrder, 2000);
+    let attempts = 0, maxAttempts = 15;
+    async function loop() {
+      attempts++;
+      try {
+        const pending = localStorage.getItem('cc_pending_order');
+        if (!pending) { debugPanelUpdate({}); return; }
+        const resp = await fetch(`${FUNCTIONS_BASE}/orderStatus?orderId=${encodeURIComponent(pending)}`);
+        let js = null;
+        if (resp && resp.ok) js = await resp.json();
+        debugPanelUpdate(js);
+        if (js && (js.status === 'paid' || js.paymentStatus === 'success')) {
+          try { localStorage.removeItem('cc_pending_order'); } catch (e) {}
+          window.location.href = window.location.origin + '/confirmation.html?orderId=' + encodeURIComponent(pending);
+          return;
+        }
+      } catch (e) {
+        debugPanelUpdate({ error: String(e) });
+      }
+      if (attempts < maxAttempts) setTimeout(loop, 2000);
+    }
+    setTimeout(loop, 800);
   })();
 
   /* ── Show payment failed UI (stays on page, allows retry) ───── */
