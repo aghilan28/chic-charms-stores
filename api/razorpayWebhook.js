@@ -57,6 +57,8 @@ module.exports = async (req, res) => {
       const doc = q.docs[0];
       const orderId = doc.id;
 
+      const orderData = doc.data();
+
       const updatedFields = {
         status: 'paid',
         paymentStatus: 'success',
@@ -65,6 +67,24 @@ module.exports = async (req, res) => {
         paidAt: admin.firestore.FieldValue.serverTimestamp(),
         updatedAt: admin.firestore.FieldValue.serverTimestamp(),
       };
+
+      if (!orderData.telegram_notification_sent) {
+        try {
+          const { sendTelegramMessage, formatOrderMessage } = require('./telegram');
+          console.log(`[Telegram Webhook] Sending order notification for ${orderData.orderRef || orderId}`);
+          const fullOrder = { ...orderData, ...updatedFields, orderId };
+          const msg = formatOrderMessage(fullOrder);
+          const result = await sendTelegramMessage(msg);
+          if (result.success) {
+            updatedFields.telegram_notification_sent = true;
+            console.log(`[Telegram Webhook] Notification sent successfully for ${orderData.orderRef || orderId}`);
+          } else {
+            console.error(`[Telegram Webhook] Failed to send notification for ${orderData.orderRef || orderId}:`, result.error);
+          }
+        } catch (tgErr) {
+          console.error(`[Telegram Webhook] Error sending notification for ${orderData.orderRef || orderId}:`, tgErr);
+        }
+      }
 
       await db.collection('orders').doc(orderId).update(updatedFields);
       console.log('[razorpayWebhook] order updated to paid:', orderId);
