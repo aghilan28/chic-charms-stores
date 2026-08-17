@@ -435,7 +435,8 @@ window.RazorpayDemo = {
    ============================================================ */
 async function rzpDemoInit() {
   if (!document.querySelector('.checkout-page')) return;
-  injectDemoBanner();
+  // Removed automatic demo banner injection to avoid showing test cards/log panel in production.
+  // injectDemoBanner();
   injectTrustSection();
 
   try {

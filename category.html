@@ -1059,8 +1059,12 @@
       }
 
       function renderProducts(products) {
-        currentProducts = products.slice();
-        if (!products.length) {
+        const visibleProducts = products.filter(function (p) {
+          const rawStock = p.stock ?? p.Stock ?? 0;
+          return Number(rawStock) > 0;
+        });
+        currentProducts = visibleProducts.slice();
+        if (!visibleProducts.length) {
           productSection.style.display = 'none';
           emptyState.style.display = 'block';
           editorialSection.style.display = 'none';
@@ -1068,7 +1072,7 @@
           return;
         }
 
-        productGrid.innerHTML = products.map(function (product) {
+        productGrid.innerHTML = visibleProducts.map(function (product) {
           const tag = product.tag ? '<span class="product-tag">' + utils.escapeHtml(product.tag) + '</span>' : '';
           const oldPriceVal = Number(product.oldPrice || product.compareAtPrice || product.mrp || (product.price ? Math.ceil(product.price * 1.28) : 0));
           return '<article class="product-card">' +

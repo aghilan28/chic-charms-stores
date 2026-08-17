@@ -610,7 +610,7 @@
 <!-- ░░ ADMIN RETURN BANNER — only visible when admin is logged in ░░ -->
 <div aria-hidden="true" class="admin-return-banner" id="adminReturnBanner">
 <span class="admin-return-copy">
-        You are browsing as <strong id="adminReturnEmail"></strong>
+  You are browsing as <strong id="adminReturnEmail"></strong>
 </span>
 <a href="admin.html">Back to Admin Dashboard</a>
 </div>
@@ -1648,6 +1648,10 @@
         // 1. Filter
         let filtered = allProducts.filter(function (item) {
           const p = item.data;
+          
+          // Hide out of stock products from the store view
+          if (p.stock <= 0) return false;
+
           const searchable = [
             p.name,
             p.tag,

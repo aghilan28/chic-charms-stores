@@ -69,6 +69,79 @@ module.exports = async (req, res) => {
         updatedAt: admin.firestore.FieldValue.serverTimestamp(),
       };
 
+      const orderRef = db.collection('orders').doc(orderId);
+
+      // Execute stock check and decrement inside an atomic transaction
+      let stockError = null;
+      try {
+        await db.runTransaction(async (transaction) => {
+          const orderDoc = await transaction.get(orderRef);
+          const oData = orderDoc.data();
+          if (oData.status === 'paid') return;
+
+          const rawItems = oData.cartItems || oData.items || [];
+          const productUpdates = [];
+
+          for (const item of rawItems) {
+            if (!item.productId) continue;
+            const pRef = db.collection('products').doc(item.productId);
+            const pSnap = await transaction.get(pRef);
+            if (!pSnap.exists) {
+              stockError = `Product "${item.name}" not found`;
+              throw new Error(stockError);
+            }
+            const pData = pSnap.data();
+            const currentStock = Number(pData.stock ?? 0);
+            const requestedQty = Number(item.quantity || 1);
+            if (currentStock < requestedQty) {
+              stockError = `Insufficient stock for product "${pData.name || item.name}" (Requested: ${requestedQty}, Available: ${currentStock})`;
+              throw new Error(stockError);
+            }
+            productUpdates.push({
+              pRef,
+              newStock: currentStock - requestedQty
+            });
+          }
+
+          // Deduct stock for all items
+          for (const update of productUpdates) {
+            transaction.update(update.pRef, {
+              stock: update.newStock,
+              outOfStock: update.newStock === 0
+            });
+          }
+
+          transaction.update(orderRef, updatedFields);
+        });
+      } catch (txErr) {
+        console.error('[razorpayWebhook] Transaction failed:', txErr.message);
+        if (!stockError) stockError = txErr.message;
+      }
+
+      if (stockError) {
+        // Stock allocation failed. Flag order for manual review but mark payment success.
+        const failFields = {
+          ...updatedFields,
+          status: 'manual_reconciliation_needed',
+          manualReconciliationReason: stockError,
+          updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        };
+        await orderRef.update(failFields);
+
+        try {
+          const { sendTelegramMessage, formatOrderMessage } = require('./telegram');
+          const fullOrder = { ...orderData, ...failFields, orderId };
+          let msg = formatOrderMessage(fullOrder);
+          msg = `⚠️ <b>ATTENTION: STOCK ALLOCATION FAILED (MANUAL RECONCILIATION NEEDED)</b>\nReason: ${stockError}\n\n` + msg;
+          await sendTelegramMessage(msg);
+        } catch (tgErr) {
+          console.error('[razorpayWebhook] Telegram fail notification error:', tgErr);
+        }
+
+        console.warn('[razorpayWebhook] Stock allocation failed for order:', orderId);
+        return res.status(200).json({ ok: true, warning: 'Stock allocation failed' });
+      }
+
       if (!orderData.telegram_notification_sent) {
         try {
           const { sendTelegramMessage, formatOrderMessage } = require('./telegram');
@@ -77,7 +150,7 @@ module.exports = async (req, res) => {
           const msg = formatOrderMessage(fullOrder);
           const result = await sendTelegramMessage(msg);
           if (result.success) {
-            updatedFields.telegram_notification_sent = true;
+            await orderRef.update({ telegram_notification_sent: true });
             console.log(`[Telegram Webhook] Notification sent successfully for ${orderData.orderRef || orderId}`);
           } else {
             console.error(`[Telegram Webhook] Failed to send notification for ${orderData.orderRef || orderId}:`, result.error);
@@ -87,7 +160,6 @@ module.exports = async (req, res) => {
         }
       }
 
-      await db.collection('orders').doc(orderId).update(updatedFields);
       console.log('[razorpayWebhook] order updated to paid:', orderId);
 
       return res.status(200).json({ ok: true });

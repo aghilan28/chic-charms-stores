@@ -49,6 +49,23 @@ module.exports = async (req, res) => {
     if (!total || Number(total) <= 0)             return res.status(400).json({ error: 'Invalid total amount' });
     if (!paymentMethod)                           return res.status(400).json({ error: 'Payment method required' });
 
+    // Validate stock for all items in the cart
+    for (const item of cartItems) {
+      if (!item.productId) {
+        return res.status(400).json({ error: `Invalid product ID for item: ${item.name || 'Unknown'}` });
+      }
+      const productSnap = await db.collection('products').doc(item.productId).get();
+      if (!productSnap.exists) {
+        return res.status(400).json({ error: `Product "${item.name || item.productId}" not found` });
+      }
+      const productData = productSnap.data();
+      const currentStock = Number(productData.stock ?? 0);
+      const requestedQty = Number(item.quantity || 1);
+      if (currentStock < requestedQty) {
+        return res.status(400).json({ error: `"${productData.name || item.name}" is out of stock or does not have enough quantity available.` });
+      }
+    }
+
     /* ── Prevent duplicate orders: idempotency key ── */
     const idempotencyKey = body.idempotencyKey || null;
     if (idempotencyKey) {

@@ -221,6 +221,17 @@
     .data-section { display: none; }
     .data-section.has-data { display: block; }
 
+    /* Hover zoom styling */
+    .zoom-wrapper {
+      overflow: hidden;
+      position: relative;
+      cursor: zoom-in;
+    }
+    .zoom-wrapper img {
+      transition: transform 0.1s ease-out;
+      transform-origin: center center;
+    }
+
   </style>
 
   <script>
@@ -1167,10 +1178,27 @@ function renderProduct(product, docId) {
 
   if (_galleryImages.length > 0) {
     gc.innerHTML = _galleryImages.map((img, i) =>
-      `<div class="snap-center shrink-0 w-full h-full relative">
-        <img class="w-full h-full object-cover" src="${img.src}" alt="${product.name} - ${img.label}" loading="${i === 0 ? 'eager' : 'lazy'}" />
+      `<div class="snap-center shrink-0 w-full h-full relative zoom-wrapper" onclick="openZoomModal('${img.src}')">
+        <img class="w-full h-full object-cover zoom-img" src="${img.src}" alt="${product.name} - ${img.label}" loading="${i === 0 ? 'eager' : 'lazy'}" />
       </div>`
     ).join('');
+
+    // Bind hover zoom listeners
+    gc.querySelectorAll('.zoom-wrapper').forEach(wrapper => {
+      const img = wrapper.querySelector('.zoom-img');
+      wrapper.addEventListener('mousemove', (e) => {
+        const rect = wrapper.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        img.style.transformOrigin = `${x}% ${y}%`;
+        img.style.transform = 'scale(2)';
+      });
+      wrapper.addEventListener('mouseleave', () => {
+        img.style.transform = 'scale(1)';
+        img.style.transformOrigin = 'center center';
+      });
+    });
+
     let scrollTimeout;
     _galleryScrollListener = function() {
       clearTimeout(scrollTimeout);
@@ -1522,7 +1550,7 @@ function syncMobilePDP() {
   const galDest = document.getElementById('galleryContainerMobile');
   if (galDest && _galleryImages.length > 0) {
     galDest.innerHTML = _galleryImages.map((img, i) =>
-      `<div class="snap-center shrink-0 w-full h-full relative flex items-center justify-center bg-gray-50">
+      `<div class="snap-center shrink-0 w-full h-full relative flex items-center justify-center bg-gray-50" onclick="openZoomModal('${img.src}')">
         <img class="w-full h-full object-cover" src="${img.src}" alt="${_currentProduct?.name || ''} - ${img.label}" loading="${i === 0 ? 'eager' : 'lazy'}" />
       </div>`
     ).join('');
@@ -1613,53 +1641,39 @@ async function loadProduct() {
   }, 10000);
 
   try {
-    const _url = 'https://firestore.googleapis.com/v1/projects/chic-charms-store/databases/(default)/documents/products/'
-      + encodeURIComponent(productId)
-      + '?key=AIzaSyA5Bh77_4HE3yQF0hi5ddvbFLZC7rEerxg';
-    const _res  = await fetch(_url);
-    clearTimeout(_safety);
-    if (!_res.ok) throw new Error('HTTP ' + _res.status);
-    const _doc = await _res.json();
-    if (_doc.error)  throw new Error(_doc.error.message || 'Firestore error');
-    if (!_doc.fields) {
-      document.getElementById('loadingState').classList.add('hidden');
-      document.getElementById('errorState').classList.remove('hidden');
-      document.querySelector('#errorState p').textContent = 'Product not found.';
-      return;
-    }
-    function _cv(v) {
-      if (!v) return null;
-      if ('stringValue'    in v) return v.stringValue;
-      if ('integerValue'   in v) return Number(v.integerValue);
-      if ('doubleValue'    in v) return Number(v.doubleValue);
-      if ('booleanValue'   in v) return v.booleanValue;
-      if ('nullValue'      in v) return null;
-      if ('timestampValue' in v) return new Date(v.timestampValue);
-      if ('arrayValue'     in v) return (v.arrayValue.values || []).map(_cv);
-      if ('mapValue'       in v) {
-        const o = {};
-        for (const [k,w] of Object.entries(v.mapValue.fields || {})) o[k] = _cv(w);
-        return o;
+    if (typeof firebase === 'undefined') throw new Error('Firebase SDK not loaded');
+    const db = firebase.firestore();
+    db.collection('products').doc(productId).onSnapshot((docSnap) => {
+      clearTimeout(_safety);
+      if (!docSnap.exists) {
+        document.getElementById('loadingState').classList.add('hidden');
+        document.getElementById('errorState').classList.remove('hidden');
+        document.querySelector('#errorState p').textContent = 'Product not found.';
+        return;
       }
-      return null;
-    }
-    const _product = {};
-    for (const [k,v] of Object.entries(_doc.fields)) _product[k] = _cv(v);
-    try {
-      renderProduct(_product, productId);
-      _rendered = true;
-    } catch(renderErr) {
-      console.error('[PDP] renderProduct error:', renderErr);
+      const productData = docSnap.data();
+      try {
+        renderProduct(productData, docSnap.id);
+        _rendered = true;
+      } catch(renderErr) {
+        console.error('[PDP] renderProduct error:', renderErr);
+        document.getElementById('loadingState').classList.add('hidden');
+        document.getElementById('errorState').classList.remove('hidden');
+        document.querySelector('#errorState p').textContent = 'Display error. Please tap Retry.';
+      }
+    }, (error) => {
+      clearTimeout(_safety);
+      console.error('[PDP] load error:', error);
       document.getElementById('loadingState').classList.add('hidden');
       document.getElementById('errorState').classList.remove('hidden');
-      document.querySelector('#errorState p').textContent = 'Display error. Please tap Retry.';
-    }
+      document.querySelector('#errorState p').textContent = 'Could not load product. Please check your connection.';
+    });
   } catch (error) {
     clearTimeout(_safety);
-    console.error('[PDP] load error:', error);
+    console.error('[PDP] load initialization error:', error);
     document.getElementById('loadingState').classList.add('hidden');
     document.getElementById('errorState').classList.remove('hidden');
-    document.querySelector('#errorState p').textContent = 'Could not load product. Please check your connection.';
+    document.querySelector('#errorState p').textContent = 'Could not initialize product load. Please check your connection.';
   }
 
   loadRelatedProducts(productId);
@@ -1906,6 +1920,97 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) upda
 </script>
 
 
+
+  <!-- Lightbox Zoom Modal -->
+  <div id="zoomModal" class="fixed inset-0 bg-black/95 z-[9999] hidden flex flex-col items-center justify-center p-4">
+    <button onclick="closeZoomModal()" class="absolute top-6 right-6 text-white bg-white/10 hover:bg-white/20 p-3 rounded-full transition-colors" aria-label="Close zoom view">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="relative max-w-5xl max-h-[85vh] overflow-hidden flex items-center justify-center cursor-zoom-out" onclick="closeZoomModal()">
+      <img id="zoomModalImg" class="max-w-full max-h-full object-contain transition-transform duration-300" src="" alt="Zoomed view" onclick="event.stopPropagation(); toggleLightboxZoom(event)" style="cursor: zoom-in;" />
+    </div>
+    <p class="text-white/60 text-xs mt-4 tracking-wider uppercase font-jost select-none">Click image to Zoom In/Out • Drag to pan</p>
+  </div>
+
+  <script>
+    (function() {
+      let lightboxZoomed = false;
+      let isDragging = false;
+      let startX = 0, startY = 0;
+      let translateX = 0, translateY = 0;
+
+      window.openZoomModal = function(src) {
+        const modal = document.getElementById('zoomModal');
+        const img = document.getElementById('zoomModalImg');
+        img.src = src;
+        img.style.transform = 'scale(1) translate(0px, 0px)';
+        translateX = 0; translateY = 0;
+        lightboxZoomed = false;
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden'; // Lock background scroll
+      };
+
+      window.closeZoomModal = function() {
+        document.getElementById('zoomModal').classList.add('hidden');
+        document.body.style.overflow = ''; // Unlock background scroll
+      };
+
+      window.toggleLightboxZoom = function(e) {
+        const img = e.currentTarget;
+        lightboxZoomed = !lightboxZoomed;
+        if (lightboxZoomed) {
+          img.style.transform = 'scale(2.2)';
+          img.style.cursor = 'grab';
+        } else {
+          img.style.transform = 'scale(1) translate(0px, 0px)';
+          img.style.cursor = 'zoom-in';
+          translateX = 0;
+          translateY = 0;
+        }
+      };
+
+      const img = document.getElementById('zoomModalImg');
+      if (img) {
+        img.addEventListener('mousedown', (e) => {
+          if (!lightboxZoomed) return;
+          isDragging = true;
+          img.style.cursor = 'grabbing';
+          startX = e.clientX - translateX;
+          startY = e.clientY - translateY;
+          e.preventDefault();
+        });
+        window.addEventListener('mousemove', (e) => {
+          if (!isDragging) return;
+          translateX = e.clientX - startX;
+          translateY = e.clientY - startY;
+          img.style.transform = `scale(2.2) translate(${translateX / 2.2}px, ${translateY / 2.2}px)`;
+        });
+        window.addEventListener('mouseup', () => {
+          isDragging = false;
+          if (lightboxZoomed) img.style.cursor = 'grab';
+        });
+
+        // Touch support for mobile dragging
+        img.addEventListener('touchstart', (e) => {
+          if (!lightboxZoomed) return;
+          isDragging = true;
+          const touch = e.touches[0];
+          startX = touch.clientX - translateX;
+          startY = touch.clientY - translateY;
+        }, { passive: true });
+        window.addEventListener('touchmove', (e) => {
+          if (!isDragging) return;
+          const touch = e.touches[0];
+          translateX = touch.clientX - startX;
+          translateY = touch.clientY - startY;
+          img.style.transform = `scale(2.2) translate(${translateX / 2.2}px, ${translateY / 2.2}px)`;
+        }, { passive: false });
+        window.addEventListener('touchend', () => {
+          isDragging = false;
+        });
+      }
+    })();
+  </script>
 
   <script src="cc-global-header.js" defer></script>
   <script src="cc-bottom-nav.js" defer></script>
