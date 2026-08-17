@@ -24,10 +24,11 @@ module.exports = async (req, res) => {
   try {
     // Initialize Firebase Admin using credentials from environment variable
     if (!admin.apps.length) {
-      if (!process.env.FIREBASE_SERVICE_ACCOUNT) {
-        return res.status(500).json({ error: 'Missing FIREBASE_SERVICE_ACCOUNT environment variable on Vercel' });
+      const serviceAccountStr = process.env.FIREBASE_SERVICE_ACCOUNT || process.env.SERVICE_ACCOUNT_KEY;
+      if (!serviceAccountStr) {
+        return res.status(500).json({ error: 'Missing FIREBASE_SERVICE_ACCOUNT or SERVICE_ACCOUNT_KEY environment variable' });
       }
-      const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+      const serviceAccount = JSON.parse(serviceAccountStr);
       admin.initializeApp({
         credential: admin.credential.cert(serviceAccount)
       });

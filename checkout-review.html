@@ -1204,58 +1204,7 @@ document.documentElement.classList.add('cc-loading');
     return resp.json(); // { success, orderId }
   }
 
-  function debugPanelUpdate(data, errorMsg) {
-    try {
-      let el = document.getElementById('ccDebugPanel');
-      if (!el) {
-        el = document.createElement('div');
-        el.id = 'ccDebugPanel';
-        el.style.cssText = 'position:fixed;left:12px;right:12px;bottom:84px;background:rgba(0,0,0,0.85);color:#fff;padding:12px;border-radius:16px;font-size:12px;z-index:9999;backdrop-filter:blur(8px);box-shadow:0 8px 32px rgba(0,0,0,0.3);max-height:200px;overflow:auto;font-family:sans-serif;border:1px solid rgba(255,255,255,0.1);';
-        document.body.appendChild(el);
-      }
-      const pending = localStorage.getItem('cc_pending_order');
-      if (!pending) {
-        el.style.display = 'none';
-        return;
-      }
-      el.style.display = 'block';
-      
-      let statusHtml = '';
-      if (errorMsg) {
-        statusHtml = `<span style="color:#ff6b6b;font-weight:700;">Error: ${esc(errorMsg)}</span>`;
-      } else if (data && (data.paymentStatus === 'failed' || data.status === 'failed')) {
-        statusHtml = `<span style="color:#ff6b6b;font-weight:700;background:rgba(255,107,107,0.15);padding:2px 6px;border-radius:4px;border:1px solid rgba(255,107,107,0.3);">❌ PAYMENT FAILED</span>`;
-      } else if (data && (data.status === 'paid' || data.paymentStatus === 'success')) {
-        statusHtml = `<span style="color:#51cf66;font-weight:700;">🟢 PAID / SUCCESS</span>`;
-      } else {
-        statusHtml = `<span style="color:#ffd43b;font-weight:700;">⏳ Checking Payment Status...</span>`;
-      }
-
-      el.innerHTML = `
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:6px;">
-          <span style="font-weight:700;color:#ffb1c3;">Pending Order Check</span>
-          <button id="ccManualCheckBtn" style="background:#8e4559;color:#fff;border:0;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;">Check Now</button>
-        </div>
-        <div style="margin-bottom:6px;"><b>Order ID:</b> #${esc(pending)}</div>
-        <div style="margin-bottom:8px;"><b>Status:</b> ${statusHtml}</div>
-        <details style="color:#bbb;font-size:11px;">
-          <summary style="cursor:pointer;outline:none;padding:2px 0;">Last response data (click)</summary>
-          <pre style="white-space:pre-wrap;margin-top:6px;color:#dcdcdc;background:rgba(0,0,0,0.3);padding:6px;border-radius:6px;font-family:monospace;font-size:10px;border:1px solid rgba(255,255,255,0.05);">${esc(JSON.stringify(data || {}, null, 2))}</pre>
-        </details>
-      `;
-
-      const btn = document.getElementById('ccManualCheckBtn');
-      if (btn) {
-        btn.onclick = async () => {
-          btn.disabled = true;
-          btn.textContent = 'Checking...';
-          await runSingleCheck();
-          btn.disabled = false;
-          btn.textContent = 'Check Now';
-        };
-      }
-    } catch (e) { /* ignore DOM errors */ }
-  }
+  // debug panel removed
 
   let runSingleCheck = async () => {};
 
@@ -1266,7 +1215,6 @@ document.documentElement.classList.add('cc-loading');
     async function checkStatus() {
       const pending = localStorage.getItem('cc_pending_order');
       if (!pending) {
-        debugPanelUpdate(null);
         return false;
       }
       
@@ -1276,7 +1224,7 @@ document.documentElement.classList.add('cc-loading');
           throw new Error(`HTTP ${resp.status}`);
         }
         const js = await resp.json();
-        debugPanelUpdate(js);
+        // silent check; debug panel removed
         
         if (js && (js.status === 'paid' || js.paymentStatus === 'success')) {
           try { localStorage.removeItem('cc_pending_order'); } catch (e) {}
@@ -1288,7 +1236,7 @@ document.documentElement.classList.add('cc-loading');
           return true;
         }
       } catch (e) {
-        debugPanelUpdate(null, String(e.message || e));
+        // ignore errors during polling
       }
       return false;
     }
@@ -1308,7 +1256,6 @@ document.documentElement.classList.add('cc-loading');
     async function loop() {
       const pending = localStorage.getItem('cc_pending_order');
       if (!pending) {
-        debugPanelUpdate(null);
         return;
       }
       

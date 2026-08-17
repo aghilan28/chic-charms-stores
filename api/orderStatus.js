@@ -10,10 +10,11 @@ module.exports = async (req, res) => {
 
   try {
     if (!admin.apps.length) {
-      if (!process.env.FIREBASE_SERVICE_ACCOUNT) {
-        return res.status(500).json({ error: 'Missing FIREBASE_SERVICE_ACCOUNT environment variable' });
+      const serviceAccountStr = process.env.FIREBASE_SERVICE_ACCOUNT || process.env.SERVICE_ACCOUNT_KEY;
+      if (!serviceAccountStr) {
+        return res.status(500).json({ error: 'Missing FIREBASE_SERVICE_ACCOUNT or SERVICE_ACCOUNT_KEY environment variable' });
       }
-      const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+      const serviceAccount = JSON.parse(serviceAccountStr);
       admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
     }
     const db = admin.firestore();
