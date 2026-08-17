@@ -689,9 +689,12 @@ document.documentElement.classList.add('cc-loading');
      ═══════════════════════════════════════════════════════════════ */
   let RAZORPAY_KEY_ID = '';
 
-  const FUNCTIONS_BASE = window.location.hostname.includes('vercel.app')
-    ? '/api'
-    : 'https://chic-charms-stores.vercel.app/api';
+  const FUNCTIONS_BASE = (
+    window.location.hostname.includes('vercel.app') ||
+    window.location.hostname.includes('chiccharms.beauty') ||
+    window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1'
+  ) ? '/api' : 'https://chiccharms.beauty/api';
 
   /* Fetch public Razorpay Key ID from the backend config endpoint */
   async function fetchConfig() {
