@@ -1201,10 +1201,14 @@
     ============================================================ */
     function getFilteredSorted() {
       let list = allOrders.filter(o => {
-        // Text search: name or phone
+        // Text search: name, phone, or email
         if (filterText) {
           const q = filterText.toLowerCase();
-          const hay = [o.customerName, o.phone, o.email].join(" ").toLowerCase();
+          const hay = [
+            o.customerName, o.customerInfo?.fullName, o.deliveryInfo?.name,
+            o.phone, o.customerInfo?.phone, o.deliveryInfo?.phone,
+            o.email, o.customerInfo?.email, o.deliveryInfo?.email
+          ].join(" ").toLowerCase();
           if (!hay.includes(q)) return false;
         }
         // Status filter
@@ -1221,10 +1225,10 @@
           list.sort((a, b) => getTimestamp(a) - getTimestamp(b));
           break;
         case "highest":
-          list.sort((a, b) => Number(b.totalAmount||0) - Number(a.totalAmount||0));
+          list.sort((a, b) => Number(b.total || b.totalAmount || 0) - Number(a.total || a.totalAmount || 0));
           break;
         case "lowest":
-          list.sort((a, b) => Number(a.totalAmount||0) - Number(b.totalAmount||0));
+          list.sort((a, b) => Number(a.total || a.totalAmount || 0) - Number(b.total || b.totalAmount || 0));
           break;
         default: // newest
           list.sort((a, b) => getTimestamp(b) - getTimestamp(a));
@@ -1291,6 +1295,10 @@
 
     function buildCardHTML(o, curStatus, num) {
       const docId = o._id;
+      const name = o.customerName || o.customerInfo?.fullName || o.deliveryInfo?.name || "—";
+      const phone = o.phone || o.customerInfo?.phone || o.deliveryInfo?.phone || "—";
+      const email = o.email || o.customerInfo?.email || o.deliveryInfo?.email || "";
+      const totalVal = o.total || o.totalAmount || 0;
       return `
         <!-- Clickable header -->
         <div class="order-header" role="button" tabindex="0" aria-expanded="false"
@@ -1298,9 +1306,9 @@
           <div class="order-header-left">
             <span class="order-num">#${esc(num)}</span>
             <div class="order-customer-info">
-              <div class="order-customer">${esc(o.customerName || "—")}</div>
-              ${o.email ? `<div class="order-email">✉️ ${esc(o.email)}</div>` : ""}
-              <div class="order-phone">📞 ${esc(o.phone || "—")}</div>
+              <div class="order-customer">${esc(name)}</div>
+              ${email ? `<div class="order-email">✉️ ${esc(email)}</div>` : ""}
+              <div class="order-phone">📞 ${esc(phone)}</div>
             </div>
           </div>
           <div class="order-header-right">
@@ -1309,7 +1317,7 @@
               ${paymentBadge(o.paymentMethod)}
             </div>
             <div class="order-header-meta">
-              <div class="order-total">${formatINR(o.totalAmount)}</div>
+              <div class="order-total">${formatINR(totalVal)}</div>
               <div class="order-date">🕐 ${formatDate(o.createdAt)}</div>
             </div>
             <div class="expand-toggle">▼</div>
@@ -1325,7 +1333,8 @@
     }
 
     function buildDetailsHTML(o) {
-      const itemRows = (o.items || []).map(item => {
+      const rawItems = o.cartItems || o.items || [];
+      const itemRows = rawItems.map(item => {
         const lineTotal = Number(item.price || 0) * Number(item.quantity || 1);
         return `<tr>
           <td class="item-name">${esc(item.name)}</td>
@@ -1334,14 +1343,27 @@
         </tr>`;
       }).join("");
 
+      let addressStr = o.address || "";
+      if (!addressStr && o.deliveryInfo) {
+        const addr = o.deliveryInfo.address || o.deliveryInfo.addressLine1 || '';
+        const city = o.deliveryInfo.city || '';
+        const state = o.deliveryInfo.state || '';
+        const pin = o.deliveryInfo.pincode || '';
+        addressStr = [addr, city, state, pin].filter(Boolean).join(", ");
+      }
+      if (!addressStr) addressStr = "—";
+
+      const email = o.email || o.customerInfo?.email || o.deliveryInfo?.email || "—";
+      const pincode = o.pincode || o.deliveryInfo?.pincode || "—";
+
       return `
         <div class="order-body">
           <!-- Shipping address -->
           <div class="order-address">
             <span class="order-address-icon">📍</span>
             <div>
-              <span>${esc(o.address || "—")}</span>
-              ${o.pincode ? `<span style="margin-left:6px;font-size:0.78rem;color:var(--muted);">PIN: ${esc(o.pincode)}</span>` : ""}
+              <span>${esc(addressStr)}</span>
+              ${pincode !== "—" ? `<span style="margin-left:6px;font-size:0.78rem;color:var(--muted);">PIN: ${esc(pincode)}</span>` : ""}
             </div>
           </div>
 
@@ -1349,7 +1371,7 @@
           <div class="order-meta-grid">
             <div class="order-meta-item">
               <div class="order-meta-label">Customer Email</div>
-              <div class="order-meta-value">${esc(o.email || "—")}</div>
+              <div class="order-meta-value">${esc(email)}</div>
             </div>
             <div class="order-meta-item">
               <div class="order-meta-label">Customer UID</div>
@@ -1363,9 +1385,9 @@
               <div class="order-meta-label">Order Date</div>
               <div class="order-meta-value">${formatDate(o.createdAt)}</div>
             </div>
-            ${o.pincode ? `<div class="order-meta-item">
+            ${pincode !== "—" ? `<div class="order-meta-item">
               <div class="order-meta-label">Pincode</div>
-              <div class="order-meta-value">${esc(o.pincode)}</div>
+              <div class="order-meta-value">${esc(pincode)}</div>
             </div>` : ""}
             ${o.razorpayOrderId ? `<div class="order-meta-item">
               <div class="order-meta-label">Razorpay Order ID</div>
@@ -1387,18 +1409,21 @@
 
     function buildFooterHTML(o, curStatus) {
       const docId = o._id;
+      const subtotalVal = o.subtotal || o.subtotalAmount || 0;
+      const shippingVal = o.shipping || o.deliveryCharge || 0;
+      const totalVal = o.total || o.totalAmount || 0;
       return `
         <div class="order-footer">
           <div class="order-footer-totals">
             <div class="order-footer-row">
-              <span>Subtotal</span><span>${formatINR(o.subtotal)}</span>
+              <span>Subtotal</span><span>${formatINR(subtotalVal)}</span>
             </div>
             <div class="order-footer-row">
               <span>Shipping</span>
-              <span>${Number(o.shipping) === 0 ? "Free" : formatINR(o.shipping ?? 49)}</span>
+              <span>${Number(shippingVal) === 0 ? "Free" : formatINR(shippingVal)}</span>
             </div>
             <div class="order-footer-row total-row">
-              <span>Total</span><span>${formatINR(o.totalAmount)}</span>
+              <span>Total</span><span>${formatINR(totalVal)}</span>
             </div>
           </div>
 
