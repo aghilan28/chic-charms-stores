@@ -474,9 +474,25 @@
           });
         });
 
-        // Fisher-Yates Shuffle for dynamic e-commerce catalog feel
+        // Seeded PRNG for stable shuffle per session
+        function getSeededRandom(seed) {
+          return function() {
+            let t = seed += 0x6D2B79F5;
+            t = Math.imul(t ^ (t >>> 15), t | 1);
+            t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+            return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+          }
+        }
+        let seedStr = sessionStorage.getItem('cc_shuffle_seed');
+        if (!seedStr) {
+          seedStr = String(Math.floor(Math.random() * 1e6));
+          sessionStorage.setItem('cc_shuffle_seed', seedStr);
+        }
+        const rand = getSeededRandom(parseInt(seedStr, 10));
+
+        // Fisher-Yates Shuffle with seeded PRNG
         for (let i = allProducts.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
+          const j = Math.floor(rand() * (i + 1));
           const temp = allProducts[i];
           allProducts[i] = allProducts[j];
           allProducts[j] = temp;

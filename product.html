@@ -1190,29 +1190,39 @@ function renderProduct(product, docId) {
       let rect = null;
 
       if (img) {
-        img.style.willChange = 'transform, transform-origin';
+        img.style.willChange = 'transform';
+        img.style.transformOrigin = 'center center';
       }
 
-      wrapper.addEventListener('mouseenter', () => {
+      wrapper.addEventListener('mouseenter', (e) => {
         rect = wrapper.getBoundingClientRect();
-        if (img) img.style.transition = 'transform 0.15s ease-out';
+        if (img) {
+          img.style.transition = 'transform 0.25s cubic-bezier(0.25, 1, 0.5, 1)';
+          const S = isZoomed ? 3.0 : 2.0;
+          const pctX = (e.clientX - rect.left) / rect.width - 0.5;
+          const pctY = (e.clientY - rect.top) / rect.height - 0.5;
+          const tx = -pctX * rect.width * (S - 1) / S;
+          const ty = -pctY * rect.height * (S - 1) / S;
+          img.style.transform = `scale(${S}) translate(${tx}px, ${ty}px)`;
+        }
       });
 
       wrapper.addEventListener('mousemove', (e) => {
         if (!img) return;
         if (!rect) rect = wrapper.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width) * 100;
-        const y = ((e.clientY - rect.top) / rect.height) * 100;
         img.style.transition = 'none';
-        img.style.transformOrigin = `${x}% ${y}%`;
-        img.style.transform = isZoomed ? 'scale(3.5)' : 'scale(2.2)';
+        const S = isZoomed ? 3.0 : 2.0;
+        const pctX = (e.clientX - rect.left) / rect.width - 0.5;
+        const pctY = (e.clientY - rect.top) / rect.height - 0.5;
+        const tx = -pctX * rect.width * (S - 1) / S;
+        const ty = -pctY * rect.height * (S - 1) / S;
+        img.style.transform = `scale(${S}) translate(${tx}px, ${ty}px)`;
       });
 
       wrapper.addEventListener('mouseleave', () => {
         if (!img) return;
-        img.style.transition = 'transform 0.15s ease-out';
-        img.style.transform = 'scale(1)';
-        img.style.transformOrigin = 'center center';
+        img.style.transition = 'transform 0.25s cubic-bezier(0.25, 1, 0.5, 1)';
+        img.style.transform = 'scale(1) translate(0px, 0px)';
         isZoomed = false;
         img.style.cursor = 'zoom-in';
         rect = null;
@@ -1222,12 +1232,14 @@ function renderProduct(product, docId) {
         if (!img) return;
         isZoomed = !isZoomed;
         img.style.cursor = isZoomed ? 'zoom-out' : 'zoom-in';
-        img.style.transition = 'transform 0.15s ease-out';
+        img.style.transition = 'transform 0.25s cubic-bezier(0.25, 1, 0.5, 1)';
         if (rect) {
-          const x = ((e.clientX - rect.left) / rect.width) * 100;
-          const y = ((e.clientY - rect.top) / rect.height) * 100;
-          img.style.transformOrigin = `${x}% ${y}%`;
-          img.style.transform = isZoomed ? 'scale(3.5)' : 'scale(2.2)';
+          const S = isZoomed ? 3.0 : 2.0;
+          const pctX = (e.clientX - rect.left) / rect.width - 0.5;
+          const pctY = (e.clientY - rect.top) / rect.height - 0.5;
+          const tx = -pctX * rect.width * (S - 1) / S;
+          const ty = -pctY * rect.height * (S - 1) / S;
+          img.style.transform = `scale(${S}) translate(${tx}px, ${ty}px)`;
         }
       });
     });
