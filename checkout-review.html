@@ -982,6 +982,9 @@ document.documentElement.classList.add('cc-loading');
           </div>
         `;
       } else {
+        const shippingText = isInCampus 
+          ? '<span style="color:var(--success);font-weight:800;">Free (Campus Benefit 43% Included)</span>'
+          : (shipping === 0 ? '<span style="color:var(--success);font-weight:800;">Free</span>' : money(shipping));
         rows.innerHTML = `
           <div class="summary-row">
             <span class="summary-label">Subtotal (${cart.length} Item${cart.length !== 1 ? 's' : ''})</span>
@@ -989,9 +992,7 @@ document.documentElement.classList.add('cc-loading');
           </div>
           <div class="summary-row">
             <span class="summary-label">Delivery Charges</span>
-            <span class="summary-value">${shipping === 0
-              ? '<span style="color:var(--success);font-weight:800;">Free</span>'
-              : money(shipping)}</span>
+            <span class="summary-value">${shippingText}</span>
           </div>
           <div class="summary-row summary-total">
             <span class="summary-label">Total Amount</span>

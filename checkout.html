@@ -737,10 +737,15 @@
       const subtotal = cart.reduce(function (sum, item) {
         return sum + Number(item.price) * (item.quantity || 1);
       }, 0);
-      const shipping = subtotal >= 399 ? 0 : 49;
+      let isInCampus = false;
+      try {
+        const dt = localStorage.getItem('cc_delivery_type');
+        if (dt === 'in_campus') isInCampus = true;
+      } catch (e) {}
+      const shipping = isInCampus ? 0 : (subtotal >= 399 ? 0 : 49);
       const coupon = couponOverride !== undefined ? couponOverride : (VerifiedCouponState || (window.ChicCoupon && window.ChicCoupon.getStoredCoupon ? window.ChicCoupon.getStoredCoupon() : null));
       const discountAmount = window.ChicCoupon ? window.ChicCoupon.getDiscount(coupon) : 0;
-      return { subtotal, shipping, discountAmount, coupon, total: Math.max(0, subtotal + shipping - discountAmount) };
+      return { subtotal, shipping, discountAmount, coupon, total: Math.max(0, subtotal + shipping - discountAmount), isInCampus };
     }
 
     async function verifyCouponAtCheckout() {
@@ -878,7 +883,11 @@
       const totals = getCartTotals(cart);
 
       $id('summarySubtotal').textContent = formatINR(totals.subtotal);
-      $id('summaryShipping').textContent = totals.shipping === 0 ? 'Free 🎉' : '₹49';
+      if (totals.isInCampus) {
+        $id('summaryShipping').innerHTML = '<span style="color:var(--success);font-weight:700;">Free (Campus Benefit 43% Included)</span>';
+      } else {
+        $id('summaryShipping').textContent = totals.shipping === 0 ? 'Free 🎉' : '₹49';
+      }
       const showCoupon = totals.discountAmount > 0 && totals.coupon && totals.coupon.couponType === 'campus';
       $id('summaryCouponDiscountRow').style.display = showCoupon ? 'flex' : 'none';
       $id('summaryCouponCodeRow').style.display = showCoupon ? 'flex' : 'none';
