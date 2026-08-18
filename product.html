@@ -1187,30 +1187,48 @@ function renderProduct(product, docId) {
     gc.querySelectorAll('.zoom-wrapper').forEach(wrapper => {
       const img = wrapper.querySelector('.zoom-img');
       let isZoomed = false;
+      let rect = null;
+
+      if (img) {
+        img.style.willChange = 'transform, transform-origin';
+      }
+
+      wrapper.addEventListener('mouseenter', () => {
+        rect = wrapper.getBoundingClientRect();
+        if (img) img.style.transition = 'transform 0.15s ease-out';
+      });
 
       wrapper.addEventListener('mousemove', (e) => {
-        const rect = wrapper.getBoundingClientRect();
+        if (!img) return;
+        if (!rect) rect = wrapper.getBoundingClientRect();
         const x = ((e.clientX - rect.left) / rect.width) * 100;
         const y = ((e.clientY - rect.top) / rect.height) * 100;
+        img.style.transition = 'none';
         img.style.transformOrigin = `${x}% ${y}%`;
         img.style.transform = isZoomed ? 'scale(3.5)' : 'scale(2.2)';
       });
 
       wrapper.addEventListener('mouseleave', () => {
+        if (!img) return;
+        img.style.transition = 'transform 0.15s ease-out';
         img.style.transform = 'scale(1)';
         img.style.transformOrigin = 'center center';
         isZoomed = false;
         img.style.cursor = 'zoom-in';
+        rect = null;
       });
 
-      wrapper.addEventListener('click', () => {
+      wrapper.addEventListener('click', (e) => {
+        if (!img) return;
         isZoomed = !isZoomed;
         img.style.cursor = isZoomed ? 'zoom-out' : 'zoom-in';
-        wrapper.dispatchEvent(new MouseEvent('mousemove', {
-          clientX: window.event?.clientX,
-          clientY: window.event?.clientY,
-          bubbles: true
-        }));
+        img.style.transition = 'transform 0.15s ease-out';
+        if (rect) {
+          const x = ((e.clientX - rect.left) / rect.width) * 100;
+          const y = ((e.clientY - rect.top) / rect.height) * 100;
+          img.style.transformOrigin = `${x}% ${y}%`;
+          img.style.transform = isZoomed ? 'scale(3.5)' : 'scale(2.2)';
+        }
       });
     });
 
@@ -1439,6 +1457,11 @@ window.updateItemQty = function(delta) {
   );
   if (idx > -1) {
     const newQty = (cart[idx].quantity || 1) + delta;
+    const stockVal = Number(_currentProduct.stock ?? 0);
+    if (delta > 0 && newQty > stockVal) {
+      showToast('No more stock available');
+      return;
+    }
     if (newQty <= 0) {
       cart.splice(idx, 1);
     } else {
@@ -1579,19 +1602,26 @@ function syncMobilePDP() {
       let startScale = 1;
       let currentScale = 1;
 
+      if (img) {
+        img.style.willChange = 'transform';
+      }
+
       // Double Tap to toggle Zoom
       wrapper.addEventListener('touchend', (e) => {
         const currentTime = new Date().getTime();
         const tapLength = currentTime - lastTap;
         if (tapLength < 300 && tapLength > 0) {
           isZoomed = !isZoomed;
-          if (isZoomed) {
-            img.style.transform = 'scale(2.5)';
-            galDest.style.overflowX = 'hidden'; // Lock swiping while zoomed
-          } else {
-            img.style.transform = 'scale(1)';
-            galDest.style.overflowX = 'auto';
-            currentScale = 1;
+          if (img) {
+            img.style.transition = 'transform 0.2s ease-out';
+            if (isZoomed) {
+              img.style.transform = 'scale(2.5)';
+              galDest.style.overflowX = 'hidden'; // Lock swiping while zoomed
+            } else {
+              img.style.transform = 'scale(1)';
+              galDest.style.overflowX = 'auto';
+              currentScale = 1;
+            }
           }
           e.preventDefault();
         }
@@ -1601,6 +1631,7 @@ function syncMobilePDP() {
       // Pinch to Zoom
       wrapper.addEventListener('touchstart', (e) => {
         if (e.touches.length === 2) {
+          if (img) img.style.transition = 'none';
           touchStartDist = Math.hypot(
             e.touches[0].clientX - e.touches[1].clientX,
             e.touches[0].clientY - e.touches[1].clientY
@@ -1610,13 +1641,14 @@ function syncMobilePDP() {
       }, { passive: true });
 
       wrapper.addEventListener('touchmove', (e) => {
-        if (e.touches.length === 2) {
+        if (e.touches.length === 2 && img) {
           const dist = Math.hypot(
             e.touches[0].clientX - e.touches[1].clientX,
             e.touches[0].clientY - e.touches[1].clientY
           );
           const factor = dist / touchStartDist;
           currentScale = Math.min(Math.max(startScale * factor, 1), 4);
+          img.style.transition = 'none';
           img.style.transform = `scale(${currentScale})`;
           if (currentScale > 1) {
             galDest.style.overflowX = 'hidden'; // Lock swiping while zoomed
