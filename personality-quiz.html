@@ -7,7 +7,8 @@
 <meta name="description" content="Swipe through 5 styles and discover your ChicCharms jewellery personality.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="cc-global-header.css">
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
@@ -17,22 +18,22 @@
      CHICCHARMS — DESIGN TOKENS
   ===================================================== */
   :root{
-    --rose: #D98FA3;
-    --blush: #F8E7EC;
-    --ivory: #FFFDF9;
-    --charcoal: #242124;
-    --muted-rose: #B96F86;
+    --rose: #D4879C;
+    --blush: #FAF1F4;
+    --ivory: #FAF8F5;
+    --charcoal: #1C1917;
+    --muted-rose: #B5657A;
     --gold: #C8A96B;
 
-    --serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
-    --sans: 'DM Sans', Arial, Helvetica, sans-serif;
+    --serif: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Jost', 'DM Sans', -apple-system, sans-serif;
 
-    --radius-lg: 28px;
-    --radius-md: 18px;
-    --radius-sm: 10px;
+    --radius-lg: 20px;
+    --radius-md: 12px;
+    --radius-sm: 8px;
 
-    --shadow-soft: 0 12px 32px rgba(36,33,36,0.08);
-    --shadow-card: 0 18px 40px rgba(185,111,134,0.18);
+    --shadow-soft: 0 4px 16px rgba(60, 40, 30, 0.07);
+    --shadow-card: 0 10px 36px rgba(60, 40, 30, 0.10);
 
     --vh: 1vh;
   }
@@ -82,20 +83,23 @@
   ===================================================== */
   #app{
     max-width:480px;
-    margin:0 auto;
-    min-height:100vh;
-    min-height:calc(var(--vh, 1vh) * 100);
+    margin:104px auto 0; /* Offset for global header + announcement bar (36px + 68px) */
+    min-height:calc(100vh - 104px);
     position:relative;
     background:var(--ivory);
     display:flex;
     flex-direction:column;
   }
 
+  .hero-top {
+    display: none !important;
+  }
+
   @media (min-width:520px){
     body{ background:var(--blush); }
     #app{
-      margin:24px auto;
-      min-height:calc(100vh - 48px);
+      margin:128px auto 24px;
+      min-height:calc(100vh - 152px);
       border-radius:32px;
       box-shadow:0 40px 80px rgba(36,33,36,0.18);
       overflow:hidden;
@@ -751,7 +755,7 @@
         <svg viewBox="0 0 130 130" width="140" height="140">
           <defs>
             <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#D98FA3"/>
+              <stop offset="0%" stop-color="#D4879C"/>
               <stop offset="100%" stop-color="#C8A96B"/>
             </linearGradient>
           </defs>
@@ -820,7 +824,7 @@
     brandName: "CHICCHARMS",
     shopUrl: "index.html",
     assets: {
-      heroModel: "images/hero-quiet-luxury-main.jpg",
+      heroModel: "images/quiz-hero.png",
       swipe1A: "images/style-everyday-elegance.png",
       swipe1B: "images/style-after-dark.png",
       swipe2A: "images/style-modern-romance.jpg",
@@ -1482,5 +1486,6 @@
 
 })();
 </script>
+<script src="cc-global-header.js" defer></script>
 </body>
 </html>
