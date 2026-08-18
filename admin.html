@@ -6383,20 +6383,29 @@
         const variantError = validateVariantRows(variantRowsEl);
         const variants = collectVariants(variantRowsEl);
 
-        // Primary color and images come from the first variant row (migrated variants architecture)
+        // Read from main form inputs, falling back to first variant row if empty
         const firstVariant = variants[0] || {};
-        const color = firstVariant.color || "";
-        const image = firstVariant.variantProductImage || "";
-        const modelImage = firstVariant.variantModelImage || "";
+        const color = ($id("pColor")?.value || "").trim() || (firstVariant.color || "").trim();
+        const image = (imgInput?.value || "").trim() || (firstVariant.variantProductImage || "").trim();
+        const modelImage = ($id("pModelImage")?.value || "").trim() || (firstVariant.variantModelImage || "").trim();
 
         if (!name || price === "" || stock === "" || !color || !category || !image || !modelImage) {
+          const missing = [];
+          if (!name) missing.push("Name");
+          if (price === "") missing.push("Price");
+          if (stock === "") missing.push("Stock");
+          if (!color) missing.push("Primary Color");
+          if (!category) missing.push("Category");
+          if (!image) missing.push("Product Image URL");
+          if (!modelImage) missing.push("Model Image URL");
+
           showStatus(
             statusMsg,
             statusIcon,
             statusText,
             "error",
             "⚠️",
-            "Please fill in all required fields (Name, Price, Stock, Primary Color, Category, Product Image URL, Model Image URL).",
+            "Please fill in all required fields (Missing: " + missing.join(", ") + ").",
           );
           return;
         }
