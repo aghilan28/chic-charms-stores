@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>CHICCHARMS — What's Your Earring Energy?</title>
+<meta name="description" content="Swipe through 5 styles and discover your ChicCharms jewellery personality.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+<style>
+  /* =====================================================
+     CHICCHARMS — DESIGN TOKENS
+  ===================================================== */
+  :root{
+    --rose: #D98FA3;
+    --blush: #F8E7EC;
+    --ivory: #FFFDF9;
+    --charcoal: #242124;
+    --muted-rose: #B96F86;
+    --gold: #C8A96B;
+
+    --serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    --sans: 'DM Sans', Arial, Helvetica, sans-serif;
+
+    --radius-lg: 28px;
+    --radius-md: 18px;
+    --radius-sm: 10px;
+
+    --shadow-soft: 0 12px 32px rgba(36,33,36,0.08);
+    --shadow-card: 0 18px 40px rgba(185,111,134,0.18);
+
+    --vh: 1vh;
+  }
+
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+  html,body{
+    margin:0; padding:0;
+    background:var(--ivory);
+    color:var(--charcoal);
+    font-family:var(--sans);
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  body{
+    min-height:100vh;
+    min-height:calc(var(--vh, 1vh) * 100);
+  }
+
+  h1,h2,h3{
+    font-family:var(--serif);
+    font-weight:600;
+    margin:0;
+    letter-spacing:0.01em;
+  }
+
+  button{ font-family:var(--sans); cursor:pointer; border:none; background:none; }
+  a{ color:inherit; text-decoration:none; }
+  img{ max-width:100%; display:block; }
+
+  ::selection{ background:var(--rose); color:#fff; }
+
+  /* focus visibility */
+  button:focus-visible, a:focus-visible{
+    outline:2px solid var(--rose);
+    outline-offset:3px;
+    border-radius:6px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; }
+  }
+
+  /* =====================================================
+     APP SHELL — mobile-first, centered on larger viewports
+  ===================================================== */
+  #app{
+    max-width:480px;
+    margin:0 auto;
+    min-height:100vh;
+    min-height:calc(var(--vh, 1vh) * 100);
+    position:relative;
+    background:var(--ivory);
+    display:flex;
+    flex-direction:column;
+  }
+
+  @media (min-width:520px){
+    body{ background:var(--blush); }
+    #app{
+      margin:24px auto;
+      min-height:calc(100vh - 48px);
+      border-radius:32px;
+      box-shadow:0 40px 80px rgba(36,33,36,0.18);
+      overflow:hidden;
+    }
+  }
+
+  .screen{
+    display:none;
+    flex-direction:column;
+    flex:1;
+    min-height:100%;
+    width:100%;
+    padding:28px 24px 40px;
+    position:relative;
+  }
+  .screen.active{ display:flex; }
+
+  .eyebrow{
+    font-family:var(--sans);
+    font-size:11px;
+    letter-spacing:0.22em;
+    font-weight:700;
+    color:var(--muted-rose);
+    text-transform:uppercase;
+  }
+
+  .wordmark{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:20px;
+    letter-spacing:0.14em;
+    color:var(--charcoal);
+    text-align:center;
+  }
+  .wordmark span{ color:var(--rose); }
+
+  /* =====================================================
+     HERO
+  ===================================================== */
+  #screen-hero{ padding-top:22px; }
+
+  .hero-top{
+    display:flex; justify-content:center; align-items:center;
+    margin-bottom:22px;
+  }
+
+  .hero-media{
+    position:relative;
+    width:100%;
+    aspect-ratio: 4 / 5;
+    border-radius:var(--radius-lg);
+    overflow:hidden;
+    background:linear-gradient(160deg, var(--blush), #f1d6de 60%, var(--rose));
+    box-shadow:var(--shadow-soft);
+    margin-bottom:26px;
+  }
+  .hero-media img{
+    width:100%; height:100%; object-fit:cover; object-position: center 20%;
+  }
+  .hero-media .img-fallback{ position:absolute; inset:0; }
+
+  .hero-media::after{
+    content:"";
+    position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(36,33,36,0) 45%, rgba(36,33,36,0.38) 100%);
+    pointer-events:none;
+  }
+
+  .hero-media-caption{
+    position:absolute; left:18px; bottom:16px; z-index:2;
+    color:#fff;
+    font-family:var(--sans);
+    font-size:11px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    font-weight:700;
+    opacity:0.92;
+  }
+
+  .hero-headline{
+    font-size:clamp(34px, 9vw, 42px);
+    line-height:1.04;
+    text-align:center;
+    color:var(--charcoal);
+    margin-bottom:14px;
+  }
+  .hero-headline em{
+    font-style:italic;
+    color:var(--muted-rose);
+  }
+
+  .hero-sub{
+    text-align:center;
+    font-size:15px;
+    line-height:1.55;
+    color:#57515a;
+    max-width:340px;
+    margin:0 auto 28px;
+  }
+
+  .btn-primary{
+    display:block;
+    width:100%;
+    padding:18px 20px;
+    background:var(--charcoal);
+    color:#fff;
+    border-radius:100px;
+    font-size:13px;
+    letter-spacing:0.16em;
+    font-weight:700;
+    text-align:center;
+    text-transform:uppercase;
+    box-shadow:0 14px 30px rgba(36,33,36,0.22);
+    transition:transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .btn-primary:active{ transform:scale(0.97); }
+
+  .btn-primary.rose{
+    background:var(--rose);
+    box-shadow:0 14px 30px rgba(217,143,163,0.4);
+  }
+
+  .hero-micro{
+    text-align:center;
+    font-size:12px;
+    color:#a99ba1;
+    margin-top:14px;
+    letter-spacing:0.02em;
+  }
+
+  /* =====================================================
+     QUIZ / SWIPE
+  ===================================================== */
+  #screen-quiz{ padding-top:20px; }
+
+  .quiz-header{
+    display:flex; flex-direction:column; gap:16px;
+    margin-bottom:18px;
+  }
+
+  .quiz-progress-row{
+    display:flex; align-items:center; justify-content:space-between;
+  }
+
+  .progress-count{
+    font-family:var(--serif);
+    font-size:14px;
+    font-weight:600;
+    color:var(--muted-rose);
+    letter-spacing:0.04em;
+  }
+
+  .progress-track{
+    flex:1;
+    height:3px;
+    background:var(--blush);
+    border-radius:10px;
+    margin-left:14px;
+    overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg, var(--rose), var(--gold));
+    border-radius:10px;
+    transition:width 0.5s cubic-bezier(.65,0,.35,1);
+  }
+
+  .quiz-question{
+    font-size:22px;
+    text-align:center;
+    color:var(--charcoal);
+  }
+
+  .card-stack{
+    position:relative;
+    flex:1;
+    min-height:340px;
+    margin:6px 0 18px;
+    touch-action:pan-y;
+  }
+
+  .swipe-card{
+    position:absolute;
+    inset:0;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    background:var(--ivory);
+    border-radius:var(--radius-lg);
+    padding:10px;
+    box-shadow:var(--shadow-card);
+    border:1px solid rgba(217,143,163,0.15);
+    will-change:transform;
+    user-select:none;
+    -webkit-user-select:none;
+  }
+  .swipe-card.behind{
+    z-index:1;
+    transform:scale(0.94) translateY(10px);
+    opacity:0.7;
+    box-shadow:none;
+  }
+  .swipe-card.front{ z-index:2; }
+
+  .swipe-option{
+    position:relative;
+    border-radius:var(--radius-md);
+    overflow:hidden;
+    background:var(--blush);
+    display:flex;
+    flex-direction:column;
+  }
+  .swipe-option .opt-media{
+    position:relative;
+    flex:1;
+    background:linear-gradient(150deg, var(--blush), #ecd0d8);
+    overflow:hidden;
+  }
+  .swipe-option img{ width:100%; height:100%; object-fit:cover; }
+  .swipe-option .opt-label{
+    padding:10px 8px 12px;
+    text-align:center;
+    font-family:var(--serif);
+    font-size:16px;
+    font-weight:600;
+    letter-spacing:0.03em;
+    color:var(--charcoal);
+    background:var(--ivory);
+  }
+
+  .swipe-flag{
+    position:absolute;
+    top:14px;
+    padding:6px 14px;
+    border-radius:100px;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    border:2px solid;
+    opacity:0;
+    transition:opacity 0.12s ease;
+    background:rgba(255,253,249,0.92);
+    pointer-events:none;
+  }
+  .flag-love{ right:14px; color:#3f8f5c; border-color:#3f8f5c; transform:rotate(8deg); }
+  .flag-pass{ left:14px; color:#b5555f; border-color:#b5555f; transform:rotate(-8deg); }
+
+  .swipe-buttons{
+    display:flex;
+    gap:14px;
+    justify-content:center;
+    margin-top:auto;
+  }
+  .swipe-btn{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:15px 10px;
+    border-radius:100px;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    border:1.5px solid var(--blush);
+    background:var(--ivory);
+    color:var(--charcoal);
+    box-shadow:0 8px 18px rgba(36,33,36,0.06);
+    transition:transform 0.15s ease;
+  }
+  .swipe-btn:active{ transform:scale(0.96); }
+  .swipe-btn.love{ border-color:var(--rose); color:var(--muted-rose); }
+
+  /* =====================================================
+     TRANSITION / LOADING
+  ===================================================== */
+  #screen-loading{
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    gap:26px;
+  }
+  .loader-mark{
+    width:64px; height:64px;
+    border-radius:50%;
+    border:2px solid var(--blush);
+    border-top-color:var(--rose);
+    animation:spin 1s linear infinite;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  .loading-text{
+    font-family:var(--serif);
+    font-size:19px;
+    color:var(--charcoal);
+    letter-spacing:0.02em;
+    min-height:28px;
+  }
+
+  /* =====================================================
+     RESULT
+  ===================================================== */
+  #screen-result{ padding-top:26px; }
+
+  .result-eyebrow{
+    text-align:center;
+    margin-bottom:8px;
+  }
+
+  .match-ring-wrap{
+    display:flex; justify-content:center;
+    margin:6px 0 6px;
+  }
+  .match-ring{
+    position:relative;
+    width:140px; height:140px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    flex-direction:column;
+  }
+  .match-ring svg{ position:absolute; inset:0; transform:rotate(-90deg); }
+  .match-ring .ring-bg{ fill:none; stroke:var(--blush); stroke-width:6; }
+  .match-ring .ring-fill{
+    fill:none; stroke:url(#ringGradient); stroke-width:6; stroke-linecap:round;
+    stroke-dasharray:377; stroke-dashoffset:377;
+    transition:stroke-dashoffset 1.4s cubic-bezier(.2,.8,.2,1);
+  }
+  .match-percent{
+    font-family:var(--serif);
+    font-size:30px;
+    font-weight:600;
+    color:var(--charcoal);
+  }
+  .match-label{
+    font-size:10px;
+    letter-spacing:0.14em;
+    font-weight:700;
+    color:var(--muted-rose);
+    text-transform:uppercase;
+  }
+
+  .result-headline{
+    text-align:center;
+    font-size:clamp(30px,8vw,36px);
+    line-height:1.08;
+    margin:18px 0 14px;
+  }
+  .result-headline .accent{ color:var(--rose); font-style:italic; }
+
+  .result-desc{
+    text-align:center;
+    font-size:15px;
+    line-height:1.6;
+    color:#57515a;
+    max-width:340px;
+    margin:0 auto 20px;
+  }
+
+  .result-tags{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:30px;
+  }
+  .tag-pill{
+    padding:7px 16px;
+    border-radius:100px;
+    background:var(--blush);
+    color:var(--muted-rose);
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+  }
+
+  .section-title{
+    font-size:20px;
+    text-align:center;
+    margin-bottom:6px;
+  }
+  .section-sub{
+    text-align:center;
+    font-size:13.5px;
+    color:#8a7f85;
+    margin-bottom:20px;
+    line-height:1.5;
+  }
+
+  /* =====================================================
+     PRODUCTS
+  ===================================================== */
+  .product-list{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    margin-bottom:8px;
+  }
+
+  .product-card{
+    display:flex;
+    gap:14px;
+    align-items:center;
+    background:#fff;
+    border:1px solid var(--blush);
+    border-radius:var(--radius-md);
+    padding:12px;
+    box-shadow:var(--shadow-soft);
+    opacity:0;
+    transform:translateY(14px);
+    animation:cardReveal 0.6s cubic-bezier(.2,.7,.3,1) forwards;
+  }
+  @keyframes cardReveal{ to{ opacity:1; transform:translateY(0); } }
+
+  .product-thumb{
+    width:78px; height:78px;
+    border-radius:14px;
+    overflow:hidden;
+    flex-shrink:0;
+    background:linear-gradient(150deg, var(--blush), #ecd0d8);
+  }
+  .product-thumb img{ width:100%; height:100%; object-fit:cover; }
+
+  .product-info{ flex:1; min-width:0; }
+  .product-match{
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:0.12em;
+    color:var(--gold);
+    text-transform:uppercase;
+    margin-bottom:3px;
+  }
+  .product-name{
+    font-family:var(--serif);
+    font-size:17px;
+    font-weight:600;
+    color:var(--charcoal);
+    margin-bottom:2px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .product-price{
+    font-size:13px;
+    color:var(--muted-rose);
+    font-weight:700;
+  }
+  .product-cta{
+    flex-shrink:0;
+    padding:9px 14px;
+    border-radius:100px;
+    border:1.5px solid var(--charcoal);
+    font-size:10.5px;
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    white-space:nowrap;
+  }
+  .product-cta:active{ background:var(--charcoal); color:#fff; }
+
+  /* =====================================================
+     STUDENT OFFER
+  ===================================================== */
+  .offer-block{
+    margin:34px 0 30px;
+    background:linear-gradient(165deg, var(--rose), var(--muted-rose));
+    border-radius:var(--radius-lg);
+    padding:30px 24px;
+    text-align:center;
+    color:#fff;
+    box-shadow:0 20px 40px rgba(185,111,134,0.35);
+    position:relative;
+    overflow:hidden;
+  }
+  .offer-block::before{
+    content:"";
+    position:absolute;
+    top:-40%; right:-20%;
+    width:220px; height:220px;
+    background:radial-gradient(circle, rgba(255,255,255,0.22), transparent 70%);
+  }
+  .offer-eyebrow{
+    font-size:12px;
+    letter-spacing:0.18em;
+    font-weight:700;
+    text-transform:uppercase;
+    opacity:0.9;
+    margin-bottom:10px;
+  }
+  .offer-big{
+    font-family:var(--serif);
+    font-size:56px;
+    line-height:1;
+    margin-bottom:10px;
+    font-weight:600;
+  }
+  .offer-sub{
+    font-size:13.5px;
+    line-height:1.5;
+    opacity:0.95;
+    max-width:280px;
+    margin:0 auto 20px;
+  }
+  .offer-benefits{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    background:rgba(255,255,255,0.14);
+    border-radius:16px;
+    padding:16px;
+    text-align:left;
+  }
+  .offer-benefit{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:13.5px;
+    font-weight:500;
+  }
+  .offer-benefit .icon{ font-size:16px; }
+
+  /* =====================================================
+     FINAL CTA
+  ===================================================== */
+  .final-block{ text-align:center; padding-top:6px; }
+  .final-headline{
+    font-size:clamp(26px,7vw,30px);
+    line-height:1.15;
+    margin-bottom:22px;
+  }
+  .final-wordmark{
+    font-family:var(--serif);
+    font-size:26px;
+    letter-spacing:0.16em;
+    font-weight:600;
+    margin-bottom:8px;
+  }
+  .final-wordmark span{ color:var(--rose); }
+  .final-tagline{
+    font-size:13px;
+    color:#8a7f85;
+    margin-bottom:26px;
+  }
+
+  .sparkle{
+    position:absolute;
+    color:var(--gold);
+    opacity:0;
+    animation:sparklePop 1.8s ease-in-out infinite;
+    pointer-events:none;
+  }
+  @keyframes sparklePop{
+    0%,100%{ opacity:0; transform:scale(0.6) rotate(0deg); }
+    50%{ opacity:1; transform:scale(1.05) rotate(10deg); }
+  }
+
+  /* =====================================================
+     FALLBACK IMAGE PANEL
+  ===================================================== */
+  .img-fallback{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:100%; height:100%;
+    background:linear-gradient(150deg, var(--blush), #f1dbe1);
+    color:var(--muted-rose);
+    font-family:var(--serif);
+    font-size:12px;
+    letter-spacing:0.1em;
+    text-align:center;
+    text-transform:uppercase;
+    flex-direction:column;
+    gap:4px;
+  }
+  .img-fallback .fb-mark{ font-size:14px; font-weight:600; }
+
+  /* =====================================================
+     DEBUG PANEL
+  ===================================================== */
+  #debug-panel{
+    position:fixed;
+    bottom:10px; left:10px; right:10px;
+    max-width:460px;
+    margin:0 auto;
+    background:rgba(36,33,36,0.92);
+    color:#fff;
+    font-size:11px;
+    line-height:1.6;
+    padding:12px 14px;
+    border-radius:12px;
+    z-index:999;
+    display:none;
+    font-family:monospace;
+  }
+  #debug-panel.show{ display:block; }
+</style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ================= HERO SCREEN ================= -->
+  <section class="screen active" id="screen-hero" aria-label="ChicCharms introduction">
+    <div class="hero-top">
+      <div class="wordmark">CHIC<span>CHARMS</span></div>
+    </div>
+
+    <div class="hero-media">
+      <img id="hero-model-img" alt="Model wearing ChicCharms earrings" loading="eager">
+      <div class="hero-media-caption">ChicCharms Edit</div>
+    </div>
+
+    <h1 class="hero-headline">WHAT'S YOUR<br><em>EARRING ENERGY?</em></h1>
+    <p class="hero-sub">Swipe through 5 styles. We'll reveal the jewellery taste that feels most like you.</p>
+
+    <button class="btn-primary rose" id="btn-start" aria-label="Discover my style, begin the quiz">DISCOVER MY STYLE</button>
+    <p class="hero-micro">No sign-up. Just your taste.</p>
+  </section>
+
+  <!-- ================= QUIZ / SWIPE SCREEN ================= -->
+  <section class="screen" id="screen-quiz" aria-label="Style swipe quiz">
+    <div class="quiz-header">
+      <div class="quiz-progress-row">
+        <span class="progress-count" id="progress-count" aria-live="polite">01 / 05</span>
+        <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+      </div>
+      <h2 class="quiz-question" id="quiz-question">WHICH ONE FEELS MORE YOU?</h2>
+    </div>
+
+    <div class="card-stack" id="card-stack"></div>
+
+    <div class="swipe-buttons">
+      <button class="swipe-btn" id="btn-pass" aria-label="Not my style, choose the left option">← NOT MY STYLE</button>
+      <button class="swipe-btn love" id="btn-love" aria-label="Love this, choose the right option">LOVE THIS →</button>
+    </div>
+  </section>
+
+  <!-- ================= LOADING / TRANSITION SCREEN ================= -->
+  <section class="screen" id="screen-loading" aria-label="Calculating your style">
+    <div class="loader-mark" aria-hidden="true"></div>
+    <div class="loading-text" id="loading-text" aria-live="polite">READING YOUR PICKS...</div>
+  </section>
+
+  <!-- ================= RESULT SCREEN ================= -->
+  <section class="screen" id="screen-result" aria-label="Your jewellery personality result">
+    <div class="result-eyebrow eyebrow">YOUR JEWELLERY PERSONALITY</div>
+
+    <div class="match-ring-wrap">
+      <div class="match-ring">
+        <svg viewBox="0 0 130 130" width="140" height="140">
+          <defs>
+            <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#D98FA3"/>
+              <stop offset="100%" stop-color="#C8A96B"/>
+            </linearGradient>
+          </defs>
+          <circle class="ring-bg" cx="65" cy="65" r="60"></circle>
+          <circle class="ring-fill" id="ring-fill" cx="65" cy="65" r="60"></circle>
+        </svg>
+        <div class="match-percent" id="match-percent">0%</div>
+        <div class="match-label">Style Match</div>
+      </div>
+    </div>
+
+    <h2 class="result-headline" id="result-headline"></h2>
+    <p class="result-desc" id="result-desc"></p>
+    <div class="result-tags" id="result-tags"></div>
+
+    <h3 class="section-title" id="products-title">WE THINK YOU'LL LOVE THESE.</h3>
+    <p class="section-sub" id="products-sub">Based on your choices, these ChicCharms pieces feel very you.</p>
+
+    <div class="product-list" id="product-list"></div>
+
+    <div class="offer-block">
+      <div class="offer-eyebrow">YOUR STUDENT PERK ✨</div>
+      <div class="offer-big">43% OFF</div>
+      <p class="offer-sub">Because great style shouldn't need a great budget.</p>
+      <div class="offer-benefits">
+        <div class="offer-benefit"><span class="icon">🎓</span> Student Offer</div>
+        <div class="offer-benefit"><span class="icon">🚚</span> Free Delivery</div>
+        <div class="offer-benefit"><span class="icon">📍</span> In-Campus Delivery</div>
+      </div>
+    </div>
+
+    <div class="final-block">
+      <h2 class="final-headline">YOU FOUND YOUR STYLE.<br><em style="font-style:italic;color:var(--rose)">NOW WEAR IT.</em></h2>
+      <div class="final-wordmark">CHIC<span>CHARMS</span></div>
+      <p class="final-tagline">Trendy earrings made for your everyday sparkle.</p>
+      <button class="btn-primary" id="btn-shop" aria-label="Shop my ChicCharms match, go to the ChicCharms website">SHOP MY CHICCHARMS MATCH →</button>
+    </div>
+  </section>
+
+</div>
+
+<div id="debug-panel"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  // =====================================================
+  // FIREBASE INITIALIZATION & CONFIGURATION
+  // =====================================================
+  const FIREBASE_CONFIG = {
+    apiKey: "AIzaSyA5Bh77_4HE3yQF0hi5ddvbFLZC7rEerxg",
+    authDomain: "chic-charms-store.firebaseapp.com",
+    projectId: "chic-charms-store",
+    storageBucket: "chic-charms-store.firebasestorage.app",
+    messagingSenderId: "342514318589",
+    appId: "1:342514318589:web:31c3490c10731e46d75294"
+  };
+
+  // Initialize Firebase app if the scripts are present
+  if (typeof firebase !== 'undefined' && !firebase.apps.length) {
+    firebase.initializeApp(FIREBASE_CONFIG);
+  }
+
+  const CONFIG = {
+    brandName: "CHICCHARMS",
+    shopUrl: "index.html",
+    assets: {
+      heroModel: "images/hero-quiet-luxury-main.jpg",
+      swipe1A: "images/style-everyday-elegance.png",
+      swipe1B: "images/style-after-dark.png",
+      swipe2A: "images/style-modern-romance.jpg",
+      swipe2B: "images/editorial-light-meets-gold.png",
+      swipe3A: "images/style-heritage-muse.png",
+      swipe3B: "images/editorial-everyday-hoops.png",
+      swipe4A: "images/editorial-korean-morning-coffee.png",
+      swipe4B: "images/editorial-soft-date-night.png",
+      swipe5A: "images/story-soft-pearl-drop.png",
+      swipe5B: "images/editorial-minimal-soul-closeup.png"
+    }
+  };
+
+  // Curated static fallback catalog if API is completely unreachable
+  const PRODUCTS_FALLBACK = {
+    quietLuxury: [
+      { id: "fallback-ql-1", name: "Pearl Drop Elegance",  price: "₹299", image: "images/story-soft-pearl-drop.png", url: "product.html?id=PearlDropElegance" },
+      { id: "fallback-ql-2", name: "Minimal Gold Stud",    price: "₹249", image: "images/style-everyday-elegance.png", url: "product.html?id=MinimalGoldStud" },
+      { id: "fallback-ql-3", name: "Classic Pearl Stud",   price: "₹279", image: "images/style-heritage-muse.png", url: "product.html?id=ClassicPearlStud" }
+    ],
+    trendsetter: [
+      { id: "fallback-ts-1", name: "Trendy Statement Drop",price: "₹349", image: "images/style-after-dark.png", url: "product.html?id=TrendyStatementDrop" },
+      { id: "fallback-ts-2", name: "Korean Bow Earrings",  price: "₹299", image: "images/editorial-everyday-hoops.png", url: "product.html?id=KoreanBowEarrings" },
+      { id: "fallback-ts-3", name: "Modern Heart Drop",    price: "₹329", image: "images/editorial-minimal-soul-closeup.png", url: "product.html?id=ModernHeartDrop" }
+    ],
+    romantic: [
+      { id: "fallback-rm-1", name: "Blush Pearl Cascade",  price: "₹319", image: "images/style-modern-romance.jpg", url: "product.html?id=BlushPearlCascade" },
+      { id: "fallback-rm-2", name: "Rose Petal Studs",     price: "images/style-modern-romance.jpg", url: "product.html?id=RosePetalStuds" },
+      { id: "fallback-rm-3", name: "Delicate Vine Drop",   price: "₹289", image: "images/story-soft-pearl-drop.png", url: "product.html?id=DelicateVineDrop" }
+    ],
+    statementMaker: [
+      { id: "fallback-sm-1", name: "Bold Gold Hoop",       price: "₹359", image: "images/style-after-dark.png", url: "product.html?id=BoldGoldHoop" },
+      { id: "fallback-sm-2", name: "Crystal Chandelier",   price: "₹399", image: "images/editorial-light-meets-gold.png", url: "product.html?id=CrystalChandelier" },
+      { id: "fallback-sm-3", name: "Sculptural Drop",      price: "₹369", image: "images/editorial-soft-date-night.png", url: "product.html?id=SculpturalDrop" }
+    ],
+    everydayIcon: [
+      { id: "fallback-ei-1", name: "Everyday Gold Hoop",   price: "₹269", image: "images/style-everyday-elegance.png", url: "product.html?id=EverydayGoldHoop" },
+      { id: "fallback-ei-2", name: "Simple Circle Stud",   price: "₹229", image: "images/editorial-korean-morning-coffee.png", url: "product.html?id=SimpleCircleStud" },
+      { id: "fallback-ei-3", name: "Everyday Charm Drop",  price: "₹279", image: "images/editorial-everyday-hoops.png", url: "product.html?id=EverydayCharmDrop" }
+    ]
+  };
+
+  let PRODUCTS = PRODUCTS_FALLBACK;
+  let liveFetchedList = [];
+
+  // Decoupled Analytics Layer
+  function track(eventName, payload) {
+    console.log('[Analytics] Event:', eventName, payload);
+    try {
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', eventName, payload);
+      }
+      if (typeof window.fbq === 'function') {
+        window.fbq('trackCustom', eventName, payload);
+      }
+    } catch (e) {
+      console.warn('[Analytics] Failed to send tracking event:', e);
+    }
+  }
+
+  // =====================================================
+  // API INTEGRATION — PRODUCTS FETCH
+  // =====================================================
+  function fetchProducts() {
+    return new Promise((resolve, reject) => {
+      // 4-second timeout guard
+      const timeout = setTimeout(() => {
+        reject(new Error('Fetch request timed out'));
+      }, 4000);
+
+      if (typeof firebase === 'undefined') {
+        clearTimeout(timeout);
+        return reject(new Error('Firebase SDK not loaded'));
+      }
+
+      const db = firebase.firestore();
+      db.collection('products').get().then((snapshot) => {
+        clearTimeout(timeout);
+        const list = [];
+        snapshot.forEach((doc) => {
+          const raw = doc.data();
+          // Normalize stock checks
+          const rawStock = raw.stock ?? raw.Stock ?? null;
+          const parsed = Number(rawStock ?? 0);
+          const stock = isNaN(parsed) ? 0 : parsed;
+
+          // Normalize image URL
+          let imageUrl = raw.productImage || raw.image || raw.imageUrl || raw.imageURL || "";
+          if (!imageUrl && raw.images && raw.images.length) {
+            imageUrl = raw.images[0];
+          }
+
+          list.push({
+            id: doc.id,
+            name: raw.name || "Chic Charms Piece",
+            price: Number(raw.price || 0),
+            imageUrl: imageUrl,
+            productUrl: `product.html?id=${doc.id}`,
+            inStock: stock > 0,
+            categorySlug: raw.categorySlug || ""
+          });
+        });
+        resolve(list);
+      }).catch((err) => {
+        clearTimeout(timeout);
+        reject(err);
+      });
+    });
+  }
+
+  // Execute products fetch on page load (non-blocking)
+  fetchProducts().then((list) => {
+    liveFetchedList = list;
+    console.log('[ChicCharms] Live products synced:', list.length);
+  }).catch((err) => {
+    console.warn('[ChicCharms] Failed to load live products, falling back to static copy:', err);
+  });
+
+  // Map category slugs or attributes to personality keys
+  function getPersonalityForProduct(product) {
+    if (product.personality) return product.personality;
+    const cat = String(product.categorySlug || '').toLowerCase();
+    if (cat.includes('heritage') || cat.includes('luxury')) return 'quietLuxury';
+    if (cat.includes('romance') || cat.includes('romantic')) return 'romantic';
+    if (cat.includes('after-dark') || cat.includes('statement')) return 'statementMaker';
+    if (cat.includes('everyday')) return 'everydayIcon';
+    return 'trendsetter'; // fallback
+  }
+
+  // Resolves 3 matching, in-stock products dynamically
+  function getProductsForPersonality(personalityKey) {
+    if (!liveFetchedList || liveFetchedList.length === 0) {
+      return PRODUCTS_FALLBACK[personalityKey] || [];
+    }
+
+    // Filter by personality mapping and check if inStock
+    let matched = liveFetchedList.filter((p) => {
+      return getPersonalityForProduct(p) === personalityKey && p.inStock;
+    });
+
+    // Fallback backfill from general bestsellers/other personalities if < 3 matches
+    if (matched.length < 3) {
+      const remainingIds = new Set(matched.map(m => m.id));
+      const backup = liveFetchedList.filter(p => p.inStock && !remainingIds.has(p.id));
+      matched = matched.concat(backup.slice(0, 3 - matched.length));
+    }
+
+    // Return exactly 3 products
+    return matched.slice(0, 3).map((p) => ({
+      name: p.name,
+      price: '₹' + Number(p.price).toLocaleString('en-IN'),
+      image: p.imageUrl,
+      url: p.productUrl,
+      id: p.id
+    }));
+  }
+
+  // =====================================================
+  // DEBUG MODE
+  // =====================================================
+  const DEBUG = false;
+
+  // =====================================================
+  // QUIZ ROUNDS
+  // =====================================================
+  const ROUNDS = [
+    {
+      question: "WHICH ONE FEELS MORE YOU?",
+      optionA: { label: "MINIMAL",   image: CONFIG.assets.swipe1A, weights: { quietLuxury: 3, everydayIcon: 2 } },
+      optionB: { label: "STATEMENT", image: CONFIG.assets.swipe1B, weights: { statementMaker: 3, trendsetter: 2 } }
+    },
+    {
+      question: "WHAT CATCHES YOUR EYE?",
+      optionA: { label: "SOFT", image: CONFIG.assets.swipe2A, weights: { romantic: 3, quietLuxury: 1 } },
+      optionB: { label: "BOLD", image: CONFIG.assets.swipe2B, weights: { statementMaker: 3, trendsetter: 2 } }
+    },
+    {
+      question: "YOUR PERFECT VIBE?",
+      optionA: { label: "TIMELESS", image: CONFIG.assets.swipe3A, weights: { quietLuxury: 3, everydayIcon: 2 } },
+      optionB: { label: "TRENDING", image: CONFIG.assets.swipe3B, weights: { trendsetter: 3, statementMaker: 1 } }
+    },
+    {
+      question: "WHAT WOULD YOU WEAR MOST?",
+      optionA: { label: "EVERYDAY", image: CONFIG.assets.swipe4A, weights: { everydayIcon: 3, quietLuxury: 1 } },
+      optionB: { label: "OCCASION", image: CONFIG.assets.swipe4B, weights: { statementMaker: 3, romantic: 1 } }
+    },
+    {
+      question: "ONE LAST CHOICE...",
+      optionA: { label: "DELICATE", image: CONFIG.assets.swipe5A, weights: { romantic: 3, quietLuxury: 2 } },
+      optionB: { label: "DRAMATIC", image: CONFIG.assets.swipe5B, weights: { statementMaker: 3, trendsetter: 3 } }
+    }
+  ];
+
+  // =====================================================
+  // PERSONALITIES
+  // =====================================================
+  const PERSONALITIES = {
+    quietLuxury: {
+      headlineHtml: "YOU'RE A<br><em>QUIET LUXURY GIRL.</em>",
+      desc: "You don't need jewellery to shout. You notice the details, choose carefully, and somehow make simple look expensive.",
+      tags: ["ELEGANT","REFINED","TIMELESS"],
+      resultIntro: "Clean lines. Elegant details. Nothing unnecessary.",
+      resultSub: "Here are three ChicCharms pieces that match your refined taste."
+    },
+    trendsetter: {
+      headlineHtml: "YOU'RE A<br><em>TRENDSETTER.</em>",
+      desc: "You spot the pieces everyone else is about to discover. Your jewellery is part of the outfit — and sometimes the whole point.",
+      tags: ["TRENDY","PLAYFUL","FEARLESS"],
+      resultIntro: "You picked bold, current and impossible-to-ignore.",
+      resultSub: "Here are three ChicCharms pieces we'd put straight on your wishlist."
+    },
+    romantic: {
+      headlineHtml: "YOU'RE A<br><em>ROMANTIC.</em>",
+      desc: "You fall for the little details. Soft shapes, delicate sparkle and pieces that make an ordinary outfit feel a little more special.",
+      tags: ["SOFT","FEMININE","DREAMY"],
+      resultIntro: "Soft shapes. Delicate sparkle. Pieces with a little poetry.",
+      resultSub: "Here are three ChicCharms pieces that feel like you."
+    },
+    statementMaker: {
+      headlineHtml: "YOU'RE A<br><em>STATEMENT MAKER.</em>",
+      desc: "You don't believe jewellery should disappear into an outfit. You like pieces that enter the room before you do.",
+      tags: ["BOLD","CONFIDENT","MAGNETIC"],
+      resultIntro: "Bold shapes. Big presence. Zero apologies.",
+      resultSub: "Here are three ChicCharms pieces built to be noticed."
+    },
+    everydayIcon: {
+      headlineHtml: "YOU'RE AN<br><em>EVERYDAY ICON.</em>",
+      desc: "You want jewellery that works with your real life — college mornings, coffee runs, spontaneous plans and everything in between.",
+      tags: ["EFFORTLESS","VERSATILE","EVERYDAY"],
+      resultIntro: "Easy, wearable, made for real life.",
+      resultSub: "Here are three ChicCharms pieces for every day."
+    }
+  };
+
+  // =====================================================
+  // STATE
+  // =====================================================
+  let currentRound = 0;
+  let scores = { quietLuxury: 0, trendsetter: 0, romantic: 0, statementMaker: 0, everydayIcon: 0 };
+  let isAnimating = false;
+
+  // =====================================================
+  // DOM REFS
+  // =====================================================
+  const screens = {
+    hero: document.getElementById('screen-hero'),
+    quiz: document.getElementById('screen-quiz'),
+    loading: document.getElementById('screen-loading'),
+    result: document.getElementById('screen-result')
+  };
+
+  const cardStack = document.getElementById('card-stack');
+  const quizQuestion = document.getElementById('quiz-question');
+  const progressCount = document.getElementById('progress-count');
+  const progressFill = document.getElementById('progress-fill');
+  const loadingText = document.getElementById('loading-text');
+  const debugPanel = document.getElementById('debug-panel');
+
+  function showScreen(name){
+    Object.values(screens).forEach(s => s.classList.remove('active'));
+    screens[name].classList.add('active');
+    window.scrollTo(0,0);
+  }
+
+  // =====================================================
+  // IMAGE HELPERS — graceful fallback panel
+  // =====================================================
+  function setImageWithFallback(imgEl, src, fallbackLabel){
+    imgEl.addEventListener('error', function onErr(){
+      imgEl.removeEventListener('error', onErr);
+      const fallback = document.createElement('div');
+      fallback.className = 'img-fallback';
+      fallback.innerHTML = '<div class="fb-mark">CHICCHARMS</div><div>' + (fallbackLabel || 'IMAGE') + '</div>';
+      imgEl.replaceWith(fallback);
+    });
+    imgEl.src = src;
+  }
+
+  // Hero image
+  setImageWithFallback(document.getElementById('hero-model-img'), CONFIG.assets.heroModel, 'MODEL IMAGE');
+
+  // =====================================================
+  // BUILD QUIZ CARD
+  // =====================================================
+  function renderRound(index){
+    const round = ROUNDS[index];
+    quizQuestion.textContent = round.question;
+    progressCount.textContent = String(index + 1).padStart(2,'0') + ' / ' + String(ROUNDS.length).padStart(2,'0');
+    progressFill.style.width = ((index) / ROUNDS.length * 100) + '%';
+
+    cardStack.innerHTML = '';
+
+    // behind card (next preview, static, decorative)
+    if (index < ROUNDS.length - 1) {
+      const behind = buildCardEl(ROUNDS[index+1], true);
+      cardStack.appendChild(behind);
+    }
+
+    const front = buildCardEl(round, false);
+    cardStack.appendChild(front);
+
+    attachDrag(front, round);
+  }
+
+  function buildCardEl(round, isBehind){
+    const card = document.createElement('div');
+    card.className = 'swipe-card ' + (isBehind ? 'behind' : 'front');
+    card.setAttribute('role','group');
+    card.setAttribute('aria-label', round.question);
+
+    const optA = buildOptionEl(round.optionA, 'pass');
+    const optB = buildOptionEl(round.optionB, 'love');
+
+    const flagLove = document.createElement('div');
+    flagLove.className = 'swipe-flag flag-love';
+    flagLove.textContent = 'LOVE';
+    const flagPass = document.createElement('div');
+    flagPass.className = 'swipe-flag flag-pass';
+    flagPass.textContent = 'PASS';
+
+    card.appendChild(flagPass);
+    card.appendChild(optA);
+    card.appendChild(optB);
+    card.appendChild(flagLove);
+
+    if(!isBehind){
+      card._flagLove = flagLove;
+      card._flagPass = flagPass;
+    }
+    return card;
+  }
+
+  function buildOptionEl(option, side){
+    const wrap = document.createElement('div');
+    wrap.className = 'swipe-option';
+    const media = document.createElement('div');
+    media.className = 'opt-media';
+    const img = document.createElement('img');
+    img.alt = option.label + ' earring style';
+    img.loading = 'lazy';
+    img.draggable = false;
+    setImageWithFallback(img, option.image, option.label);
+    media.appendChild(img);
+    const label = document.createElement('div');
+    label.className = 'opt-label';
+    label.textContent = option.label;
+    wrap.appendChild(media);
+    wrap.appendChild(label);
+    return wrap;
+  }
+
+  // =====================================================
+  // DRAG / SWIPE MECHANICS
+  // =====================================================
+  function attachDrag(cardEl, round){
+    let startX = 0, startY = 0, currentX = 0, dragging = false, pointerId = null;
+    const threshold = () => cardEl.offsetWidth * 0.27;
+
+    function onPointerDown(e){
+      if(isAnimating) return;
+      dragging = true;
+      pointerId = e.pointerId;
+      cardEl.setPointerCapture(pointerId);
+      startX = e.clientX;
+      startY = e.clientY;
+      currentX = 0;
+      cardEl.style.transition = 'none';
+    }
+
+    function onPointerMove(e){
+      if(!dragging) return;
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      if(Math.abs(dx) < Math.abs(dy)) return; // let vertical scroll happen
+      currentX = dx;
+      const rotate = dx / 18;
+      cardEl.style.transform = 'translateX(' + dx + 'px) rotate(' + rotate + 'deg)';
+      const ratio = Math.min(Math.abs(dx) / threshold(), 1);
+      if(dx > 0){
+        cardEl._flagLove.style.opacity = ratio;
+        cardEl._flagPass.style.opacity = 0;
+      } else {
+        cardEl._flagPass.style.opacity = ratio;
+        cardEl._flagLove.style.opacity = 0;
+      }
+    }
+
+    function onPointerUp(){
+      if(!dragging) return;
+      dragging = false;
+      cardEl.style.transition = 'transform 0.35s cubic-bezier(.2,.7,.3,1)';
+      if(Math.abs(currentX) >= threshold()){
+        commitSwipe(cardEl, round, currentX > 0 ? 'love' : 'pass');
+      } else {
+        cardEl.style.transform = 'translateX(0) rotate(0)';
+        cardEl._flagLove.style.opacity = 0;
+        cardEl._flagPass.style.opacity = 0;
+      }
+    }
+
+    cardEl.addEventListener('pointerdown', onPointerDown);
+    cardEl.addEventListener('pointermove', onPointerMove);
+    cardEl.addEventListener('pointerup', onPointerUp);
+    cardEl.addEventListener('pointercancel', onPointerUp);
+  }
+
+  function commitSwipe(cardEl, round, direction){
+    if(isAnimating) return;
+    isAnimating = true;
+    const flyX = (direction === 'love' ? 1 : -1) * (window.innerWidth);
+    cardEl.style.transform = 'translateX(' + flyX + 'px) rotate(' + (direction === 'love' ? 24 : -24) + 'deg)';
+    cardEl.style.opacity = '0';
+
+    const chosen = direction === 'love' ? round.optionB : round.optionA;
+    applyWeights(chosen.weights);
+
+    // Track round_completed event
+    track('round_completed', {
+      roundIndex: currentRound + 1,
+      choiceLabel: chosen.label,
+      direction: direction
+    });
+
+    setTimeout(() => {
+      isAnimating = false;
+      advanceRound();
+    }, 320);
+  }
+
+  function applyWeights(weights){
+    Object.keys(weights).forEach(key => { scores[key] += weights[key]; });
+    updateDebugPanel();
+  }
+
+  function advanceRound(){
+    currentRound++;
+    if(currentRound >= ROUNDS.length){
+      progressFill.style.width = '100%';
+      // Track quiz_completed event
+      track('quiz_completed', { scores: scores });
+      runLoadingSequence();
+    } else {
+      renderRound(currentRound);
+    }
+  }
+
+  // Fallback buttons (accessibility + non-swipe path)
+  document.getElementById('btn-pass').addEventListener('click', () => {
+    const front = cardStack.querySelector('.swipe-card.front');
+    if(front && !isAnimating) commitSwipe(front, ROUNDS[currentRound], 'pass');
+  });
+  document.getElementById('btn-love').addEventListener('click', () => {
+    const front = cardStack.querySelector('.swipe-card.front');
+    if(front && !isAnimating) commitSwipe(front, ROUNDS[currentRound], 'love');
+  });
+
+  // =====================================================
+  // START QUIZ
+  // =====================================================
+  document.getElementById('btn-start').addEventListener('click', () => {
+    // Track quiz_started event
+    track('quiz_started', {});
+    currentRound = 0;
+    scores = { quietLuxury: 0, trendsetter: 0, romantic: 0, statementMaker: 0, everydayIcon: 0 };
+    renderRound(0);
+    showScreen('quiz');
+  });
+
+  // =====================================================
+  // LOADING TRANSITION
+  // =====================================================
+  function runLoadingSequence(){
+    showScreen('loading');
+    loadingText.textContent = 'READING YOUR PICKS...';
+    setTimeout(() => { loadingText.textContent = 'MATCHING YOUR STYLE...'; }, 700);
+    setTimeout(() => { loadingText.textContent = 'YOUR CHICCHARMS STYLE IS READY.'; }, 1400);
+    setTimeout(() => { renderResult(); showScreen('result'); }, 1900);
+  }
+
+  // =====================================================
+  // RESULT RENDER
+  // =====================================================
+  function getWinningPersonality(){
+    let best = null, bestScore = -Infinity;
+    Object.keys(scores).forEach(key => {
+      if(scores[key] > bestScore){ bestScore = scores[key]; best = key; }
+    });
+    return best;
+  }
+
+  function computeMatchPercent(key){
+    const total = Object.values(scores).reduce((a,b) => a+b, 0) || 1;
+    const raw = Math.round((scores[key] / total) * 100);
+    // present an appealing but honest range
+    return Math.max(78, Math.min(98, raw + 40));
+  }
+
+  function renderResult(){
+    const key = getWinningPersonality();
+    const p = PERSONALITIES[key];
+    updateDebugPanel(key);
+
+    document.getElementById('result-headline').innerHTML = p.headlineHtml;
+    document.getElementById('result-desc').textContent = p.desc;
+
+    const tagsWrap = document.getElementById('result-tags');
+    tagsWrap.innerHTML = '';
+    p.tags.forEach(tag => {
+      const pill = document.createElement('span');
+      pill.className = 'tag-pill';
+      pill.textContent = tag;
+      tagsWrap.appendChild(pill);
+    });
+
+    document.getElementById('products-title').textContent = p.resultIntro;
+    document.getElementById('products-sub').textContent = p.resultSub;
+
+    // Match percent animation
+    const percent = computeMatchPercent(key);
+    const percentEl = document.getElementById('match-percent');
+    const ringFill = document.getElementById('ring-fill');
+    const circumference = 377;
+    ringFill.style.strokeDashoffset = circumference;
+    requestAnimationFrame(() => {
+      ringFill.style.strokeDashoffset = circumference - (circumference * percent / 100);
+    });
+    animateCountUp(percentEl, percent);
+
+    // Track personality_result_shown event
+    track('personality_result_shown', {
+      personalityKey: key,
+      matchPercent: percent
+    });
+
+    // Resolve products for this personality from live database (or fallback)
+    const recommendedProducts = getProductsForPersonality(key);
+
+    // Products
+    const listEl = document.getElementById('product-list');
+    listEl.innerHTML = '';
+    recommendedProducts.forEach((product, i) => {
+      const card = document.createElement('div');
+      card.className = 'product-card';
+      card.style.animationDelay = (0.15 + i * 0.12) + 's';
+
+      const thumb = document.createElement('div');
+      thumb.className = 'product-thumb';
+      const img = document.createElement('img');
+      img.alt = product.name;
+      img.loading = 'lazy';
+      setImageWithFallback(img, product.image, 'PRODUCT');
+      thumb.appendChild(img);
+
+      const info = document.createElement('div');
+      info.className = 'product-info';
+      info.innerHTML =
+        '<div class="product-match">Your Match</div>' +
+        '<div class="product-name">' + escapeHtml(product.name) + '</div>' +
+        '<div class="product-price">' + escapeHtml(product.price) + '</div>';
+
+      const cta = document.createElement('a');
+      cta.className = 'product-cta';
+      cta.textContent = 'VIEW PIECE';
+      cta.href = product.url || '#';
+      cta.setAttribute('aria-label', 'View ' + product.name);
+      
+      cta.addEventListener('click', (e) => {
+        // Track product click event
+        track('product_clicked', {
+          productId: product.id,
+          personalityKey: key
+        });
+      });
+
+      card.appendChild(thumb);
+      card.appendChild(info);
+      card.appendChild(cta);
+      listEl.appendChild(card);
+
+      // Track product_viewed event
+      track('product_viewed', { productId: product.id });
+    });
+
+    // Instrument offer viewed using IntersectionObserver
+    const offerBlock = document.querySelector('.offer-block');
+    if (offerBlock && window.IntersectionObserver) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            track('offer_viewed', {});
+            observer.disconnect();
+          }
+        });
+      }, { threshold: 0.2 });
+      observer.observe(offerBlock);
+    }
+  }
+
+  function animateCountUp(el, target){
+    const duration = 1200;
+    const start = performance.now();
+    function tick(now){
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(eased * target) + '%';
+      if(progress < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  function escapeHtml(str){
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  // =====================================================
+  // FINAL CTA & PERSONALITY-SPECIFIC DEEP LINKING
+  // =====================================================
+  const PERSONALITY_COLLECTIONS = {
+    quietLuxury: "index.html?category=heritage-muse",
+    trendsetter: "index.html",
+    romantic: "index.html?category=modern-romance",
+    statementMaker: "index.html?category=after-dark",
+    everydayIcon: "index.html?category=everyday-elegance"
+  };
+
+  document.getElementById('btn-shop').addEventListener('click', () => {
+    const key = getWinningPersonality() || 'trendsetter';
+    const targetUrl = PERSONALITY_COLLECTIONS[key] || CONFIG.shopUrl;
+    
+    // Track shop_cta_clicked event
+    track('shop_cta_clicked', { personalityKey: key, targetUrl: targetUrl });
+    
+    window.location.href = targetUrl;
+  });
+
+  // =====================================================
+  // DEBUG PANEL
+  // =====================================================
+  function updateDebugPanel(winner){
+    if(!DEBUG) return;
+    debugPanel.classList.add('show');
+    debugPanel.innerHTML =
+      '<strong>DEBUG</strong><br>' +
+      'Round: ' + currentRound + ' / ' + ROUNDS.length + '<br>' +
+      'Scores: ' + JSON.stringify(scores) + '<br>' +
+      'Winner: ' + (winner || getWinningPersonality());
+  }
+
+  // =====================================================
+  // VIEWPORT HEIGHT FIX (mobile browser chrome)
+  // =====================================================
+  function setVh(){
+    document.documentElement.style.setProperty('--vh', (window.innerHeight * 0.01) + 'px');
+  }
+  setVh();
+  window.addEventListener('resize', setVh);
+
+})();
+</script>
+</body>
+</html>

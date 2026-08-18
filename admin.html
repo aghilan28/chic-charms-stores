@@ -6376,15 +6376,18 @@
         const price = $id("pPrice").value.trim();
         const oldPrice = $id("pOldPrice").value.trim();
         const stock = $id("pStock").value.trim();
-        const color = $id("pColor").value.trim();
         const category = $id("pCategory").value.trim();
         const piecePayload = buildPiecePayload(pPieceTypeEl, pPieceCountEl);
-        const image = imgInput.value.trim();
-        const modelImage = $id("pModelImage").value.trim();
         const tag = $id("pTag").value.trim();
         const desc = $id("pDesc").value.trim();
         const variantError = validateVariantRows(variantRowsEl);
         const variants = collectVariants(variantRowsEl);
+
+        // Primary color and images come from the first variant row (migrated variants architecture)
+        const primaryVariant = variants[0] || {};
+        const color = primaryVariant.color || "";
+        const image = primaryVariant.variantProductImage || "";
+        const modelImage = primaryVariant.variantModelImage || "";
 
         if (!name || price === "" || stock === "" || !color || !category || !image || !modelImage) {
           showStatus(
