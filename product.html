@@ -1382,20 +1382,42 @@ function renderProduct(product, docId) {
   setProductCtaReady(true);
 }
 
-// ── Cart ──
 window.handleAddToCart = function() {
   if (!_currentProduct) return;
+
+  const cart = getCart();
+  const variants = _currentProduct ? normalizeVariants(_currentProduct) : [];
+  const namedVariants = variants.filter(v => v.color && v.color.toLowerCase() !== 'default');
+  const hasColors = namedVariants.length >= 1;
+  const targetVariant = hasColors ? (_selectedVariantId || '') : (_selectedVariantId || 'Gold Finish');
+  const targetSize = _selectedSize || '';
+
+  const idx = cart.findIndex(i => 
+    (i.id === _currentDocId || i.productId === _currentDocId) && 
+    (i.variant || '') === targetVariant && 
+    (i.size || '') === targetSize
+  );
+
+  const stockVal = Number(_currentProduct.stock ?? 0);
+  const currentQty = idx > -1 ? (cart[idx].quantity || 0) : 0;
+
+  if (currentQty >= stockVal) {
+    showToast('Out of stock or limit reached');
+    return;
+  }
+
   const price = Number(_currentProduct.price) || 0;
   if (_currentDocId && _currentDocId !== 'demo-product' && window.addToCartWithId) {
     window.addToCartWithId(_currentProduct.name, price, _currentDocId, _selectedVariantId, _selectedSize);
   } else {
     // Fallback if script.js not fully loaded or demo product
-    const cart = getCart();
     const image = _currentProduct.images?.productImage || _currentProduct.image || '';
     const item = { id: _currentDocId || 'demo-product', productId: _currentDocId || 'demo-product', name: _currentProduct.name, price, image, variant: _selectedVariantId, size: _selectedSize, quantity: 1 };
-    const idx = cart.findIndex(i => (i.id === item.id || i.productId === item.id) && (i.variant || '') === (item.variant || '') && (i.size || '') === (item.size || ''));
-    if (idx > -1) cart[idx].quantity = (cart[idx].quantity || 1) + 1;
-    else cart.push(item);
+    if (idx > -1) {
+      cart[idx].quantity = currentQty + 1;
+    } else {
+      cart.push(item);
+    }
     saveCart(cart);
     showToast('Added to cart!');
     window.dispatchEvent(new Event('cartUpdated'));
