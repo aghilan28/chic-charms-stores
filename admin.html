@@ -6384,10 +6384,10 @@
         const variants = collectVariants(variantRowsEl);
 
         // Primary color and images come from the first variant row (migrated variants architecture)
-        const primaryVariant = variants[0] || {};
-        const color = primaryVariant.color || "";
-        const image = primaryVariant.variantProductImage || "";
-        const modelImage = primaryVariant.variantModelImage || "";
+        const firstVariant = variants[0] || {};
+        const color = firstVariant.color || "";
+        const image = firstVariant.variantProductImage || "";
+        const modelImage = firstVariant.variantModelImage || "";
 
         if (!name || price === "" || stock === "" || !color || !category || !image || !modelImage) {
           showStatus(
