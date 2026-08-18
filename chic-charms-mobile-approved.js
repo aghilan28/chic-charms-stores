@@ -293,12 +293,8 @@
     else if (currentSort === "newest") list.reverse();
     else if (currentSort === "popularity") list.sort((a, b) => (Number(b.rating) || 0) - (Number(a.rating) || 0));
     else {
-      list.sort((a, b) => {
-        const aOrder = CATEGORY_ORDER.indexOf(a.categorySlug);
-        const bOrder = CATEGORY_ORDER.indexOf(b.categorySlug);
-        if (aOrder !== bOrder) return aOrder - bOrder;
-        return String(a.name || "").localeCompare(String(b.name || ""));
-      });
+      // Default sort: Shuffled/Random order for dynamic e-commerce catalog feel
+      // We do not apply any sorting here to preserve the shuffled order of allProducts.
     }
     return list;
   }
@@ -477,6 +473,15 @@
             image: productImage(raw)
           });
         });
+
+        // Fisher-Yates Shuffle for dynamic e-commerce catalog feel
+        for (let i = allProducts.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          const temp = allProducts[i];
+          allProducts[i] = allProducts[j];
+          allProducts[j] = temp;
+        }
+
         renderAll();
         updateCartCount();
       }, (err) => {

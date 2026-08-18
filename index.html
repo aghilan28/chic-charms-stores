@@ -1703,14 +1703,8 @@
             return Number(b.data.price) - Number(a.data.price);
           });
         } else {
-          filtered.sort(function (a, b) {
-            const aOrder = CATEGORY_ORDER.indexOf(a.data.categorySlug);
-            const bOrder = CATEGORY_ORDER.indexOf(b.data.categorySlug);
-            if (aOrder !== bOrder) return aOrder - bOrder;
-            return String(a.data.name || "").localeCompare(
-              String(b.data.name || ""),
-            );
-          });
+          // Default sort: Shuffled/Random order for dynamic e-commerce catalog feel
+          // We do not apply any sorting here to preserve the shuffled order of allProducts.
         }
 
         // 3. Render
@@ -1936,6 +1930,14 @@
               );
               allProducts.push({ data: migratedData, id: doc.id });
             });
+
+            // Fisher-Yates Shuffle for dynamic e-commerce catalog feel
+            for (let i = allProducts.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              const temp = allProducts[i];
+              allProducts[i] = allProducts[j];
+              allProducts[j] = temp;
+            }
 
             // Show controls now that we have data
             controls.style.display = "flex";
