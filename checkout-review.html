@@ -1086,11 +1086,12 @@ document.documentElement.classList.add('cc-loading');
       },
       deliveryInfo: delivery || {},
       cartItems:    cart.map(i => ({
-        id:       i.id || i.productId || '',
-        name:     i.name     || '',
-        price:    Number(i.price    || 0),
-        quantity: Number(i.quantity || 1),
-        image:    i.image || i.img || '',
+        id:        i.id || i.productId || '',
+        productId: i.productId || i.id || '',
+        name:      i.name     || '',
+        price:     Number(i.price    || 0),
+        quantity:  Number(i.quantity || 1),
+        image:     i.image || i.img || '',
       })),
       couponInfo:   coupon ? {
         couponCode:     coupon.couponCode,

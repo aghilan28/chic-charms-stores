@@ -309,7 +309,8 @@
       items.innerHTML = cart.map(function (item, index) {
         var qty = Number(item.quantity) || 1;
         var atStockMax = item.stock != null && !isNaN(Number(item.stock)) && qty >= Number(item.stock);
-        var stock = atStockMax ? '<span class="ccap-stock-note">Out of stock</span>' : '';
+        var isOutOfStock = item.stock != null && !isNaN(Number(item.stock)) && (qty > Number(item.stock) || Number(item.stock) <= 0);
+        var stock = isOutOfStock ? '<span class="ccap-stock-note">Out of stock</span>' : '';
         return [
           '<article class="ccap-item" style="animation-delay:' + (index * 45) + 'ms">',
             '<div class="ccap-item-image">',

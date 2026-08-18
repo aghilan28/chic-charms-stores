@@ -52,6 +52,9 @@ module.exports = async (req, res) => {
     // Validate stock for all items in the cart
     for (const item of cartItems) {
       if (!item.productId) {
+        item.productId = item.id;
+      }
+      if (!item.productId) {
         return res.status(400).json({ error: `Invalid product ID for item: ${item.name || 'Unknown'}` });
       }
       const productSnap = await db.collection('products').doc(item.productId).get();

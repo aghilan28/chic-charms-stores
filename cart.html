@@ -726,7 +726,8 @@
         const icon        = icons[index % icons.length];
         const subtotal    = item.price * item.quantity;
         const atStockMax  = item.stock !== null && item.quantity >= item.stock;
-        const oosLabel    = atStockMax
+        const isOutOfStock = item.stock !== null && (item.quantity > item.stock || item.stock <= 0);
+        const oosLabel    = isOutOfStock
           ? '<span style="font-size:0.72rem;color:#c0392b;font-weight:600;margin-top:3px;display:block;">Out of stock</span>'
           : '';
 
