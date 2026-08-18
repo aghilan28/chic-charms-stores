@@ -7,8 +7,7 @@
 <meta name="description" content="Swipe through 5 styles and discover your ChicCharms jewellery personality.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="cc-global-header.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
@@ -83,23 +82,20 @@
   ===================================================== */
   #app{
     max-width:480px;
-    margin:104px auto 0; /* Offset for global header + announcement bar (36px + 68px) */
-    min-height:calc(100vh - 104px);
+    margin:0 auto;
+    min-height:100vh;
+    min-height:calc(var(--vh, 1vh) * 100);
     position:relative;
     background:var(--ivory);
     display:flex;
     flex-direction:column;
   }
 
-  .hero-top {
-    display: none !important;
-  }
-
   @media (min-width:520px){
     body{ background:var(--blush); }
     #app{
-      margin:128px auto 24px;
-      min-height:calc(100vh - 152px);
+      margin:24px auto;
+      min-height:calc(100vh - 48px);
       border-radius:32px;
       box-shadow:0 40px 80px rgba(36,33,36,0.18);
       overflow:hidden;
@@ -128,13 +124,13 @@
 
   .wordmark{
     font-family:var(--serif);
-    font-weight:600;
-    font-size:20px;
-    letter-spacing:0.14em;
-    color:var(--charcoal);
+    font-weight:500;
+    font-size:26px;
+    letter-spacing:-0.01em;
+    color:#8e4559;
     text-align:center;
   }
-  .wordmark span{ color:var(--rose); }
+  .wordmark span{ color:inherit; }
 
   /* =====================================================
      HERO
@@ -187,8 +183,16 @@
     margin-bottom:14px;
   }
   .hero-headline em{
-    font-style:italic;
-    color:var(--muted-rose);
+    font-family: 'Great Vibes', cursive;
+    font-style: normal;
+    font-size: 1.32em;
+    font-weight: 400;
+    color: var(--muted-rose);
+    text-transform: none;
+    letter-spacing: 0.02em;
+    display: inline-block;
+    position: relative;
+    top: 0.06em;
   }
 
   .hero-sub{
@@ -277,7 +281,7 @@
   .card-stack{
     position:relative;
     flex:1;
-    min-height:340px;
+    min-height:400px;
     margin:6px 0 18px;
     touch-action:pan-y;
   }
@@ -285,12 +289,11 @@
   .swipe-card{
     position:absolute;
     inset:0;
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
+    display:flex;
+    flex-direction:column;
     background:var(--ivory);
     border-radius:var(--radius-lg);
-    padding:10px;
+    padding:12px;
     box-shadow:var(--shadow-card);
     border:1px solid rgba(217,143,163,0.15);
     will-change:transform;
@@ -299,11 +302,30 @@
   }
   .swipe-card.behind{
     z-index:1;
-    transform:scale(0.94) translateY(10px);
-    opacity:0.7;
+    transform:scale(0.94) translateY(12px);
+    opacity:0.6;
     box-shadow:none;
   }
-  .swipe-card.front{ z-index:2; }
+  
+  @keyframes springUp {
+    0% {
+      transform: scale(0.94) translateY(12px);
+      opacity: 0.6;
+    }
+    70% {
+      transform: scale(1.025) translateY(-5px);
+      opacity: 0.95;
+    }
+    100% {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .swipe-card.front{
+    z-index:2;
+    animation: springUp 0.38s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
 
   .swipe-option{
     position:relative;
@@ -312,23 +334,27 @@
     background:var(--blush);
     display:flex;
     flex-direction:column;
+    flex:1;
   }
   .swipe-option .opt-media{
     position:relative;
     flex:1;
     background:linear-gradient(150deg, var(--blush), #ecd0d8);
     overflow:hidden;
+    display:block;
+    height:100%;
   }
-  .swipe-option img{ width:100%; height:100%; object-fit:cover; }
+  .swipe-option img{ width:100%; height:100%; object-fit:cover; object-position: center 25%; }
   .swipe-option .opt-label{
-    padding:10px 8px 12px;
+    padding:12px 10px 14px;
     text-align:center;
-    font-family:var(--serif);
-    font-size:16px;
+    font-family:var(--sans);
+    font-size:13.5px;
     font-weight:600;
-    letter-spacing:0.03em;
+    letter-spacing:0.06em;
     color:var(--charcoal);
     background:var(--ivory);
+    text-transform:uppercase;
   }
 
   .swipe-flag{
@@ -431,9 +457,9 @@
     transition:stroke-dashoffset 1.4s cubic-bezier(.2,.8,.2,1);
   }
   .match-percent{
-    font-family:var(--serif);
-    font-size:30px;
-    font-weight:600;
+    font-family:var(--sans);
+    font-size:32px;
+    font-weight:700;
     color:var(--charcoal);
   }
   .match-label{
@@ -446,11 +472,25 @@
 
   .result-headline{
     text-align:center;
-    font-size:clamp(30px,8vw,36px);
-    line-height:1.08;
+    font-family:var(--sans);
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:0.02em;
+    font-size:clamp(22px,6.5vw,28px);
+    line-height:1.2;
     margin:18px 0 14px;
+    color:var(--charcoal);
   }
-  .result-headline .accent{ color:var(--rose); font-style:italic; }
+  .result-headline em{
+    font-family:'Great Vibes', cursive;
+    text-transform:none;
+    font-size:1.45em;
+    font-weight:400;
+    color:var(--rose);
+    display:block;
+    margin-top:6px;
+    letter-spacing:0;
+  }
 
   .result-desc{
     text-align:center;
@@ -593,11 +633,11 @@
     margin-bottom:10px;
   }
   .offer-big{
-    font-family:var(--serif);
-    font-size:56px;
+    font-family:var(--sans);
+    font-size:52px;
     line-height:1;
     margin-bottom:10px;
-    font-weight:600;
+    font-weight:800;
   }
   .offer-sub{
     font-size:13.5px;
@@ -636,11 +676,12 @@
   .final-wordmark{
     font-family:var(--serif);
     font-size:26px;
-    letter-spacing:0.16em;
-    font-weight:600;
+    letter-spacing:-0.01em;
+    font-weight:500;
+    color:#8e4559;
     margin-bottom:8px;
   }
-  .final-wordmark span{ color:var(--rose); }
+  .final-wordmark span{ color:inherit; }
   .final-tagline{
     font-size:13px;
     color:#8a7f85;
@@ -707,7 +748,7 @@
   <!-- ================= HERO SCREEN ================= -->
   <section class="screen active" id="screen-hero" aria-label="ChicCharms introduction">
     <div class="hero-top">
-      <div class="wordmark">CHIC<span>CHARMS</span></div>
+      <div class="wordmark">Chic<span>Charms</span></div>
     </div>
 
     <div class="hero-media">
@@ -715,7 +756,7 @@
       <div class="hero-media-caption">ChicCharms Edit</div>
     </div>
 
-    <h1 class="hero-headline">WHAT'S YOUR<br><em>EARRING ENERGY?</em></h1>
+    <h1 class="hero-headline">WHAT'S YOUR<br><em>Earring Energy?</em></h1>
     <p class="hero-sub">Swipe through 5 styles. We'll reveal the jewellery taste that feels most like you.</p>
 
     <button class="btn-primary rose" id="btn-start" aria-label="Discover my style, begin the quiz">DISCOVER MY STYLE</button>
@@ -789,7 +830,7 @@
 
     <div class="final-block">
       <h2 class="final-headline">YOU FOUND YOUR STYLE.<br><em style="font-style:italic;color:var(--rose)">NOW WEAR IT.</em></h2>
-      <div class="final-wordmark">CHIC<span>CHARMS</span></div>
+      <div class="final-wordmark">Chic<span>Charms</span></div>
       <p class="final-tagline">Trendy earrings made for your everyday sparkle.</p>
       <button class="btn-primary" id="btn-shop" aria-label="Shop my ChicCharms match, go to the ChicCharms website">SHOP MY CHICCHARMS MATCH →</button>
     </div>
@@ -824,7 +865,7 @@
     brandName: "CHICCHARMS",
     shopUrl: "index.html",
     assets: {
-      heroModel: "images/quiz-hero.png",
+      heroModel: "images/quiz-hero.jpg",
       swipe1A: "images/style-everyday-elegance.png",
       swipe1B: "images/style-after-dark.png",
       swipe2A: "images/style-modern-romance.jpg",
@@ -981,89 +1022,183 @@
       id: p.id
     }));
   }
-
   // =====================================================
   // DEBUG MODE
   // =====================================================
   const DEBUG = false;
 
   // =====================================================
-  // QUIZ ROUNDS
+  // THE 8 QUIZ PRODUCTS (DIAGNOSTIC METADATA)
   // =====================================================
-  const ROUNDS = [
-    {
-      question: "WHICH ONE FEELS MORE YOU?",
-      optionA: { label: "MINIMAL",   image: CONFIG.assets.swipe1A, weights: { quietLuxury: 3, everydayIcon: 2 } },
-      optionB: { label: "STATEMENT", image: CONFIG.assets.swipe1B, weights: { statementMaker: 3, trendsetter: 2 } }
+  const DIAGNOSTIC_PRODUCTS = {
+    "aurelia-triple-ring": {
+      minimal: 90, classic: 85, modern: 80, traditional: 15, feminine: 50,
+      bold: 45, playful: 10, statement: 40, everyday: 90, occasion: 35
     },
-    {
-      question: "WHAT CATCHES YOUR EYE?",
-      optionA: { label: "SOFT", image: CONFIG.assets.swipe2A, weights: { romantic: 3, quietLuxury: 1 } },
-      optionB: { label: "BOLD", image: CONFIG.assets.swipe2B, weights: { statementMaker: 3, trendsetter: 2 } }
+    "butterfly-pearl-bloom": {
+      minimal: 60, classic: 55, modern: 45, traditional: 10, feminine: 95,
+      bold: 15, playful: 90, statement: 30, everyday: 75, occasion: 45
     },
-    {
-      question: "YOUR PERFECT VIBE?",
-      optionA: { label: "TIMELESS", image: CONFIG.assets.swipe3A, weights: { quietLuxury: 3, everydayIcon: 2 } },
-      optionB: { label: "TRENDING", image: CONFIG.assets.swipe3B, weights: { trendsetter: 3, statementMaker: 1 } }
+    "emerald-vintage-charm": {
+      minimal: 15, classic: 80, modern: 20, traditional: 95, feminine: 70,
+      bold: 80, playful: 10, statement: 90, everyday: 20, occasion: 95
     },
-    {
-      question: "WHAT WOULD YOU WEAR MOST?",
-      optionA: { label: "EVERYDAY", image: CONFIG.assets.swipe4A, weights: { everydayIcon: 3, quietLuxury: 1 } },
-      optionB: { label: "OCCASION", image: CONFIG.assets.swipe4B, weights: { statementMaker: 3, romantic: 1 } }
+    "midnight-noir-vintage": {
+      minimal: 25, classic: 70, modern: 55, traditional: 40, feminine: 55,
+      bold: 100, playful: 10, statement: 95, everyday: 35, occasion: 85
     },
-    {
-      question: "ONE LAST CHOICE...",
-      optionA: { label: "DELICATE", image: CONFIG.assets.swipe5A, weights: { romantic: 3, quietLuxury: 2 } },
-      optionB: { label: "DRAMATIC", image: CONFIG.assets.swipe5B, weights: { statementMaker: 3, trendsetter: 3 } }
-    }
-  ];
-
-  // =====================================================
-  // PERSONALITIES
-  // =====================================================
-  const PERSONALITIES = {
-    quietLuxury: {
-      headlineHtml: "YOU'RE A<br><em>QUIET LUXURY GIRL.</em>",
-      desc: "You don't need jewellery to shout. You notice the details, choose carefully, and somehow make simple look expensive.",
-      tags: ["ELEGANT","REFINED","TIMELESS"],
-      resultIntro: "Clean lines. Elegant details. Nothing unnecessary.",
-      resultSub: "Here are three ChicCharms pieces that match your refined taste."
+    "silver-teardrop-sculpted": {
+      minimal: 95, classic: 50, modern: 100, traditional: 5, feminine: 40,
+      bold: 60, playful: 10, statement: 60, everyday: 85, occasion: 45
     },
-    trendsetter: {
-      headlineHtml: "YOU'RE A<br><em>TRENDSETTER.</em>",
-      desc: "You spot the pieces everyone else is about to discover. Your jewellery is part of the outfit — and sometimes the whole point.",
-      tags: ["TRENDY","PLAYFUL","FEARLESS"],
-      resultIntro: "You picked bold, current and impossible-to-ignore.",
-      resultSub: "Here are three ChicCharms pieces we'd put straight on your wishlist."
+    "crimson-royale": {
+      minimal: 10, classic: 75, modern: 25, traditional: 70, feminine: 65,
+      bold: 95, playful: 15, statement: 100, everyday: 15, occasion: 100
     },
-    romantic: {
-      headlineHtml: "YOU'RE A<br><em>ROMANTIC.</em>",
-      desc: "You fall for the little details. Soft shapes, delicate sparkle and pieces that make an ordinary outfit feel a little more special.",
-      tags: ["SOFT","FEMININE","DREAMY"],
-      resultIntro: "Soft shapes. Delicate sparkle. Pieces with a little poetry.",
-      resultSub: "Here are three ChicCharms pieces that feel like you."
+    "royal-peacock-bloom": {
+      minimal: 5, classic: 65, modern: 20, traditional: 95, feminine: 85,
+      bold: 90, playful: 35, statement: 100, everyday: 15, occasion: 95
     },
-    statementMaker: {
-      headlineHtml: "YOU'RE A<br><em>STATEMENT MAKER.</em>",
-      desc: "You don't believe jewellery should disappear into an outfit. You like pieces that enter the room before you do.",
-      tags: ["BOLD","CONFIDENT","MAGNETIC"],
-      resultIntro: "Bold shapes. Big presence. Zero apologies.",
-      resultSub: "Here are three ChicCharms pieces built to be noticed."
-    },
-    everydayIcon: {
-      headlineHtml: "YOU'RE AN<br><em>EVERYDAY ICON.</em>",
-      desc: "You want jewellery that works with your real life — college mornings, coffee runs, spontaneous plans and everything in between.",
-      tags: ["EFFORTLESS","VERSATILE","EVERYDAY"],
-      resultIntro: "Easy, wearable, made for real life.",
-      resultSub: "Here are three ChicCharms pieces for every day."
+    "midnight-fairy-wing": {
+      minimal: 25, classic: 15, modern: 60, traditional: 5, feminine: 85,
+      bold: 50, playful: 100, statement: 65, everyday: 70, occasion: 30
     }
   };
 
   // =====================================================
-  // STATE
+  // QUIZ ROUNDS
   // =====================================================
+  const ROUNDS = [
+    {
+      id: "aurelia-triple-ring",
+      question: "DO YOU LOVE THIS VIBE?",
+      label: "AURELIA TRIPLE-RING DROP EARRINGS",
+      image: "images/slide1-hoops.jpg"
+    },
+    {
+      id: "butterfly-pearl-bloom",
+      question: "DO YOU LOVE THIS VIBE?",
+      label: "BUTTERFLY PEARL BLOOM EARRINGS",
+      image: "images/slide2-pearl-bow.jpg"
+    },
+    {
+      id: "emerald-vintage-charm",
+      question: "DO YOU LOVE THIS VIBE?",
+      label: "EMERALD VINTAGE CHARM EARRINGS",
+      image: "images/slide3-jhumkas.jpg"
+    },
+    {
+      id: "midnight-noir-vintage",
+      question: "DO YOU LOVE THIS VIBE?",
+      label: "MIDNIGHT NOIR VINTAGE EARRINGS",
+      image: "images/slide4-gold-circular.jpg"
+    },
+    {
+      id: "silver-teardrop-sculpted",
+      question: "DO YOU LOVE THIS VIBE?",
+      label: "SILVER TEARDROP SCULPTED EARRINGS",
+      image: "images/slide5-waterdrop.png"
+    },
+    {
+      id: "crimson-royale",
+      question: "DO YOU LOVE THIS VIBE?",
+      label: "CRIMSON ROYALE EARRINGS",
+      image: "images/slide6-red-gemstone.jpg"
+    },
+    {
+      id: "royal-peacock-bloom",
+      question: "DO YOU LOVE THIS VIBE?",
+      label: "ROYAL PEACOCK BLOOM EARRINGS",
+      image: "images/slide7-temple-studs.png"
+    },
+    {
+      id: "midnight-fairy-wing",
+      question: "DO YOU LOVE THIS VIBE?",
+      label: "MIDNIGHT FAIRY WING EARRINGS",
+      image: "images/slide8-fairy-studs.png"
+    }
+  ];
+
+  // =====================================================
+  // FIVE CORE PERSONALITIES
+  // =====================================================
+  const PERSONALITIES = {
+    minimalMuse: {
+      id: "minimalMuse",
+      name: "MINIMAL MUSE",
+      headlineHtml: "YOU'RE A<br><em>Minimal Muse.</em>",
+      desc: "Effortlessly refined. You gravitate toward clean silhouettes, subtle details and jewellery that feels elegant without trying too hard.",
+      tags: ["MINIMAL", "REFINED", "EFFORTLESS"],
+      pickedStatement: "You picked clean lines, quiet details and effortless elegance.",
+      attributes: {
+        minimal: 95, classic: 75, modern: 85, traditional: 10, feminine: 45,
+        bold: 35, playful: 15, statement: 35, everyday: 90, occasion: 35
+      }
+    },
+    romanticDreamer: {
+      id: "romanticDreamer",
+      name: "ROMANTIC DREAMER",
+      headlineHtml: "YOU'RE A<br><em>Romantic Dreamer.</em>",
+      desc: "Soft details, feminine energy and little touches that make an ordinary outfit feel special.",
+      tags: ["ROMANTIC", "FEMININE", "PLAYFUL"],
+      pickedStatement: "You picked soft details, feminine touches and a little everyday magic.",
+      attributes: {
+        minimal: 55, classic: 55, modern: 40, traditional: 15, feminine: 95,
+        bold: 20, playful: 85, statement: 35, everyday: 75, occasion: 50
+      }
+    },
+    heritageRoyal: {
+      id: "heritageRoyal",
+      name: "HERITAGE ROYAL",
+      headlineHtml: "YOU'RE A<br><em>Heritage Royal.</em>",
+      desc: "You are drawn to timeless jewellery, intricate details and pieces that carry a sense of tradition and story.",
+      tags: ["TIMELESS", "HERITAGE", "ROYAL"],
+      pickedStatement: "You picked timeless details, rich character and jewellery with a story.",
+      attributes: {
+        minimal: 10, classic: 85, modern: 20, traditional: 100, feminine: 80,
+        bold: 80, playful: 15, statement: 95, everyday: 20, occasion: 95
+      }
+    },
+    midnightMuse: {
+      id: "midnightMuse",
+      name: "MIDNIGHT MUSE",
+      headlineHtml: "YOU'RE A<br><em>Midnight Muse.</em>",
+      desc: "You don't wear jewellery just to complete an outfit. You wear it to make an entrance.",
+      tags: ["BOLD", "DRAMATIC", "FEARLESS"],
+      pickedStatement: "You picked bold silhouettes, dramatic details and pieces impossible to ignore.",
+      attributes: {
+        minimal: 15, classic: 65, modern: 55, traditional: 35, feminine: 55,
+        bold: 100, playful: 10, statement: 100, everyday: 30, occasion: 90
+      }
+    },
+    playfulTrendsetter: {
+      id: "playfulTrendsetter",
+      name: "PLAYFUL TRENDSETTER",
+      headlineHtml: "YOU'RE A<br><em>Playful Trendsetter.</em>",
+      desc: "You spot the pieces everyone else is about to discover. Your jewellery is part of the outfit — and sometimes the whole point.",
+      tags: ["TRENDY", "PLAYFUL", "FEARLESS"],
+      pickedStatement: "You picked bold, current and impossible-to-ignore.",
+      attributes: {
+        minimal: 25, classic: 20, modern: 75, traditional: 5, feminine: 80,
+        bold: 60, playful: 100, statement: 70, everyday: 70, occasion: 35
+      }
+    }
+  };
+
+  // =====================================================
+  // QUIZ ENGINE STATE
+  // =====================================================
+  const quizState = {
+    currentIndex: 0,
+    answers: [],
+    profile: {
+      minimal: 0, classic: 0, modern: 0, traditional: 0, feminine: 0,
+      bold: 0, playful: 0, statement: 0, everyday: 0, occasion: 0
+    },
+    result: null
+  };
+
   let currentRound = 0;
-  let scores = { quietLuxury: 0, trendsetter: 0, romantic: 0, statementMaker: 0, everydayIcon: 0 };
   let isAnimating = false;
 
   // =====================================================
@@ -1098,9 +1233,286 @@
       const fallback = document.createElement('div');
       fallback.className = 'img-fallback';
       fallback.innerHTML = '<div class="fb-mark">CHICCHARMS</div><div>' + (fallbackLabel || 'IMAGE') + '</div>';
-      imgEl.replaceWith(fallback);
+      if(imgEl.parentNode) {
+        imgEl.parentNode.replaceChild(fallback, imgEl);
+      }
     });
     imgEl.src = src;
+  }
+
+  // =====================================================
+  // DYNAMIC STYLE VECTOR ESTIMATION FOR CATALOGUE PRODUCTS
+  // =====================================================
+  function getStyleVectorForProduct(product) {
+    const base = {
+      minimal: 50, classic: 50, modern: 50, traditional: 50, feminine: 50,
+      bold: 50, playful: 50, statement: 50, everyday: 50, occasion: 50
+    };
+
+    const name = String(product.name || '').toLowerCase();
+    const cat = String(product.categorySlug || '').toLowerCase();
+
+    // Map exact diagnostic product vectors
+    if (name.includes('aurelia') || product.id === 'aurelia-triple-ring') {
+      return { ...DIAGNOSTIC_PRODUCTS['aurelia-triple-ring'] };
+    }
+    if (name.includes('butterfly') || product.id === 'butterfly-pearl-bloom') {
+      return { ...DIAGNOSTIC_PRODUCTS['butterfly-pearl-bloom'] };
+    }
+    if (name.includes('emerald') || product.id === 'emerald-vintage-charm') {
+      return { ...DIAGNOSTIC_PRODUCTS['emerald-vintage-charm'] };
+    }
+    if ((name.includes('midnight') && name.includes('noir')) || product.id === 'midnight-noir-vintage') {
+      return { ...DIAGNOSTIC_PRODUCTS['midnight-noir-vintage'] };
+    }
+    if (name.includes('teardrop') || product.id === 'silver-teardrop-sculpted') {
+      return { ...DIAGNOSTIC_PRODUCTS['silver-teardrop-sculpted'] };
+    }
+    if (name.includes('crimson') || product.id === 'crimson-royale') {
+      return { ...DIAGNOSTIC_PRODUCTS['crimson-royale'] };
+    }
+    if (name.includes('peacock') || product.id === 'royal-peacock-bloom') {
+      return { ...DIAGNOSTIC_PRODUCTS['royal-peacock-bloom'] };
+    }
+    if (name.includes('fairy') || product.id === 'midnight-fairy-wing') {
+      return { ...DIAGNOSTIC_PRODUCTS['midnight-fairy-wing'] };
+    }
+
+    // Heuristics based on category/title
+    if (cat.includes('everyday') || name.includes('everyday') || name.includes('daily')) {
+      base.everyday = 90; base.minimal = 80; base.classic = 75; base.occasion = 20; base.statement = 25;
+    }
+    if (cat.includes('after-dark') || cat.includes('party') || name.includes('party') || name.includes('glam')) {
+      base.occasion = 95; base.statement = 95; base.bold = 90; base.everyday = 20; base.minimal = 20;
+    }
+    if (cat.includes('modern-romance') || name.includes('heart') || name.includes('pearl') || name.includes('floral') || name.includes('rose') || name.includes('bloom')) {
+      base.feminine = 95; base.playful = 75; base.modern = 70;
+    }
+    if (cat.includes('traditional') || name.includes('temple') || name.includes('jhumka') || name.includes('heritage') || name.includes('vintage')) {
+      base.traditional = 95; base.classic = 85; base.bold = 75; base.modern = 15; base.minimal = 15;
+    }
+    if (name.includes('stud') || name.includes('minimal')) {
+      base.minimal = 90; base.everyday = 85; base.statement = 20; base.bold = 25;
+    }
+    if (name.includes('hoop') || name.includes('loop')) {
+      base.everyday = 85; base.classic = 75; base.minimal = 70;
+    }
+    if (name.includes('drop') || name.includes('dangle')) {
+      base.occasion = 75; base.statement = 70; base.everyday = 55;
+    }
+
+    return base;
+  }
+
+  // =====================================================
+  // CHOICE HANDLER
+  // =====================================================
+  function handleChoice(productId, choice) {
+    if (quizState.answers.some(a => a.productId === productId)) return;
+
+    quizState.answers.push({ productId, choice });
+
+    const vector = DIAGNOSTIC_PRODUCTS[productId];
+    if (!vector) return;
+
+    const factor = (choice === 'love') ? 1.0 : -0.55;
+
+    Object.keys(quizState.profile).forEach(dim => {
+      quizState.profile[dim] += vector[dim] * factor;
+    });
+
+    if (DEBUG) {
+      console.log(`[DEBUG] Handled Choice: ${productId} (${choice})`);
+      console.log(`[DEBUG] Raw Profile Sum:`, JSON.stringify(quizState.profile));
+    }
+  }
+
+  // =====================================================
+  // USER PROFILE NORMALIZATION
+  // =====================================================
+  function normalizeUserProfile() {
+    const normalized = {};
+    Object.keys(quizState.profile).forEach(dim => {
+      let maxPossible = 0;
+      let minPossible = 0;
+      Object.keys(DIAGNOSTIC_PRODUCTS).forEach(prodId => {
+        const val = DIAGNOSTIC_PRODUCTS[prodId][dim];
+        maxPossible += val * 1.0;
+        minPossible += val * -0.55;
+      });
+
+      const raw = quizState.profile[dim];
+      let norm = ((raw - minPossible) / (maxPossible - minPossible)) * 100;
+      normalized[dim] = Math.max(0, Math.min(100, Math.round(norm)));
+    });
+
+    quizState.profile = normalized;
+
+    if (DEBUG) {
+      console.log(`[DEBUG] Normalized User Profile:`, JSON.stringify(quizState.profile));
+    }
+  }
+
+  // =====================================================
+  // COSINE SIMILARITY CALCULATION
+  // =====================================================
+  function cosineSimilarity(vecA, vecB) {
+    let dotProduct = 0;
+    let normA = 0;
+    let normB = 0;
+    const keys = Object.keys(vecA);
+    keys.forEach(key => {
+      const a = vecA[key] || 0;
+      const b = vecB[key] || 0;
+      dotProduct += a * b;
+      normA += a * a;
+      normB += b * b;
+    });
+    if (normA === 0 || normB === 0) return 0;
+    return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+  }
+
+  // =====================================================
+  // DETERMINE DOMINANT AND SECONDARY PERSONALITIES
+  // =====================================================
+  function determinePersonalityAndMatch() {
+    let primaryId = null;
+    let primarySimilarity = -1;
+    let secondaryId = null;
+    let secondarySimilarity = -1;
+
+    Object.keys(PERSONALITIES).forEach(key => {
+      const p = PERSONALITIES[key];
+      const sim = cosineSimilarity(quizState.profile, p.attributes);
+      if (sim > primarySimilarity) {
+        secondaryId = primaryId;
+        secondarySimilarity = primarySimilarity;
+        primaryId = key;
+        primarySimilarity = sim;
+      } else if (sim > secondarySimilarity) {
+        secondaryId = key;
+        secondarySimilarity = sim;
+      }
+    });
+
+    let matchPercent = Math.round(70 + primarySimilarity * 27);
+    matchPercent = Math.max(70, Math.min(97, matchPercent));
+
+    quizState.result = {
+      personalityId: primaryId,
+      personalityName: PERSONALITIES[primaryId].name,
+      matchPercentage: matchPercent,
+      tags: PERSONALITIES[primaryId].tags,
+      description: PERSONALITIES[primaryId].desc,
+      pickedStatement: PERSONALITIES[primaryId].pickedStatement,
+      secondaryPersonalityId: secondaryId
+    };
+
+    if (DEBUG) {
+      console.log(`[DEBUG] Style Engine Match Result:`, JSON.stringify(quizState.result));
+    }
+  }
+
+  // =====================================================
+  // DIVERSE PRODUCT RECOMMENDATIONS GENERATION
+  // =====================================================
+  function getRecommendations() {
+    const listToSearch = (liveFetchedList && liveFetchedList.length > 0) ? liveFetchedList : [];
+    
+    if (listToSearch.length === 0) {
+      const fallbacks = [
+        { id: "fallback-ql-1", name: "AURELIA TRIPLE-RING DROP EARRINGS", price: 229, imageUrl: "images/slide1-hoops.jpg", productUrl: "product.html?id=SimpleCircleStud", categorySlug: "everyday-elegance", inStock: true },
+        { id: "fallback-ql-2", name: "BUTTERFLY PEARL BLOOM EARRINGS", price: 279, imageUrl: "images/slide2-pearl-bow.jpg", productUrl: "product.html?id=SimpleCircleStud", categorySlug: "modern-romance", inStock: true },
+        { id: "fallback-ql-3", name: "EMERALD VINTAGE CHARM EARRINGS", price: 249, imageUrl: "images/slide3-jhumkas.jpg", productUrl: "product.html?id=SimpleCircleStud", categorySlug: "heritage-luxury", inStock: true },
+        { id: "fallback-ql-4", name: "MIDNIGHT NOIR VINTAGE EARRINGS", price: 299, imageUrl: "images/slide4-gold-circular.jpg", productUrl: "product.html?id=SimpleCircleStud", categorySlug: "after-dark", inStock: true },
+        { id: "fallback-ql-5", name: "SILVER TEARDROP SCULPTED EARRINGS", price: 199, imageUrl: "images/slide5-waterdrop.png", productUrl: "product.html?id=SimpleCircleStud", categorySlug: "everyday-elegance", inStock: true },
+        { id: "fallback-ql-6", name: "CRIMSON ROYALE EARRINGS", price: 299, imageUrl: "images/slide6-red-gemstone.jpg", productUrl: "product.html?id=SimpleCircleStud", categorySlug: "after-dark", inStock: true }
+      ];
+      listToSearch.push(...fallbacks);
+    }
+
+    const candidates = listToSearch.map(prod => {
+      const styleVec = getStyleVectorForProduct(prod);
+      const simUser = cosineSimilarity(quizState.profile, styleVec);
+      const simPrimary = cosineSimilarity(PERSONALITIES[quizState.result.personalityId].attributes, styleVec);
+      const simSecondary = quizState.result.secondaryPersonalityId ? 
+        cosineSimilarity(PERSONALITIES[quizState.result.secondaryPersonalityId].attributes, styleVec) : simPrimary;
+      
+      const score = (simUser * 0.75) + (simPrimary * 0.20) + (simSecondary * 0.05);
+
+      const reasons = [];
+      if (styleVec.modern > 70) reasons.push("strong modern preference");
+      if (styleVec.minimal > 70) reasons.push("strong minimal preference");
+      if (styleVec.everyday > 70) reasons.push("high everyday compatibility");
+      if (styleVec.traditional > 70) reasons.push("high traditional affinity");
+
+      return {
+        product: prod,
+        score: score,
+        reasons: reasons
+      };
+    });
+
+    candidates.sort((a, b) => b.score - a.score);
+
+    const selected = [];
+    for (const cand of candidates) {
+      if (selected.length >= 3) break;
+      
+      const isTooSimilar = selected.some(s => {
+        const nameA = s.product.name.split(' ')[0].toLowerCase();
+        const nameB = cand.product.name.split(' ')[0].toLowerCase();
+        if (nameA === nameB) return true;
+        
+        const sameCat = selected.filter(sel => sel.product.categorySlug === cand.product.categorySlug).length;
+        if (sameCat >= 2) return true;
+        return false;
+      });
+
+      if (!isTooSimilar || selected.length + (candidates.length - candidates.indexOf(cand)) <= 3) {
+        selected.push(cand);
+      }
+    }
+
+    if (selected.length < 3) {
+      for (const cand of candidates) {
+        if (selected.length >= 3) break;
+        if (!selected.some(s => s.product.id === cand.product.id)) {
+          selected.push(cand);
+        }
+      }
+    }
+
+    return selected.map(s => ({
+      name: s.product.name,
+      price: '₹' + Number(s.product.price).toLocaleString('en-IN'),
+      image: s.product.imageUrl || s.product.image || "",
+      url: s.product.productUrl || s.product.url || "#",
+      id: s.product.id
+    }));
+  }
+
+  function escapeHtml(str) {
+    if (typeof str !== 'string') return '';
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function animateCountUp(el, target) {
+    let current = 0;
+    const duration = 1200;
+    const start = performance.now();
+
+    function step(timestamp) {
+      const progress = Math.min((timestamp - start) / duration, 1);
+      current = Math.floor(progress * target);
+      el.textContent = current + '%';
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        el.textContent = target + '%';
+      }
+    }
+    requestAnimationFrame(step);
   }
 
   // Hero image
@@ -1113,7 +1525,7 @@
     const round = ROUNDS[index];
     quizQuestion.textContent = round.question;
     progressCount.textContent = String(index + 1).padStart(2,'0') + ' / ' + String(ROUNDS.length).padStart(2,'0');
-    progressFill.style.width = ((index) / ROUNDS.length * 100) + '%';
+    progressFill.style.width = ((index + 1) / ROUNDS.length * 100) + '%';
 
     cardStack.innerHTML = '';
 
@@ -1135,19 +1547,17 @@
     card.setAttribute('role','group');
     card.setAttribute('aria-label', round.question);
 
-    const optA = buildOptionEl(round.optionA, 'pass');
-    const optB = buildOptionEl(round.optionB, 'love');
+    const opt = buildOptionEl(round);
 
     const flagLove = document.createElement('div');
     flagLove.className = 'swipe-flag flag-love';
-    flagLove.textContent = 'LOVE';
+    flagLove.textContent = 'LOVE THIS';
     const flagPass = document.createElement('div');
     flagPass.className = 'swipe-flag flag-pass';
     flagPass.textContent = 'PASS';
 
     card.appendChild(flagPass);
-    card.appendChild(optA);
-    card.appendChild(optB);
+    card.appendChild(opt);
     card.appendChild(flagLove);
 
     if(!isBehind){
@@ -1157,7 +1567,7 @@
     return card;
   }
 
-  function buildOptionEl(option, side){
+  function buildOptionEl(option){
     const wrap = document.createElement('div');
     wrap.className = 'swipe-option';
     const media = document.createElement('div');
@@ -1238,13 +1648,12 @@
     cardEl.style.transform = 'translateX(' + flyX + 'px) rotate(' + (direction === 'love' ? 24 : -24) + 'deg)';
     cardEl.style.opacity = '0';
 
-    const chosen = direction === 'love' ? round.optionB : round.optionA;
-    applyWeights(chosen.weights);
+    handleChoice(round.id, direction);
 
     // Track round_completed event
     track('round_completed', {
       roundIndex: currentRound + 1,
-      choiceLabel: chosen.label,
+      choiceLabel: round.label,
       direction: direction
     });
 
@@ -1254,17 +1663,12 @@
     }, 320);
   }
 
-  function applyWeights(weights){
-    Object.keys(weights).forEach(key => { scores[key] += weights[key]; });
-    updateDebugPanel();
-  }
-
   function advanceRound(){
     currentRound++;
     if(currentRound >= ROUNDS.length){
       progressFill.style.width = '100%';
       // Track quiz_completed event
-      track('quiz_completed', { scores: scores });
+      track('quiz_completed', { profile: quizState.profile });
       runLoadingSequence();
     } else {
       renderRound(currentRound);
@@ -1288,7 +1692,13 @@
     // Track quiz_started event
     track('quiz_started', {});
     currentRound = 0;
-    scores = { quietLuxury: 0, trendsetter: 0, romantic: 0, statementMaker: 0, everydayIcon: 0 };
+    quizState.currentIndex = 0;
+    quizState.answers = [];
+    quizState.profile = {
+      minimal: 0, classic: 0, modern: 0, traditional: 0, feminine: 0,
+      bold: 0, playful: 0, statement: 0, everyday: 0, occasion: 0
+    };
+    quizState.result = null;
     renderRound(0);
     showScreen('quiz');
   });
@@ -1301,30 +1711,25 @@
     loadingText.textContent = 'READING YOUR PICKS...';
     setTimeout(() => { loadingText.textContent = 'MATCHING YOUR STYLE...'; }, 700);
     setTimeout(() => { loadingText.textContent = 'YOUR CHICCHARMS STYLE IS READY.'; }, 1400);
-    setTimeout(() => { renderResult(); showScreen('result'); }, 1900);
-  }
-
-  // =====================================================
-  // RESULT RENDER
-  // =====================================================
-  function getWinningPersonality(){
-    let best = null, bestScore = -Infinity;
-    Object.keys(scores).forEach(key => {
-      if(scores[key] > bestScore){ bestScore = scores[key]; best = key; }
-    });
-    return best;
-  }
-
-  function computeMatchPercent(key){
-    const total = Object.values(scores).reduce((a,b) => a+b, 0) || 1;
-    const raw = Math.round((scores[key] / total) * 100);
-    // present an appealing but honest range
-    return Math.max(78, Math.min(98, raw + 40));
+    setTimeout(() => {
+      showScreen('result');
+      setTimeout(() => {
+        renderResult();
+      }, 50);
+    }, 1900);
   }
 
   function renderResult(){
-    const key = getWinningPersonality();
+    // Normalize profile to 0-100 values
+    normalizeUserProfile();
+
+    // Determine personality classification & similarity
+    determinePersonalityAndMatch();
+
+    const res = quizState.result;
+    const key = res.personalityId;
     const p = PERSONALITIES[key];
+    
     updateDebugPanel(key);
 
     document.getElementById('result-headline').innerHTML = p.headlineHtml;
@@ -1332,18 +1737,18 @@
 
     const tagsWrap = document.getElementById('result-tags');
     tagsWrap.innerHTML = '';
-    p.tags.forEach(tag => {
+    res.tags.forEach(tag => {
       const pill = document.createElement('span');
       pill.className = 'tag-pill';
       pill.textContent = tag;
       tagsWrap.appendChild(pill);
     });
 
-    document.getElementById('products-title').textContent = p.resultIntro;
-    document.getElementById('products-sub').textContent = p.resultSub;
+    document.getElementById('products-title').textContent = p.pickedStatement;
+    document.getElementById('products-sub').textContent = "Here are three ChicCharms pieces we'd put straight on your wishlist.";
 
     // Match percent animation
-    const percent = computeMatchPercent(key);
+    const percent = res.matchPercentage;
     const percentEl = document.getElementById('match-percent');
     const ringFill = document.getElementById('ring-fill');
     const circumference = 377;
@@ -1359,8 +1764,8 @@
       matchPercent: percent
     });
 
-    // Resolve products for this personality from live database (or fallback)
-    const recommendedProducts = getProductsForPersonality(key);
+    // Resolve dynamic products using recommendation algorithm
+    const recommendedProducts = getRecommendations();
 
     // Products
     const listEl = document.getElementById('product-list');
@@ -1392,7 +1797,6 @@
       cta.setAttribute('aria-label', 'View ' + product.name);
       
       cta.addEventListener('click', (e) => {
-        // Track product click event
         track('product_clicked', {
           productId: product.id,
           personalityKey: key
@@ -1404,7 +1808,6 @@
       card.appendChild(cta);
       listEl.appendChild(card);
 
-      // Track product_viewed event
       track('product_viewed', { productId: product.id });
     });
 
@@ -1423,42 +1826,22 @@
     }
   }
 
-  function animateCountUp(el, target){
-    const duration = 1200;
-    const start = performance.now();
-    function tick(now){
-      const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      el.textContent = Math.round(eased * target) + '%';
-      if(progress < 1) requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
-  }
-
-  function escapeHtml(str){
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
-  }
-
   // =====================================================
   // FINAL CTA & PERSONALITY-SPECIFIC DEEP LINKING
   // =====================================================
   const PERSONALITY_COLLECTIONS = {
-    quietLuxury: "index.html?category=heritage-muse",
-    trendsetter: "index.html",
-    romantic: "index.html?category=modern-romance",
-    statementMaker: "index.html?category=after-dark",
-    everydayIcon: "index.html?category=everyday-elegance"
+    minimalMuse: "index.html?category=everyday-elegance",
+    romanticDreamer: "index.html?category=modern-romance",
+    heritageRoyal: "index.html?category=heritage-muse",
+    midnightMuse: "index.html?category=after-dark",
+    playfulTrendsetter: "index.html"
   };
 
   document.getElementById('btn-shop').addEventListener('click', () => {
-    const key = getWinningPersonality() || 'trendsetter';
+    const key = (quizState.result && quizState.result.personalityId) || 'playfulTrendsetter';
     const targetUrl = PERSONALITY_COLLECTIONS[key] || CONFIG.shopUrl;
     
-    // Track shop_cta_clicked event
     track('shop_cta_clicked', { personalityKey: key, targetUrl: targetUrl });
-    
     window.location.href = targetUrl;
   });
 
@@ -1471,8 +1854,8 @@
     debugPanel.innerHTML =
       '<strong>DEBUG</strong><br>' +
       'Round: ' + currentRound + ' / ' + ROUNDS.length + '<br>' +
-      'Scores: ' + JSON.stringify(scores) + '<br>' +
-      'Winner: ' + (winner || getWinningPersonality());
+      'Winner: ' + (winner || (quizState.result && quizState.result.personalityId) || 'None') + '<br>' +
+      'Profile: ' + JSON.stringify(quizState.profile);
   }
 
   // =====================================================
@@ -1486,6 +1869,5 @@
 
 })();
 </script>
-<script src="cc-global-header.js" defer></script>
 </body>
 </html>
