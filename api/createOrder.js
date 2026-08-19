@@ -87,7 +87,14 @@ module.exports = async (req, res) => {
       }
     }
 
-    const amountPaise = Math.round(Number(total) * 100);
+    // Securely recalculate totals on the backend
+    const computedSubtotal = cartItems.reduce((sum, item) => sum + (Number(item.price) * (Number(item.quantity) || 1)), 0);
+    const isCampus = couponInfo && couponInfo.couponType === 'campus';
+    const computedShipping = isCampus ? 0 : (computedSubtotal >= 399 ? 0 : 49);
+    const computedDiscount = isCampus ? Math.round(computedSubtotal * 0.18) : 0;
+    const computedTotal = Math.max(0, computedSubtotal + computedShipping - computedDiscount);
+
+    const amountPaise = Math.round(computedTotal * 100);
     if (amountPaise < 100) {
       return res.status(400).json({ error: 'Amount must be at least 100 paise (₹1.00)' });
     }
@@ -127,10 +134,10 @@ module.exports = async (req, res) => {
       studentInfo:   studentInfo   || null,
       paymentMethod: paymentMethod || '',
 
-      subtotal:       Number(subtotal)       || 0,
-      discount:       Number(discount)       || 0,
-      deliveryCharge: Number(deliveryCharge) || 0,
-      total:          Number(total)          || 0,
+      subtotal:       computedSubtotal,
+      discount:       computedDiscount,
+      deliveryCharge: computedShipping,
+      total:          computedTotal,
 
       status:        'pending_payment',
       paymentStatus: 'pending',
@@ -145,7 +152,7 @@ module.exports = async (req, res) => {
     return res.status(200).json({
       orderId:         orderRef.id,
       razorpayOrderId: rzpOrder.id,
-      amount:          Number(total),
+      amount:          computedTotal,
       currency:        'INR',
     });
 

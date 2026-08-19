@@ -161,11 +161,11 @@
         var subtotal = cart.reduce(function(s, i) {
           return s + (Number(i.price || 0) * Number(i.quantity || 1));
         }, 0);
-        // NOTE: The 42% advertised campus benefit is a combined value consisting of:
-        // 1. A 20% cash discount directly off the subtotal of items.
+        // NOTE: The 43% advertised campus benefit is a combined value consisting of:
+        // 1. An 18% cash discount directly off the subtotal of items.
         // 2. A waived delivery fee/shipping charge, representing the remaining value of the "42% benefit".
         // This ensures the free delivery is within the 42% total benefit valuation.
-        return Math.round(subtotal * 0.20);
+        return Math.round(subtotal * 0.18);
       } catch (e) {
         return Math.max(0, Number(coupon.discountAmount || 0));
       }
