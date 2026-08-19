@@ -1793,6 +1793,7 @@ async function loadProduct() {
       try {
         renderProduct(productData, docSnap.id);
         _rendered = true;
+        loadRelatedProducts(docSnap.id, productData);
       } catch(renderErr) {
         console.error('[PDP] renderProduct error:', renderErr);
         document.getElementById('loadingState').classList.add('hidden');
@@ -1813,12 +1814,10 @@ async function loadProduct() {
     document.getElementById('errorState').classList.remove('hidden');
     document.querySelector('#errorState p').textContent = 'Could not initialize product load. Please check your connection.';
   }
-
-  loadRelatedProducts(productId);
 }
 
 // ── Related products from Firestore ──
-async function loadRelatedProducts(currentProductId) {
+async function loadRelatedProducts(currentProductId, product) {
   const section = document.getElementById('relatedSection');
   const container = document.getElementById('relatedProducts');
   const title = document.getElementById('relatedTitle');
@@ -1828,8 +1827,8 @@ async function loadRelatedProducts(currentProductId) {
     const db = firebase.firestore();
     let related = [];
 
-    if (_currentProduct?.relatedProducts && Array.isArray(_currentProduct.relatedProducts)) {
-      for (const rid of _currentProduct.relatedProducts.slice(0, 8)) {
+    if (product?.relatedProducts && Array.isArray(product.relatedProducts)) {
+      for (const rid of product.relatedProducts.slice(0, 8)) {
         try {
           const doc = await db.collection('products').doc(String(rid)).get();
           if (doc.exists && doc.id !== currentProductId) related.push({ ...doc.data(), _id: doc.id });
@@ -1837,22 +1836,51 @@ async function loadRelatedProducts(currentProductId) {
       }
     }
 
-    if (related.length < 4 && _currentProduct?.categorySlug) {
-      const snap = await db.collection('products').where('categorySlug', '==', _currentProduct.categorySlug).limit(6).get();
+    if (related.length < 6 && (product?.categorySlug || product?.category)) {
+      let query = db.collection('products');
+      if (product.categorySlug) {
+        query = query.where('categorySlug', '==', product.categorySlug);
+      } else if (product.category) {
+        query = query.where('category', '==', product.category);
+      }
+
+      const snap = await query.limit(16).get();
+      let catProducts = [];
       snap.forEach(doc => {
-        if (doc.id !== currentProductId && !related.some(r => r._id === doc.id)) {
-          related.push({ ...doc.data(), _id: doc.id });
+        if (doc.id !== currentProductId) {
+          catProducts.push({ ...doc.data(), _id: doc.id });
         }
       });
+
+      // Shuffle category-matching products
+      catProducts.sort(() => 0.5 - Math.random());
+
+      for (const p of catProducts) {
+        if (!related.some(r => r._id === p._id)) {
+          related.push(p);
+        }
+      }
     }
 
-    if (related.length < 3) {
-      const snap = await db.collection('products').limit(8).get();
+    if (related.length < 6) {
+      const snap = await db.collection('products').limit(30).get();
+      let allProducts = [];
       snap.forEach(doc => {
         if (doc.id !== currentProductId && !related.some(r => r._id === doc.id)) {
-          related.push({ ...doc.data(), _id: doc.id });
+          allProducts.push({ ...doc.data(), _id: doc.id });
         }
       });
+
+      // Shuffle general fallback products
+      allProducts.sort(() => 0.5 - Math.random());
+
+      for (const p of allProducts) {
+        if (related.length < 6) {
+          related.push(p);
+        } else {
+          break;
+        }
+      }
     }
 
     if (related.length > 0) {
