@@ -1808,36 +1808,32 @@
             return buildProductCard(item.data, item.id);
           });
 
-          // Inject editorial quote after card 3 (unfiltered full view only)
+          // Inject editorial quote after every 6 products (unfiltered full view only)
           const isFiltered =
             searchText || category !== "all" || sort !== "default";
-          const quoteHTML = `
-            <div class="editorial-quote-strip">
-              <p class="editorial-quote-text">"Every woman deserves to feel adorned — effortlessly, every single day."</p>
-              <span class="editorial-quote-attr">Chic Charms</span>
-            </div>`;
+          const quotesList = [
+            "\"Every woman deserves to feel adorned — effortlessly, every single day.\"",
+            "\"Jewelry has the power to be this one little thing that can make you feel unique.\"",
+            "\"Simplicity is the keynote of all true elegance.\"",
+            "\"Elegance is not standing out, but being remembered.\"",
+            "\"Adorn yourself with confidence, grace, and a touch of gold.\"",
+            "\"Find beauty in the details of the everyday.\""
+          ];
 
-          if (!isFiltered && cards.length >= 4) {
-            cards.splice(3, 0, quoteHTML);
-          }
-
-          // Inject custom new-collection-banner-card after every 6 products
-          const bannerHTML = `
-            <div class="new-collection-banner-card">
-              <div class="banner-text-content">
-                <h3>New Collection</h3>
-                <p>Discount 50% for the first transaction</p>
-                <button onclick="scrollToProducts()">Shop Now</button>
-              </div>
-              <img src="images/new_collection_banner.png" alt="New Collection Model" />
-            </div>
-          `;
-
-          let insertIndex = 6;
-          const quoteAdjustment = (!isFiltered && cards.length >= 4) ? 1 : 0;
-          while (insertIndex + quoteAdjustment <= cards.length) {
-            cards.splice(insertIndex + quoteAdjustment, 0, bannerHTML);
-            insertIndex += 7; // 6 products + 1 banner
+          if (!isFiltered) {
+            let insertIndex = 6;
+            let quoteIdx = 0;
+            while (insertIndex <= cards.length) {
+              const quoteText = quotesList[quoteIdx % quotesList.length];
+              const quoteHTML = `
+                <div class="editorial-quote-strip">
+                  <p class="editorial-quote-text">${quoteText}</p>
+                  <span class="editorial-quote-attr">Chic Charms</span>
+                </div>`;
+              cards.splice(insertIndex, 0, quoteHTML);
+              insertIndex += 7; // 6 products + 1 quote card
+              quoteIdx++;
+            }
           }
 
           container.innerHTML = cards.join("");
