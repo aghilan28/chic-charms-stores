@@ -226,6 +226,25 @@
     box-shadow:0 14px 30px rgba(217,143,163,0.4);
   }
 
+  .btn-outline{
+    display:block;
+    width:100%;
+    padding:18px 20px;
+    background:transparent;
+    color:var(--charcoal);
+    border:2px solid var(--charcoal);
+    border-radius:100px;
+    font-size:13px;
+    letter-spacing:0.16em;
+    font-weight:700;
+    text-align:center;
+    text-transform:uppercase;
+    transition:transform 0.18s ease, background 0.18s ease, color 0.18s ease;
+    margin-top:12px;
+  }
+  .btn-outline:active{ transform:scale(0.97); }
+  .btn-outline:hover{ background:var(--charcoal); color:#fff; }
+
   .hero-micro{
     text-align:center;
     font-size:12px;
@@ -760,6 +779,7 @@
     <p class="hero-sub">Swipe through 5 styles. We'll reveal the jewellery taste that feels most like you.</p>
 
     <button class="btn-primary rose" id="btn-start" aria-label="Discover my style, begin the quiz">DISCOVER MY STYLE</button>
+    <button class="btn-outline" id="btn-visit-store" onclick="location.href='index.html'" aria-label="Visit the website store">VISIT WEBSITE STORE</button>
     <p class="hero-micro">No sign-up. Just your taste.</p>
   </section>
 
