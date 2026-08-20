@@ -4812,7 +4812,7 @@
         for (const order of allOrders) {
           const pStatus = (order.paymentStatus || "").toLowerCase();
           const oStatus = (order.status || "").toLowerCase();
-          if (oStatus === "cancelled" || pStatus === "failed") {
+          if (oStatus !== "paid" && pStatus !== "success") {
             continue;
           }
 
@@ -5362,7 +5362,7 @@
         for (const order of allOrders) {
           const pStatus = (order.paymentStatus || "").toLowerCase();
           const oStatus = (order.status || "").toLowerCase();
-          if (oStatus === "cancelled" || pStatus === "failed") {
+          if (oStatus !== "paid" && pStatus !== "success") {
             continue;
           }
 
