@@ -4627,8 +4627,9 @@
       }
 
       function getOrderItems(order) {
-        if (!Array.isArray(order.items)) return [];
-        return order.items.map((item) => ({
+        const items = order.cartItems || order.items || [];
+        if (!Array.isArray(items)) return [];
+        return items.map((item) => ({
           productId: item.productId || item.id || null,
           name: item.name || item.productName || "Unknown",
           price: Number(item.price || 0),
@@ -4809,8 +4810,13 @@
         const map = new Map();
 
         for (const order of allOrders) {
-          const key =
-            order.userId || order.userEmail || order.uid || order.email || null;
+          const pStatus = (order.paymentStatus || "").toLowerCase();
+          const oStatus = (order.status || "").toLowerCase();
+          if (oStatus === "cancelled" || oStatus === "pending_payment" || pStatus === "failed") {
+            continue;
+          }
+
+          const key = (order.customerInfo?.email || order.userId || order.userEmail || order.uid || order.email || "").toLowerCase().trim() || null;
           if (!key) continue;
 
           if (!map.has(key)) {
@@ -4849,35 +4855,42 @@
        * Merge user docs with computed order stats.
        * Returns enriched array of customer objects.
        */
-      function buildEnrichedCustomers() {
+            function buildEnrichedCustomers() {
         const statsMap = buildCustomerStats();
+        const excludeEmails = [
+          "cvmun28@gmail.com",
+          "mugilan.aghilan29@gmail.com",
+          "aghilanm.cse2025@citchennai.net"
+        ];
 
-        return allUsers.map((u) => {
-          // Try matching by uid, userId, email
-          const stat = statsMap.get(u.id) ||
-            statsMap.get(u.uid) ||
-            statsMap.get(u.email) || {
-              totalSpent: 0,
-              orderCount: 0,
-              orders: [],
-              lastOrderDate: null,
-              products: [],
+        return allUsers
+          .filter((u) => u.email && !excludeEmails.includes(u.email.toLowerCase().trim()))
+          .map((u) => {
+            const emailKey = String(u.email || "").toLowerCase().trim();
+            const stat = statsMap.get(emailKey) ||
+              statsMap.get(u.id) ||
+              statsMap.get(u.uid) || {
+                totalSpent: 0,
+                orderCount: 0,
+                orders: [],
+                lastOrderDate: null,
+                purchasedProducts: [],
+              };
+
+            const isVIP =
+              stat.totalSpent >= VIP_SPEND_THRESHOLD ||
+              stat.orderCount >= VIP_ORDERS_THRESHOLD;
+
+            return {
+              ...u,
+              totalSpent: stat.totalSpent,
+              orderCount: stat.orderCount,
+              customerOrders: stat.orders,
+              lastOrderDate: stat.lastOrderDate,
+              purchasedProducts: stat.products,
+              isVIP,
             };
-
-          const isVIP =
-            stat.totalSpent >= VIP_SPEND_THRESHOLD ||
-            stat.orderCount >= VIP_ORDERS_THRESHOLD;
-
-          return {
-            ...u,
-            totalSpent: stat.totalSpent,
-            orderCount: stat.orderCount,
-            customerOrders: stat.orders,
-            lastOrderDate: stat.lastOrderDate,
-            purchasedProducts: stat.products,
-            isVIP,
-          };
-        });
+          });
       }
 
       /* ══════════════════════════════════════════
@@ -5325,7 +5338,7 @@
       /* ══════════════════════════════════════════
          ANALYTICS - compute engine
       ══════════════════════════════════════════ */
-      function computeAnalytics() {
+            function computeAnalytics() {
         const totalProducts = allProducts.length;
         const lowStock = allProducts.filter(
           (p) => Number(p.stock) > 0 && Number(p.stock) <= 5,
@@ -5333,7 +5346,7 @@
         const outOfStock = allProducts.filter(
           (p) => Number(p.stock) <= 0,
         ).length;
-        const totalCustomers = allUsers.length;
+        const totalCustomers = buildEnrichedCustomers().length;
 
         const todayStart = startOfToday();
         const weekStart = startOfWeek();
@@ -5347,6 +5360,12 @@
         const salesMap = {};
 
         for (const order of allOrders) {
+          const pStatus = (order.paymentStatus || "").toLowerCase();
+          const oStatus = (order.status || "").toLowerCase();
+          if (oStatus === "cancelled" || oStatus === "pending_payment" || pStatus === "failed") {
+            continue;
+          }
+
           const total = getOrderTotal(order);
           const date = parseOrderDate(order);
 
@@ -5732,7 +5751,7 @@
           .map((o) => ({
             icon: "New",
             title: "Pending order",
-            meta: `${o.customerName || o.name || "Customer"} - ${formatINR(getOrderTotal(o))}`,
+            meta: `${o.customerInfo?.fullName || o.customerName || o.name || "Customer"} - ${formatINR(getOrderTotal(o))}`,
             target: "order",
             id: o.id,
           }));
@@ -5774,11 +5793,11 @@
         allOrders.forEach((o) => rows.push({
           type: "Order",
           icon: "O",
-          title: o.customerName || o.name || o.email || "Order",
+          title: o.customerInfo?.fullName || o.customerName || o.name || o.customerInfo?.email || o.email || "Order",
           meta: `${o.id || ""} - ${(o.status || "pending").toUpperCase()} - ${formatINR(getOrderTotal(o))}`,
           target: "order",
           id: o.id,
-          hay: [o.id, o.customerName, o.name, o.email, o.phone, o.status].join(" "),
+          hay: [o.id, o.customerInfo?.fullName, o.customerName, o.name, o.customerInfo?.email, o.email, o.customerInfo?.phone, o.phone, o.status].join(" "),
         }));
         return rows;
       }
@@ -5827,9 +5846,9 @@
       function exportOrdersCSV() {
         downloadCSV("chic-charms-orders.csv", allOrders.map((o) => ({
           id: o.id,
-          customerName: o.customerName || o.name || "",
-          email: o.email || o.userEmail || "",
-          phone: o.phone || "",
+          customerName: o.customerInfo?.fullName || o.customerName || o.name || "",
+          email: o.customerInfo?.email || o.email || o.userEmail || "",
+          phone: o.customerInfo?.phone || o.phone || "",
           status: o.status || "pending",
           paymentMethod: o.paymentMethod || "",
           total: getOrderTotal(o),
