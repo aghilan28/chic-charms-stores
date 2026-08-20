@@ -65,7 +65,7 @@ function formatOrderMessage(order) {
   const customerName = escapeHTML(order.customerInfo?.fullName || order.customerName || order.deliveryInfo?.name || 'N/A');
   
   // Format phone number
-  let phone = order.customerInfo?.phone || order.phone || order.deliveryInfo?.phone || 'N/A';
+  let phone = order.razorpayPhone || order.customerInfo?.phone || order.phone || order.deliveryInfo?.phone || 'N/A';
   if (phone !== 'N/A') {
     phone = escapeHTML(String(phone).replace(/^(\+91|91)/, '').trim());
     phone = `+91 ${phone}`;

@@ -89,6 +89,24 @@ module.exports = async (req, res) => {
       return handleResult(400, false, 'Payment verification failed. Signature mismatch.');
     }
 
+    // Fetch payment contact information directly from Razorpay API
+    let razorpayPhone = null;
+    let razorpayEmail = null;
+    try {
+      const RazorpayObj = require('razorpay');
+      const rzpInstance = new RazorpayObj({
+        key_id:     process.env.RAZORPAY_KEY_ID,
+        key_secret: process.env.RAZORPAY_KEY_SECRET,
+      });
+      const paymentDetails = await rzpInstance.payments.fetch(razorpay_payment_id);
+      if (paymentDetails) {
+        razorpayPhone = paymentDetails.contact || null;
+        razorpayEmail = paymentDetails.email || null;
+      }
+    } catch (payErr) {
+      console.warn('[verifyPayment] Failed to fetch payment details:', payErr);
+    }
+
     const updatedFields = {
       status:           'paid',
       paymentStatus:    'success',
@@ -97,6 +115,8 @@ module.exports = async (req, res) => {
       transactionId:    razorpay_payment_id,
       paidAt:           admin.firestore.FieldValue.serverTimestamp(),
       updatedAt:        admin.firestore.FieldValue.serverTimestamp(),
+      razorpayPhone:    razorpayPhone,
+      razorpayEmail:    razorpayEmail,
     };
 
     // Execute stock check and decrement inside an atomic transaction

@@ -67,6 +67,8 @@ module.exports = async (req, res) => {
         transactionId: razorpayPaymentId,
         paidAt: admin.firestore.FieldValue.serverTimestamp(),
         updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+        razorpayPhone: payment.contact || null,
+        razorpayEmail: payment.email || null,
       };
 
       const orderRef = db.collection('orders').doc(orderId);
