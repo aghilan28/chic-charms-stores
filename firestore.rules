@@ -120,13 +120,14 @@ service cloud.firestore {
       return hasAuthEmail() && resource.data[field] == authEmail();
     }
 
-    function orderBelongsToUser() {
+     function orderBelongsToUser() {
       return signedIn()
         && (
           resource.data.userId == request.auth.uid
           || resource.data.uid == request.auth.uid
           || (hasAuthEmail() && resource.data.userEmail == authEmail())
           || (hasAuthEmail() && resource.data.email == authEmail())
+          || (hasAuthEmail() && "customerInfo" in resource.data && resource.data.customerInfo.email == authEmail())
         );
     }
 
@@ -137,6 +138,7 @@ service cloud.firestore {
           || request.resource.data.uid == request.auth.uid
           || (hasAuthEmail() && request.resource.data.userEmail == authEmail())
           || (hasAuthEmail() && request.resource.data.email == authEmail())
+          || (hasAuthEmail() && "customerInfo" in request.resource.data && request.resource.data.customerInfo.email == authEmail())
         );
     }
 
