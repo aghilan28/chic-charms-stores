@@ -953,17 +953,24 @@
       }
 
       try {
-        const q = query(collection(db, "orders"), where("userId", "==", user.uid));
+        const q = query(collection(db, "orders"), where("customerInfo.email", "==", user.email));
         const snap = await getDocs(q);
         orders = sortOrdersDesc(mapDocs(snap));
-      } catch (err) {
-        console.warn("[account] userId query failed, trying userEmail fallback:", err.message);
-        try {
+        
+        // If empty, try legacy userEmail fallback
+        if (orders.length === 0) {
           const q2 = query(collection(db, "orders"), where("userEmail", "==", user.email));
           const snap2 = await getDocs(q2);
           orders = sortOrdersDesc(mapDocs(snap2));
-        } catch (err2) {
-          console.error("[account] Both order queries failed:", err2.message);
+        }
+      } catch (err) {
+        console.warn("[account] Primary order query failed, trying userId fallback:", err.message);
+        try {
+          const q3 = query(collection(db, "orders"), where("userId", "==", user.uid));
+          const snap3 = await getDocs(q3);
+          orders = sortOrdersDesc(mapDocs(snap3));
+        } catch (err3) {
+          console.error("[account] All order queries failed:", err3.message);
           orders = [];
           if (!silent) {
             $("ordersWrap").innerHTML = `
@@ -1017,10 +1024,21 @@
 
     function renderOrderCardHTML(order) {
       const date = order.date || (order.createdAt?.toDate ? fmtDate(order.createdAt.toDate()) : "-");
-      const items = order.items || [];
+      const items = order.cartItems || order.items || [];
       const isCod = order.paymentMethod !== "razorpay";
       const total = order.totalAmount || order.total || 0;
       const status = order.status || "Placed";
+
+      let addressText = "";
+      if (order.deliveryInfo) {
+        const addr = order.deliveryInfo.address || order.deliveryInfo.addressLine1 || "";
+        const city = order.deliveryInfo.city || "";
+        const state = order.deliveryInfo.state || "";
+        const pin = order.deliveryInfo.pincode || "";
+        addressText = [addr, city, state, pin].filter(Boolean).join(", ");
+      } else if (order.address) {
+        addressText = order.address;
+      }
 
       return `
         <div class="bg-surface p-5 rounded-lg border border-brand-border premium-shadow space-y-4">
@@ -1028,7 +1046,7 @@
             <div>
               <p class="font-label-lg text-on-background font-semibold text-xs">ORDER #${esc(order.id?.slice(-8).toUpperCase() || "-")}</p>
               <p class="text-[11px] text-on-surface-variant mt-0.5">${esc(date)}</p>
-              ${order.address ? `<p class="text-[10px] text-on-surface-variant mt-1 leading-normal">${esc(order.address)}</p>` : ""}
+              ${addressText ? `<p class="text-[10px] text-on-surface-variant mt-1 leading-normal">${esc(addressText)}</p>` : ""}
             </div>
             <div class="flex flex-col items-end gap-1.5">
               <span class="px-2 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase ${isCod ? "bg-amber-100 text-amber-800" : "bg-emerald-100 text-emerald-800"}">
