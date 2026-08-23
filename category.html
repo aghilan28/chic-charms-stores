@@ -983,7 +983,18 @@
       }
 
       function getProductImage(product) {
-        return product.image || product.modelImage || (currentCategory && (currentCategory.heroImage || currentCategory.editorialImage)) || 'images/hero-quiet-luxury-main.jpg';
+        let img = '';
+        const mainStock = Number(product.stock ?? product.Stock ?? 0);
+        if (mainStock <= 0 && Array.isArray(product.variants)) {
+          const firstInStockVariant = product.variants.find(v => Number(v.stock || 0) > 0);
+          if (firstInStockVariant) {
+            img = (firstInStockVariant.images && firstInStockVariant.images.productImage) || firstInStockVariant.productImage || firstInStockVariant.image || firstInStockVariant.imageUrl || '';
+          }
+        }
+        if (!img) {
+          img = product.image || product.modelImage;
+        }
+        return img || (currentCategory && (currentCategory.heroImage || currentCategory.editorialImage)) || 'images/hero-quiet-luxury-main.jpg';
       }
 
       function applyCategoryContent(category) {
@@ -1060,8 +1071,12 @@
 
       function renderProducts(products) {
         const visibleProducts = products.filter(function (p) {
-          const rawStock = p.stock ?? p.Stock ?? 0;
-          return Number(rawStock) > 0;
+          let totalStock = Number(p.stock ?? p.Stock ?? 0);
+          if (Array.isArray(p.variants) && p.variants.length > 0) {
+            const variantStockSum = p.variants.reduce((sum, v) => sum + Number(v.stock || 0), 0);
+            totalStock = Math.max(totalStock, variantStockSum);
+          }
+          return totalStock > 0;
         });
         currentProducts = visibleProducts.slice();
         if (!visibleProducts.length) {

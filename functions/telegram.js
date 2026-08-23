@@ -62,10 +62,14 @@ async function sendTelegramMessage(message) {
 
 function formatOrderMessage(order) {
   const orderRef = escapeHTML(order.orderRef || order.orderId || 'Unknown');
-  const customerName = escapeHTML(order.customerInfo?.fullName || order.customerName || order.deliveryInfo?.name || 'N/A');
+  const studentName = order.studentInfo?.name || order.studentInfo?.studentName || '';
+  let customerName = escapeHTML(studentName || order.customerInfo?.fullName || order.customerName || order.deliveryInfo?.name || 'N/A');
+  if (customerName === 'Student' && studentName) {
+    customerName = escapeHTML(studentName);
+  }
   
   // Format phone number
-  let phone = order.razorpayPhone || order.customerInfo?.phone || order.phone || order.deliveryInfo?.phone || 'N/A';
+  let phone = order.studentInfo?.phone || order.razorpayPhone || order.customerInfo?.phone || order.phone || order.deliveryInfo?.phone || 'N/A';
   if (phone !== 'N/A') {
     phone = escapeHTML(String(phone).replace(/^(\+91|91)/, '').trim());
     phone = `+91 ${phone}`;
@@ -77,15 +81,24 @@ function formatOrderMessage(order) {
     const name = escapeHTML(item.name || 'Product');
     const qty = item.quantity || item.qty || 1;
     const price = item.price || 0;
-    return `• <b>${name}</b>\n  Qty: ${qty} × ₹${price}`;
+    const variantStr = item.variant ? ` [Variant: ${escapeHTML(item.variant)}]` : '';
+    const sizeStr = item.size ? ` [Size: ${escapeHTML(item.size)}]` : '';
+    return `• <b>${name}${variantStr}${sizeStr}</b>\n  Qty: ${qty} × ₹${price}`;
   }).join('\n\n');
 
   // Format delivery info (supports deliveryInfo and address)
   let deliveryStr = 'N/A';
-  if (order.couponInfo?.couponType === 'campus') {
-    const dept = escapeHTML(order.studentInfo?.dept || '');
-    const year = escapeHTML(order.studentInfo?.year || '');
-    deliveryStr = `Campus Delivery (CIT)\nStudent: ${customerName}\nDetails: ${[year, dept].filter(Boolean).join(' · ')}`;
+  if (order.couponInfo?.couponType === 'campus' || order.studentInfo) {
+    const sName = escapeHTML(studentName || order.customerInfo?.fullName || 'Student');
+    const dept = escapeHTML(order.studentInfo?.dept || order.deliveryInfo?.dept || '');
+    let year = order.studentInfo?.year || order.deliveryInfo?.year || '';
+    if (year && !String(year).toLowerCase().includes('year')) {
+      year = `${year} Year`;
+    }
+    const yearStr = escapeHTML(year);
+    const status = escapeHTML(order.studentInfo?.studentType || order.deliveryInfo?.studentType || '');
+    
+    deliveryStr = `Campus Delivery (CIT)\nStudent Name: ${sName}\nDetails: ${[yearStr, dept, status].filter(Boolean).join(' · ')}`;
   } else if (order.deliveryInfo && (order.deliveryInfo.address || order.deliveryInfo.addressLine1)) {
     const addr = escapeHTML(order.deliveryInfo.address || order.deliveryInfo.addressLine1 || '');
     const city = escapeHTML(order.deliveryInfo.city || '');

@@ -735,11 +735,16 @@
         li.className = 'cart-item';
         li.style.animationDelay = (index * 0.05) + 's';
 
+        const variantText = item.variant ? '<span style="font-size:0.8rem;color:#7f8c8d;margin-top:2px;display:block;">Variant: ' + escapeHTML(item.variant) + '</span>' : '';
+        const sizeText = item.size ? '<span style="font-size:0.8rem;color:#7f8c8d;margin-top:2px;display:block;">Size: ' + escapeHTML(item.size) + '</span>' : '';
+
         li.innerHTML =
           '<div class="cart-item-icon" aria-hidden="true">' + icon + '</div>' +
 
           '<div class="cart-item-details">' +
             '<p class="cart-item-name">' + escapeHTML(item.name) + '</p>' +
+            variantText +
+            sizeText +
             '<p class="cart-item-price">₹' + item.price.toLocaleString('en-IN') + ' each</p>' +
             oosLabel +
           '</div>' +

@@ -1485,6 +1485,16 @@
       }
 
       function productPrimaryImage(product) {
+        // Fallback to variant image if main product is sold out but a variant is in stock
+        const mainStock = Number(product?.stock ?? 0);
+        if (mainStock <= 0 && Array.isArray(product?.variants)) {
+          const firstInStockVariant = product.variants.find(v => Number(v.stock || 0) > 0);
+          if (firstInStockVariant) {
+            const vImg = firstInStockVariant.images?.productImage || firstInStockVariant.productImage || firstInStockVariant.image || firstInStockVariant.imageUrl;
+            if (isUsableImageUrl(vImg)) return vImg;
+          }
+        }
+
         const images = product?.images || {};
         return (
           product?.productImage ||
@@ -1563,7 +1573,11 @@
         // P1+P5: Same normalization as the storage loop — resilient to bad Firestore data.
         const _rawStock = product.stock ?? product.Stock ?? null;
         const _parsed = Number(_rawStock ?? 0);
-        const stock = isNaN(_parsed) ? 0 : _parsed;
+        let stock = isNaN(_parsed) ? 0 : _parsed;
+        if (Array.isArray(product.variants) && product.variants.length > 0) {
+          const variantStockSum = product.variants.reduce((sum, v) => sum + Number(v.stock || 0), 0);
+          stock = Math.max(stock, variantStockSum);
+        }
         const inStock = stock > 0;
 
         const isWishlisted = window.CCWishlist && window.CCWishlist.has(docId);
@@ -1734,8 +1748,13 @@
         let filtered = allProducts.filter(function (item) {
           const p = item.data;
           
-          // Hide out of stock products from the store view
-          if (p.stock <= 0) return false;
+          // Hide out of stock products from the store view only if both main product and all variants are out of stock
+          let totalStock = Number(p.stock ?? 0);
+          if (Array.isArray(p.variants) && p.variants.length > 0) {
+            const variantStockSum = p.variants.reduce((sum, v) => sum + Number(v.stock || 0), 0);
+            totalStock = Math.max(totalStock, variantStockSum);
+          }
+          if (totalStock <= 0) return false;
 
           const searchable = [
             p.name,

@@ -537,7 +537,18 @@
       }
 
       function getProductImage(product) {
-        return product.image || product.modelImage || 'images/editorial-minimal-soul-closeup.png';
+        let img = '';
+        const mainStock = Number(product.stock ?? product.Stock ?? 0);
+        if (mainStock <= 0 && Array.isArray(product.variants)) {
+          const firstInStockVariant = product.variants.find(v => Number(v.stock || 0) > 0);
+          if (firstInStockVariant) {
+            img = (firstInStockVariant.images && firstInStockVariant.images.productImage) || firstInStockVariant.productImage || firstInStockVariant.image || firstInStockVariant.imageUrl || '';
+          }
+        }
+        if (!img) {
+          img = product.image || product.modelImage;
+        }
+        return img || 'images/editorial-minimal-soul-closeup.png';
       }
 
       function renderFeatured(category, count) {

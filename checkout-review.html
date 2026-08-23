@@ -846,11 +846,15 @@ document.documentElement.classList.add('cc-loading');
       const imgTag = imgSrc
         ? `<img src="${esc(imgSrc)}" alt="${esc(item.name || 'Product')}" loading="lazy" />`
         : `<span class="material-symbols-outlined" style="font-size:36px;color:var(--outline);">diamond</span>`;
+      const variantText = item.variant ? `<p class="item-qty" style="color:var(--muted); font-size:11px; margin-top:2px;">Variant: ${esc(item.variant)}</p>` : '';
+      const sizeText = item.size ? `<p class="item-qty" style="color:var(--muted); font-size:11px; margin-top:2px;">Size: ${esc(item.size)}</p>` : '';
       return `
         <div class="item-row">
           <div class="item-thumb">${imgTag}</div>
           <div class="item-info">
             <p class="item-name">${esc(item.name || 'Unnamed Product')}</p>
+            ${variantText}
+            ${sizeText}
             <p class="item-qty">Qty: ${qty}</p>
             <p class="item-price">${money(price * qty)}</p>
           </div>
@@ -1093,16 +1097,35 @@ document.documentElement.classList.add('cc-loading');
         price:     Number(i.price    || 0),
         quantity:  Number(i.quantity || 1),
         image:     i.image || i.img || '',
+        variant:   i.variant  || '',
+        size:      i.size     || '',
       })),
       couponInfo:   coupon ? {
         couponCode:     coupon.couponCode,
         couponType:     coupon.couponType,
         discountAmount: getDiscount(coupon),
       } : null,
-      studentInfo:   delivery ? {
-        dept: delivery.dept || '',
-        year: delivery.year || '',
-      } : null,
+      studentInfo: (() => {
+        if (!delivery) return null;
+        let info = {
+          name: delivery.name || '',
+          phone: delivery.phone || '',
+          dept: delivery.dept || '',
+          year: delivery.year || '',
+          studentType: ''
+        };
+        try {
+          const saved = JSON.parse(localStorage.getItem('cc_campus_verification') || 'null');
+          if (saved) {
+            if (saved.studentName) info.name = saved.studentName;
+            if (saved.phone) info.phone = saved.phone;
+            if (saved.department) info.dept = saved.department;
+            if (saved.year) info.year = saved.year;
+            if (saved.studentType) info.studentType = saved.studentType;
+          }
+        } catch (e) {}
+        return info;
+      })(),
       paymentMethod:  selectedMethod,
       subtotal:       amounts.subtotal       || 0,
       discount:       amounts.discount       || 0,

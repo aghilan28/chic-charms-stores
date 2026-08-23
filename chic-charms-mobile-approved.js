@@ -345,7 +345,7 @@
     const second = list.slice(8);
     if (grid1) grid1.innerHTML = first.map(productCard).join("");
     if (grid2) grid2.innerHTML = second.map(productCard).join("");
-    if (editorial) editorial.style.display = first.length >= 4 ? "block" : "none";
+    if (editorial) editorial.style.display = "none";
 
     document.querySelectorAll("[data-wish]").forEach(btn => {
       btn.addEventListener("click", e => {

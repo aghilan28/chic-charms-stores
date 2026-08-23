@@ -1131,7 +1131,8 @@ function renderProduct(product, docId) {
 
   const variants = normalizeVariants(product);
   if (variants.length && (!_selectedVariantId || !variants.some(v => v.id === _selectedVariantId))) {
-    _selectedVariantId = variants[0].id;
+    const firstInStock = variants.find(v => Number(v.stock || 0) > 0);
+    _selectedVariantId = firstInStock ? firstInStock.id : variants[0].id;
   }
   const activeVariant = variants.find(v => v.id === _selectedVariantId) || variants[0] || null;
 
@@ -1401,7 +1402,8 @@ window.handleAddToCart = function() {
   const variants = _currentProduct ? normalizeVariants(_currentProduct) : [];
   const namedVariants = variants.filter(v => v.color && v.color.toLowerCase() !== 'default');
   const hasColors = namedVariants.length >= 1;
-  const targetVariant = hasColors ? (_selectedVariantId || '') : (_selectedVariantId || 'Gold Finish');
+  const activeVariant = variants.find(v => v.id === _selectedVariantId) || variants[0] || null;
+  const targetVariant = activeVariant ? (activeVariant.color || activeVariant.id) : (hasColors ? (_selectedVariantId || '') : 'Gold Finish');
   const targetSize = _selectedSize || '';
 
   const idx = cart.findIndex(i => 
@@ -1420,11 +1422,11 @@ window.handleAddToCart = function() {
 
   const price = Number(_currentProduct.price) || 0;
   if (_currentDocId && _currentDocId !== 'demo-product' && window.addToCartWithId) {
-    window.addToCartWithId(_currentProduct.name, price, _currentDocId, _selectedVariantId, _selectedSize);
+    window.addToCartWithId(_currentProduct.name, price, _currentDocId, targetVariant, _selectedSize);
   } else {
     // Fallback if script.js not fully loaded or demo product
     const image = _currentProduct.images?.productImage || _currentProduct.image || '';
-    const item = { id: _currentDocId || 'demo-product', productId: _currentDocId || 'demo-product', name: _currentProduct.name, price, image, variant: _selectedVariantId, size: _selectedSize, quantity: 1 };
+    const item = { id: _currentDocId || 'demo-product', productId: _currentDocId || 'demo-product', name: _currentProduct.name, price, image, variant: targetVariant, size: _selectedSize, quantity: 1 };
     if (idx > -1) {
       cart[idx].quantity = currentQty + 1;
     } else {
